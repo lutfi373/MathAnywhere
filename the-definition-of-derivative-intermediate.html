@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Definition of Derivative - Intermediate | MathAnywhere</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- MathQuill resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+    
+    <!-- MathJax for rendering mathematical expressions -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Plotly for interactive graphs -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                packages: {'[+]': ['color']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <style>
+        :root {
+            --input-focus: #2d8cf0;
+            --font-color: #323232;
+            --font-color-sub: #666;
+            --bg-color: #f7f9fc;
+            --main-color: black;
+            --accent-color: #1dd1a1;
+            --secondary-color: #54a0ff;
+            --tertiary-color: #5f27cd;
+            --light-blue: #74b9ff;
+            --pink: #fd79a8;
+            --purple: #6c5ce7;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fira Code', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: var(--font-color);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(29, 209, 161, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(84, 160, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(95, 39, 205, 0.15) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            box-shadow: 
+                20px 20px 60px rgba(0, 0, 0, 0.1),
+                -20px -20px 60px rgba(255, 255, 255, 0.8),
+                inset 5px 5px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            border: 2px solid var(--main-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 3px solid var(--main-color);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 3em;
+            font-weight: 900;
+            position: relative;
+            z-index: 1;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.25);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+            z-index: 1;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 50px;
+        }
+
+        .progress-bar {
+            background: rgba(233, 236, 239, 0.8);
+            height: 12px;
+            border-radius: 25px;
+            margin: 25px 0;
+            overflow: hidden;
+            border: 2px solid var(--main-color);
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--accent-color), var(--secondary-color), var(--tertiary-color));
+            height: 100%;
+            border-radius: 25px;
+            transition: width 0.6s ease;
+            width: 0%;
+        }
+
+        .question-container {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid var(--main-color);
+            box-shadow: 
+                8px 8px 20px rgba(0, 0, 0, 0.1),
+                -8px -8px 20px rgba(255, 255, 255, 0.7);
+            transition: all 0.4s ease;
+        }
+
+        .question-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                10px 10px 25px rgba(0, 0, 0, 0.15),
+                -10px -10px 25px rgba(255, 255, 255, 0.8);
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            border: 3px solid var(--main-color);
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            line-height: 1.7;
+            color: var(--font-color);
+            font-weight: 600;
+        }
+
+        .math-expression {
+            background: linear-gradient(135deg, #e8f8f5, #d1ecf1);
+            padding: 20px;
+            border-radius: 15px;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.4em;
+            text-align: center;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .math-input-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+            box-shadow: 
+                inset 2px 2px 5px rgba(0, 0, 0, 0.1),
+                inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .input-label {
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            display: block;
+            font-size: 1.1em;
+        }
+
+        .mathquill-field {
+            width: 100%;
+            margin: 15px 0;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            min-height: 50px;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.1),
+                -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .mathquill-field:focus-within {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(29, 209, 161, 0.3);
+            transform: scale(1.02);
+        }
+
+        .text-input-field {
+            width: 100%;
+            margin: 15px 0;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            min-height: 50px;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.1),
+                -2px -2px 5px rgba(255, 255, 255, 0.8);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .text-input-field:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(29, 209, 161, 0.3);
+            transform: scale(1.02);
+            outline: none;
+        }
+
+        .text-input-field::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        .check-answer-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .check-answer-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        .answer-feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        .answer-feedback.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .answer-feedback.correct {
+            background: linear-gradient(135deg, var(--success-color), #20c997);
+            color: white;
+        }
+
+        .answer-feedback.incorrect {
+            background: linear-gradient(135deg, var(--danger-color), #fd7e14);
+            color: white;
+        }
+
+        .math-hint {
+            background: rgba(29, 209, 161, 0.1);
+            border-left: 4px solid var(--accent-color);
+            padding: 10px 15px;
+            margin-top: 10px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9em;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--tertiary-color) 100%);
+            color: white;
+            border: 3px solid var(--main-color);
+            padding: 18px 50px;
+            border-radius: 50px;
+            font-size: 1.3em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            margin: 40px auto;
+            display: block;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            color: white;
+            text-decoration: none;
+        }
+
+        .floating-submit {
+            display: none;
+        }
+
+        .results {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+            text-align: center;
+            border: 3px solid var(--main-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .score {
+            font-size: 4em;
+            font-weight: 900;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .score.pass {
+            color: var(--success-color);
+        }
+
+        .score.fail {
+            color: var(--danger-color);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 3px solid var(--main-color);
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.4s ease;
+            flex: 1;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .nav-btn:hover {
+            color: white;
+            transform: translateY(-3px);
+            text-decoration: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container { margin: 10px; }
+            .form_area { padding: 40px 20px; }
+            .title { font-size: 2rem; }
+            .question-container { padding: 30px 20px; }
+            .navigation { flex-direction: column; gap: 15px; }
+            .submit-btn { width: 100%; font-size: 18px; }
+            .floating-submit { 
+                bottom: 20px; 
+                right: 20px; 
+                font-size: 14px;
+                padding: 15px 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .form_area { padding: 30px 15px; }
+            .title { font-size: 1.8rem; }
+            .question-container { padding: 20px 15px; }
+            .math-expression { font-size: 1.2em; padding: 20px; }
+            .mathquill-field, .text-input-field { min-height: 50px; }
+        }
+        
+        .math-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid var(--main-color);
+            border-radius: 15px;
+            box-shadow: 
+                2px 2px 8px rgba(0, 0, 0, 0.1),
+                -2px -2px 8px rgba(255, 255, 255, 0.8);
+        }
+
+        .math-btn {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 40px;
+            text-align: center;
+            color: var(--main-color);
+            box-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.1),
+                -1px -1px 3px rgba(255, 255, 255, 0.8);
+        }
+
+        .math-btn:hover {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 
+                3px 3px 8px rgba(0, 0, 0, 0.2),
+                -2px -2px 6px rgba(255, 255, 255, 0.9);
+        }
+
+        .function-btn {
+            background: linear-gradient(135deg, var(--tertiary-color), var(--accent-color));
+            color: white;
+            font-weight: 700;
+        }
+
+        .function-btn:hover {
+            background: linear-gradient(135deg, var(--accent-color), var(--main-color));
+        }
+
+        /* Style for the answer format guides */
+        .answer-format {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(29, 209, 161, 0.05);
+            border: 1px dashed var(--accent-color);
+            border-radius: 8px;
+            color: #333;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            text-align: center;
+            font-weight: normal;
+            position: relative;
+        }
+        
+        .answer-format::before {
+            content: "📝 Answer Format Guide";
+            position: absolute;
+            top: -12px;
+            left: 10px;
+            background: var(--accent-color);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        /* Style for blank spaces in cloze format */
+        .blank {
+            display: inline-block;
+            min-width: 30px;
+            margin: 0 2px;
+            position: relative;
+        }
+        
+        /* Style for the underscores in blanks */
+        .blank-line {
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 18px;
+            display: inline;
+        }
+        
+        /* Container for mathquill fields */
+        .mathquill-field-wrapper {
+            width: 100%;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+        <div class="header">
+            <h1>The Definition of Derivative</h1>
+            <p>Master advanced differentiation techniques and applications</p>
+            <div class="difficulty-badge">Intermediate Level</div>
+    </div>
+
+        <div class="content">
+
+            <div id="questionsContainer">
+                <!-- Question 1 - When to use Product Rule -->
+                <div class="question-container">
+                    <div class="question-number">1</div>
+                    <div class="question-text">
+                        When do you use the Product Rule for differentiation?
+                    </div>
+                    <div class="math-expression">
+                        $$\text{If } f(x) = u(x) \cdot v(x), \text{ then } f'(x) = u'(x)v(x) + u(x)v'(x)$$
+                    </div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Write the complete formal definition</label>
+                        
+                        <!-- Enhanced Mathematical Toolbar -->
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(0, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(0, 'h')">h</button>
+                            <button class="math-btn" onclick="insertMath(0, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(0, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(0, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(0, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(0, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(0, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(0, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(0, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(0, '\\frac{}{}')">[/]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(0, 'f(x)')">f(x)</button>
+                            <button class="math-btn function-btn" onclick="insertMath(0, 'f(x+h)')">f(x+h)</button>
+                            <button class="math-btn function-btn" onclick="insertMath(0, '\\lim')">lim</button>
+                            <button class="math-btn" onclick="insertMath(0, '\\to')">→</button>
+                            <button class="math-btn" onclick="insertMath(0, '0')">0</button>
+                        </div>
+                        
+                        <div class="mathquill-field-wrapper">
+                            <div class="mathquill-field" id="question0"></div>
+                            <div class="answer-format" id="format-0">lim<sub>h→0</sub> [<span class="blank-line">______</span> - <span class="blank-line">______</span>]/<span class="blank-line">_</span></div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(0)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-0"></div>
+                        <div class="math-hint">
+                            💡 Hint: Use proper limit notation with h approaching 0
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 2 - Derivative of x³ -->
+                <div class="question-container">
+                    <div class="question-number">2</div>
+                    <div class="question-text">
+                        Using the definition, find the derivative of $f(x) = x^3$.
+                    </div>
+                    <div class="math-expression">$f(x) = x^3$</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Step 1: Set up the definition with f(x+h)</label>
+                        
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(1, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(1, 'h')">h</button>
+                            <button class="math-btn" onclick="insertMath(1, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(1, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(1, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(1, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(1, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(1, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(1, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(1, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(1, '\\frac{}{}')">[/]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(1, '\\lim')">lim</button>
+                            <button class="math-btn" onclick="insertMath(1, '\\to')">→</button>
+                            <button class="math-btn" onclick="insertMath(1, '0')">0</button>
+                            <button class="math-btn" onclick="insertMath(1, '3')">3</button>
+                        </div>
+                        
+                        <div class="mathquill-field-wrapper">
+                            <div class="mathquill-field" id="question1"></div>
+                            <div class="answer-format" id="format-1">lim<sub>h→0</sub> [(<span class="blank-line">_</span>+<span class="blank-line">_</span>)³ - <span class="blank-line">_</span>³]/<span class="blank-line">_</span></div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(1)">Check Setup</button>
+                        <div class="answer-feedback" id="feedback-1"></div>
+                    </div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Step 2: Calculate the final derivative</label>
+                        
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(2, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(2, 'h')">h</button>
+                            <button class="math-btn" onclick="insertMath(2, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(2, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(2, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(2, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(2, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(2, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(2, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(2, '=')">=</button>
+                            <button class="math-btn" onclick="insertMath(2, '2')">2</button>
+                            <button class="math-btn" onclick="insertMath(2, '3')">3</button>
+                        </div>
+                        
+                        <div class="mathquill-field-wrapper">
+                            <div class="mathquill-field" id="question2"></div>
+                            <div class="answer-format" id="format-2"><span class="blank-line">_</span>x²</div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(2)">Check Result</button>
+                        <div class="answer-feedback" id="feedback-2"></div>
+                        <div class="math-hint">
+                            💡 Hint: Expand $(x+h)^3$ and simplify the difference quotient
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 3 - Non-differentiable Points -->
+                <div class="question-container">
+                    <div class="question-number">3</div>
+                    <div class="question-text">
+                        At what point is $f(x) = |x|$ not differentiable? Why?
+                    </div>
+                    <div class="math-expression">$f(x) = |x|$</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Identify the non-differentiable point</label>
+                        
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(3, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(3, 'h')">h</button>
+                            <button class="math-btn" onclick="insertMath(3, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(3, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(3, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(3, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(3, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(3, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(3, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(3, '=')">=</button>
+                            <button class="math-btn" onclick="insertMath(3, '0')">0</button>
+                            <button class="math-btn" onclick="insertMath(3, '1')">1</button>
+                            <button class="math-btn" onclick="insertMath(3, '2')">2</button>
+                        </div>
+                        
+                        <div class="mathquill-field-wrapper">
+                            <div class="mathquill-field" id="question3"></div>
+                            <div class="answer-format" id="format-3">x = <span class="blank-line">_</span></div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(3)">Check Point</button>
+                        <div class="answer-feedback" id="feedback-3"></div>
+                    </div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Explain why it's not differentiable</label>
+                        <input type="text" class="text-input-field" id="question4" placeholder="Type your explanation here...">
+                        <div class="answer-format" id="format-4">The <span class="blank-line">____</span> and <span class="blank-line">____</span> limits differ</div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(4)">Check Explanation</button>
+                        <div class="answer-feedback" id="feedback-4"></div>
+                        <div class="math-hint">
+                            💡 Hint: Consider left and right limits at the critical point
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 4 - Left and Right Derivatives -->
+                <div class="question-container">
+                    <div class="question-number">4</div>
+                    <div class="question-text">
+                        For $f(x) = |x|$ at $x = 0$, find the left and right derivatives.
+                    </div>
+                    <div class="math-expression">$f(x) = |x|, \quad x = 0$</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Left derivative at x = 0</label>
+                        <input type="text" class="text-input-field" id="question5" placeholder="Type your answer here...">
+                        <div class="answer-format" id="format-5"><span class="blank-line">__</span></div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(5)">Check Left Derivative</button>
+                        <div class="answer-feedback" id="feedback-5"></div>
+                    </div>
+
+                    <div class="math-input-container">
+                        <label class="input-label">Right derivative at x = 0</label>
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(6, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(6, 'h')">h</button>
+                            <button class="math-btn" onclick="insertMath(6, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(6, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(6, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(6, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(6, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(6, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(6, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(6, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(6, '\\frac{}{}')">[/]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(6, '\\lim')">lim</button>
+                            <button class="math-btn" onclick="insertMath(6, '\\to')">→</button>
+                            <button class="math-btn" onclick="insertMath(6, '0')">0</button>
+                            <button class="math-btn" onclick="insertMath(6, '1')">1</button>
+                        </div>
+                        <div class="mathquill-field-wrapper">
+                            <div class="mathquill-field" id="question6"></div>
+                            <div class="answer-format" id="format-6"><span class="blank-line">_</span></div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(6)">Check Right Derivative</button>
+                        <div class="answer-feedback" id="feedback-6"></div>
+                        <div class="math-hint">
+                            💡 Hint: Use $\lim_{h \to 0^-}$ and $\lim_{h \to 0^+}$ respectively
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 5 - Square Root Function -->
+                <div class="question-container">
+                    <div class="question-number">5</div>
+                    <div class="question-text">
+                        Find the derivative of $f(x) = \sqrt{x}$ using the definition.
+                    </div>
+                    <div class="math-expression">$f(x) = \sqrt{x}$</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Set up the limit definition</label>
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(7, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(7, 'h')">h</button>
+                            <button class="math-btn" onclick="insertMath(7, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(7, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(7, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(7, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(7, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(7, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(7, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(7, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(7, '\\sqrt{}')">[√]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(7, '\\frac{}{}')">[/]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(7, '\\lim')">lim</button>
+                            <button class="math-btn" onclick="insertMath(7, '\\to')">→</button>
+                            <button class="math-btn" onclick="insertMath(7, '0')">0</button>
+                        </div>
+                        <div class="mathquill-field-wrapper">
+                            <div class="mathquill-field" id="question7"></div>
+                            <div class="answer-format" id="format-7">lim<sub>h→0</sub> [√(<span class="blank-line">___</span>) - √<span class="blank-line">_</span>]/<span class="blank-line">_</span></div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(7)">Check Setup</button>
+                        <div class="answer-feedback" id="feedback-7"></div>
+                    </div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Calculate the derivative (rationalize the numerator)</label>
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(8, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(8, 'h')">h</button>
+                            <button class="math-btn" onclick="insertMath(8, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(8, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(8, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(8, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(8, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(8, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(8, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(8, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(8, '\\sqrt{}')">[√]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(8, '\\frac{}{}')">[/]</button>
+                            <button class="math-btn" onclick="insertMath(8, '1')">1</button>
+                            <button class="math-btn" onclick="insertMath(8, '2')">2</button>
+                        </div>
+                        <div class="mathquill-field-wrapper">
+                            <div class="mathquill-field" id="question8"></div>
+                            <div class="answer-format" id="format-8">
+                                <div style="display: inline-block; text-align: center;">
+                                    <span class="blank-line">_</span>
+                                    <hr style="margin: 2px 0; border: 1px solid #333;">
+                                    <span class="blank-line">_</span>√<span class="blank-line">_</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(8)">Check Result</button>
+                        <div class="answer-feedback" id="feedback-8"></div>
+                        <div class="math-hint">
+                            💡 Hint: Multiply by $\frac{\sqrt{x+h} + \sqrt{x}}{\sqrt{x+h} + \sqrt{x}}$
+                        </div>
+                    </div>
+                    
+                    <!-- Interactive Graph Section -->
+                    <div style="background: rgba(255, 255, 255, 0.95); border: 2px solid var(--accent-color); border-radius: 15px; padding: 20px; margin: 20px 0; text-align: center;">
+                        <h4>Interactive Derivative Visualization: $f(x) = x^3 - 2x^2 + x$</h4>
+                        <div style="width: 100%; height: 300px; border: 2px solid var(--main-color); border-radius: 10px; background: linear-gradient(135deg, #f8f9fa, #e9ecef);" id="intermediateGraph"></div>
+                        
+                        <div style="margin: 20px 0; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                            <label style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" id="showIntermediateOriginal" checked onchange="updateIntermediateGraph()">
+                                <span style="color: blue; font-weight: 600;">f(x) - Original</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" id="showIntermediateFirstDerivative" checked onchange="updateIntermediateGraph()">
+                                <span style="color: red; font-weight: 600;">f'(x) - First Derivative</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" id="showIntermediateSecondDerivative" onchange="updateIntermediateGraph()">
+                                <span style="color: green; font-weight: 600;">f''(x) - Second Derivative</span>
+                            </label>
+                        </div>
+                        
+                        <div style="display: flex; gap: 15px; justify-content: center; margin: 15px 0;">
+                            <button class="check-answer-btn" onclick="animateIntermediateDerivativeEvolution()">🎬 Animate Evolution</button>
+                            <button class="check-answer-btn" onclick="showIntermediateCriticalPoints()">📍 Show Critical Points</button>
+                            <button class="check-answer-btn" onclick="resetIntermediateAnimation()">🔄 Reset</button>
+                        </div>
+                        
+                        <div class="math-expression">
+                            $$f(x) = x^3 - 2x^2 + x$$
+                            $$f'(x) = 3x^2 - 4x + 1$$
+                            $$f''(x) = 6x - 4$$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 6 - Continuity and Differentiability -->
+                <div class="question-container">
+                    <div class="question-number">6</div>
+                    <div class="question-text">
+                        If a function is differentiable at a point, what can we say about its continuity at that point?
+                    </div>
+
+                    <div class="math-input-container">
+                        <label class="input-label">State the relationship</label>
+                        <input type="text" class="text-input-field" id="question9" placeholder="Type your answer here...">
+                        <div class="answer-format" id="format-9">Differentiable <span class="blank-line">_______</span> continuous</div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(9)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-9"></div>
+                        <div class="math-hint">
+                            💡 Hint: Think about what differentiability implies about continuity
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 7 - Piecewise Function -->
+                <div class="question-container">
+                    <div class="question-number">7</div>
+                    <div class="question-text">
+                        For what value of $a$ is the function $f(x) = \begin{cases} x^2 & \text{if } x \leq 1 \\ ax + b & \text{if } x > 1 \end{cases}$ differentiable at $x = 1$?
+                    </div>
+                    <div class="math-expression">Given that $b = 1$ (for continuity)</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Find the value of a for differentiability</label>
+                        <input type="text" class="text-input-field" id="question10" placeholder="Type your answer here...">
+                        <div class="answer-format" id="format-10">a = <span class="blank-line">_</span></div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(10)">Check Value</button>
+                        <div class="answer-feedback" id="feedback-10"></div>
+                        <div class="math-hint">
+                            💡 Hint: Ensure left and right derivatives are equal at x = 1
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="submit-btn" id="submitBtn" onclick="submitQuiz()">Submit Quiz</button>
+
+            <div style="text-align: center; margin: 20px 0;">
+                <button id="toggleAnswerGuide" class="nav-btn" style="background: linear-gradient(135deg, #ff7e5f, #feb47b); border: 2px solid #333; padding: 12px 25px; font-size: 16px;">
+                    📝 Show Answer Guide
+                </button>
+            </div>
+
+            <div id="results" class="results" style="display: none;">
+                <div class="score" id="scoreDisplay"></div>
+                <div id="resultMessage"></div>
+                <div class="navigation">
+                    <a href="profile.html" class="nav-btn">← Back to Profile</a>
+                    <a href="the-definition-of-derivative-advanced.html" class="nav-btn">Next: Advanced →</a>
+                </div>
+            </div>
+
+            <!-- Answer Guide Section -->
+            <div id="answerGuide" style="margin-top: 30px; padding: 20px; background: #f0f8ff; border: 2px solid #1e90ff; border-radius: 10px; display: none;">
+                <h4 style="color: #0066cc; margin-bottom: 15px;">📝 Answer Guide</h4>
+                <p style="font-size: 14px; color: #333; margin-bottom: 15px;">
+                    Use this guide if you're having trouble with the questions:
+                </p>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 1: Formal definition of derivative</h5>
+                    <p><strong>Answer:</strong> f'(x) = lim(h→0) [f(x+h) - f(x)]/h</p>
+                    <p>This is the formal limit definition that must include the limit notation.</p>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 2: Derivative of f(x) = x³</h5>
+                    <p><strong>Step 1:</strong> Set up: lim(h→0) [(x+h)³ - x³]/h</p>
+                    <p><strong>Step 2:</strong> After expanding and simplifying: f'(x) = 3x²</p>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 3: Non-differentiable point of |x|</h5>
+                    <p><strong>Point:</strong> x = 0</p>
+                    <p><strong>Explanation:</strong> The left and right limits differ at x = 0, creating a corner/cusp</p>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 4: Left and right derivatives of |x| at x = 0</h5>
+                    <p><strong>Left derivative:</strong> -1 (slope going left)</p>
+                    <p><strong>Right derivative:</strong> 1 (slope going right)</p>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 5: Derivative of √x</h5>
+                    <p><strong>Setup:</strong> lim(h→0) [√(x+h) - √x]/h</p>
+                    <p><strong>Result:</strong> After rationalizing: f'(x) = 1/(2√x)</p>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 6: Differentiability implies continuity</h5>
+                    <p><strong>Answer:</strong> If a function is differentiable at a point, it must be continuous there</p>
+                    <p>Note: The converse is not always true - continuity doesn't guarantee differentiability</p>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 7: Piecewise function differentiability</h5>
+                    <p><strong>Answer:</strong> a = 2</p>
+                    <p>For differentiability at x = 1, the left derivative (2x at x=1 gives 2) must equal the right derivative (a)</p>
+                </div>
+            </div>
+            
+            <!-- Debug Panel for Troubleshooting -->
+            <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border: 2px solid #dee2e6; border-radius: 10px;">
+                <h4 style="color: #495057; margin-bottom: 15px;">🛠️ Debug Panel</h4>
+                <p style="font-size: 14px; color: #6c757d; margin-bottom: 15px;">
+                    If your module completion isn't saving properly, use these tools:
+                </p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button onclick="checkModuleProgress()" class="nav-btn" style="flex: none; padding: 10px 15px; font-size: 14px;">
+                        📊 Check Progress
+                    </button>
+                    <button onclick="forceCompleteModule()" class="nav-btn" style="flex: none; padding: 10px 15px; font-size: 14px;">
+                        ✅ Force Complete
+                    </button>
+                </div>
+                <p style="font-size: 12px; color: #6c757d; margin-top: 10px;">
+                    Use "Check Progress" to see debug info in console, or "Force Complete" to manually mark as done.
+                </p>
+            </div>
+        </div>
+    </div>
+
+<script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+        import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBUfSOSpmCdWUGTVbSQsMCH-JVmrjpfdPY",
+        authDomain: "fyp-lutfi-naim.firebaseapp.com",
+        projectId: "fyp-lutfi-naim",
+        storageBucket: "fyp-lutfi-naim.firebasestorage.app",
+        messagingSenderId: "231274529807",
+        appId: "1:231274529807:web:c4ea279f9e7581bd674f7a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+        let mathAnswers = {};
+        let currentUser = null;
+        
+        // Initialize global mathFields
+        window.mathFields = {};
+
+        // Initialize MathQuill following the same pattern as introduction modules
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📚 Definition of Derivative Intermediate module DOM loaded');
+            
+            // Initialize MathQuill with proper timing like introduction modules
+            setTimeout(() => {
+                console.log('🔧 Initializing MathQuill...');
+                if (typeof MathQuill === 'undefined') {
+                    console.error('❌ MathQuill not loaded');
+                    return;
+                }
+                
+                const MQ = MathQuill.getInterface(2);
+                
+                // Questions that use text inputs instead of MathQuill
+                const textInputQuestions = [4, 5, 9, 10];
+                
+                // Initialize all MathQuill fields using fieldId pattern like introduction modules
+                window.mathFields = {};
+                
+                for (let i = 0; i < 11; i++) {
+                    const fieldId = `question${i}`;
+                    const element = document.getElementById(fieldId);
+                    if (element) {
+                        if (textInputQuestions.includes(i)) {
+                            // Handle text inputs
+                            element.addEventListener('input', function() {
+                                mathAnswers[i] = element.value;
+                                sessionStorage.setItem('definition-derivative-intermediate-progress', JSON.stringify(mathAnswers));
+                            });
+                            console.log(`✅ Text input ${i} initialized`);
+                        } else {
+                            // Handle MathQuill fields with fieldId key like introduction modules
+                            try {
+                                window.mathFields[fieldId] = MQ.MathField(element, {
+                                    spaceBehavesLikeTab: true,
+                                    handlers: {
+                                        edit: function() {
+                                            console.log(`📝 MathField ${i} edited`);
+                                            const latex = window.mathFields[fieldId].latex();
+                                            mathAnswers[i] = latex;
+                                            sessionStorage.setItem('definition-derivative-intermediate-progress', JSON.stringify(mathAnswers));
+                                        }
+                                    }
+                                });
+                                console.log(`✅ MathField ${i} initialized`);
+                            } catch (error) {
+                                console.error(`❌ Error initializing MathField ${i}:`, error);
+                            }
+                        }
+                    } else {
+                        console.warn(`⚠️ Element ${fieldId} not found`);
+                    }
+                }
+                
+                console.log('🎯 All fields initialized. Available mathFields:', Object.keys(window.mathFields));
+                
+                // Initialize answer guide toggle
+                initializeAnswerGuide();
+                
+                // Initialize Plotly graph
+                initializeIntermediateGraph();
+                
+            }, 2000); // Give time for MathQuill to load like introduction modules
+        });
+
+        // Answer guide functionality
+        function initializeAnswerGuide() {
+            const toggleBtn = document.getElementById('toggleAnswerGuide');
+            const answerGuide = document.getElementById('answerGuide');
+            
+            if (toggleBtn && answerGuide) {
+                toggleBtn.addEventListener('click', function() {
+                    if (answerGuide.style.display === 'none' || answerGuide.style.display === '') {
+                        answerGuide.style.display = 'block';
+                        toggleBtn.textContent = '📝 Hide Answer Guide';
+                    } else {
+                        answerGuide.style.display = 'none';
+                        toggleBtn.textContent = '📝 Show Answer Guide';
+                    }
+                });
+            }
+        }
+
+        // Debug functions
+        window.checkModuleProgress = function() {
+            console.log('Current answers:', mathAnswers);
+            console.log('Session storage:', sessionStorage.getItem('definition-derivative-intermediate-progress'));
+            console.log('Current user:', currentUser);
+            console.log('Available mathFields:', Object.keys(window.mathFields));
+        };
+
+        window.forceCompleteModule = function() {
+            if (confirm('Force complete this module? This will mark it as 100% complete.')) {
+                mathAnswers = {0: 'forced', 1: 'forced', 2: 'forced', 3: 'forced', 4: 'forced', 5: 'forced', 6: 'forced', 7: 'forced', 8: 'forced', 9: 'forced', 10: 'forced'};
+                submitQuiz();
+            }
+        };
+
+        // Initialize graph for intermediate module
+        function initializeIntermediateGraph() {
+            try {
+                const x = [];
+                const originalFunction = [];
+                const firstDerivative = [];
+                const secondDerivative = [];
+                
+                for (let i = -2; i <= 3; i += 0.1) {
+                    x.push(i);
+                    originalFunction.push(i * i * i - 2 * i * i + i); // f(x) = x³ - 2x² + x
+                    firstDerivative.push(3 * i * i - 4 * i + 1); // f'(x) = 3x² - 4x + 1
+                    secondDerivative.push(6 * i - 4); // f''(x) = 6x - 4
+                }
+                
+                const trace1 = {
+                    x: x,
+                    y: originalFunction,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: 'f(x) = x³ - 2x² + x',
+                    line: { color: 'blue', width: 3 }
+                };
+                
+                const trace2 = {
+                    x: x,
+                    y: firstDerivative,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: "f'(x) = 3x² - 4x + 1",
+                    line: { color: 'red', width: 3 }
+                };
+                
+                const trace3 = {
+                    x: x,
+                    y: secondDerivative,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: "f''(x) = 6x - 4",
+                    line: { color: 'green', width: 3 },
+                    visible: false
+                };
+                
+                const layout = {
+                    title: 'Derivative Visualization: f(x) = x³ - 2x² + x',
+                    xaxis: { title: 'x', range: [-2, 3] },
+                    yaxis: { title: 'y', range: [-3, 6] },
+                    showlegend: true,
+                    grid: { rows: 1, columns: 1 }
+                };
+                
+                Plotly.newPlot('intermediateGraph', [trace1, trace2, trace3], layout);
+            } catch (error) {
+                console.error('Error initializing intermediate graph:', error);
+                // Fallback message
+                const graphDiv = document.getElementById('intermediateGraph');
+                if (graphDiv) {
+                    graphDiv.innerHTML = '<div style="padding: 50px; text-align: center; color: #666;">Graph loading... Please ensure Plotly is available.</div>';
+                }
+            }
+        }
+
+        // Graph control functions
+        window.updateIntermediateGraph = function() {
+            try {
+                const showOriginal = document.getElementById('showIntermediateOriginal').checked;
+                const showFirst = document.getElementById('showIntermediateFirstDerivative').checked;
+                const showSecond = document.getElementById('showIntermediateSecondDerivative').checked;
+                
+                const update = {
+                    visible: [showOriginal, showFirst, showSecond]
+                };
+                
+                Plotly.restyle('intermediateGraph', update);
+            } catch (error) {
+                console.error('Error updating intermediate graph:', error);
+            }
+        };
+
+        window.animateIntermediateDerivativeEvolution = function() {
+            console.log('Animating intermediate derivative evolution...');
+            // Animation showing how derivative emerges
+        };
+
+        window.showIntermediateCriticalPoints = function() {
+            console.log('Showing intermediate critical points...');
+            // Show critical points on the graph
+        };
+
+        window.resetIntermediateAnimation = function() {
+            initializeIntermediateGraph();
+        };
+
+        // Enhanced answer validation function
+        function normalizeAnswer(answer) {
+            return answer.toLowerCase()
+                .replace(/\s+/g, '') // Remove all spaces
+                .replace(/\$+/g, '') // Remove $ symbols
+                .replace(/\\cdot/g, '*') // Replace LaTeX multiplication
+                .replace(/\\times/g, '*') // Replace LaTeX multiplication
+                .replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, '($1)/($2)') // Convert fractions
+                .replace(/\{([^}]*)\}/g, '$1') // Remove braces
+                .replace(/\^(\d+)/g, '^$1') // Normalize exponents
+                .replace(/²/g, '^2') // Convert superscript 2
+                .replace(/³/g, '^3') // Convert superscript 3
+                .replace(/⁴/g, '^4') // Convert superscript 4
+                .replace(/⁵/g, '^5') // Convert superscript 5
+                .replace(/√/g, 'sqrt') // Convert square root symbol
+                .replace(/\\sin/g, 'sin') // Convert LaTeX sin
+                .replace(/\\cos/g, 'cos') // Convert LaTeX cos
+                .replace(/\\tan/g, 'tan') // Convert LaTeX tan
+                .replace(/π/g, 'pi') // Convert pi symbol
+                .replace(/∞/g, 'infinity') // Convert infinity symbol
+                .replace(/±/g, '+-') // Convert plus-minus
+                .replace(/≈/g, '=') // Convert approximately equal
+                .replace(/≠/g, '!=') // Convert not equal
+                .replace(/≤/g, '<=') // Convert less than or equal
+                .replace(/≥/g, '>=') // Convert greater than or equal
+                .replace(/∂/g, 'd') // Convert partial derivative symbol
+                .replace(/∫/g, 'integral') // Convert integral symbol
+                .replace(/∑/g, 'sum') // Convert summation symbol
+                .replace(/∏/g, 'product') // Convert product symbol
+                .replace(/∆/g, 'delta') // Convert delta symbol
+                .replace(/α/g, 'alpha') // Convert alpha
+                .replace(/β/g, 'beta') // Convert beta
+                .replace(/γ/g, 'gamma') // Convert gamma
+                .replace(/θ/g, 'theta') // Convert theta
+                .replace(/λ/g, 'lambda') // Convert lambda
+                .replace(/μ/g, 'mu') // Convert mu
+                .replace(/σ/g, 'sigma') // Convert sigma
+                .replace(/φ/g, 'phi') // Convert phi
+                .replace(/ω/g, 'omega'); // Convert omega
+        }
+
+        // Check if two mathematical expressions are equivalent
+        function areEquivalent(userAnswer, correctAnswer) {
+            const normalizedUser = normalizeAnswer(userAnswer);
+            const normalizedCorrect = normalizeAnswer(correctAnswer);
+            
+            // Direct match
+            if (normalizedUser === normalizedCorrect) return true;
+            
+            // Check if user answer contains correct answer or vice versa
+            if (normalizedUser.includes(normalizedCorrect) || normalizedCorrect.includes(normalizedUser)) return true;
+            
+            // Check for common mathematical equivalencies
+            const equivalencies = [
+                [normalizedUser, normalizedCorrect],
+                [normalizedUser.replace(/\*/g, ''), normalizedCorrect.replace(/\*/g, '')], // Remove multiplication signs
+                [normalizedUser.replace(/\(/g, '').replace(/\)/g, ''), normalizedCorrect.replace(/\(/g, '').replace(/\)/g, '')], // Remove parentheses
+            ];
+            
+            return equivalencies.some(([a, b]) => a === b);
+        }
+
+        const mathCorrectAnswers = {
+            0: "lim h->0 [f(x+h)-f(x)]/h",
+            1: "lim h->0 [(x+h)³-x³]/h",
+            2: "3x²",
+            3: "0",
+            4: "left and right limits differ",
+            5: "-1",
+            6: "1",
+            7: "lim h→0 [√(x+h)-√x]/h",
+            8: "1/(2√x)",
+            9: "differentiable implies continuous",
+            10: "2"
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                loadProgress();
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        function loadProgress() {
+            const saved = sessionStorage.getItem('definition-derivative-intermediate-progress');
+            if (saved) {
+                mathAnswers = JSON.parse(saved);
+                restoreAnswers();
+            }
+        }
+
+        function restoreAnswers() {
+            const textInputQuestions = [4, 5, 9, 10];
+            
+            Object.keys(mathAnswers).forEach(questionNum => {
+                const qNum = parseInt(questionNum);
+                if (textInputQuestions.includes(qNum)) {
+                    // Restore text input
+                    const element = document.getElementById(`question${questionNum}`);
+                    if (element) {
+                        element.value = mathAnswers[questionNum];
+                    }
+                } else {
+                    // Restore MathQuill field
+                    const fieldId = `question${questionNum}`;
+                    const mathField = window.mathFields[fieldId];
+                    if (mathField && mathAnswers[questionNum]) {
+                        mathField.latex(mathAnswers[questionNum]);
+                    }
+                }
+            });
+            updateProgress();
+        }
+
+        window.checkMathAnswer = function(questionNum) {
+            const feedback = document.getElementById(`feedback-${questionNum}`);
+            const textInputQuestions = [4, 5, 9, 10];
+            
+            let userAnswer = '';
+            if (textInputQuestions.includes(questionNum)) {
+                // Get answer from text input
+                const element = document.getElementById(`question${questionNum}`);
+                userAnswer = element ? element.value.toLowerCase().trim() : '';
+            } else {
+                // Get answer from MathQuill field
+                const fieldId = `question${questionNum}`;
+                const mathField = window.mathFields[fieldId];
+                userAnswer = mathField ? mathField.latex() : '';
+            }
+            
+            mathAnswers[questionNum] = userAnswer;
+            sessionStorage.setItem('definition-derivative-intermediate-progress', JSON.stringify(mathAnswers));
+            
+            let isCorrect = false;
+            
+            console.log(`Question ${questionNum}: User answer: "${userAnswer}"`);
+            
+            if (questionNum == 0) {
+                // Formal definition - very flexible
+                const hasLimit = userAnswer.includes('lim') || userAnswer.includes('limit') || userAnswer.includes('\\lim');
+                const hasH = userAnswer.includes('h');
+                const hasZero = userAnswer.includes('0') || userAnswer.includes('\\to0') || userAnswer.includes('→0');
+                const hasFxh = userAnswer.includes('f(x+h)') || userAnswer.includes('f\\left(x+h\\right)') || userAnswer.includes('f(x+h)');
+                const hasFx = userAnswer.includes('f(x)') || userAnswer.includes('f\\left(x\\right)');
+                const hasMinus = userAnswer.includes('-');
+                const hasFrac = userAnswer.includes('/') || userAnswer.includes('\\frac');
+                
+                isCorrect = hasLimit && hasH && hasZero && hasFxh && hasFx && hasMinus && hasFrac;
+            } else if (questionNum == 1) {
+                // Setup for x³ - very flexible
+                const hasLimit = userAnswer.includes('lim') || userAnswer.includes('limit') || userAnswer.includes('\\lim');
+                const hasXPlusH = userAnswer.includes('x+h') || userAnswer.includes('(x+h)');
+                const hasCubed = userAnswer.includes('³') || userAnswer.includes('^3') || userAnswer.includes('^{3}');
+                const hasX = userAnswer.includes('x³') || userAnswer.includes('x^3') || userAnswer.includes('x^{3}');
+                const hasMinus = userAnswer.includes('-');
+                
+                isCorrect = hasLimit && hasXPlusH && hasCubed && hasX && hasMinus;
+            } else if (questionNum == 2) {
+                // Result 3x² - very flexible
+                const hasThree = userAnswer.includes('3');
+                const hasX = userAnswer.includes('x');
+                const hasSquared = userAnswer.includes('²') || userAnswer.includes('^2') || userAnswer.includes('^{2}');
+                
+                isCorrect = hasThree && hasX && hasSquared;
+            } else if (questionNum == 3) {
+                // Point x = 0 - very flexible
+                isCorrect = userAnswer.includes('0') || userAnswer.includes('zero') || 
+                           userAnswer.includes('origin') || userAnswer.includes('x=0') || userAnswer.includes('x = 0');
+            } else if (questionNum == 4) {
+                // Explanation - very flexible
+                isCorrect = (userAnswer.includes('left') && userAnswer.includes('right')) ||
+                           (userAnswer.includes('corner') || userAnswer.includes('sharp') || userAnswer.includes('cusp')) ||
+                           (userAnswer.includes('discontin') || userAnswer.includes('not smooth')) ||
+                           (userAnswer.includes('different') && userAnswer.includes('limit')) ||
+                           userAnswer.includes('not differentiable') || userAnswer.includes('no derivative');
+            } else if (questionNum == 5) {
+                // Left derivative -1 - very flexible
+                isCorrect = userAnswer.includes('-1') || userAnswer.includes('negative 1') || userAnswer.includes('minus 1') ||
+                           userAnswer.includes('negative one') || userAnswer.includes('-1.0') || userAnswer === '-1';
+            } else if (questionNum == 6) {
+                // Right derivative 1 - very flexible
+                isCorrect = (userAnswer === '1' || userAnswer === 'one' || userAnswer === 'positive 1' || 
+                            userAnswer === '1.0' || userAnswer.includes('positive')) && 
+                           !userAnswer.includes('-');
+            } else if (questionNum == 7) {
+                // Square root setup - very flexible
+                const hasLimit = userAnswer.includes('lim') || userAnswer.includes('limit') || userAnswer.includes('\\lim');
+                const hasSqrtXH = userAnswer.includes('√(x+h)') || userAnswer.includes('sqrt(x+h)') || 
+                                 userAnswer.includes('\\sqrt{x+h}') || userAnswer.includes('√x+h');
+                const hasSqrtX = userAnswer.includes('√x') || userAnswer.includes('sqrt(x)') || userAnswer.includes('\\sqrt{x}');
+                const hasMinus = userAnswer.includes('-');
+                
+                isCorrect = hasLimit && hasSqrtXH && hasSqrtX && hasMinus;
+            } else if (questionNum == 8) {
+                // Derivative result 1/(2√x) - very flexible
+                const hasOne = userAnswer.includes('1');
+                const hasTwo = userAnswer.includes('2');
+                const hasSqrtX = userAnswer.includes('√x') || userAnswer.includes('sqrt(x)') || userAnswer.includes('\\sqrt{x}');
+                const hasFrac = userAnswer.includes('/') || userAnswer.includes('\\frac');
+                
+                isCorrect = hasOne && hasTwo && hasSqrtX && hasFrac;
+            } else if (questionNum == 9) {
+                // Continuity relationship - very flexible
+                isCorrect = (userAnswer.includes('differentiable') && userAnswer.includes('continuous')) ||
+                           (userAnswer.includes('diff') && userAnswer.includes('cont')) ||
+                           userAnswer.includes('implies') || userAnswer.includes('then') ||
+                           userAnswer.includes('must be') || userAnswer.includes('always');
+            } else if (questionNum == 10) {
+                // Value of a = 2 - very flexible
+                isCorrect = userAnswer.includes('2') || userAnswer.includes('two') || 
+                           userAnswer === '2' || userAnswer === 'two';
+            }
+            
+            feedback.classList.remove('correct', 'incorrect');
+            feedback.classList.add('show');
+            
+            if (isCorrect) {
+                feedback.classList.add('correct');
+                feedback.innerHTML = '✅ Excellent! Your intermediate skills are developing!';
+            } else {
+                feedback.classList.add('incorrect');
+                feedback.innerHTML = '❌ Not quite right. Review the formal approach and try again!';
+            }
+            
+            updateProgress();
+        };
+
+        function updateProgress() {
+            const totalQuestions = 11;
+            const answeredCount = Object.keys(mathAnswers).filter(key => {
+                const answer = mathAnswers[key];
+                return answer && answer.trim() !== '';
+            }).length;
+            
+            // Update progress bar
+            const progress = (answeredCount / totalQuestions) * 100;
+            const progressFill = document.getElementById('progressFill');
+            if (progressFill) {
+                progressFill.style.width = progress + '%';
+            }
+            
+            // Progress tracking (no floating submit button needed)
+            
+            console.log(`Progress: ${answeredCount}/${totalQuestions} questions answered`);
+        }
+
+    window.submitQuiz = async function() {
+            if (Object.keys(mathAnswers).length < 11) {
+                alert('Please answer all questions before submitting.');
+            return;
+        }
+
+                    let score = 0;
+            const textInputQuestions = [4, 5, 9, 10];
+            
+            Object.keys(mathCorrectAnswers).forEach(questionNum => {
+                const qNum = parseInt(questionNum);
+                let userAnswer = '';
+                
+                if (textInputQuestions.includes(qNum)) {
+                    // Get answer from text input (preserve spaces for text answers)
+                    userAnswer = mathAnswers[questionNum]?.toLowerCase().trim() || '';
+                } else {
+                    // Get answer from MathQuill (remove spaces for math expressions)  
+                    userAnswer = mathAnswers[questionNum]?.toLowerCase().replace(/\s/g, '') || '';
+                }
+                let isCorrect = false;
+                
+                console.log(`Checking question ${questionNum}: "${userAnswer}"`);
+                
+                if (questionNum == 0) {
+                    // Formal definition - very flexible
+                    const hasLimit = userAnswer.includes('lim') || userAnswer.includes('limit') || userAnswer.includes('\\lim');
+                    const hasH = userAnswer.includes('h');
+                    const hasZero = userAnswer.includes('0') || userAnswer.includes('\\to0') || userAnswer.includes('→0');
+                    const hasFxh = userAnswer.includes('f(x+h)') || userAnswer.includes('f\\left(x+h\\right)') || userAnswer.includes('f(x+h)');
+                    const hasFx = userAnswer.includes('f(x)') || userAnswer.includes('f\\left(x\\right)');
+                    const hasMinus = userAnswer.includes('-');
+                    const hasFrac = userAnswer.includes('/') || userAnswer.includes('\\frac');
+                    
+                    isCorrect = hasLimit && hasH && hasZero && hasFxh && hasFx && hasMinus && hasFrac;
+                } else if (questionNum == 1) {
+                    // Setup for x³ - very flexible
+                    const hasLimit = userAnswer.includes('lim') || userAnswer.includes('limit') || userAnswer.includes('\\lim');
+                    const hasXPlusH = userAnswer.includes('x+h') || userAnswer.includes('(x+h)');
+                    const hasCubed = userAnswer.includes('³') || userAnswer.includes('^3') || userAnswer.includes('^{3}');
+                    const hasX = userAnswer.includes('x³') || userAnswer.includes('x^3') || userAnswer.includes('x^{3}');
+                    const hasMinus = userAnswer.includes('-');
+                    
+                    isCorrect = hasLimit && hasXPlusH && hasCubed && hasX && hasMinus;
+                } else if (questionNum == 2) {
+                    // Result 3x² - very flexible
+                    const hasThree = userAnswer.includes('3');
+                    const hasX = userAnswer.includes('x');
+                    const hasSquared = userAnswer.includes('²') || userAnswer.includes('^2') || userAnswer.includes('^{2}');
+                    
+                    isCorrect = hasThree && hasX && hasSquared;
+                } else if (questionNum == 3) {
+                    // Point x = 0 - very flexible
+                    isCorrect = userAnswer.includes('0') || userAnswer.includes('zero') || 
+                               userAnswer.includes('origin') || userAnswer.includes('x=0') || userAnswer.includes('x = 0');
+                } else if (questionNum == 4) {
+                    // Explanation - very flexible
+                    isCorrect = (userAnswer.includes('left') && userAnswer.includes('right')) ||
+                               (userAnswer.includes('corner') || userAnswer.includes('sharp') || userAnswer.includes('cusp')) ||
+                               (userAnswer.includes('discontin') || userAnswer.includes('not smooth')) ||
+                               (userAnswer.includes('different') && userAnswer.includes('limit')) ||
+                               userAnswer.includes('not differentiable') || userAnswer.includes('no derivative');
+                } else if (questionNum == 5) {
+                    // Left derivative -1 - very flexible
+                    isCorrect = userAnswer.includes('-1') || userAnswer.includes('negative 1') || userAnswer.includes('minus 1') ||
+                               userAnswer.includes('negative one') || userAnswer.includes('-1.0') || userAnswer === '-1';
+                } else if (questionNum == 6) {
+                    // Right derivative 1 - very flexible
+                    isCorrect = (userAnswer === '1' || userAnswer === 'one' || userAnswer === 'positive 1' || 
+                                userAnswer === '1.0' || userAnswer.includes('positive')) && 
+                               !userAnswer.includes('-');
+                } else if (questionNum == 7) {
+                    // Square root setup - very flexible
+                    const hasLimit = userAnswer.includes('lim') || userAnswer.includes('limit') || userAnswer.includes('\\lim');
+                    const hasSqrtXH = userAnswer.includes('√(x+h)') || userAnswer.includes('sqrt(x+h)') || 
+                                     userAnswer.includes('\\sqrt{x+h}') || userAnswer.includes('√x+h');
+                    const hasSqrtX = userAnswer.includes('√x') || userAnswer.includes('sqrt(x)') || userAnswer.includes('\\sqrt{x}');
+                    const hasMinus = userAnswer.includes('-');
+                    
+                    isCorrect = hasLimit && hasSqrtXH && hasSqrtX && hasMinus;
+                } else if (questionNum == 8) {
+                    // Derivative result 1/(2√x) - very flexible
+                    const hasOne = userAnswer.includes('1');
+                    const hasTwo = userAnswer.includes('2');
+                    const hasSqrtX = userAnswer.includes('√x') || userAnswer.includes('sqrt(x)') || userAnswer.includes('\\sqrt{x}');
+                    const hasFrac = userAnswer.includes('/') || userAnswer.includes('\\frac');
+                    
+                    isCorrect = hasOne && hasTwo && hasSqrtX && hasFrac;
+                } else if (questionNum == 9) {
+                    // Continuity relationship - very flexible
+                    isCorrect = (userAnswer.includes('differentiable') && userAnswer.includes('continuous')) ||
+                               (userAnswer.includes('diff') && userAnswer.includes('cont')) ||
+                               userAnswer.includes('implies') || userAnswer.includes('then') ||
+                               userAnswer.includes('must be') || userAnswer.includes('always');
+                } else if (questionNum == 10) {
+                    // Value of a = 2 - very flexible
+                    isCorrect = userAnswer.includes('2') || userAnswer.includes('two') || 
+                               userAnswer === '2' || userAnswer === 'two';
+                }
+                
+                if (isCorrect) score++;
+            });
+
+            const percentage = Math.round((score / 11) * 100);
+            const passed = score >= 8;
+
+            document.getElementById('scoreDisplay').textContent = `${score}/11 (${percentage}%)`;
+            document.getElementById('scoreDisplay').className = `score ${passed ? 'pass' : 'fail'}`;
+            document.getElementById('resultMessage').innerHTML = passed 
+                ? '<h3 style="color: var(--success-color);">🎉 Outstanding! You have mastered intermediate derivative definitions!</h3><p>You can now move to the Advanced level!</p>'
+                : '<h3 style="color: var(--danger-color);">Keep developing!</h3><p>You need at least 8 correct answers to pass. Review the concepts and try again.</p>';
+
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('submitBtn').style.display = 'none';
+
+            if (currentUser && passed) {
+                try {
+                    const userDocRef = doc(db, 'users', currentUser.uid);
+                    
+                    // Save with multiple key variations for compatibility
+                    const updateData = {
+                        moduleProgress: {
+                            // Primary key that profile.html expects
+                            "The definition of Derivative - Intermediate": percentage,
+                            // Backup key with original format
+                            "The Definition of Derivative - Intermediate": percentage,
+                            // URL-friendly backup key
+                            "the-definition-of-derivative-intermediate": percentage
+                        }
+                    };
+                    
+                    await setDoc(userDocRef, updateData, { merge: true });
+                    
+                    // Also save to session storage for immediate sync
+                    sessionStorage.setItem('moduleCompleted', JSON.stringify({
+                        module: "The definition of Derivative - Intermediate",
+                        score: percentage,
+                        timestamp: Date.now()
+                    }));
+                    
+                    console.log('✅ Module completion saved successfully:', updateData);
+                    sessionStorage.removeItem('definition-derivative-intermediate-progress');
+                } catch (error) {
+                    console.error('❌ Error saving module completion:', error);
+                    alert('There was an error saving your progress. Please try again or contact support.');
+                }
+            }
+
+            // Add automatic redirection to profile after 3 seconds
+            let countdown = 3;
+            const redirectMessage = document.createElement('div');
+            redirectMessage.style.cssText = 'margin-top: 20px; padding: 15px; background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; color: #856404; font-weight: 600; text-align: center;';
+            redirectMessage.innerHTML = `<p>🔄 Redirecting to Profile in <span id="countdown">${countdown}</span> seconds to show your updated progress...</p><p><a href="profile.html" style="color: #856404; text-decoration: underline;">Click here to go immediately</a></p>`;
+            document.getElementById('results').appendChild(redirectMessage);
+
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                const countdownElement = document.getElementById('countdown');
+                if (countdownElement) {
+                    countdownElement.textContent = countdown;
+                }
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    window.location.href = 'profile.html';
+                }
+            }, 1000);
+        };
+
+        // Enhanced Mathematical toolbar function matching introduction module pattern
+        window.insertMath = function(questionNum, symbol) {
+            try {
+                const fieldId = `question${questionNum}`;
+                if (!window.mathFields || !window.mathFields[fieldId]) {
+                    console.warn('MathField not properly initialized for question', questionNum);
+                    return;
+                }
+                
+                const field = window.mathFields[fieldId];
+                field.focus();
+                
+                switch(symbol) {
+                    case '\\frac{}{}':
+                        field.write('\\frac{}{}');
+                        field.keystroke('Left Left Left');
+                        break;
+                    case '\\sqrt{}':
+                        field.write('\\sqrt{}');
+                        field.keystroke('Left');
+                        break;
+                    case 'f(x)':
+                        field.write('f(x)');
+                        break;
+                    case 'f(x+h)':
+                        field.write('f(x+h)');
+                        break;
+                    case '\\lim':
+                        field.write('\\lim_{h \\to 0}');
+                        field.keystroke('Right');
+                        break;
+                    case '\\to':
+                        field.write('\\to ');
+                        break;
+                    case '*':
+                        field.write('\\cdot ');
+                        break;
+                    case '^':
+                        field.write('^{}');
+                        field.keystroke('Left');
+                        break;
+                    case '(':
+                        field.write('\\left(\\right)');
+                        field.keystroke('Left Left Left Left Left Left Left');
+                        break;
+                    case ')':
+                        field.write('\\right)');
+                        break;
+                    case '/':
+                        field.write('\\frac{}{}');
+                        field.keystroke('Left Left Left');
+                        break;
+                    default:
+                        field.write(symbol + ' ');
+                        break;
+                }
+                
+                // Update stored answer
+                const latex = field.latex();
+                mathAnswers[questionNum] = latex;
+                sessionStorage.setItem('definition-derivative-intermediate-progress', JSON.stringify(mathAnswers));
+                
+                field.blur();
+                field.focus();
+                
+            } catch (error) {
+                console.error('Error inserting math symbol:', error);
+            }
+        };
+</script>
+</body>
+</html> 
+
+
+
+
+
+
+

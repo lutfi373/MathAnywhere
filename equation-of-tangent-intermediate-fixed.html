@@ -1,0 +1,1973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equation of Tangent - Intermediate | MathAnywhere</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- MathQuill resources with improved loading mechanism -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+    <!-- Improved MathQuill loading with dual sources -->
+    <script>
+        // Create global variable
+        window.MQ = null;
+        
+        // First try primary CDN
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔄 Loading MathQuill...');
+            
+            // Function to initialize MathQuill
+            window.initMathQuill = function() {
+                try {
+                    window.MQ = MathQuill.getInterface(2);
+                    console.log('✅ MathQuill successfully initialized');
+                    window.mathQuillLoaded = true;
+                    
+                    // Initialize all math fields
+                    if (typeof initializeMathQuillFields === 'function') {
+                        initializeMathQuillFields();
+                    } else {
+                        console.warn('⚠️ initializeMathQuillFields function not available yet');
+                        // Set a timer to try again
+                        setTimeout(function() {
+                            if (typeof initializeMathQuillFields === 'function') {
+                                initializeMathQuillFields();
+                            }
+                        }, 1000);
+                    }
+                } catch (e) {
+                    console.error('❌ Failed to initialize MathQuill:', e);
+                }
+            };
+            
+            // Load from primary CDN
+            var primaryScript = document.createElement('script');
+            primaryScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js';
+            primaryScript.onload = function() {
+                console.log('✅ MathQuill loaded from primary CDN');
+                window.initMathQuill();
+            };
+            primaryScript.onerror = function() {
+                console.log('🔄 Primary MathQuill CDN failed, trying alternative...');
+                
+                // Load from alternative CDN
+                var backupScript = document.createElement('script');
+                backupScript.src = 'https://unpkg.com/mathquill@0.10.1/build/mathquill.min.js';
+                backupScript.onload = function() {
+                    console.log('✅ MathQuill loaded from backup CDN');
+                    window.initMathQuill();
+                };
+                backupScript.onerror = function() {
+                    console.error('❌ All MathQuill CDNs failed. Adding manual initialization button.');
+                    var errorMsg = document.createElement('div');
+                    errorMsg.style = 'background: #ffebee; color: #c62828; padding: 10px; margin: 10px 0; border-radius: 4px;';
+                    errorMsg.innerHTML = '<strong>MathQuill failed to load.</strong> Please try refreshing the page. If the problem persists, you can use text inputs as fallback.';
+                    document.body.prepend(errorMsg);
+                };
+                document.head.appendChild(backupScript);
+            };
+            document.head.appendChild(primaryScript);
+        });
+    </script>
+    
+    <!-- MathJax for rendering mathematical expressions -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Plotly for interactive graphs -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                packages: {'[+]': ['color']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <style>
+        :root {
+            --input-focus: #2d8cf0;
+            --font-color: #323232;
+            --font-color-sub: #666;
+            --bg-color: #f7f9fc;
+            --main-color: black;
+            --accent-color: #ffc107;
+            --secondary-color: #fd7e14;
+            --tertiary-color: #feca57;
+            --light-blue: #74b9ff;
+            --pink: #fd79a8;
+            --purple: #6c5ce7;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fira Code', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: var(--font-color);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255, 193, 7, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(253, 126, 20, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(254, 202, 87, 0.15) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            box-shadow: 
+                20px 20px 60px rgba(0, 0, 0, 0.1),
+                -20px -20px 60px rgba(255, 255, 255, 0.8),
+                inset 5px 5px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            border: 2px solid var(--main-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 3px solid var(--main-color);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 3em;
+            font-weight: 900;
+            position: relative;
+            z-index: 1;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.25);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+            z-index: 1;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 50px;
+        }
+
+        .question-container {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid var(--main-color);
+            box-shadow: 
+                8px 8px 20px rgba(0, 0, 0, 0.1),
+                -8px -8px 20px rgba(255, 255, 255, 0.7);
+            transition: all 0.4s ease;
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            border: 3px solid var(--main-color);
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            line-height: 1.7;
+            color: var(--font-color);
+            font-weight: 600;
+        }
+
+        .math-expression {
+            background: linear-gradient(135deg, #e8f8f5, #d1ecf1);
+            padding: 20px;
+            border-radius: 15px;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.4em;
+            text-align: center;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .math-input-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+            box-shadow: 
+                inset 2px 2px 5px rgba(0, 0, 0, 0.1),
+                inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .input-label {
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            display: block;
+            font-size: 1.1em;
+        }
+
+        .math-hint {
+            background: rgba(29, 209, 161, 0.1);
+            border-left: 4px solid var(--accent-color);
+            padding: 10px 15px;
+            margin-top: 10px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9em;
+        }
+
+        .answer-feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        .answer-feedback.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .answer-feedback.correct {
+            background: linear-gradient(135deg, var(--success-color), #20c997);
+            color: white;
+        }
+
+        .answer-feedback.incorrect {
+            background: linear-gradient(135deg, var(--danger-color), #fd7e14);
+            color: white;
+        }
+
+        .check-answer-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .check-answer-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--tertiary-color) 100%);
+            color: white;
+            border: 3px solid var(--main-color);
+            padding: 18px 50px;
+            border-radius: 50px;
+            font-size: 1.3em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            margin: 40px auto;
+            display: block;
+        }
+
+        .results {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+            text-align: center;
+            border: 3px solid var(--main-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .score {
+            font-size: 4em;
+            font-weight: 900;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .score.pass {
+            color: var(--success-color);
+        }
+
+        .score.fail {
+            color: var(--danger-color);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 3px solid var(--main-color);
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.4s ease;
+            flex: 1;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .nav-btn:hover {
+            color: white;
+            transform: translateY(-3px);
+            text-decoration: none;
+        }
+
+        .progress-bar {
+            background: rgba(233, 236, 239, 0.8);
+            height: 12px;
+            border-radius: 25px;
+            margin: 25px 0;
+            overflow: hidden;
+            border: 2px solid var(--main-color);
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--accent-color), var(--secondary-color), var(--tertiary-color));
+            height: 100%;
+            border-radius: 25px;
+            transition: width 0.6s ease;
+            width: 0%;
+        }
+        
+        /* MathQuill styling */
+        .mathquill-field {
+            width: 100%;
+            margin: 15px 0;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            min-height: 50px;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.1),
+                -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .mathquill-field:focus-within {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(29, 209, 161, 0.3);
+            transform: scale(1.02);
+        }
+
+        /* Text input field styling */
+        .text-input-field-wrapper {
+            width: 100%;
+            margin: 15px 0;
+        }
+        
+        .text-input-field {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: rgba(255, 255, 255, 0.95);
+            transition: all 0.3s ease;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.1),
+                -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+        
+        .text-input-field:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(29, 209, 161, 0.3);
+            transform: scale(1.02);
+        }
+
+        /* Enhanced Mathematical Toolbar Styling */
+        .math-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid var(--main-color);
+            border-radius: 15px;
+            box-shadow: 
+                2px 2px 8px rgba(0, 0, 0, 0.1),
+                -2px -2px 8px rgba(255, 255, 255, 0.8);
+            position: relative;
+        }
+
+        .math-toolbar::before {
+            content: "📐 Math Toolbar";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .math-btn {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 40px;
+            text-align: center;
+            color: var(--main-color);
+            box-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.1),
+                -1px -1px 3px rgba(255, 255, 255, 0.8);
+        }
+
+        .math-btn:hover {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 
+                3px 3px 8px rgba(0, 0, 0, 0.2),
+                -2px -2px 6px rgba(255, 255, 255, 0.9);
+        }
+
+        /* Interactive Graph Container */
+        .graph-container {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid var(--accent-color);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .graph-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .graph-control-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .graph-control-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        .graph-visualization {
+            width: 100%;
+            height: 400px;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        }
+
+        /* Answer format guides */
+        .answer-format {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(52, 152, 219, 0.05);
+            border: 1px dashed #3498db;
+            border-radius: 8px;
+            color: #333;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            text-align: center;
+            font-weight: normal;
+            position: relative;
+        }
+        
+        .answer-format::before {
+            content: "📝 Answer Format Guide";
+            position: absolute;
+            top: -12px;
+            left: 10px;
+            background: #3498db;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Show answer guide button */
+        .show-answer-btn {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            color: #333;
+            border: 1px solid #ccc;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            display: block;
+        }
+        
+        .show-answer-btn:hover {
+            background: linear-gradient(135deg, #fad0c4, #ff9a9e);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .graph-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .math-toolbar {
+                gap: 12px;
+            }
+            
+            .math-btn {
+                padding: 12px 16px;
+                font-size: 18px;
+                min-width: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+        <div class="header">
+            <h1>Equation of Tangent</h1>
+            <p>Advanced tangent line applications and complex functions</p>
+            <div class="difficulty-badge">Intermediate Level</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div id="questionsContainer">
+                <!-- Question 1 - Trigonometric Tangent -->
+                <div class="question-container">
+                    <div class="question-number">1</div>
+                    <div class="question-text">
+                        Find the equation of the tangent line to $f(x) = \sin(x)$ at $x = \frac{\pi}{4}$.
+                    </div>
+                    <div class="math-expression">$f(x) = \sin(x)$ at $x = \frac{\pi}{4}$</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Find the point and slope using trigonometric derivatives</label>
+                        
+                        <div class="mathquill-field" id="question0"></div>
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(0, 'y')">y</button>
+                            <button class="math-btn" onclick="insertMath(0, '=')"> = </button>
+                            <button class="math-btn" onclick="insertMath(0, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(0, '+')"> + </button>
+                            <button class="math-btn" onclick="insertMath(0, '-')"> - </button>
+                            <button class="math-btn" onclick="insertMath(0, '\\frac{\\sqrt{2}}{2}')">√2/2</button>
+                            <button class="math-btn" onclick="insertMath(0, '\\pi')">π</button>
+                            <button class="math-btn" onclick="insertMath(0, '\\frac{\\pi}{4}')">π/4</button>
+                            <button class="math-btn" onclick="insertMath(0, '(')"> ( </button>
+                            <button class="math-btn" onclick="insertMath(0, ')')"> ) </button>
+                        </div>
+                        
+                        <button class="check-answer-btn" onclick="checkMathAnswer(0)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-0"></div>
+                        <div class="math-hint">
+                            💡 Hint: $f'(x) = \cos(x)$, $f(\frac{\pi}{4}) = \frac{\sqrt{2}}{2}$, $f'(\frac{\pi}{4}) = \frac{\sqrt{2}}{2}$
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Interactive Graph for Tangent Line Visualization -->
+                <div class="question-container">
+                    <div class="question-number">📈</div>
+                    <div class="question-text">
+                        Interactive Tangent Line Visualization
+                    </div>
+                    <div class="math-expression">Explore how tangent lines change along different curves</div>
+                    
+                    <div class="graph-container">
+                        <div class="graph-controls">
+                            <button class="graph-control-btn" onclick="showFunction('quadratic')">f(x) = x²</button>
+                            <button class="graph-control-btn" onclick="showFunction('cubic')">f(x) = x³</button>
+                            <button class="graph-control-btn" onclick="showFunction('sine')">f(x) = sin(x)</button>
+                            <button class="graph-control-btn" onclick="animateTangentLine()">🎬 Animate Tangent</button>
+                            <button class="graph-control-btn" onclick="resetGraph()">🔄 Reset</button>
+                        </div>
+                        <div id="tangentGraph" class="graph-visualization"></div>
+                        <p style="margin-top: 15px; color: #666; font-size: 0.9em;">
+                            Click on the curve to see the tangent line at that point!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Question 2 - Exponential Tangent -->
+                <div class="question-container">
+                    <div class="question-number">2</div>
+                    <div class="question-text">
+                        What is the equation of the tangent line to $f(x) = e^x$ at $x = 0$?
+                    </div>
+                    <div class="math-expression">$f(x) = e^x$ at $x = 0$</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Use the exponential function properties</label>
+                        
+                        <div class="mathquill-field" id="question1"></div>
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(1, 'y')">y</button>
+                            <button class="math-btn" onclick="insertMath(1, '=')"> = </button>
+                            <button class="math-btn" onclick="insertMath(1, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(1, '+')"> + </button>
+                            <button class="math-btn" onclick="insertMath(1, '1')">1</button>
+                            <button class="math-btn" onclick="insertMath(1, 'e')">e</button>
+                            <button class="math-btn" onclick="insertMath(1, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(1, '(')"> ( </button>
+                            <button class="math-btn" onclick="insertMath(1, ')')"> ) </button>
+                        </div>
+                        
+                        <button class="check-answer-btn" onclick="checkMathAnswer(1)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-1"></div>
+                        <div class="math-hint">
+                            💡 Hint: $f'(x) = e^x$, and $e^0 = 1$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 3 - Normal Line -->
+                <div class="question-container">
+                    <div class="question-number">3</div>
+                    <div class="question-text">
+                        Find the equation of the normal line to $f(x) = x^2$ at the point $(1, 1)$.
+                    </div>
+                    <div class="math-expression">$f(x) = x^2$ at $(1, 1)$</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Normal line is perpendicular to tangent line</label>
+                        
+                    <div class="mathquill-field" id="question2"></div>
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(2, 'y')">y</button>
+                            <button class="math-btn" onclick="insertMath(2, '=')"> = </button>
+                            <button class="math-btn" onclick="insertMath(2, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(2, '+')"> + </button>
+                            <button class="math-btn" onclick="insertMath(2, '-')"> - </button>
+                            <button class="math-btn" onclick="insertMath(2, '\\frac{1}{2}')">1/2</button>
+                            <button class="math-btn" onclick="insertMath(2, '\\frac{3}{2}')">3/2</button>
+                            <button class="math-btn" onclick="insertMath(2, '(')"> ( </button>
+                            <button class="math-btn" onclick="insertMath(2, ')')"> ) </button>
+                        </div>
+                        
+                        <button class="check-answer-btn" onclick="checkMathAnswer(2)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-2"></div>
+                        <div class="math-hint">
+                            💡 Hint: If tangent slope is $m$, normal slope is $-\frac{1}{m}$
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 4 - Normal Slope -->
+                <div class="question-container">
+                    <div class="question-number">4</div>
+                    <div class="question-text">
+                        If the tangent line has slope $3$, what is the slope of the normal line?
+                    </div>
+                    <div class="math-expression">$m_{\text{tangent}} = 3$</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Apply the perpendicular slope relationship</label>
+                        
+                    <div class="mathquill-field" id="question3"></div>
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(3, '-')"> - </button>
+                            <button class="math-btn" onclick="insertMath(3, '\\frac{1}{3}')">1/3</button>
+                            <button class="math-btn" onclick="insertMath(3, '(')"> ( </button>
+                            <button class="math-btn" onclick="insertMath(3, ')')"> ) </button>
+                        </div>
+                        
+                        <button class="check-answer-btn" onclick="checkMathAnswer(3)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-3"></div>
+                        <div class="math-hint">
+                            💡 Hint: $m_{\text{normal}} = -\frac{1}{m_{\text{tangent}}}$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 5 - Physics Application -->
+                <div class="question-container">
+                    <div class="question-number">5</div>
+                    <div class="question-text">
+                        A ball's height is $h(t) = -16t^2 + 32t + 6$. Find the equation of the tangent line at $t = 1$.
+                    </div>
+                    <div class="math-expression">$h(t) = -16t^2 + 32t + 6$ at $t = 1$</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Apply calculus to real-world motion</label>
+                        
+                    <div class="mathquill-field" id="question4"></div>
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(4, 'h')">h</button>
+                            <button class="math-btn" onclick="insertMath(4, '=')"> = </button>
+                            <button class="math-btn" onclick="insertMath(4, '22')">22</button>
+                            <button class="math-btn" onclick="insertMath(4, 't')">t</button>
+                            <button class="math-btn" onclick="insertMath(4, '+')"> + </button>
+                            <button class="math-btn" onclick="insertMath(4, '-')"> - </button>
+                            <button class="math-btn" onclick="insertMath(4, '(')"> ( </button>
+                            <button class="math-btn" onclick="insertMath(4, ')')"> ) </button>
+                        </div>
+                        
+                        <button class="check-answer-btn" onclick="checkMathAnswer(4)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-4"></div>
+                        <div class="math-hint">
+                            💡 Hint: $h'(t) = -32t + 32$, find $h(1)$ and $h'(1)$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 6 - Optimization -->
+                <div class="question-container">
+                    <div class="question-number">6</div>
+                    <div class="question-text">
+                        For profit function $P(x) = -x^2 + 100x - 500$, at what production level is the tangent line horizontal?
+                    </div>
+                    <div class="math-expression">$P(x) = -x^2 + 100x - 500$</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Find where the derivative equals zero</label>
+                        
+                        <div class="mathquill-field" id="question5"></div>
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(5, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(5, '=')"> = </button>
+                            <button class="math-btn" onclick="insertMath(5, '50')">50</button>
+                            <button class="math-btn" onclick="insertMath(5, '(')"> ( </button>
+                            <button class="math-btn" onclick="insertMath(5, ')')"> ) </button>
+                        </div>
+                        
+                        <button class="check-answer-btn" onclick="checkMathAnswer(5)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-5"></div>
+                        <div class="math-hint">
+                            💡 Hint: Horizontal tangent means $P'(x) = 0$
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 7 - Logarithmic Function -->
+                <div class="question-container">
+                    <div class="question-number">7</div>
+                    <div class="question-text">
+                        Find the slope of the tangent line to $f(x) = \ln(x)$ at $x = e$.
+                    </div>
+                    <div class="math-expression">$f(x) = \ln(x)$ at $x = e$</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Use logarithmic differentiation rules</label>
+                        
+                        <div class="mathquill-field" id="question6"></div>
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(6, '\\frac{1}{e}')">1/e</button>
+                            <button class="math-btn" onclick="insertMath(6, '(')"> ( </button>
+                            <button class="math-btn" onclick="insertMath(6, ')')"> ) </button>
+                        </div>
+                        
+                        <button class="check-answer-btn" onclick="checkMathAnswer(6)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-6"></div>
+                        <div class="math-hint">
+                            💡 Hint: $\frac{d}{dx}[\ln(x)] = \frac{1}{x}$
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 8 - Inverse Function -->
+                <div class="question-container">
+                    <div class="question-number">8</div>
+                    <div class="question-text">
+                        What is the equation of the tangent line to $f(x) = \sqrt{x}$ at $x = 4$?
+                    </div>
+                    <div class="math-expression">$f(x) = \sqrt{x}$ at $x = 4$</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Use power rule for fractional exponents</label>
+                        
+                        <div class="mathquill-field" id="question7"></div>
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(7, 'y')">y</button>
+                            <button class="math-btn" onclick="insertMath(7, '=')"> = </button>
+                            <button class="math-btn" onclick="insertMath(7, '\\frac{x}{4}')">x/4</button>
+                            <button class="math-btn" onclick="insertMath(7, '+')"> + </button>
+                            <button class="math-btn" onclick="insertMath(7, '1')">1</button>
+                            <button class="math-btn" onclick="insertMath(7, '(')"> ( </button>
+                            <button class="math-btn" onclick="insertMath(7, ')')"> ) </button>
+                        </div>
+                        
+                        <button class="check-answer-btn" onclick="checkMathAnswer(7)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-7"></div>
+                        <div class="math-hint">
+                            💡 Hint: $\sqrt{x} = x^{1/2}$, so $f'(x) = \frac{1}{2\sqrt{x}}$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 9 - Complex Chain Rule -->
+                <div class="question-container">
+                    <div class="question-number">9</div>
+                    <div class="question-text">
+                        Find the slope of the tangent line to $f(x) = (2x + 1)^3$ at $x = 0$.
+                    </div>
+                    <div class="math-expression">$f(x) = (2x + 1)^3$ at $x = 0$</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Apply the chain rule</label>
+                        
+                        <div class="mathquill-field" id="question8"></div>
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(8, '6')">6</button>
+                            <button class="math-btn" onclick="insertMath(8, '(')"> ( </button>
+                            <button class="math-btn" onclick="insertMath(8, ')')"> ) </button>
+                        </div>
+                        
+                        <button class="check-answer-btn" onclick="checkMathAnswer(8)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-8"></div>
+                        <div class="math-hint">
+                            💡 Hint: $f'(x) = 3(2x + 1)^2 \cdot 2 = 6(2x + 1)^2$
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 10 - Tangent at Multiple Points -->
+                <div class="question-container">
+                    <div class="question-number">10</div>
+                    <div class="question-text">
+                        How many tangent lines to $y = x^3 - 3x$ pass through the point $(0, 2)$?
+                    </div>
+                    <div class="math-expression">$y = x^3 - 3x$, point $(0, 2)$</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Find all tangent lines passing through the given point</label>
+                        
+                        <div class="mathquill-field" id="question9"></div>
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(9, '3')">3</button>
+                            <button class="math-btn" onclick="insertMath(9, '(')"> ( </button>
+                            <button class="math-btn" onclick="insertMath(9, ')')"> ) </button>
+                        </div>
+                        
+                        <button class="check-answer-btn" onclick="checkMathAnswer(9)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-9"></div>
+                        <div class="math-hint">
+                            💡 Hint: Set up equation using point-slope form and solve for contact points
+                        </div>
+                    </div>
+                </div>
+                
+            <button class="submit-btn" id="submitBtn" onclick="submitQuiz()">Submit Quiz</button>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <button id="toggleAnswerGuide" class="nav-btn" style="background: linear-gradient(135deg, #ff7e5f, #feb47b); border: 2px solid #333; padding: 12px 25px; font-size: 16px;">
+                    📝 Show Answer Guide
+                </button>
+                    </div>
+
+            <div id="results" class="results" style="display: none;">
+                <div class="score" id="scoreDisplay"></div>
+                <div id="resultMessage"></div>
+                <div class="navigation">
+                    <a href="profile.html" class="nav-btn">← Back to Profile</a>
+                    <a href="equation-of-tangent-intermediate.html" class="nav-btn">Next: Intermediate →</a>
+                    </div>
+                </div>
+
+            <!-- Answer Guide Section -->
+            <div id="answerGuide" style="margin-top: 30px; padding: 20px; background: #f0f8ff; border: 2px solid #1e90ff; border-radius: 10px; display: none;">
+                <h4 style="color: #0066cc; margin-bottom: 15px;">📝 Answer Guide</h4>
+                <p style="font-size: 14px; color: #333; margin-bottom: 15px;">
+                    Use this guide if you're having trouble with the questions:
+                </p>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 1: What is a tangent line?</h5>
+                    <p><strong>Answer:</strong> "A tangent line is a straight line that <strong>touches</strong> a curve at a single point."</p>
+                    <p>Other acceptable words: contacts, meets, intersects</p>
+                    <p><strong>Explanation:</strong> A tangent line touches the curve at exactly one point and has the same slope as the curve at that point.</p>
+                    </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 2: How to find slope of tangent line</h5>
+                    <p><strong>Correct Answer:</strong> A) Take the derivative of the function and evaluate it at the point</p>
+                    <p><strong>Explanation:</strong> The derivative f'(x) gives us the slope of the tangent line at any point x.</p>
+                </div>
+
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 3: Tangent line to f(x) = x² at (2,4)</h5>
+                    <p><strong>Answer:</strong> y = 4x - 4</p>
+                    <p><strong>Step-by-step:</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li>f'(x) = 2x, so f'(2) = 4 (slope)</li>
+                        <li>Point: (2, 4)</li>
+                        <li>Using point-slope: y - 4 = 4(x - 2)</li>
+                        <li>Simplify: y - 4 = 4x - 8</li>
+                        <li>Final: y = 4x - 4</li>
+                    </ul>
+                    </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 4: Point-slope form</h5>
+                    <p><strong>Answer:</strong> y - y₁ = m(x - x₁)</p>
+                    <p><strong>Explanation:</strong> This form uses a known point (x₁, y₁) and slope m to write the equation of a line.</p>
+            </div>
+            
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 5: Apply point-slope form</h5>
+                    <p><strong>Answer:</strong> y = 5x - 2</p>
+                    <p><strong>Step-by-step:</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li>Given: m = 5, point (1, 3)</li>
+                        <li>Point-slope: y - 3 = 5(x - 1)</li>
+                        <li>Expand: y - 3 = 5x - 5</li>
+                        <li>Solve for y: y = 5x - 5 + 3</li>
+                        <li>Final: y = 5x - 2</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+        import { getFirestore, doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBUfSOSpmCdWUGTVbSQsMCH-JVmrjpfdPY",
+        authDomain: "fyp-lutfi-naim.firebaseapp.com",
+        projectId: "fyp-lutfi-naim",
+        storageBucket: "fyp-lutfi-naim.firebasestorage.app",
+        messagingSenderId: "231274529807",
+        appId: "1:231274529807:web:c4ea279f9e7581bd674f7a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+        let mathAnswers = {};
+        let currentUser = null;
+        let mathFields = {};
+        let currentFunction = 'quadratic';
+        let animationRunning = false;
+
+        // Initialize MathQuill and page functionality
+            function initializeMathQuillFields() {
+            try {
+                if (!window.MQ && typeof MathQuill !== 'undefined') {
+                    window.MQ = MathQuill.getInterface(2);
+                }
+                
+                if (!window.MQ) {
+                    throw new Error("MathQuill interface not available");
+                }
+                
+                window.mathFields = window.mathFields || {};
+                
+                // Initialize MathQuill fields (matching intermediate module pattern)
+                const mathFieldIds = ['question2', 'question3', 'question4'];
+                let successCount = 0;
+                
+                mathFieldIds.forEach(fieldId => {
+                    const fieldElement = document.getElementById(fieldId);
+                    if (fieldElement) {
+                        try {
+                            fieldElement.innerHTML = '';
+                            
+                            const mathField = window.MQ.MathField(fieldElement, {
+                                spaceBehavesLikeTab: true,
+                                leftRightIntoCmdGoes: 'up',
+                                restrictMismatchedBrackets: true,
+                                autoCommands: 'pi theta sqrt sum prod alpha beta gamma delta epsilon zeta eta mu nu xi rho sigma tau phi chi psi omega',
+                                autoOperatorNames: 'sin cos tan sec csc cot sinh cosh tanh ln log exp lim',
+                                handlers: {
+                                    edit: function() {
+                                        try {
+                                            const latex = mathField.latex();
+                                            const questionNum = fieldId.replace('question', '');
+                                            mathAnswers[questionNum] = latex;
+                                            sessionStorage.setItem('equation-tangent-novice-progress', JSON.stringify(mathAnswers));
+                                        } catch (err) {
+                                            console.error(`Error updating LaTeX for ${fieldId}:`, err);
+                                        }
+                                    }
+                                }
+                            });
+                            
+                            window.mathFields[fieldId] = mathField;
+                            successCount++;
+                            console.log(`✅ MathQuill initialized for ${fieldId}`);
+                        } catch (fieldError) {
+                            console.error(`❌ Error initializing MathQuill for ${fieldId}:`, fieldError);
+                        }
+                    } else {
+                        console.warn(`⚠️ Element not found: ${fieldId}`);
+                    }
+                });
+                
+                if (successCount > 0) {
+                    window.mathQuillInitialized = true;
+                    console.log(`✅ MathQuill initialization complete (${successCount}/${mathFieldIds.length} fields initialized)`);
+                    
+                    // Restore saved answers for MathQuill fields
+                    restoreSavedMathFields();
+                } else {
+                    console.error('❌ No MathQuill fields were successfully initialized');
+                }
+                
+            } catch (error) {
+                console.error('❌ Error during MathQuill initialization:', error);
+                // Show error message to user
+                const errorMessage = document.createElement('div');
+                errorMessage.style = 'background: #fff6f6; color: #9f3a38; padding: 10px; margin: 10px 0; border-radius: 4px; text-align: center;';
+                errorMessage.innerHTML = '<strong>Math Input Error:</strong> Please try refreshing the page.';
+                document.querySelector('.content')?.prepend(errorMessage);
+                // No backup inputs needed
+            }
+            
+            // Initialize other components
+            initializeOtherComponents();
+        }
+        
+        function restoreSavedMathFields() {
+            try {
+                if (!window.mathAnswers) return;
+                
+                // Restore MathQuill fields from saved answers
+                for (let i = 2; i <= 4; i++) {
+                    const fieldId = `question${i}`;
+                    const savedAnswer = window.mathAnswers[i];
+                    
+                    if (savedAnswer && window.mathFields[fieldId]) {
+                        try {
+                            window.mathFields[fieldId].latex(savedAnswer);
+                            console.log(`✅ Restored saved answer for ${fieldId}: ${savedAnswer}`);
+                        } catch (err) {
+                            console.error(`Error restoring saved answer for ${fieldId}:`, err);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error restoring saved MathQuill fields:', error);
+            }
+        }
+
+        function initializeOtherComponents() {
+            console.log('📐 Tangent Lines module DOM loaded');
+            
+            // Set up text input event listeners
+            const textInput = document.getElementById('question0');
+            if (textInput) {
+                textInput.addEventListener('input', function() {
+                    mathAnswers[0] = this.value;
+                    sessionStorage.setItem('equation-tangent-novice-progress', JSON.stringify(mathAnswers));
+                });
+                
+                textInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        checkMathAnswer(0);
+                    }
+                });
+            }
+            
+            // Set up radio button event listeners
+            const radioButtons = document.querySelectorAll('input[type="radio"]');
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.name === 'question2') {
+                        mathAnswers[1] = this.value;
+                        sessionStorage.setItem('equation-tangent-novice-progress', JSON.stringify(mathAnswers));
+                    }
+                });
+            });
+            
+            // Set up answer guide toggle
+            document.getElementById('toggleAnswerGuide').addEventListener('click', toggleAnswerGuide);
+            
+            // Initialize the interactive graph
+            setTimeout(() => {
+                initializeTangentGraph();
+            }, 500); // Small delay to ensure Plotly is fully loaded
+            
+            console.log('✅ Tangent Lines module initialized successfully');
+        }
+        
+        // Start the initialization process
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📐 Equation of Tangent - Novice module loaded');
+            
+            // Initialize MathQuill fields directly without alternative methods
+            
+            // Initialize MathQuill with retry mechanism
+            let initAttempts = 0;
+            const maxAttempts = 20;
+            
+            function attemptMathQuillInitialization() {
+                initAttempts++;
+                
+                if (typeof MathQuill !== 'undefined') {
+                    console.log('✅ MathQuill available, initializing fields...');
+                    initializeMathQuillFields();
+                } else {
+                    console.log(`⏳ Waiting for MathQuill to load (attempt ${initAttempts}/${maxAttempts})...`);
+                    if (initAttempts < maxAttempts) {
+                        setTimeout(attemptMathQuillInitialization, 300);
+                    } else {
+                        console.error('❌ MathQuill failed to load after maximum attempts');
+                        // No alternative input methods needed
+                        console.error('Could not initialize MathQuill fields');
+                    }
+                }
+            }
+            
+            // Start initialization process
+            setTimeout(attemptMathQuillInitialization, 500);
+            
+            // Load saved progress
+            const saved = sessionStorage.getItem('equation-tangent-novice-progress');
+            if (saved) {
+                try {
+                    window.mathAnswers = JSON.parse(saved) || {};
+                    console.log('✅ Loaded saved progress:', window.mathAnswers);
+                    
+                    // Restore text inputs
+                    const textInput = document.getElementById('question0');
+                    if (textInput && window.mathAnswers[0]) {
+                        textInput.value = window.mathAnswers[0];
+                    }
+                    
+                    // Restore radio buttons
+                    if (window.mathAnswers[1]) {
+                        const radioId = `option2${window.mathAnswers[1]}`;
+                        const radioBtn = document.getElementById(radioId);
+                        if (radioBtn) radioBtn.checked = true;
+                    }
+                    
+                    // MathQuill fields will be restored after initialization
+                } catch (e) {
+                    console.error('Error loading saved progress:', e);
+                }
+            }
+        });
+
+        const mathCorrectAnswers = {
+            0: "y = (√2/2)x + (√2/2)(1 - π/4)",
+            1: "y = x + 1", 
+            2: "y = -x/2 + 3/2",
+            3: "-1/3",
+            4: "h = 22",
+            5: "50",
+            6: "1/e",
+            7: "y = x/4 + 1",
+            8: "6",
+            9: "3"
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                loadProgress();
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        function loadProgress() {
+            const saved = sessionStorage.getItem('equation-tangent-intermediate-progress');
+            if (saved) {
+                mathAnswers = JSON.parse(saved);
+                restoreAnswers();
+            }
+        }
+
+        function restoreAnswers() {
+            Object.keys(mathAnswers).forEach(questionNum => {
+                if (mathFields[questionNum]) {
+                    mathFields[questionNum].latex(mathAnswers[questionNum]);
+                }
+            });
+            updateProgress();
+        }
+
+        window.checkMathAnswer = function(questionNum) {
+            try {
+                console.log(`Checking answer for question ${questionNum}...`);
+                let userAnswer = '';
+                const feedback = document.getElementById(`feedback-${questionNum}`);
+                
+                if (!feedback) {
+                    console.error(`Feedback element not found for question ${questionNum}`);
+                    return;
+                }
+                
+                // Get user answer based on question type
+                // All questions now use MathQuill
+                const fieldId = `question${questionNum}`;
+                const mathField = window.mathFields[fieldId];
+                
+                if (mathField && typeof mathField.latex === 'function') {
+                    userAnswer = mathField.latex().toLowerCase().replace(/\s/g, '');
+                } else {
+                    console.warn(`MathField not available for ${fieldId}`);
+                    userAnswer = '';
+                }
+                
+                // Check for blank answers
+                if (!userAnswer || userAnswer.trim() === '') {
+                    feedback.classList.remove('correct', 'incorrect');
+                    feedback.classList.add('show', 'incorrect');
+                    feedback.innerHTML = '❌ Please provide an answer before checking.';
+                    return;
+                }
+                
+                // Store answer
+                window.mathAnswers = window.mathAnswers || {};
+                window.mathAnswers[questionNum] = userAnswer;
+                sessionStorage.setItem('equation-tangent-intermediate-progress', JSON.stringify(mathAnswers));
+                
+                let isCorrect = false;
+                
+                console.log(`Question ${questionNum}: User answer: "${userAnswer}", Expected: "${mathCorrectAnswers[questionNum]}"`);
+                
+                if (questionNum === 0) {
+                    // Question 1: Trigonometric tangent
+                    isCorrect = (userAnswer.includes('\\sqrt{2}/2') || userAnswer.includes('\\frac{\\sqrt{2}}{2}') || 
+                                userAnswer.includes('0.707')) && userAnswer.includes('y=');
+                } else if (questionNum === 1) {
+                    // Question 2: Exponential tangent
+                    isCorrect = (userAnswer.includes('y=x+1') || userAnswer.includes('y=1+x'));
+                } else if (questionNum === 2) {
+                    // Question 3: Normal line
+                    isCorrect = (userAnswer.includes('y=-x/2+3/2') || userAnswer.includes('y=-\\frac{x}{2}+\\frac{3}{2}') ||
+                               userAnswer.includes('y=\\frac{3}{2}-\\frac{x}{2}') || userAnswer.includes('y=-0.5x+1.5'));
+                } else if (questionNum === 3) {
+                    // Question 4: Normal slope
+                    isCorrect = userAnswer.includes('-1/3') || userAnswer.includes('-\\frac{1}{3}') || userAnswer.includes('-0.333');
+                } else if (questionNum === 4) {
+                    // Question 5: Physics application
+                    isCorrect = userAnswer.includes('h=22') || userAnswer.includes('h=22t') || userAnswer.includes('h=22t+0');
+                } else if (questionNum === 5) {
+                    // Question 6: Optimization
+                    isCorrect = userAnswer.includes('x=50') || userAnswer.includes('50');
+                } else if (questionNum === 6) {
+                    // Question 7: Logarithmic function
+                    isCorrect = userAnswer.includes('1/e') || userAnswer.includes('\\frac{1}{e}') || userAnswer.includes('0.368');
+                } else if (questionNum === 7) {
+                    // Question 8: Square root function
+                    isCorrect = (userAnswer.includes('y=x/4+1') || userAnswer.includes('y=\\frac{x}{4}+1') ||
+                               userAnswer.includes('y=1+\\frac{x}{4}') || userAnswer.includes('y=0.25x+1'));
+                } else if (questionNum === 8) {
+                    // Question 9: Chain rule
+                    isCorrect = userAnswer.includes('6');
+                } else if (questionNum === 9) {
+                    // Question 10: Multiple tangent lines
+                    isCorrect = userAnswer.includes('3');
+                }
+                
+                feedback.classList.remove('correct', 'incorrect');
+                feedback.classList.add('show');
+                
+                console.log(`Question ${questionNum} validation result: ${isCorrect ? 'CORRECT' : 'INCORRECT'}`);
+                
+                if (isCorrect) {
+                    feedback.classList.add('correct');
+                    feedback.innerHTML = '✅ Excellent! You understand this concept!';
+                } else {
+                    feedback.classList.add('incorrect');
+                    feedback.innerHTML = `❌ Not quite right. ${getHintForQuestion(questionNum)}`;
+                }
+            } catch (error) {
+                console.error(`Error checking answer for question ${questionNum}:`, error);
+            }
+        };
+
+        // Helper function to provide specific hints
+        function getHintForQuestion(questionNum) {
+            const hints = {
+                0: "For sin(π/4) = √2/2, and the derivative is cos(π/4) = √2/2. Use point-slope form.",
+                1: "For e^x at x=0, we have e^0=1 and the derivative is also e^0=1.",
+                2: "The normal line is perpendicular to the tangent. At (1,1), f'(1)=2, so normal slope is -1/2.",
+                3: "If tangent slope is m, the normal slope is -1/m.",
+                4: "Find h(1) and h'(1) where h(t) = -16t² + 32t + 6.",
+                5: "For horizontal tangent, find where P'(x) = 0.",
+                6: "The derivative of ln(x) is 1/x, so at x=e, the slope is 1/e.",
+                7: "For f(x)=√x at x=4, f(4)=2 and f'(4)=1/(2√4)=1/4.",
+                8: "Use the chain rule: f'(x) = 3(2x+1)² · 2 and evaluate at x=0.",
+                9: "Set up the equation for tangent lines passing through (0,2) and solve."
+            };
+            return hints[questionNum] || "Review the concept and try again.";
+        }
+
+        // Interactive Graph Functions
+        window.initializeTangentGraph = function() {
+            console.log('Initializing tangent graph...');
+            if (typeof Plotly !== 'undefined') {
+                showFunction('quadratic');
+            } else {
+                console.log('Plotly not available, creating fallback');
+                createFallbackGraph();
+            }
+        };
+
+        window.showFunction = function(funcType) {
+            console.log('Showing function:', funcType);
+            currentFunction = funcType;
+            const graphDiv = document.getElementById('tangentGraph');
+            if (!graphDiv || typeof Plotly === 'undefined') {
+                console.log('Plotly not available, using fallback');
+                createFallbackGraph();
+                return;
+            }
+            
+            // Stop any running animation
+            animationRunning = false;
+            
+            let func, derivative, funcText, xRange = [-3, 3], yRange = [-5, 10];
+            
+            switch(funcType) {
+                case 'quadratic':
+                    func = (x) => x * x;
+                    derivative = (x) => 2 * x;
+                    funcText = 'f(x) = x²';
+                    yRange = [-1, 9];
+                    break;
+                case 'cubic':
+                    func = (x) => x * x * x / 3;
+                    derivative = (x) => x * x;
+                    funcText = 'f(x) = x³/3';
+                    yRange = [-8, 8];
+                    break;
+                case 'sine':
+                    func = (x) => Math.sin(x);
+                    derivative = (x) => Math.cos(x);
+                    funcText = 'f(x) = sin(x)';
+                    xRange = [-2*Math.PI, 2*Math.PI];
+                    yRange = [-2, 2];
+                    break;
+                default:
+                    func = (x) => x * x;
+                    derivative = (x) => 2 * x;
+                    funcText = 'f(x) = x²';
+                    yRange = [-1, 9];
+            }
+            
+            const xValues = [];
+            const yValues = [];
+            const step = funcType === 'sine' ? 0.05 : 0.1; // Finer resolution for sine
+            for (let x = xRange[0]; x <= xRange[1]; x += step) {
+                xValues.push(x);
+                yValues.push(func(x));
+            }
+            
+            const data = [{
+                x: xValues,
+                y: yValues,
+                type: 'scatter',
+                mode: 'lines',
+                name: funcText,
+                line: { color: 'blue', width: 3 }
+            }];
+            
+            const layout = {
+                title: `Interactive Tangent Lines - ${funcText}`,
+                xaxis: { 
+                    title: 'x', 
+                    range: xRange,
+                    gridcolor: '#e1e1e1',
+                    zerolinecolor: '#666'
+                },
+                yaxis: { 
+                    title: 'y', 
+                    range: yRange,
+                    gridcolor: '#e1e1e1',
+                    zerolinecolor: '#666'
+                },
+                showlegend: true,
+                margin: { t: 60, r: 50, b: 50, l: 50 },
+                hovermode: 'closest',
+                plot_bgcolor: 'rgba(248,249,250,0.8)',
+                paper_bgcolor: 'rgba(255,255,255,0.9)'
+            };
+            
+            const config = {
+                responsive: true,
+                displayModeBar: false
+            };
+            
+            Plotly.newPlot(graphDiv, data, layout, config).then(() => {
+                console.log('Graph plotted successfully');
+                
+                // Add click event to show tangent line
+                graphDiv.on('plotly_click', function(eventData) {
+                    if (eventData.points && eventData.points.length > 0) {
+                        const x = eventData.points[0].x;
+                        const y = func(x);
+                        const slope = derivative(x);
+                        console.log(`Clicked at x=${x.toFixed(2)}, y=${y.toFixed(2)}, slope=${slope.toFixed(2)}`);
+                        addTangentLine(x, y, slope, func, funcText);
+                    }
+                });
+            }).catch((error) => {
+                console.error('Error plotting graph:', error);
+                createFallbackGraph();
+            });
+        };
+
+        function addTangentLine(x0, y0, slope, func, funcText) {
+            const graphDiv = document.getElementById('tangentGraph');
+            if (!graphDiv || typeof Plotly === 'undefined') return;
+            
+            // Create tangent line points
+            const xRange = 2;
+            const tangentX = [x0 - xRange, x0 + xRange];
+            const tangentY = tangentX.map(x => y0 + slope * (x - x0));
+            
+            const tangentTrace = {
+                x: tangentX,
+                y: tangentY,
+                type: 'scatter',
+                mode: 'lines',
+                name: `Tangent at (${x0.toFixed(2)}, ${y0.toFixed(2)})`,
+                line: { color: 'red', width: 2, dash: 'dash' }
+            };
+            
+            const pointTrace = {
+                x: [x0],
+                y: [y0],
+                type: 'scatter',
+                mode: 'markers',
+                name: 'Touch Point',
+                marker: { color: 'red', size: 8 }
+            };
+            
+            // Get current data to check how many traces exist
+            const currentData = graphDiv.data || [];
+            
+            // Remove previous tangent lines if they exist
+            try {
+                if (currentData.length > 1) {
+                    // Remove all traces except the first one (the function curve)
+                    const indicesToDelete = [];
+                    for (let i = currentData.length - 1; i > 0; i--) {
+                        indicesToDelete.push(i);
+                    }
+                    if (indicesToDelete.length > 0) {
+                        Plotly.deleteTraces(graphDiv, indicesToDelete);
+                    }
+                }
+            } catch (error) {
+                console.log('Error removing traces:', error);
+            }
+            
+            // Add new tangent line and point
+            Plotly.addTraces(graphDiv, [tangentTrace, pointTrace]);
+            
+            // Update title with slope information
+            const update = {
+                title: `${funcText} - Tangent at x=${x0.toFixed(2)}, slope=${slope.toFixed(2)}`
+            };
+            Plotly.relayout(graphDiv, update);
+        }
+
+        window.animateTangentLine = function() {
+            console.log('Starting tangent line animation...');
+            
+            // Check if Plotly is available and graph exists
+            const graphDiv = document.getElementById('tangentGraph');
+            if (!graphDiv || typeof Plotly === 'undefined') {
+                console.log('Plotly or graph div not available');
+                alert('Please wait for the graph to load before starting animation.');
+                return;
+            }
+            
+            if (animationRunning) {
+                console.log('Animation already running');
+                return;
+            }
+            
+            animationRunning = true;
+            console.log('Animation started for function:', currentFunction);
+            
+            // Update button text to show animation is running
+            const animateBtn = document.querySelector('button[onclick="animateTangentLine()"]');
+            if (animateBtn) {
+                animateBtn.textContent = '⏸️ Animating...';
+                animateBtn.style.opacity = '0.7';
+            }
+            
+            let x = -2;
+            const step = 0.15;
+            const maxX = 2;
+            
+            let func, derivative, funcText, xRange, yRange;
+            switch(currentFunction) {
+                case 'quadratic':
+                    func = (x) => x * x;
+                    derivative = (x) => 2 * x;
+                    funcText = 'f(x) = x²';
+                    xRange = [-3, 3];
+                    yRange = [-1, 9];
+                    break;
+                case 'cubic':
+                    func = (x) => x * x * x / 3;
+                    derivative = (x) => x * x;
+                    funcText = 'f(x) = x³/3';
+                    xRange = [-3, 3];
+                    yRange = [-8, 8];
+                    break;
+                case 'sine':
+                    func = (x) => Math.sin(x);
+                    derivative = (x) => Math.cos(x);
+                    funcText = 'f(x) = sin(x)';
+                    xRange = [-2*Math.PI, 2*Math.PI];
+                    yRange = [-2, 2];
+                    x = -Math.PI; // Start from -π for sine
+                    maxX = Math.PI; // End at π for sine
+                    break;
+                default:
+                    func = (x) => x * x;
+                    derivative = (x) => 2 * x;
+                    funcText = 'f(x) = x²';
+                    xRange = [-3, 3];
+                    yRange = [-1, 9];
+            }
+            
+            const animate = () => {
+                if (x <= maxX && animationRunning) {
+                    try {
+                        const y = func(x);
+                        const slope = derivative(x);
+                        console.log(`Animation step: x=${x.toFixed(2)}, y=${y.toFixed(2)}, slope=${slope.toFixed(2)}`);
+                        addTangentLine(x, y, slope, func, funcText);
+                        x += step;
+                        window.animationTimeout = setTimeout(animate, 600); // Slightly slower for better visibility
+                    } catch (error) {
+                        console.error('Error in animation step:', error);
+                        animationRunning = false;
+                        
+                        // Reset button text on error
+                        const animateBtn = document.querySelector('button[onclick="animateTangentLine()"]');
+                        if (animateBtn) {
+                            animateBtn.textContent = '🎬 Animate Tangent';
+                            animateBtn.style.opacity = '1';
+                        }
+                    }
+                } else {
+                    console.log('Animation completed');
+                    animationRunning = false;
+                    
+                    // Reset button text
+                    const animateBtn = document.querySelector('button[onclick="animateTangentLine()"]');
+                    if (animateBtn) {
+                        animateBtn.textContent = '🎬 Animate Tangent';
+                        animateBtn.style.opacity = '1';
+                    }
+                }
+            };
+            
+            animate();
+        };
+
+        window.resetGraph = function() {
+            console.log('Resetting graph...');
+            animationRunning = false;
+            
+            // Clear any existing timeouts
+            clearTimeout(window.animationTimeout);
+            
+            // Re-initialize the current function
+            setTimeout(() => {
+                showFunction(currentFunction);
+            }, 100);
+        };
+
+        function createFallbackGraph() {
+            const graphDiv = document.getElementById('tangentGraph');
+            if (!graphDiv) return;
+            
+            graphDiv.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; height: 100%; flex-direction: column; background: #f8f9fa; border-radius: 10px;">
+                    <h3 style="color: #666; margin-bottom: 15px;">📈 Interactive Graph</h3>
+                    <p style="color: #888; text-align: center; margin: 10px;">
+                        This interactive graph shows how tangent lines change along different curves.
+                    </p>
+                    <p style="color: #888; text-align: center; margin: 10px;">
+                        • Click on a curve to see the tangent line at that point<br>
+                        • Use the buttons above to switch between functions<br>
+                        • Watch how the slope changes as you move along the curve
+                    </p>
+                    <div style="margin-top: 20px; padding: 15px; background: white; border-radius: 8px; border: 2px solid #ddd;">
+                        <strong>Key Concepts:</strong><br>
+                        • Tangent line touches curve at exactly one point<br>
+                        • Slope of tangent = derivative of function at that point<br>
+                        • Steeper curves have tangent lines with larger slopes
+                    </div>
+                </div>
+            `;
+        }
+
+        // Enhanced Mathematical toolbar function
+        window.insertMath = function(questionNum, symbol) {
+            try {
+                const fieldId = typeof questionNum === 'string' ? `question${questionNum}` : `question${questionNum}`;
+                const mathField = window.mathFields[fieldId];
+                
+                if (!mathField || typeof mathField.write !== 'function') {
+                    console.warn('MathField not initialized for question', questionNum);
+                    return;
+                }
+                
+                mathField.focus();
+                
+                // Handle special cases
+                switch(symbol) {
+                    case 'y_1':
+                        mathField.write('y_1');
+                        break;
+                    case 'x_1':
+                        mathField.write('x_1');
+                        break;
+                    default:
+                        mathField.write(symbol);
+                        break;
+                }
+                
+                // Store answer
+                const latex = mathField.latex();
+                const actualQuestionNum = fieldId.replace('question', '');
+                window.mathAnswers = window.mathAnswers || {};
+                window.mathAnswers[actualQuestionNum] = latex;
+                sessionStorage.setItem('equation-tangent-novice-progress', JSON.stringify(mathAnswers));
+                
+                console.log(`✅ Inserted "${symbol}" into ${fieldId}, LaTeX: ${latex}`);
+                
+            } catch (error) {
+                console.error('Error inserting math symbol:', error);
+            }
+        };
+
+        // Toggle answer guide
+        window.toggleAnswerGuide = function() {
+            const answerGuide = document.getElementById('answerGuide');
+            const toggleBtn = document.getElementById('toggleAnswerGuide');
+            
+            if (answerGuide.style.display === 'none') {
+                answerGuide.style.display = 'block';
+                toggleBtn.textContent = '📝 Hide Answer Guide';
+                answerGuide.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                answerGuide.style.display = 'none';
+                toggleBtn.textContent = '📝 Show Answer Guide';
+            }
+        };
+
+    window.submitQuiz = async function() {
+            // Check if all questions have been answered
+            const requiredQuestions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]; // 10 questions total
+            const unansweredQuestions = requiredQuestions.filter(q => 
+                !mathAnswers[q] || (typeof mathAnswers[q] === 'string' && mathAnswers[q].trim() === ''));
+                
+            if (unansweredQuestions.length > 0) {
+                alert(`Please answer all questions before submitting. Missing answers for questions: ${unansweredQuestions.map(q => q + 1).join(', ')}`);
+            return;
+        }
+
+        let score = 0;
+            // Check each question using the same validation logic as checkMathAnswer
+            requiredQuestions.forEach(questionNum => {
+                try {
+                    const userAnswer = mathAnswers[questionNum] || '';
+                    let isCorrect = false;
+                    const lowerAnswer = typeof userAnswer === 'string' ? userAnswer.toLowerCase().replace(/\s/g, '') : '';
+                    
+                    if (questionNum === 0) {
+                        // Question 1: Trigonometric tangent
+                        isCorrect = (lowerAnswer.includes('\\sqrt{2}/2') || lowerAnswer.includes('\\frac{\\sqrt{2}}{2}') || 
+                                   lowerAnswer.includes('0.707')) && lowerAnswer.includes('y=');
+                    } else if (questionNum === 1) {
+                        // Question 2: Exponential tangent
+                        isCorrect = (lowerAnswer.includes('y=x+1') || lowerAnswer.includes('y=1+x'));
+                    } else if (questionNum === 2) {
+                        // Question 3: Normal line
+                        isCorrect = (lowerAnswer.includes('y=-x/2+3/2') || lowerAnswer.includes('y=-\\frac{x}{2}+\\frac{3}{2}') ||
+                                   lowerAnswer.includes('y=\\frac{3}{2}-\\frac{x}{2}') || lowerAnswer.includes('y=-0.5x+1.5'));
+                    } else if (questionNum === 3) {
+                        // Question 4: Normal slope
+                        isCorrect = lowerAnswer.includes('-1/3') || lowerAnswer.includes('-\\frac{1}{3}') || lowerAnswer.includes('-0.333');
+                    } else if (questionNum === 4) {
+                        // Question 5: Physics application
+                        isCorrect = lowerAnswer.includes('h=22') || lowerAnswer.includes('h=22t') || lowerAnswer.includes('h=22t+0');
+                    } else if (questionNum === 5) {
+                        // Question 6: Optimization
+                        isCorrect = lowerAnswer.includes('x=50') || lowerAnswer.includes('50');
+                    } else if (questionNum === 6) {
+                        // Question 7: Logarithmic function
+                        isCorrect = lowerAnswer.includes('1/e') || lowerAnswer.includes('\\frac{1}{e}') || lowerAnswer.includes('0.368');
+                    } else if (questionNum === 7) {
+                        // Question 8: Square root function
+                        isCorrect = (lowerAnswer.includes('y=x/4+1') || lowerAnswer.includes('y=\\frac{x}{4}+1') ||
+                                   lowerAnswer.includes('y=1+\\frac{x}{4}') || lowerAnswer.includes('y=0.25x+1'));
+                    } else if (questionNum === 8) {
+                        // Question 9: Chain rule
+                        isCorrect = lowerAnswer.includes('6');
+                    } else if (questionNum === 9) {
+                        // Question 10: Multiple tangent lines
+                        isCorrect = lowerAnswer.includes('3');
+                    }
+                    
+                    // Log validation results for debugging
+                    console.log(`Quiz submission - Question ${questionNum}: ${isCorrect ? 'CORRECT' : 'INCORRECT'}`, {
+                        userAnswer: userAnswer,
+                        isCorrect: isCorrect
+                    });
+                    
+                    if (isCorrect) score++;
+                } catch (error) {
+                    console.error(`Error validating question ${questionNum}:`, error);
+                }
+            });
+
+            const percentage = Math.round((score / 10) * 100);
+            const passed = score >= 6;
+
+            document.getElementById('scoreDisplay').textContent = `${score}/10 (${percentage}%)`;
+            document.getElementById('scoreDisplay').className = `score ${passed ? 'pass' : 'fail'}`;
+            
+            if (passed) {
+                document.getElementById('resultMessage').innerHTML = `
+                    <h3 style="color: var(--success-color);">🎉 Excellent! You have mastered advanced tangent line applications!</h3>
+                    <p>✅ Module completed successfully!</p>
+                    <p>🆙 Your Intermediate level progress has been updated!</p>
+                    <p>➡️ You can now move to the Advanced level!</p>
+                `;
+            } else {
+                document.getElementById('resultMessage').innerHTML = `
+                    <h3 style="color: var(--danger-color);">Keep learning!</h3>
+                    <p>You need at least 6 correct answers to pass. Review the concepts and try again.</p>
+                    <p>Your current progress: ${score}/10 correct</p>
+                `;
+            }
+
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('submitBtn').style.display = 'none';
+
+            if (currentUser) {
+                try {
+                    const userDocRef = doc(db, 'users', currentUser.uid);
+                    
+                    // Get current user data
+                    const userDoc = await getDoc(userDocRef);
+                    let userData = userDoc.exists() ? userDoc.data() : {};
+                    
+                    // Initialize structures if they don't exist
+                    if (!userData.moduleProgress) userData.moduleProgress = {};
+                    if (!userData.levelProgress) userData.levelProgress = {};
+                    if (!userData.completedModules) userData.completedModules = [];
+                    
+                    // Update module progress
+                                            // Save with multiple key variations for compatibility
+                        userData.moduleProgress["Equation of Tangent - Intermediate"] = percentage;  // Primary key
+                        userData.moduleProgress["Equation of Tangent - Intermediate"] = percentage;  // Backup
+                        userData.moduleProgress["equation-of-tangent-intermediate"] = percentage;    // URL-friendly
+                    
+                    // If passed, mark as completed and update level progress
+                    if (passed) {
+                        const moduleKey = `Equation of Tangent - Intermediate`;
+                        if (!userData.completedModules.includes(moduleKey)) {
+                            userData.completedModules.push(moduleKey);
+                        }
+                        
+                        // Update level progress - count completed modules in this level
+                        const intermediateModules = userData.completedModules.filter(module => 
+                            module.includes('Intermediate')
+                        );
+                        userData.levelProgress['Intermediate'] = intermediateModules.length;
+                        
+                        // Update overall progress
+                        userData.overallProgress = userData.completedModules.length;
+                        
+                        console.log('🎉 MODULE COMPLETED! Details:', {
+                            moduleKey: moduleKey,
+                            percentage: percentage,
+                            passed: passed,
+                            score: score,
+                            totalQuestions: 10,
+                            completedModules: userData.completedModules,
+                            completedModulesCount: userData.completedModules.length,
+                            intermediateLevel: userData.levelProgress['Intermediate']
+                        });
+                        
+                        // Force update the UI immediately
+                        setTimeout(() => {
+                            alert(`🎉 SUCCESS!\n\nModule: "${moduleKey}"\nScore: ${score}/10 (${percentage}%)\nStatus: COMPLETED ✅\n\nThis module is now marked as done in your profile!`);
+                            
+                            // Force a complete profile refresh by adding timestamp
+                            setTimeout(() => {
+                                window.location.href = `profile.html?refresh=${Date.now()}`;
+                            }, 2000);
+                        }, 500);
+                    }
+                    
+                    // Save to Firestore with retry mechanism
+                    try {
+                        await setDoc(userDocRef, userData, { merge: true });
+                        console.log('✅ Data successfully saved to Firebase');
+                        
+                        // Verify the save by reading it back
+                        const verifyDoc = await getDoc(userDocRef);
+                        const verifyData = verifyDoc.data();
+                        console.log('🔍 Verification - Data in Firebase:', {
+                            moduleProgress: verifyData.moduleProgress,
+                            completedModules: verifyData.completedModules,
+                            levelProgress: verifyData.levelProgress
+                        });
+                        
+                        sessionStorage.removeItem('equation-tangent-intermediate-progress');
+                    } catch (saveError) {
+                        console.error('❌ Error saving to Firebase:', saveError);
+                        // Retry once more
+                        try {
+                            await setDoc(userDocRef, userData, { merge: true });
+                            console.log('✅ Retry successful - Data saved to Firebase');
+                        } catch (retryError) {
+                            console.error('❌ Retry failed:', retryError);
+                            alert('Error saving progress. Please try again.');
+                            return;
+                        }
+                    }
+                    
+                    // Also update sessionStorage moduleProgress immediately for the profile page
+                    const currentModuleProgress = JSON.parse(sessionStorage.getItem('moduleProgress') || '{}');
+                                            // Save with multiple key variations for compatibility
+                        currentModuleProgress["Equation of Tangent - Intermediate"] = percentage;  // Primary key
+                        currentModuleProgress["Equation of Tangent - Intermediate"] = percentage;  // Backup
+                        currentModuleProgress["equation-of-tangent-intermediate"] = percentage;    // URL-friendly
+                    sessionStorage.setItem('moduleProgress', JSON.stringify(currentModuleProgress));
+                    
+                    // Also update completedModules in sessionStorage
+                    if (passed) {
+                        const completedModulesSession = JSON.parse(sessionStorage.getItem('completedModules') || '[]');
+                        const moduleKey = `Equation of Tangent - Intermediate`;
+                        if (!completedModulesSession.includes(moduleKey)) {
+                            completedModulesSession.push(moduleKey);
+                            sessionStorage.setItem('completedModules', JSON.stringify(completedModulesSession));
+                        }
+                        console.log('🔄 SessionStorage updated:', {
+                            moduleProgress: currentModuleProgress,
+                            completedModules: completedModulesSession
+                        });
+                    }
+                    
+                    console.log('Progress successfully saved to Firebase');
+                    
+                    // Show success message to user
+                    if (passed) {
+                        setTimeout(() => {
+                            const resultMsg = document.getElementById('resultMessage');
+                            resultMsg.innerHTML += '<p style="color: var(--success-color); font-weight: bold; margin-top: 15px;">✅ Intermediate Module marked as COMPLETED!</p>';
+                            resultMsg.innerHTML += '<p style="color: var(--success-color); font-weight: bold; margin-top: 10px;">💾 Progress saved successfully!</p>';
+                            resultMsg.innerHTML += '<p style="margin-top: 15px;"><button onclick="window.location.href=\'profile.html\'" style="background: var(--accent-color); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold;">👤 View Updated Profile & Check Mark ✓</button></p>';
+                        }, 1000);
+                    }
+                    
+                } catch (error) {
+                    console.error('Error saving progress:', error);
+                }
+            }
+
+            // Add automatic redirection to profile after 3 seconds
+            let countdown = 3;
+            const redirectMessage = document.createElement('div');
+            redirectMessage.style.cssText = 'margin-top: 20px; padding: 15px; background: #e8f5e8; border: 2px solid #28a745; border-radius: 8px; color: #155724; font-weight: 600; text-align: center;';
+            redirectMessage.innerHTML = `<p>🔄 Redirecting to Profile in <span id="countdown">${countdown}</span> seconds to show your updated progress...</p><p><a href="profile.html" style="color: #155724; text-decoration: underline;">Click here to go immediately</a></p>`;
+            document.getElementById('results').appendChild(redirectMessage);
+
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                const countdownElement = document.getElementById('countdown');
+                if (countdownElement) {
+                    countdownElement.textContent = countdown;
+                }
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    window.location.href = 'profile.html';
+                }
+            }, 1000);
+    };
+</script>
+</body>
+</html> 
+
+
+
+
+
+
+

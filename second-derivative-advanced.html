@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Second Derivative - Advanced | MathAnywhere</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- MathQuill resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+    
+    <!-- MathJax for rendering mathematical expressions -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                packages: {'[+]': ['color']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <style>
+        :root {
+            --input-focus: #2d8cf0;
+            --font-color: #323232;
+            --font-color-sub: #666;
+            --bg-color: #f7f9fc;
+            --main-color: black;
+            --accent-color: #1dd1a1;
+            --secondary-color: #54a0ff;
+            --tertiary-color: #5f27cd;
+            --light-blue: #74b9ff;
+            --pink: #fd79a8;
+            --purple: #6c5ce7;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fira Code', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: var(--font-color);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(29, 209, 161, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(84, 160, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(95, 39, 205, 0.15) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            box-shadow: 
+                20px 20px 60px rgba(0, 0, 0, 0.1),
+                -20px -20px 60px rgba(255, 255, 255, 0.8),
+                inset 5px 5px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            border: 2px solid var(--main-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--tertiary-color) 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 3px solid var(--main-color);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 3em;
+            font-weight: 900;
+            position: relative;
+            z-index: 1;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.25);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+            z-index: 1;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 50px;
+        }
+
+        .question-container {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid var(--main-color);
+            box-shadow: 
+                8px 8px 20px rgba(0, 0, 0, 0.1),
+                -8px -8px 20px rgba(255, 255, 255, 0.7);
+            transition: all 0.4s ease;
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, var(--accent-color), var(--tertiary-color));
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            border: 3px solid var(--main-color);
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            line-height: 1.7;
+            color: var(--font-color);
+            font-weight: 600;
+        }
+
+        .math-expression {
+            background: linear-gradient(135deg, #e8f8f5, #d1ecf1);
+            padding: 20px;
+            border-radius: 15px;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.4em;
+            text-align: center;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .math-input-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+            box-shadow: 
+                inset 2px 2px 5px rgba(0, 0, 0, 0.1),
+                inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .input-label {
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            display: block;
+            font-size: 1.1em;
+        }
+
+        .math-hint {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 2px solid var(--warning-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #856404;
+            font-weight: 600;
+        }
+
+        .answer-feedback {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+
+        .answer-feedback.show {
+            display: block;
+        }
+
+        .answer-feedback.correct {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border: 2px solid var(--success-color);
+            color: #155724;
+        }
+
+        .answer-feedback.incorrect {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            border: 2px solid var(--danger-color);
+            color: #721c24;
+        }
+
+        .check-answer-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 12px 25px;
+            border-radius: 20px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 15px 0;
+        }
+
+        .check-answer-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(29, 209, 161, 0.3);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 30px auto;
+            display: block;
+            box-shadow: 
+                8px 8px 20px rgba(0, 0, 0, 0.1),
+                -8px -8px 20px rgba(255, 255, 255, 0.7);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(29, 209, 161, 0.4);
+        }
+
+        .results {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 2px solid var(--main-color);
+            text-align: center;
+            box-shadow: 
+                8px 8px 20px rgba(0, 0, 0, 0.1),
+                -8px -8px 20px rgba(255, 255, 255, 0.7);
+        }
+
+        .score {
+            font-size: 2em;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+
+        .score.pass {
+            color: var(--success-color);
+        }
+
+        .score.fail {
+            color: var(--danger-color);
+        }
+
+        .navigation {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, var(--tertiary-color), var(--purple));
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 12px 25px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin: 10px;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            text-decoration: none;
+            color: white;
+        }
+
+        /* MathQuill styling */
+        .mathquill-field {
+            width: 100%;
+            margin: 15px 0;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            min-height: 50px;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.1),
+                -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .mathquill-field:focus-within {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(29, 209, 161, 0.3);
+            transform: scale(1.02);
+        }
+
+        /* Math Toolbar Styling */
+        .math-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            border: 2px solid var(--accent-color);
+        }
+
+        .math-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 40px;
+        }
+
+        .math-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 12px rgba(29, 209, 161, 0.3);
+        }
+
+        .function-btn {
+            background: linear-gradient(135deg, var(--tertiary-color), var(--purple));
+        }
+
+        /* MCQ Styles */
+        .mcq-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+        }
+
+        .mcq-options {
+            margin: 15px 0;
+        }
+
+        .mcq-option {
+            display: flex;
+            align-items: center;
+            margin: 12px 0;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mcq-option:hover {
+            border-color: var(--accent-color);
+            background: rgba(29, 209, 161, 0.1);
+            transform: translateX(5px);
+        }
+
+        .mcq-option.selected {
+            border-color: var(--accent-color);
+            background: rgba(29, 209, 161, 0.2);
+        }
+
+        .mcq-option input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+
+        .mcq-option label {
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 500;
+            flex: 1;
+        }
+
+        /* Drag and Drop Styles */
+        .drag-drop-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+        }
+
+        .drag-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(240, 248, 255, 0.8);
+            border-radius: 10px;
+            border: 2px dashed var(--accent-color);
+        }
+
+        .draggable-item {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: grab;
+            font-weight: 600;
+            border: 2px solid var(--main-color);
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .draggable-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(29, 209, 161, 0.3);
+        }
+
+        .draggable-item.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+
+        .drop-zone {
+            min-width: 120px;
+            min-height: 40px;
+            border: 2px dashed var(--accent-color);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 5px;
+            padding: 8px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone.dragover {
+            background: rgba(29, 209, 161, 0.2);
+            border-color: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        .drop-zone.filled {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border-color: var(--main-color);
+        }
+
+        .equation-builder {
+            font-size: 1.2em;
+            font-family: 'Times New Roman', serif;
+            text-align: center;
+            margin: 20px 0;
+            line-height: 2;
+        }
+
+        .show-answer-btn {
+            background: linear-gradient(135deg, var(--warning-color), #f39c12);
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 0;
+        }
+
+        .show-answer-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        .answer-format {
+            margin-top: 10px;
+            padding: 15px;
+            background: rgba(52, 152, 219, 0.05);
+            border: 1px dashed #3498db;
+            border-radius: 8px;
+            color: #333;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            text-align: left;
+            font-weight: normal;
+            position: relative;
+        }
+        
+        .answer-format::before {
+            content: "📝 Answer Format Guide";
+            position: absolute;
+            top: -12px;
+            left: 10px;
+            background: #3498db;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .format-example {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 3px 8px;
+            margin: 2px;
+            border-radius: 4px;
+            border: 1px solid #3498db;
+            font-weight: 600;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            
+            .question-container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .mathquill-field {
+                padding: 12px;
+                font-size: 1.1em;
+            }
+            
+            .check-answer-btn, .submit-btn {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+
+            .math-toolbar {
+                gap: 12px;
+            }
+            
+            .math-btn {
+                padding: 12px 16px;
+                font-size: 18px;
+                min-width: 50px;
+            }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+        <div class="header">
+            <h1>Second Derivative</h1>
+            <p>Master sophisticated optimization and theoretical applications</p>
+            <div class="difficulty-badge">Advanced Level</div>
+
+    </div>
+
+        <div class="content">
+            <div id="questionsContainer">
+
+                <!-- Question 1 - MCQ - Advanced Concavity Analysis -->
+                <div class="question-container">
+                    <div class="question-number">1</div>
+                    <div class="question-text">
+                        Analyze the function $f(x) = x^4 - 8x^3 + 18x^2 - 16x + 5$ for intervals of concavity and inflection points.
+            </div>
+                    <div class="math-expression">$f(x) = x^4 - 8x^3 + 18x^2 - 16x + 5$</div>
+                    
+                    <div class="answer-format">
+                        📝 <strong>Format:</strong> Choose the correct analysis of concavity
+                        <br>Example: <span class="format-example">Select one option</span>
+                </div>
+                
+                    <div class="mcq-container">
+                        <div class="mcq-options" id="mcq-0">
+                            <div class="mcq-option" onclick="selectMCQ(0, 0)">
+                                <input type="radio" name="mcq-0" value="0" id="mcq-0-0">
+                                <label for="mcq-0-0">Concave up on $(-\infty, 1) \cup (3, \infty)$, concave down on $(1, 3)$, inflection points at $x = 1, 3$</label>
+                    </div>
+                            <div class="mcq-option" onclick="selectMCQ(0, 1)">
+                                <input type="radio" name="mcq-0" value="1" id="mcq-0-1">
+                                <label for="mcq-0-1">Concave up on $(1, 3)$, concave down on $(-\infty, 1) \cup (3, \infty)$, inflection points at $x = 1, 3$</label>
+                </div>
+                            <div class="mcq-option" onclick="selectMCQ(0, 2)">
+                                <input type="radio" name="mcq-0" value="2" id="mcq-0-2">
+                                <label for="mcq-0-2">Concave up everywhere, no inflection points</label>
+                    </div>
+                            <div class="mcq-option" onclick="selectMCQ(0, 3)">
+                                <input type="radio" name="mcq-0" value="3" id="mcq-0-3">
+                                <label for="mcq-0-3">Concave up on $(-\infty, 2)$, concave down on $(2, \infty)$, inflection point at $x = 2$</label>
+                </div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMCQAnswer(0)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-0"></div>
+                        <div class="math-hint">
+                            💡 Hint: Find $f''(x) = 12x^2 - 48x + 36 = 12(x-1)(x-3)$ and analyze sign changes
+                    </div>
+                </div>
+            </div>
+
+                <!-- Question 2 - Drag and Drop - Parametric Second Derivative -->
+                <div class="question-container">
+                    <div class="question-number">2</div>
+                    <div class="question-text">
+                        For parametric equations $x = t^3 - 3t$ and $y = t^2 + 2t - 1$, complete the formula for the second derivative $\frac{d^2y}{dx^2}$.
+                    </div>
+                    <div class="math-expression">$x = t^3 - 3t$, $y = t^2 + 2t - 1$</div>
+                    
+                    <div class="answer-format">
+                        📝 <strong>Format:</strong> Drag the correct terms to complete the second derivative formula
+                        <br>Example: <span class="format-example">Drag items</span> → <span class="format-example">Drop zones</span>
+                    </div>
+                    
+                    <div class="drag-drop-container">
+                        <div class="input-label">Complete the second derivative formula using $\frac{d^2y}{dx^2} = \frac{d}{dx}\left(\frac{dy}{dx}\right) \div \frac{dx}{dt}$:</div>
+                        
+                        <div class="drag-items" id="drag-items-1">
+                            <div class="draggable-item" draggable="true" data-value="2">2</div>
+                            <div class="draggable-item" draggable="true" data-value="3t² - 3">3t² - 3</div>
+                            <div class="draggable-item" draggable="true" data-value="2t + 2">2t + 2</div>
+                            <div class="draggable-item" draggable="true" data-value="-6t">&minus;6t</div>
+                            <div class="draggable-item" draggable="true" data-value="(3t² - 3)²">(3t² - 3)²</div>
+                            <div class="draggable-item" draggable="true" data-value="(3t² - 3)³">(3t² - 3)³</div>
+                        </div>
+                        
+                        <div class="equation-builder">
+                            First: dy/dx = (dy/dt)/(dx/dt) = <div class="drop-zone" data-answer="2t + 2" data-question="1" data-position="0"></div> / <div class="drop-zone" data-answer="3t² - 3" data-question="1" data-position="1"></div>
+                            <br><br>
+                            Then: d<sup>2</sup>y/dx<sup>2</sup> = d/dt(dy/dx) ÷ dx/dt = <div class="drop-zone" data-answer="-6t" data-question="1" data-position="2"></div> / <div class="drop-zone" data-answer="(3t² - 3)³" data-question="1" data-position="3"></div>
+                    </div>
+                    
+                        <button class="check-answer-btn" onclick="checkDragDropAnswer(1)">Check Answer</button>
+                        <button class="check-answer-btn" onclick="resetDragDrop(1)" style="background: linear-gradient(135deg, #ff6b6b, #ee5a52); margin-left: 10px;">🔄 Reset</button>
+                        <div class="answer-feedback" id="feedback-1"></div>
+                        <div class="math-hint">
+                            💡 Hint: Use quotient rule: $\frac{d}{dt}\left(\frac{u}{v}\right) = \frac{u'v - uv'}{v^2}$ where $u = 2t+2$, $v = 3t^2-3$
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 3 - MathQuill - Implicit Second Derivative -->
+                <div class="question-container">
+                    <div class="question-number">3</div>
+                    <div class="question-text">
+                        Find $\frac{d^2y}{dx^2}$ for the curve $x^2 + y^2 = 25$ at the point $(3, 4)$.
+                    </div>
+                    <div class="math-expression">$x^2 + y^2 = 25$ at point $(3, 4)$</div>
+                    
+                    <div class="answer-format">
+                        📝 <strong>Format:</strong> Enter the numerical value of the second derivative
+                        <br>Example: <span class="format-example">-25/64</span> or <span class="format-example">-0.390625</span>
+                    </div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Value of $\frac{d^2y}{dx^2}$ at $(3,4)$:</label>
+                        
+                        <!-- Mathematical Toolbar -->
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(2, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(2, 'y')">y</button>
+                            <button class="math-btn" onclick="insertMath(2, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(2, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(2, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(2, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(2, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(2, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(2, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(2, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(2, '\\frac{}{}')">[/]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(2, '\\sqrt{}')">[√]</button>
+                        </div>
+                        
+                        <div class="mathquill-field" id="question2"></div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(2)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-2"></div>
+                        <div class="math-hint">
+                            💡 Hint: First find $\frac{dy}{dx} = -\frac{x}{y}$, then use implicit differentiation on this result
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 4 - MCQ - Optimization with Second Derivative Test -->
+                <div class="question-container">
+                    <div class="question-number">4</div>
+                    <div class="question-text">
+                        For $f(x) = x^3 - 6x^2 + 9x + 1$, classify all critical points using the second derivative test.
+                    </div>
+                    <div class="math-expression">$f(x) = x^3 - 6x^2 + 9x + 1$</div>
+                    
+                    <div class="answer-format">
+                        📝 <strong>Format:</strong> Select the correct classification of critical points
+                        <br>Example: <span class="format-example">Choose one option</span>
+            </div>
+
+                    <div class="mcq-container">
+                        <div class="mcq-options" id="mcq-3">
+                            <div class="mcq-option" onclick="selectMCQ(3, 0)">
+                                <input type="radio" name="mcq-3" value="0" id="mcq-3-0">
+                                <label for="mcq-3-0">$x = 1$: local maximum, $x = 3$: local minimum</label>
+                        </div>
+                            <div class="mcq-option" onclick="selectMCQ(3, 1)">
+                                <input type="radio" name="mcq-3" value="1" id="mcq-3-1">
+                                <label for="mcq-3-1">$x = 1$: local minimum, $x = 3$: local maximum</label>
+                    </div>
+                            <div class="mcq-option" onclick="selectMCQ(3, 2)">
+                                <input type="radio" name="mcq-3" value="2" id="mcq-3-2">
+                                <label for="mcq-3-2">Both $x = 1$ and $x = 3$: inflection points (inconclusive test)</label>
+                </div>
+                            <div class="mcq-option" onclick="selectMCQ(3, 3)">
+                                <input type="radio" name="mcq-3" value="3" id="mcq-3-3">
+                                <label for="mcq-3-3">$x = 1$: local minimum, $x = 3$: local minimum</label>
+                    </div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMCQAnswer(3)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-3"></div>
+                        <div class="math-hint">
+                            💡 Hint: Find critical points from $f'(x) = 3x^2 - 12x + 9 = 0$, then evaluate $f''(x) = 6x - 12$ at each point
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 5 - Drag and Drop - Higher Order Derivatives -->
+                <div class="question-container">
+                    <div class="question-number">5</div>
+                    <div class="question-text">
+                        Complete the pattern for higher-order derivatives of $f(x) = e^{2x}\sin(3x)$ using the product rule repeatedly.
+                    </div>
+                    <div class="math-expression">$f(x) = e^{2x}\sin(3x)$</div>
+                    
+                    <div class="answer-format">
+                        📝 <strong>Format:</strong> Drag terms to complete the derivative pattern
+                        <br>Example: <span class="format-example">Drag items</span> to correct <span class="format-example">positions</span>
+            </div>
+
+                    <div class="drag-drop-container">
+                        <div class="input-label">Complete the higher-order derivatives pattern:</div>
+                        
+                        <div class="drag-items" id="drag-items-4">
+                            <div class="draggable-item" draggable="true" data-value="2e^{2x}">2e^{2x}</div>
+                            <div class="draggable-item" draggable="true" data-value="3e^{2x}">3e^{2x}</div>
+                            <div class="draggable-item" draggable="true" data-value="-5e^{2x}">-5e^{2x}</div>
+                            <div class="draggable-item" draggable="true" data-value="-12e^{2x}">-12e^{2x}</div>
+                            <div class="draggable-item" draggable="true" data-value="cos(3x)">cos(3x)</div>
+                            <div class="draggable-item" draggable="true" data-value="sin(3x)">sin(3x)</div>
+                </div>
+
+                        <div class="equation-builder">
+                            f'(x) = <div class="drop-zone" data-answer="2e^{2x}" data-question="4" data-position="0"></div> sin(3x) + <div class="drop-zone" data-answer="3e^{2x}" data-question="4" data-position="1"></div> <div class="drop-zone" data-answer="cos(3x)" data-question="4" data-position="2"></div>
+                            <br><br>
+                            f''(x) = <div class="drop-zone" data-answer="-5e^{2x}" data-question="4" data-position="3"></div> <div class="drop-zone" data-answer="sin(3x)" data-question="4" data-position="4"></div> + <div class="drop-zone" data-answer="-12e^{2x}" data-question="4" data-position="5"></div> <div class="drop-zone" data-answer="cos(3x)" data-question="4" data-position="6"></div>
+                    </div>
+                        
+                        <button class="check-answer-btn" onclick="checkDragDropAnswer(4)">Check Answer</button>
+                        <button class="check-answer-btn" onclick="resetDragDrop(4)" style="background: linear-gradient(135deg, #ff6b6b, #ee5a52); margin-left: 10px;">🔄 Reset</button>
+                        <div class="answer-feedback" id="feedback-4"></div>
+                        <div class="math-hint">
+                            💡 Hint: Apply product rule: $(uv)' = u'v + uv'$ where $u = e^{2x}$, $v = \sin(3x)$
+                        </div>
+                    </div>
+                </div>
+                    </div>
+
+            
+            <!-- Submit and Answer Guide Section -->
+            <div style="text-align: center; margin: 40px 0;">
+                <button class="submit-btn" id="submitBtn" onclick="submitQuiz()">
+                    🎯 Submit Advanced Quiz
+                </button>
+                <button id="toggleAnswerGuide" onclick="toggleAnswerGuide()" class="show-answer-btn" style="display: block; margin: 15px auto;">
+                    📝 Show Answer Guide
+                </button>
+                    </div>
+
+            <div id="results" class="results" style="display: none;">
+                <div class="score" id="scoreDisplay"></div>
+                <div id="resultMessage"></div>
+                <div class="navigation">
+                    <a href="second-derivative-intermediate.html" class="nav-btn">← Back to Intermediate</a>
+                    <a href="profile.html" class="nav-btn">Complete Module →</a>
+                </div>
+            </div>
+
+                        <!-- Answer Guide Section -->
+            <div id="answerGuide" style="margin-top: 30px; padding: 20px; background: #fff5f5; border: 2px solid #dc3545; border-radius: 10px; display: none;">
+                <h4 style="color: #dc3545; margin-bottom: 15px;">📝 Advanced Answer Guide</h4>
+                <p style="font-size: 14px; color: #333; margin-bottom: 15px;">
+                    These are sophisticated second derivative problems using different question formats:
+                </p>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #dc3545; margin-bottom: 10px;">Question 1: MCQ - Concavity Analysis</h5>
+                    <p><strong>Answer:</strong> Concave up on $(-\infty, 1) \cup (3, \infty)$, concave down on $(1, 3)$, inflection points at $x = 1, 3$</p>
+                    <p><strong>Type:</strong> Multiple Choice - Advanced concavity and inflection point analysis</p>
+                    </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #dc3545; margin-bottom: 10px;">Question 2: Drag & Drop - Parametric Second Derivative</h5>
+                    <p><strong>Answer:</strong> dy/dx = (2t+2)/(3t²-3), d²y/dx² = (-6t)/(3t²-3)³</p>
+                    <p><strong>Type:</strong> Drag and Drop - Advanced parametric calculus</p>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #dc3545; margin-bottom: 10px;">Question 3: MathQuill - Implicit Second Derivative</h5>
+                    <p><strong>Answer:</strong> $-\frac{25}{64}$ or $-0.390625$</p>
+                    <p><strong>Type:</strong> Mathematical Input - Advanced implicit differentiation</p>
+                    </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #dc3545; margin-bottom: 10px;">Question 4: MCQ - Second Derivative Test</h5>
+                    <p><strong>Answer:</strong> $x = 1$: local maximum, $x = 3$: local minimum</p>
+                    <p><strong>Type:</strong> Multiple Choice - Advanced optimization and critical point analysis</p>
+            </div>
+            
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #dc3545; margin-bottom: 10px;">Question 5: Drag & Drop - Higher Order Derivatives</h5>
+                    <p><strong>Answer:</strong> f'(x) = 2e^{2x}sin(3x) + 3e^{2x}cos(3x), f''(x) = -5e^{2x}sin(3x) - 12e^{2x}cos(3x)</p>
+                    <p><strong>Type:</strong> Drag and Drop - Advanced product rule and higher-order derivatives</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+        import { getFirestore, doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBUfSOSpmCdWUGTVbSQsMCH-JVmrjpfdPY",
+        authDomain: "fyp-lutfi-naim.firebaseapp.com",
+        projectId: "fyp-lutfi-naim",
+        storageBucket: "fyp-lutfi-naim.firebasestorage.app",
+        messagingSenderId: "231274529807",
+        appId: "1:231274529807:web:c4ea279f9e7581bd674f7a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Initialize all question types
+    document.addEventListener('DOMContentLoaded', function() {
+            const MQ = MathQuill.getInterface(2);
+        mathFields = {};
+        window.mathFields = mathFields;
+        
+        // Initialize MathQuill fields (question 2 only)
+        const mathQuillQuestions = [2];
+        mathQuillQuestions.forEach(i => {
+            const fieldElement = document.getElementById(`question${i}`);
+            if (fieldElement) {
+                mathFields[i] = MQ.MathField(fieldElement, {
+                        spaceBehavesLikeTab: true,
+                    leftRightIntoCmdGoes: 'up',
+                    restrictMismatchedBrackets: true,
+                    autoCommands: 'pi theta sqrt sum prod alpha beta gamma delta epsilon zeta eta mu nu xi rho sigma tau phi chi psi omega',
+                    autoOperatorNames: 'sin cos tan sec csc cot sinh cosh tanh ln log exp lim',
+                        handlers: {
+                            edit: function() {
+                            const latex = mathFields[i].latex();
+                            mathAnswers[i] = latex;
+                            sessionStorage.setItem('second-derivative-advanced-progress', JSON.stringify({
+                                math: mathAnswers,
+                                mcq: mcqAnswers,
+                                dragDrop: dragDropAnswers
+                            }));
+                            }
+                        }
+                    });
+                window.mathFields[i] = mathFields[i];
+                console.log(`✅ MathQuill field initialized for question ${i}`);
+            }
+        });
+        
+        // Initialize drag and drop functionality
+        initializeDragAndDrop();
+        
+        // Load saved progress
+        const saved = sessionStorage.getItem('second-derivative-advanced-progress');
+        if (saved) {
+            const savedData = JSON.parse(saved);
+            mathAnswers = savedData.math || {};
+            mcqAnswers = savedData.mcq || {};
+            dragDropAnswers = savedData.dragDrop || {};
+            restoreAnswers();
+        }
+    });
+
+    // Drag and Drop Functions
+    function initializeDragAndDrop() {
+        document.querySelectorAll('.draggable-item').forEach(item => {
+            item.addEventListener('dragstart', handleDragStart);
+            item.addEventListener('dragend', handleDragEnd);
+        });
+        
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+            zone.addEventListener('dragover', handleDragOver);
+            zone.addEventListener('drop', handleDrop);
+            zone.addEventListener('dragenter', handleDragEnter);
+            zone.addEventListener('dragleave', handleDragLeave);
+        });
+    }
+
+    function handleDragStart(e) {
+        e.dataTransfer.setData('text/plain', e.target.dataset.value);
+        e.target.classList.add('dragging');
+    }
+
+    function handleDragEnd(e) {
+        e.target.classList.remove('dragging');
+    }
+
+    function handleDragOver(e) {
+        e.preventDefault();
+    }
+
+    function handleDragEnter(e) {
+        e.preventDefault();
+        e.target.classList.add('dragover');
+    }
+
+    function handleDragLeave(e) {
+        e.target.classList.remove('dragover');
+    }
+
+    function handleDrop(e) {
+        e.preventDefault();
+        e.target.classList.remove('dragover');
+        
+        const draggedValue = e.dataTransfer.getData('text/plain');
+        const questionNum = e.target.dataset.question;
+        const position = e.target.dataset.position;
+        
+        e.target.textContent = draggedValue;
+        e.target.classList.add('filled');
+        
+        if (!dragDropAnswers[questionNum]) {
+            dragDropAnswers[questionNum] = {};
+        }
+        dragDropAnswers[questionNum][position] = draggedValue;
+        
+        sessionStorage.setItem('second-derivative-advanced-progress', JSON.stringify({
+            math: mathAnswers,
+            mcq: mcqAnswers,
+            dragDrop: dragDropAnswers
+        }));
+    }
+
+    // MCQ Functions
+    window.selectMCQ = function(questionNum, optionNum) {
+        const options = document.querySelectorAll(`#mcq-${questionNum} .mcq-option`);
+        options.forEach(option => option.classList.remove('selected'));
+        
+        const selectedOption = document.querySelector(`#mcq-${questionNum}-${optionNum}`);
+        selectedOption.checked = true;
+        selectedOption.closest('.mcq-option').classList.add('selected');
+        
+        mcqAnswers[questionNum] = optionNum;
+        
+        sessionStorage.setItem('second-derivative-advanced-progress', JSON.stringify({
+            math: mathAnswers,
+            mcq: mcqAnswers,
+            dragDrop: dragDropAnswers
+        }));
+    };
+
+    // Check Answer Functions
+    window.checkMCQAnswer = function(questionNum) {
+        const feedback = document.getElementById(`feedback-${questionNum}`);
+        let isCorrect = false;
+        
+        const correctAnswers = {
+            0: 0, // Q1: Concave up on (-∞,1)∪(3,∞), concave down on (1,3), inflection at x=1,3
+            3: 0  // Q4: x=1 local max, x=3 local min
+        };
+        
+        isCorrect = mcqAnswers[questionNum] === correctAnswers[questionNum];
+        
+        feedback.classList.remove('correct', 'incorrect');
+        feedback.classList.add('show');
+        
+        if (isCorrect) {
+            feedback.classList.add('correct');
+            feedback.innerHTML = '✅ Excellent! You understand advanced second derivative concepts!';
+            } else {
+            feedback.classList.add('incorrect');
+            feedback.innerHTML = '❌ Not quite right. Review the second derivative analysis and try again!';
+        }
+    };
+
+    window.checkDragDropAnswer = function(questionNum) {
+        const feedback = document.getElementById(`feedback-${questionNum}`);
+        let isCorrect = false;
+        
+        const correctAnswers = {
+            1: {
+                0: "2t + 2",
+                1: "3t² - 3", 
+                2: "-6t",
+                3: "(3t² - 3)³"
+            },
+            4: {
+                0: "2e^{2x}",
+                1: "3e^{2x}",
+                2: "cos(3x)",
+                3: "-5e^{2x}",
+                4: "sin(3x)",
+                5: "-12e^{2x}",
+                6: "cos(3x)"
+            }
+        };
+        
+        const userAnswers = dragDropAnswers[questionNum] || {};
+        const expectedAnswers = correctAnswers[questionNum];
+        
+        isCorrect = Object.keys(expectedAnswers).every(pos => 
+            userAnswers[pos] === expectedAnswers[pos]
+        );
+        
+        feedback.classList.remove('correct', 'incorrect');
+        feedback.classList.add('show');
+        
+        if (isCorrect) {
+            feedback.classList.add('correct');
+            feedback.innerHTML = '✅ Perfect! You completed the advanced derivatives correctly!';
+        } else {
+            feedback.classList.add('incorrect');
+            feedback.innerHTML = '❌ Some items are in wrong positions. Try again!';
+        }
+    };
+
+    let mathAnswers = {};
+    let mcqAnswers = {};
+    let dragDropAnswers = {};
+    let currentUser = null;
+    let mathFields = {};
+    
+    window.mathFields = mathFields;
+    
+    function restoreAnswers() {
+        // Restore MathQuill answers
+        Object.keys(mathAnswers).forEach(questionNum => {
+            if (mathFields[questionNum]) {
+                mathFields[questionNum].latex(mathAnswers[questionNum]);
+            }
+        });
+        
+        // Restore MCQ answers
+        Object.keys(mcqAnswers).forEach(questionNum => {
+            const optionNum = mcqAnswers[questionNum];
+            const radio = document.querySelector(`#mcq-${questionNum}-${optionNum}`);
+            if (radio) {
+                radio.checked = true;
+                radio.closest('.mcq-option').classList.add('selected');
+            }
+        });
+        
+        // Restore drag and drop answers
+        Object.keys(dragDropAnswers).forEach(questionNum => {
+            const answers = dragDropAnswers[questionNum];
+            Object.keys(answers).forEach(position => {
+                const dropZone = document.querySelector(`[data-question="${questionNum}"][data-position="${position}"]`);
+                if (dropZone) {
+                    dropZone.textContent = answers[position];
+                    dropZone.classList.add('filled');
+                }
+            });
+        });
+    }
+
+    // Reset drag and drop function
+    window.resetDragDrop = function(questionNum) {
+        const dropZones = document.querySelectorAll(`[data-question="${questionNum}"]`);
+        dropZones.forEach(zone => {
+            zone.textContent = '';
+            zone.classList.remove('filled');
+        });
+        
+        if (dragDropAnswers[questionNum]) {
+            delete dragDropAnswers[questionNum];
+        }
+        
+        const feedback = document.getElementById(`feedback-${questionNum}`);
+        if (feedback) {
+            feedback.classList.remove('show', 'correct', 'incorrect');
+            feedback.innerHTML = '';
+        }
+        
+        sessionStorage.setItem('second-derivative-advanced-progress', JSON.stringify({
+            math: mathAnswers,
+            mcq: mcqAnswers,
+            dragDrop: dragDropAnswers
+        }));
+        
+        console.log(`🔄 Reset drag and drop for question ${questionNum + 1}`);
+    };
+
+    // Mathematical toolbar function
+        window.insertMath = function(questionNum, symbol) {
+            try {
+            const mathField = mathFields[questionNum];
+            
+            if (!mathField || typeof mathField.write !== 'function') {
+                    console.warn('MathField not initialized for question', questionNum);
+                    return;
+                }
+                
+            mathField.focus();
+                
+                switch(symbol) {
+                    case '\\frac{}{}':
+                    mathField.write('\\frac{}{}');
+                    mathField.keystroke('Left Left Left');
+                        break;
+                    case '\\sqrt{}':
+                    mathField.write('\\sqrt{}');
+                    mathField.keystroke('Left');
+                        break;
+                    case '^':
+                    mathField.write('^{}');
+                    mathField.keystroke('Left');
+                        break;
+                    case '*':
+                    mathField.write('\\cdot ');
+                    break;
+                case '/':
+                    mathField.write('\\frac{}{}');
+                    mathField.keystroke('Left Left Left');
+                        break;
+                    default:
+                    mathField.write(symbol);
+                        break;
+                }
+                
+            const latex = mathField.latex();
+            mathAnswers[questionNum] = latex;
+            sessionStorage.setItem('second-derivative-advanced-progress', JSON.stringify({
+                math: mathAnswers,
+                mcq: mcqAnswers,
+                dragDrop: dragDropAnswers
+            }));
+            
+            console.log(`✅ Inserted "${symbol}" into question${questionNum}, LaTeX: ${latex}`);
+                
+            } catch (error) {
+            console.error('Error inserting math symbol:', error);
+            }
+        };
+
+    // Toggle answer guide
+        window.toggleAnswerGuide = function() {
+        const answerGuide = document.getElementById('answerGuide');
+        const toggleBtn = document.getElementById('toggleAnswerGuide');
+        
+        if (answerGuide.style.display === 'none') {
+            answerGuide.style.display = 'block';
+            toggleBtn.textContent = '📝 Hide Answer Guide';
+            answerGuide.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+            answerGuide.style.display = 'none';
+            toggleBtn.textContent = '📝 Show Answer Guide';
+        }
+    };
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            currentUser = user;
+            loadProgress();
+        } else {
+            window.location.href = 'index.html';
+            }
+        });
+
+        function loadProgress() {
+            const saved = sessionStorage.getItem('second-derivative-advanced-progress');
+            if (saved) {
+            try {
+                const savedData = JSON.parse(saved);
+                if (savedData.math || savedData.mcq || savedData.dragDrop) {
+                    mathAnswers = savedData.math || {};
+                    mcqAnswers = savedData.mcq || {};
+                    dragDropAnswers = savedData.dragDrop || {};
+                } else {
+                    mathAnswers = savedData;
+                }
+                restoreAnswers();
+            } catch (error) {
+                console.error('Error loading progress:', error);
+            }
+        }
+        }
+
+        window.checkMathAnswer = function(questionNum) {
+            const feedback = document.getElementById(`feedback-${questionNum}`);
+            const userAnswer = mathFields[questionNum] ? mathFields[questionNum].latex().toLowerCase().replace(/\s/g, '') : '';
+            
+            let isCorrect = false;
+            
+        // Question 2: Second derivative at (3,4) = -25/64
+        if (questionNum == 2) {
+            isCorrect = userAnswer.includes('-25/64') || userAnswer.includes('-\\frac{25}{64}') ||
+                       userAnswer.includes('-0.390625') || userAnswer.includes('\\frac{-25}{64}');
+            }
+            
+            feedback.classList.remove('correct', 'incorrect');
+            feedback.classList.add('show');
+            
+            if (isCorrect) {
+                feedback.classList.add('correct');
+            feedback.innerHTML = '✅ Outstanding! You have mastered advanced implicit second derivatives!';
+            } else {
+                feedback.classList.add('incorrect');
+            feedback.innerHTML = '❌ Not quite right. Review the implicit differentiation method and try again!';
+        }
+    };
+
+    window.submitQuiz = async function() {
+        // Check if all questions have been answered
+        const requiredQuestions = [0, 1, 2, 3, 4]; // 5 questions total
+        
+        const mathMissing = [2].filter(q => !mathAnswers[q] || mathAnswers[q].trim() === '');
+        const mcqMissing = [0, 3].filter(q => mcqAnswers[q] === undefined);
+        const dragDropMissing = [1, 4].filter(q => !dragDropAnswers[q] || Object.keys(dragDropAnswers[q]).length === 0);
+        
+        const allMissing = [...mathMissing, ...mcqMissing, ...dragDropMissing];
+        
+        if (allMissing.length > 0) {
+            alert(`Please answer all questions before submitting. Missing answers for questions: ${allMissing.map(q => q + 1).join(', ')}`);
+            return;
+        }
+
+        let score = 0;
+        
+        // Check MCQ questions
+        const mcqCorrectAnswers = { 0: 0, 3: 0 };
+        [0, 3].forEach(questionNum => {
+            if (mcqAnswers[questionNum] === mcqCorrectAnswers[questionNum]) {
+                score++;
+                console.log(`MCQ Question ${questionNum + 1}: CORRECT`);
+            } else {
+                console.log(`MCQ Question ${questionNum + 1}: INCORRECT`);
+            }
+        });
+        
+        // Check drag and drop questions
+        const dragDropCorrectAnswers = {
+            1: { 0: "2t + 2", 1: "3t² - 3", 2: "-6t", 3: "(3t² - 3)³" },
+            4: { 0: "2e^{2x}", 1: "3e^{2x}", 2: "cos(3x)", 3: "-5e^{2x}", 4: "sin(3x)", 5: "-12e^{2x}", 6: "cos(3x)" }
+        };
+        
+        [1, 4].forEach(questionNum => {
+            const userAnswers = dragDropAnswers[questionNum] || {};
+            const expectedAnswers = dragDropCorrectAnswers[questionNum];
+            const isCorrect = Object.keys(expectedAnswers).every(pos => 
+                userAnswers[pos] === expectedAnswers[pos]
+            );
+            
+            if (isCorrect) {
+                score++;
+                console.log(`Drag-Drop Question ${questionNum + 1}: CORRECT`);
+            } else {
+                console.log(`Drag-Drop Question ${questionNum + 1}: INCORRECT`);
+            }
+        });
+        
+        // Check MathQuill question (Question 3)
+        const userAnswer = mathAnswers[2] ? mathAnswers[2].toLowerCase().replace(/\s/g, '') : '';
+        const mathCorrect = userAnswer.includes('-25/64') || userAnswer.includes('-\\frac{25}{64}') ||
+                           userAnswer.includes('-0.390625') || userAnswer.includes('\\frac{-25}{64}');
+        
+        if (mathCorrect) {
+            score++;
+            console.log(`MathQuill Question 3: CORRECT`);
+        } else {
+            console.log(`MathQuill Question 3: INCORRECT`);
+        }
+
+        const percentage = Math.round((score / 5) * 100);
+        const passed = score >= 4;
+
+        document.getElementById('scoreDisplay').textContent = `${score}/5 (${percentage}%)`;
+            document.getElementById('scoreDisplay').className = `score ${passed ? 'pass' : 'fail'}`;
+        
+        if (passed) {
+            document.getElementById('resultMessage').innerHTML = `
+                <h3 style="color: var(--success-color);">🎉 Exceptional! You have mastered advanced second derivative techniques!</h3>
+                <p>✅ Module completed successfully!</p>
+                <p>🆙 Your Advanced level progress has been updated!</p>
+                <p>🎓 You have completed the Second Derivative advanced series!</p>
+            `;
+        } else {
+            document.getElementById('resultMessage').innerHTML = `
+                <h3 style="color: var(--danger-color);">Keep pushing forward!</h3>
+                <p>You need at least 4 correct answers to pass. Review the advanced techniques and try again.</p>
+                <p>Your current progress: ${score}/5 correct</p>
+            `;
+        }
+
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('submitBtn').style.display = 'none';
+
+        if (currentUser) {
+                try {
+                    const userDocRef = doc(db, 'users', currentUser.uid);
+                    
+                const userDoc = await getDoc(userDocRef);
+                let userData = userDoc.exists() ? userDoc.data() : {};
+                
+                if (!userData.moduleProgress) userData.moduleProgress = {};
+                if (!userData.levelProgress) userData.levelProgress = {};
+                if (!userData.completedModules) userData.completedModules = [];
+                
+                userData.moduleProgress["Second Derivative - Advanced"] = percentage;
+                userData.moduleProgress["second-derivative-advanced"] = percentage;
+                
+                if (passed) {
+                    const moduleKey = `Second Derivative - Advanced`;
+                    if (!userData.completedModules.includes(moduleKey)) {
+                        userData.completedModules.push(moduleKey);
+                    }
+                    
+                    const advancedModules = userData.completedModules.filter(module => 
+                        module.includes('Advanced')
+                    );
+                    userData.levelProgress['Advanced'] = advancedModules.length;
+                    userData.overallProgress = userData.completedModules.length;
+                    
+                    console.log('🎉 ADVANCED MODULE COMPLETED! Details:', {
+                        moduleKey: moduleKey,
+                        percentage: percentage,
+                        passed: passed,
+                        score: score,
+                        totalQuestions: 5,
+                        completedModules: userData.completedModules,
+                        completedModulesCount: userData.completedModules.length,
+                        advancedLevel: userData.levelProgress['Advanced']
+                    });
+                }
+                
+                try {
+                    await setDoc(userDocRef, userData, { merge: true });
+                    console.log('✅ Data successfully saved to Firebase');
+                    
+                    sessionStorage.removeItem('second-derivative-advanced-progress');
+                } catch (saveError) {
+                    console.error('❌ Error saving to Firebase:', saveError);
+                    try {
+                        await setDoc(userDocRef, userData, { merge: true });
+                        console.log('✅ Retry successful - Data saved to Firebase');
+                    } catch (retryError) {
+                        console.error('❌ Retry failed:', retryError);
+                        alert('Error saving progress. Please try again.');
+                        return;
+                    }
+                }
+                
+                const currentModuleProgress = JSON.parse(sessionStorage.getItem('moduleProgress') || '{}');
+                currentModuleProgress["Second Derivative - Advanced"] = percentage;
+                currentModuleProgress["second-derivative-advanced"] = percentage;
+                sessionStorage.setItem('moduleProgress', JSON.stringify(currentModuleProgress));
+                
+                if (passed) {
+                    const completedModulesSession = JSON.parse(sessionStorage.getItem('completedModules') || '[]');
+                    const moduleKey = `Second Derivative - Advanced`;
+                    if (!completedModulesSession.includes(moduleKey)) {
+                        completedModulesSession.push(moduleKey);
+                        sessionStorage.setItem('completedModules', JSON.stringify(completedModulesSession));
+                    }
+                    console.log('🔄 SessionStorage updated:', {
+                        moduleProgress: currentModuleProgress,
+                        completedModules: completedModulesSession
+                    });
+                }
+                
+                console.log('Progress successfully saved to Firebase');
+                
+                if (passed) {
+                    setTimeout(() => {
+                        const resultMsg = document.getElementById('resultMessage');
+                        resultMsg.innerHTML += '<p style="color: var(--success-color); font-weight: bold; margin-top: 15px;">✅ Advanced Module marked as COMPLETED!</p>';
+                        resultMsg.innerHTML += '<p style="color: var(--success-color); font-weight: bold; margin-top: 10px;">💾 Progress saved successfully!</p>';
+                        resultMsg.innerHTML += '<p style="margin-top: 15px;"><button onclick="window.location.href=\'profile.html\'" style="background: var(--accent-color); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold;">👤 View Updated Profile & Check Mark ✓</button></p>';
+                    }, 1000);
+                }
+                
+                } catch (error) {
+                console.error('Error saving progress:', error);
+            }
+        }
+
+        // Add automatic redirection to profile after 3 seconds
+        let countdown = 3;
+        const redirectMessage = document.createElement('div');
+        redirectMessage.style.cssText = 'margin-top: 20px; padding: 15px; background: #e8f5e8; border: 2px solid #28a745; border-radius: 8px; color: #155724; font-weight: 600; text-align: center;';
+        redirectMessage.innerHTML = `<p>🔄 Redirecting to Profile in <span id="countdown">${countdown}</span> seconds to show your updated progress...</p><p><a href="profile.html" style="color: #155724; text-decoration: underline;">Click here to go immediately</a></p>`;
+        document.getElementById('results').appendChild(redirectMessage);
+
+        const countdownInterval = setInterval(() => {
+            countdown--;
+            const countdownElement = document.getElementById('countdown');
+            if (countdownElement) {
+                countdownElement.textContent = countdown;
+            }
+            if (countdown <= 0) {
+                clearInterval(countdownInterval);
+                window.location.href = 'profile.html';
+            }
+        }, 1000);
+    };
+</script>
+</body>
+</html> 
+
+
+
+
+
+
+

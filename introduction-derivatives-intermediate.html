@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Derivatives - Intermediate Level</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/templatemo-topic-listing.css">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #fff3cd;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .form {
+            --input-focus: #ffc107;
+            --font-color: #856404;
+            --font-color-sub: #6c757d;
+            --bg-color: #fff3cd;
+            --main-color: #ffc107;
+            padding: 30px;
+            background: #ffeaa7;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 20px;
+            border-radius: 10px;
+            border: 2px solid var(--main-color);
+            box-shadow: 6px 6px var(--main-color);
+        }
+        .title {
+            color: var(--font-color);
+            font-weight: 900;
+            font-size: 24px;
+            margin-bottom: 25px;
+        }
+        .topic-section {
+            width: 100%;
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: #fffbf0;
+            border-radius: 8px;
+            border: 1px solid var(--main-color);
+        }
+        .topic-title {
+            color: var(--font-color);
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-align: center;
+            background-color: var(--main-color);
+            color: white;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        .question-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .question-label {
+            color: var(--font-color);
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .input {
+            width: 100%;
+            height: 45px;
+            border-radius: 5px;
+            border: 2px solid var(--main-color);
+            background-color: var(--bg-color);
+            box-shadow: 4px 4px var(--main-color);
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--font-color);
+            padding: 5px 10px;
+            outline: none;
+        }
+        .input::placeholder {
+            color: var(--font-color-sub);
+            opacity: 0.8;
+        }
+        .input:focus {
+            border: 2px solid var(--input-focus);
+        }
+        .button-confirm {
+            margin: 20px 0;
+            width: 140px;
+            height: 45px;
+            border-radius: 5px;
+            border: 2px solid var(--main-color);
+            background-color: var(--bg-color);
+            box-shadow: 4px 4px var(--main-color);
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--font-color);
+            cursor: pointer;
+        }
+        .button-confirm:hover {
+            background-color: var(--input-focus);
+            color: #fff;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #ffc107;
+        }
+        .quiz-description {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #0c5460;
+            text-align: left;
+        }
+        .level-badge {
+            background-color: #ffc107;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="level-badge">INTERMEDIATE LEVEL</div>
+    <h1>Introduction to Derivatives - Intermediate</h1>
+    
+    <div class="quiz-description">
+        <strong>Welcome to Introduction to Derivatives - Intermediate Level!</strong><br>
+        This module covers more advanced concepts of derivatives. You'll learn:
+        <ul>
+            <li>Instantaneous rate of change vs average rate of change</li>
+            <li>Geometric interpretation of derivatives</li>
+            <li>Relationship between derivatives and slopes</li>
+            <li>Applications in optimization problems</li>
+        </ul>
+        <em>Complete at least 5 out of 7 questions correctly to pass this module.</em>
+    </div>
+
+    <div class="form">
+        <div class="title">Introduction to Derivatives - Intermediate Module</div>
+        <form id="quizForm">
+            
+            <!-- Rate of Change Concepts -->
+            <div class="topic-section">
+                <div class="topic-title">Rate of Change Analysis</div>
+                
+                <div class="question-group">
+                    <label class="question-label">1. What is the difference between average rate of change and instantaneous rate of change?</label>
+                    <input type="text" class="form-control input" name="question0" placeholder="Enter your answer..." required>
+                </div>
+                
+                <div class="question-group">
+                    <label class="question-label">2. The instantaneous rate of change of a function at a point is represented by what mathematical concept?</label>
+                    <input type="text" class="form-control input" name="question1" placeholder="Enter your answer..." required>
+                </div>
+            </div>
+
+            <!-- Geometric Interpretation -->
+            <div class="topic-section">
+                <div class="topic-title">Geometric Understanding</div>
+                
+                <div class="question-group">
+                    <label class="question-label">3. Geometrically, what does the derivative of a function at a point represent?</label>
+                    <input type="text" class="form-control input" name="question2" placeholder="Enter your answer..." required>
+                </div>
+                
+                <div class="question-group">
+                    <label class="question-label">4. If f'(a) = 0, what can you say about the tangent line at x = a?</label>
+                    <input type="text" class="form-control input" name="question3" placeholder="Enter your answer..." required>
+                </div>
+            </div>
+
+            <!-- Applications -->
+            <div class="topic-section">
+                <div class="topic-title">Practical Applications</div>
+                
+                <div class="question-group">
+                    <label class="question-label">5. In economics, if C(x) represents cost as a function of quantity, what does C'(x) represent?</label>
+                    <input type="text" class="form-control input" name="question4" placeholder="Enter your answer..." required>
+                </div>
+                
+                <div class="question-group">
+                    <label class="question-label">6. If a function is increasing at a point, what can you say about its derivative at that point?</label>
+                    <input type="text" class="form-control input" name="question5" placeholder="Enter your answer..." required>
+                </div>
+                
+                <div class="question-group">
+                    <label class="question-label">7. What does it mean when we say f'(x) > 0 on an interval?</label>
+                    <input type="text" class="form-control input" name="question6" placeholder="Enter your answer..." required>
+                </div>
+            </div>
+            
+        </form>
+        <button class="button-confirm" type="button" onclick="submitQuiz()">Submit</button>
+        <div id="result"></div>
+    </div>
+</div>
+
+<script>
+    window.questions = [
+        { question: "What is the difference between average rate of change and instantaneous rate of change?", answer: "average over interval vs at a point", topic: "Introduction to derivatives" },
+        { question: "The instantaneous rate of change of a function at a point is represented by what mathematical concept?", answer: "derivative", topic: "Introduction to derivatives" },
+        { question: "Geometrically, what does the derivative of a function at a point represent?", answer: "slope of tangent line", topic: "Introduction to derivatives" },
+        { question: "If f'(a) = 0, what can you say about the tangent line at x = a?", answer: "horizontal", topic: "Introduction to derivatives" },
+        { question: "In economics, if C(x) represents cost as a function of quantity, what does C'(x) represent?", answer: "marginal cost", topic: "Introduction to derivatives" },
+        { question: "If a function is increasing at a point, what can you say about its derivative at that point?", answer: "positive", topic: "Introduction to derivatives" },
+        { question: "What does it mean when we say f'(x) > 0 on an interval?", answer: "function is increasing", topic: "Introduction to derivatives" }
+    ];
+</script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBUfSOSpmCdWUGTVbSQsMCH-JVmrjpfdPY",
+        authDomain: "fyp-lutfi-naim.firebaseapp.com",
+        projectId: "fyp-lutfi-naim",
+        storageBucket: "fyp-lutfi-naim.firebasestorage.app",
+        messagingSenderId: "231274529807",
+        appId: "1:231274529807:web:c4ea279f9e7581bd674f7a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    document.addEventListener('DOMContentLoaded', function() {
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                console.log("No authenticated user found");
+                alert("Please log in to take the module");
+                window.location.href = "index.html";
+                return;
+            }
+            console.log("User authenticated:", user.uid);
+        });
+    });
+
+    window.updateUserLevel = async function(progress) {
+        try {
+            const user = auth.currentUser;
+            if (user) {
+                const userDocRef = doc(db, 'users', user.uid);
+                const userDocSnap = await getDoc(userDocRef);
+
+                let moduleProgress = {};
+                if (userDocSnap.exists()) {
+                    moduleProgress = userDocSnap.data().moduleProgress || {};
+                }
+
+                moduleProgress['Introduction to derivatives - Intermediate'] = progress;
+
+                await setDoc(userDocRef, {
+                    moduleProgress: moduleProgress
+                }, { merge: true });
+
+                sessionStorage.setItem('moduleProgress', JSON.stringify(moduleProgress));
+
+                console.log("Module progress updated successfully");
+
+                setTimeout(() => {
+                    window.location.href = "profile.html";
+                }, 1500);
+            } else {
+                console.error("No user is signed in");
+                alert("Please sign in to save your results");
+                window.location.href = "index.html";
+            }
+        } catch (error) {
+            console.error("Error updating module progress:", error);
+            alert("Error updating your progress. Please try again.");
+        }
+    };
+
+    window.submitQuiz = async function() {
+        if (!auth.currentUser) {
+            alert("Please sign in to submit your module");
+            window.location.href = "index.html";
+            return;
+        }
+
+        const quizForm = document.getElementById('quizForm');
+        const formData = new FormData(quizForm);
+        let score = 0;
+
+        window.questions.forEach((q, index) => {
+            const userAnswer = formData.get(`question${index}`)?.trim() || '';
+            if (userAnswer.toLowerCase().includes(q.answer.toLowerCase()) || 
+                q.answer.toLowerCase().includes(userAnswer.toLowerCase())) {
+                score++;
+            }
+        });
+
+        const progress = Math.round((score / 7) * 100);
+        let status = score >= 5 ? "PASSED" : "NEEDS IMPROVEMENT";
+
+        document.getElementById('result').innerHTML = `
+            <strong>Score: ${score}/7 (${progress}%)</strong><br>
+            <strong>Status: ${status}</strong><br>
+            ${score >= 5 ? "Excellent! You can now proceed to Advanced level." : "Keep studying! You need at least 5 correct answers to pass."}
+        `;
+
+        await updateUserLevel(progress);
+    };
+</script>
+</body>
+</html> 
+
+
+
+
+
+
+

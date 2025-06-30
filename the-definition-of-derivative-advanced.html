@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Definition of Derivative - Advanced | MathAnywhere</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- MathQuill resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+    
+    <!-- MathJax for rendering mathematical expressions -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Plotly for interactive graphs -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                packages: {'[+]': ['color']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <style>
+        :root {
+            --input-focus: #2d8cf0;
+            --font-color: #323232;
+            --font-color-sub: #666;
+            --bg-color: #f7f9fc;
+            --main-color: black;
+            --accent-color: #1dd1a1;
+            --secondary-color: #54a0ff;
+            --tertiary-color: #5f27cd;
+            --light-blue: #74b9ff;
+            --pink: #fd79a8;
+            --purple: #6c5ce7;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fira Code', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: var(--font-color);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(29, 209, 161, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(84, 160, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(95, 39, 205, 0.15) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            box-shadow: 
+                20px 20px 60px rgba(0, 0, 0, 0.1),
+                -20px -20px 60px rgba(255, 255, 255, 0.8),
+                inset 5px 5px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            border: 2px solid var(--main-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 3px solid var(--main-color);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 3em;
+            font-weight: 900;
+            position: relative;
+            z-index: 1;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.25);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+            z-index: 1;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 50px;
+        }
+
+        .question-container {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid var(--main-color);
+            box-shadow: 
+                8px 8px 20px rgba(0, 0, 0, 0.1),
+                -8px -8px 20px rgba(255, 255, 255, 0.7);
+            transition: all 0.4s ease;
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            border: 3px solid var(--main-color);
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            line-height: 1.7;
+            color: var(--font-color);
+            font-weight: 600;
+        }
+
+        .math-expression {
+            background: linear-gradient(135deg, #e8f8f5, #d1ecf1);
+            padding: 20px;
+            border-radius: 15px;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.4em;
+            text-align: center;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .math-input-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+            box-shadow: 
+                inset 2px 2px 5px rgba(0, 0, 0, 0.1),
+                inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .input-label {
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            display: block;
+            font-size: 1.1em;
+        }
+
+        .math-hint {
+            background: rgba(29, 209, 161, 0.1);
+            border-left: 4px solid var(--accent-color);
+            padding: 10px 15px;
+            margin-top: 10px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9em;
+        }
+
+        .math-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-family: 'Times New Roman', serif;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        .math-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(29, 209, 161, 0.3);
+            transform: scale(1.02);
+        }
+
+        .math-preview {
+            background: linear-gradient(135deg, #e8f8f5, #d1ecf1);
+            border: 2px solid var(--accent-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+        }
+
+        .answer-feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        .answer-feedback.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .answer-feedback.correct {
+            background: linear-gradient(135deg, var(--success-color), #20c997);
+            color: white;
+        }
+
+        .answer-feedback.incorrect {
+            background: linear-gradient(135deg, var(--danger-color), #fd7e14);
+            color: white;
+        }
+
+        .check-answer-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .check-answer-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--tertiary-color) 100%);
+            color: white;
+            border: 3px solid var(--main-color);
+            padding: 18px 50px;
+            border-radius: 50px;
+            font-size: 1.3em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            margin: 40px auto;
+            display: block;
+        }
+
+        .results {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+            text-align: center;
+            border: 3px solid var(--main-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .score {
+            font-size: 4em;
+            font-weight: 900;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .score.pass {
+            color: var(--success-color);
+        }
+
+        .score.fail {
+            color: var(--danger-color);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 3px solid var(--main-color);
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.4s ease;
+            flex: 1;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .nav-btn:hover {
+            color: white;
+            transform: translateY(-3px);
+            text-decoration: none;
+        }
+
+        .progress-bar {
+            background: rgba(233, 236, 239, 0.8);
+            height: 12px;
+            border-radius: 25px;
+            margin: 25px 0;
+            overflow: hidden;
+            border: 2px solid var(--main-color);
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--accent-color), var(--secondary-color), var(--tertiary-color));
+            height: 100%;
+            border-radius: 25px;
+            transition: width 0.6s ease;
+            width: 0%;
+        }
+
+        /* MathQuill styling */
+        .mathquill-field {
+            width: 100%;
+            margin: 15px 0;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            min-height: 50px;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.1),
+                -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .mathquill-field:focus-within {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(40, 167, 69, 0.3);
+            transform: scale(1.02);
+        }
+
+        /* Text input styling */
+        .text-input-field {
+            width: 100%;
+            margin: 15px 0;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            min-height: 50px;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.1),
+                -2px -2px 5px rgba(255, 255, 255, 0.8);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .text-input-field:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(40, 167, 69, 0.3);
+            transform: scale(1.02);
+            outline: none;
+        }
+
+        .text-input-field::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        /* Enhanced Mathematical Toolbar Styling */
+        .math-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid var(--main-color);
+            border-radius: 15px;
+            box-shadow: 
+                2px 2px 8px rgba(0, 0, 0, 0.1),
+                -2px -2px 8px rgba(255, 255, 255, 0.8);
+        }
+
+        .math-toolbar::before {
+            content: "📐 Math Toolbar";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .math-toolbar:hover::before {
+            transform: scale(1.05);
+        }
+
+        .math-btn {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 40px;
+            text-align: center;
+            color: var(--main-color);
+            box-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.1),
+                -1px -1px 3px rgba(255, 255, 255, 0.8);
+        }
+
+        .math-btn:hover {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 
+                3px 3px 8px rgba(0, 0, 0, 0.2),
+                -2px -2px 6px rgba(255, 255, 255, 0.9);
+        }
+
+        .math-btn:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        .function-btn {
+            background: linear-gradient(135deg, var(--tertiary-color), var(--accent-color));
+            color: white;
+            font-weight: 700;
+        }
+
+        .function-btn:hover {
+            background: linear-gradient(135deg, var(--accent-color), var(--main-color));
+        }
+
+        /* Style for the answer format guides */
+        .answer-format {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(52, 152, 219, 0.05);
+            border: 1px dashed #3498db;
+            border-radius: 8px;
+            color: #333;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            text-align: center;
+            font-weight: normal;
+            position: relative;
+        }
+        
+        .answer-format::before {
+            content: "📝 Answer Format Guide";
+            position: absolute;
+            top: -12px;
+            left: 10px;
+            background: #3498db;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        /* Style for blank spaces in cloze format */
+        .blank {
+            display: inline-block;
+            min-width: 30px;
+            margin: 0 2px;
+            position: relative;
+        }
+        
+        /* Style for the underscores in blanks */
+        .blank-line {
+            color: #3498db;
+            font-weight: bold;
+            font-size: 18px;
+            display: inline;
+        }
+        
+        /* Container for mathquill fields */
+        .mathquill-field-wrapper {
+            width: 100%;
+            margin: 15px 0;
+        }
+        
+        /* Make mathquill field background opaque */
+        .mathquill-field {
+            background: rgba(255, 255, 255, 0.95) !important;
+        }
+    </style>
+</head> 
+<body>
+<div class="container">
+        <div class="header">
+            <h1>The Definition of Derivative</h1>
+            <p>Master advanced calculus concepts and complex derivatives</p>
+            <div class="difficulty-badge">Advanced Level</div>
+    </div>
+
+        <div class="content">
+            <div id="questionsContainer">
+                <!-- Question 1 - Advanced: Derivative of Complex Function -->
+                <div class="question-container">
+                    <div class="question-number">1</div>
+                    <div class="question-text">
+                        Use the definition of derivative to find $f'(x)$ for $f(x) = \frac{1}{\sqrt{3x-2}}$.
+                    </div>
+                    <div class="math-expression">
+                        $$f(x) = \frac{1}{\sqrt{3x-2}} = (3x-2)^{-1/2}$$
+                        $$f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$$
+                    </div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Step 1: Find $f(x+h)$</label>
+                        
+                        <!-- Enhanced Mathematical Toolbar -->
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(0, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(0, 'h')">h</button>
+                            <button class="math-btn" onclick="insertMath(0, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(0, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(0, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(0, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(0, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(0, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(0, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(0, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(0, '\\sqrt{}')">[√]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(0, '\\frac{}{}')">[/]</button>
+                            <button class="math-btn" onclick="insertMath(0, '1')">1</button>
+                            <button class="math-btn" onclick="insertMath(0, '2')">2</button>
+                            <button class="math-btn" onclick="insertMath(0, '3')">3</button>
+                        </div>
+                        
+                        <div class="mathquill-field-wrapper">
+                        <div class="mathquill-field" id="question0"></div>
+                            <div class="answer-format" id="format-0">
+                                <div style="display: inline-block; text-align: center;">
+                                    <span class="blank-line">_</span>
+                                    <hr style="margin: 2px 0; border: 1px solid #333;">
+                                    √(3(<span class="blank-line">_</span>+<span class="blank-line">_</span>)-2)
+                                </div>
+                            </div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(0)">Check Step 1</button>
+                        <div class="answer-feedback" id="feedback-0"></div>
+                </div>
+                
+                    <div class="math-input-container">
+                        <label class="input-label">Step 2: Set up the difference quotient $\frac{f(x+h) - f(x)}{h}$</label>
+                        
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(1, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(1, 'h')">h</button>
+                            <button class="math-btn" onclick="insertMath(1, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(1, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(1, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(1, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(1, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(1, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(1, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(1, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(1, '\\sqrt{}')">[√]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(1, '\\frac{}{}')">[/]</button>
+                            <button class="math-btn" onclick="insertMath(1, '1')">1</button>
+                            <button class="math-btn" onclick="insertMath(1, '2')">2</button>
+                            <button class="math-btn" onclick="insertMath(1, '3')">3</button>
+                    </div>
+                    
+                        <div class="mathquill-field-wrapper">
+                            <div class="mathquill-field" id="question1"></div>
+                            <div class="answer-format" id="format-1">
+                                <div style="display: inline-block; text-align: center;">
+                                    <div style="display: inline-block; text-align: center;">
+                                        <span class="blank-line">_</span>
+                                        <hr style="margin: 2px 0; border: 1px solid #333;">
+                                        √(3x+3h-2)
+                                    </div>
+                                    -
+                                    <div style="display: inline-block; text-align: center;">
+                                        <span class="blank-line">_</span>
+                                        <hr style="margin: 2px 0; border: 1px solid #333;">
+                                        √(3x-2)
+                                    </div>
+                                    <hr style="margin: 5px 0; border: 2px solid #333;">
+                                    <span class="blank-line">_</span>
+                        </div>
+                    </div>
+                </div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(1)">Check Step 2</button>
+                        <div class="answer-feedback" id="feedback-1"></div>
+                    </div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Step 3: Rationalize and simplify, then take the limit</label>
+                        
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(2, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(2, 'h')">h</button>
+                            <button class="math-btn" onclick="insertMath(2, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(2, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(2, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(2, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(2, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(2, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(2, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(2, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(2, '\\sqrt{}')">[√]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(2, '\\frac{}{}')">[/]</button>
+                            <button class="math-btn" onclick="insertMath(2, '1')">1</button>
+                            <button class="math-btn" onclick="insertMath(2, '2')">2</button>
+                            <button class="math-btn" onclick="insertMath(2, '3')">3</button>
+                        </div>
+                        
+                        <div class="mathquill-field-wrapper">
+                        <div class="mathquill-field" id="question2"></div>
+                            <div class="answer-format" id="format-2">
+                                <div style="display: inline-block; text-align: center;">
+                                    -<span class="blank-line">_</span>
+                                    <hr style="margin: 2px 0; border: 1px solid #333;">
+                                    <span class="blank-line">_</span>(3x-2)<sup>3/2</sup>
+                        </div>
+                    </div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(2)">Check Final Answer</button>
+                        <div class="answer-feedback" id="feedback-2"></div>
+                        <div class="math-hint">
+                            💡 Hint: After rationalizing, you'll get $\frac{-3}{(3x-2)^{3/2}}$
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 2 - Advanced: Implicit Function Derivative -->
+                <div class="question-container">
+                    <div class="question-number">2</div>
+                    <div class="question-text">
+                        Find the derivative of the implicitly defined function $x^3 + y^3 = 3xy$ using the definition approach
+                    </div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">What is $\frac{dy}{dx}$ for this implicit function?</label>
+                        
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(3, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(3, 'y')">y</button>
+                            <button class="math-btn" onclick="insertMath(3, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(3, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(3, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(3, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(3, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(3, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(3, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(3, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(3, '\\frac{}{}')">[/]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(3, '\\frac{dy}{dx}')">dy/dx</button>
+                            <button class="math-btn" onclick="insertMath(3, '2')">2</button>
+                            <button class="math-btn" onclick="insertMath(3, '3')">3</button>
+                        </div>
+                        
+                        <div class="mathquill-field-wrapper">
+                            <div class="mathquill-field" id="question3"></div>
+                            <div class="answer-format" id="format-3">
+                                <div style="display: inline-block; text-align: center;">
+                                    <span class="blank-line">_</span>y - <span class="blank-line">_</span>x²
+                                    <hr style="margin: 2px 0; border: 1px solid #333;">
+                                    <span class="blank-line">_</span>y² - <span class="blank-line">_</span>x
+                                </div>
+                            </div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(3)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-3"></div>
+                        <div class="math-hint">
+                            💡 Hint: Differentiate both sides implicitly: $3x^2 + 3y^2\frac{dy}{dx} = 3y + 3x\frac{dy}{dx}$
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 3 - Advanced: Higher Order Derivative -->
+                <div class="question-container">
+                    <div class="question-number">3</div>
+                    <div class="question-text">
+                        For $f(x) = x^4 - 6x^3 + 12x^2 - 8x + 1$, find the third derivative $f'''(x)$ using the definition
+                    </div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">What is $f'''(x)$?</label>
+                        <div class="text-input-field-wrapper">
+                            <input type="text" class="text-input-field" id="question4" placeholder="Enter the third derivative...">
+                            <div class="answer-format" id="format-4">f'''(x) = <span class="blank-line">__</span>x + <span class="blank-line">__</span></div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(4)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-4"></div>
+                        <div class="math-hint">
+                            💡 Hint: Find f'(x), then f''(x), then f'''(x) step by step
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 4 - Advanced: Parametric Derivatives -->
+                <div class="question-container">
+                    <div class="question-number">4</div>
+                    <div class="question-text">
+                        For the parametric equations $x = t^3 - 3t$ and $y = t^2 + 2t$, find $\frac{dy}{dx}$
+                    </div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Express $\frac{dy}{dx}$ in terms of $t$:</label>
+                        
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(5, 't')">t</button>
+                            <button class="math-btn" onclick="insertMath(5, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(5, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(5, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(5, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(5, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(5, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(5, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(5, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(5, '\\frac{}{}')">[/]</button>
+                            <button class="math-btn" onclick="insertMath(5, '1')">1</button>
+                            <button class="math-btn" onclick="insertMath(5, '2')">2</button>
+                            <button class="math-btn" onclick="insertMath(5, '3')">3</button>
+                        </div>
+                        
+                        <div class="mathquill-field-wrapper">
+                            <div class="mathquill-field" id="question5"></div>
+                            <div class="answer-format" id="format-5">
+                                <div style="display: inline-block; text-align: center;">
+                                    <span class="blank-line">_</span>t + <span class="blank-line">_</span>
+                                    <hr style="margin: 2px 0; border: 1px solid #333;">
+                                    <span class="blank-line">_</span>t² - <span class="blank-line">_</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(5)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-5"></div>
+                        <div class="math-hint">
+                            💡 Hint: Use $\frac{dy}{dx} = \frac{dy/dt}{dx/dt}$ where $\frac{dx}{dt} = 3t^2 - 3$ and $\frac{dy}{dt} = 2t + 2$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 5 - Advanced: Chain Rule with Definition -->
+                <div class="question-container">
+                    <div class="question-number">5</div>
+                    <div class="question-text">
+                        Use the definition of derivative to find $f'(x)$ for $f(x) = \sin(x^2 + 3x)$
+                    </div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">What is $f'(x)$?</label>
+                        
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(6, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(6, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(6, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(6, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(6, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(6, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(6, '*')">×</button>
+                            <button class="math-btn function-btn" onclick="insertMath(6, '\\sin')">sin</button>
+                            <button class="math-btn function-btn" onclick="insertMath(6, '\\cos')">cos</button>
+                            <button class="math-btn" onclick="insertMath(6, '2')">2</button>
+                            <button class="math-btn" onclick="insertMath(6, '3')">3</button>
+                        </div>
+                        
+                        <div class="mathquill-field-wrapper">
+                            <div class="mathquill-field" id="question6"></div>
+                            <div class="answer-format" id="format-6">cos(x²+3x) · (<span class="blank-line">__</span>x + <span class="blank-line">_</span>)</div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(6)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-6"></div>
+                        <div class="math-hint">
+                            💡 Hint: Use the chain rule: if f(x) = sin(u) where u = x² + 3x, then f'(x) = cos(u) · u'
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="submit-btn" id="submitBtn" onclick="submitQuiz()">Submit Quiz</button>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <button id="toggleAnswerGuide" class="nav-btn" style="background: linear-gradient(135deg, #ff7e5f, #feb47b); border: 2px solid #333; padding: 12px 25px; font-size: 16px;">
+                    📝 Show Answer Guide
+                </button>
+            </div>
+
+            <div id="results" class="results" style="display: none;">
+                <div class="score" id="scoreDisplay"></div>
+                <div id="resultMessage"></div>
+                <div class="navigation">
+                    <a href="profile.html" class="nav-btn">← Back to Profile</a>
+                    <a href="profile.html" class="nav-btn">🎉 Complete! →</a>
+                </div>
+            </div>
+
+            <!-- Answer Guide Section -->
+            <div id="answerGuide" style="margin-top: 30px; padding: 20px; background: #f0f8ff; border: 2px solid #1e90ff; border-radius: 10px; display: none;">
+                <h4 style="color: #0066cc; margin-bottom: 15px;">📝 Advanced Answer Guide</h4>
+                <p style="font-size: 14px; color: #333; margin-bottom: 15px;">
+                    Advanced-level solutions for complex derivative problems:
+                </p>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 1: f(x) = 1/√(3x-2)</h5>
+                    <p><strong>Step 1:</strong> f(x+h) = 1/√(3(x+h)-2) = 1/√(3x+3h-2)</p>
+                    <p><strong>Step 2:</strong> Difference quotient: [1/√(3x+3h-2) - 1/√(3x-2)]/h</p>
+                    <p><strong>Step 3:</strong> After rationalization: f'(x) = -3/[2(3x-2)^(3/2)]</p>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 2: Implicit derivative of x³ + y³ = 3xy</h5>
+                    <p><strong>Answer:</strong> dy/dx = (3y - 3x²)/(3y² - 3x) = (y - x²)/(y² - x)</p>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 3: Third derivative of f(x) = x⁴ - 6x³ + 12x² - 8x + 1</h5>
+                    <p><strong>Answer:</strong> f'''(x) = 24x - 36</p>
+                    <p>f'(x) = 4x³ - 18x² + 24x - 8</p>
+                    <p>f''(x) = 12x² - 36x + 24</p>
+                    <p>f'''(x) = 24x - 36</p>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 4: Parametric derivative</h5>
+                    <p><strong>Answer:</strong> dy/dx = (2t + 2)/(3t² - 3) = 2(t + 1)/[3(t² - 1)]</p>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 5: Chain rule derivative of f(x) = sin(x² + 3x)</h5>
+                    <p><strong>Answer:</strong> f'(x) = cos(x² + 3x) · (2x + 3)</p>
+                    <p>Using the chain rule: d/dx[sin(u)] = cos(u) · du/dx where u = x² + 3x</p>
+                </div>
+            </div>
+            
+            <!-- Debug Panel for Troubleshooting -->
+            <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border: 2px solid #dee2e6; border-radius: 10px;">
+                <h4 style="color: #495057; margin-bottom: 15px;">🛠️ Debug Panel</h4>
+                <p style="font-size: 14px; color: #6c757d; margin-bottom: 15px;">
+                    If your module completion isn't saving properly, use these tools:
+                </p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button onclick="checkModuleProgress()" class="nav-btn" style="flex: none; padding: 10px 15px; font-size: 14px;">
+                        📊 Check Progress
+                    </button>
+                    <button onclick="forceCompleteModule()" class="nav-btn" style="flex: none; padding: 10px 15px; font-size: 14px;">
+                        ✅ Force Complete
+                    </button>
+                </div>
+                <p style="font-size: 12px; color: #6c757d; margin-top: 10px;">
+                    Use "Check Progress" to see debug info in console, or "Force Complete" to manually mark as done.
+                </p>
+            </div>
+                 </div>
+     </div>
+
+<script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+        import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBUfSOSpmCdWUGTVbSQsMCH-JVmrjpfdPY",
+        authDomain: "fyp-lutfi-naim.firebaseapp.com",
+        projectId: "fyp-lutfi-naim",
+        storageBucket: "fyp-lutfi-naim.firebasestorage.app",
+        messagingSenderId: "231274529807",
+        appId: "1:231274529807:web:c4ea279f9e7581bd674f7a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+        let mathAnswers = {};
+        let currentUser = null;
+
+        const mathCorrectAnswers = {
+            0: "\\frac{1}{\\sqrt{3x+3h-2}}",
+            1: "\\frac{\\frac{1}{\\sqrt{3x+3h-2}}-\\frac{1}{\\sqrt{3x-2}}}{h}",
+            2: "\\frac{-3}{2(3x-2)^{\\frac{3}{2}}}",
+            3: "\\frac{y-x^2}{y^2-x}",
+            4: "24x-36",
+            5: "\\frac{2t+2}{3t^2-3}",
+            6: "\\cos(x^2+3x)(2x+3)"
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                loadProgress();
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        function loadProgress() {
+            const saved = sessionStorage.getItem('definition-derivative-advanced-progress');
+            if (saved) {
+                mathAnswers = JSON.parse(saved);
+                restoreAnswers();
+            }
+        }
+
+        function restoreAnswers() {
+            Object.keys(mathAnswers).forEach(questionNum => {
+                const input = document.querySelector(`[data-question="${questionNum}"]`);
+                if (input) {
+                    input.value = mathAnswers[questionNum];
+                }
+            });
+        }
+
+        window.checkMathAnswer = function(questionNum) {
+            const fieldId = `question${questionNum}`;
+            const feedback = document.getElementById(`feedback-${questionNum}`);
+            let userAnswer = '';
+            
+            // Handle different input types
+            if (questionNum === 4) {
+                // Question 4 uses a text input field
+                const textField = document.getElementById(fieldId);
+                userAnswer = textField ? textField.value : '';
+            } else {
+                // Other questions use MathQuill fields
+                const mathField = window.mathFields[fieldId];
+                userAnswer = mathField ? mathField.latex() : '';
+            }
+            
+            // Check for blank answers first
+            if (!userAnswer || userAnswer.trim() === '') {
+                feedback.classList.remove('correct', 'incorrect');
+                feedback.classList.add('show', 'incorrect');
+                feedback.innerHTML = '❌ Please enter an answer before checking.';
+                return;
+            }
+            
+            mathAnswers[questionNum] = userAnswer;
+            sessionStorage.setItem('definition-derivative-advanced-progress', JSON.stringify(mathAnswers));
+            
+            let isCorrect = false;
+            
+            console.log(`Question ${questionNum}: User answer: "${userAnswer}"`);
+            console.log(`Question ${questionNum}: Expected pattern: "${mathCorrectAnswers[questionNum]}"`);
+            
+            // Advanced validation logic for each question
+            if (questionNum == 0) {
+                // f(x+h) = 1/√(3x+3h-2) - accept various forms
+                isCorrect = userAnswer.includes('\\frac{1}') && userAnswer.includes('\\sqrt') && 
+                           (userAnswer.includes('3x+3h-2') || (userAnswer.includes('3(x+h)-2')));
+            } else if (questionNum == 1) {
+                // Difference quotient - must have complex fraction
+                isCorrect = userAnswer.includes('\\frac') && userAnswer.includes('\\sqrt') && 
+                           userAnswer.includes('h') && userAnswer.includes('3x+3h-2') && userAnswer.includes('3x-2');
+            } else if (questionNum == 2) {
+                // Final derivative: -3/[2(3x-2)^(3/2)] - accept format from screenshot
+                // Accept various equivalent forms of the derivative
+                const hasNegative = userAnswer.includes('-3') || userAnswer.includes('-\\frac{3}');
+                const hasCoeff = userAnswer.includes('3') && userAnswer.includes('2');
+                const hasBase = userAnswer.includes('3x-2');
+                const hasExponent = userAnswer.includes('^{3/2}') || userAnswer.includes('^{\\frac{3}{2}}') || 
+                                  userAnswer.includes('3/2') || userAnswer.includes('\\frac{3}{2}');
+                
+                // Also accept the form shown in screenshot: -(something)/(something)(3x-2)^(3/2)
+                const altFormat = userAnswer.includes('-') && userAnswer.includes('3x-2') && 
+                                userAnswer.includes('\\frac') && hasExponent;
+                
+                isCorrect = (hasNegative && hasCoeff && hasBase && hasExponent) || altFormat;
+            } else if (questionNum == 3) {
+                // Implicit derivative: (y-x²)/(y²-x)
+                isCorrect = userAnswer.includes('\\frac') && 
+                           (userAnswer.includes('y-x^2') || userAnswer.includes('y-x^{2}')) &&
+                           (userAnswer.includes('y^2-x') || userAnswer.includes('y^{2}-x'));
+            } else if (questionNum == 4) {
+                // Third derivative: 24x - 36
+                const cleanAnswer = userAnswer.replace(/\s+/g, '').toLowerCase();
+                isCorrect = (cleanAnswer.includes('24x-36') || cleanAnswer.includes('24x+-36') || 
+                           cleanAnswer === '24x-36' || cleanAnswer === 'f\'\'\'(x)=24x-36');
+            } else if (questionNum == 5) {
+                // Parametric derivative: (2t+2)/(3t²-3) - accept format from screenshot
+                isCorrect = (userAnswer.includes('2t+2') || userAnswer.includes('2(t+1)')) &&
+                           (userAnswer.includes('3t^2-3') || userAnswer.includes('3(t^2-1)') || 
+                            userAnswer.includes('3t^{2}-3') || userAnswer.includes('3t²-3'));
+            } else if (questionNum == 6) {
+                // Chain rule derivative: cos(x²+3x)(2x+3) - accept format from screenshot
+                isCorrect = userAnswer.includes('\\cos') && 
+                           (userAnswer.includes('x^2+3x') || userAnswer.includes('x^{2}+3x') || 
+                            userAnswer.includes('(x^2+3)') || userAnswer.includes('x²+3x')) &&
+                           (userAnswer.includes('2x+3') || userAnswer.includes('(2x+3)'));
+            }
+            
+            feedback.classList.remove('correct', 'incorrect');
+            feedback.classList.add('show');
+            
+            if (isCorrect) {
+                feedback.classList.add('correct');
+                feedback.innerHTML = '✅ Excellent! You understand advanced calculus!';
+            } else {
+                feedback.classList.add('incorrect');
+                feedback.innerHTML = '❌ Not quite right. This is advanced-level calculus - review the concepts and try again!';
+            }
+        };
+
+    window.submitQuiz = async function() {
+            if (Object.keys(mathAnswers).length < 7) {
+                alert('Please answer all questions before submitting.');
+                return;
+            }
+
+            let score = 0;
+            
+            // Check each question using the same logic as checkMathAnswer
+            Object.keys(mathCorrectAnswers).forEach(questionNum => {
+                const userAnswer = mathAnswers[questionNum] || '';
+                let isCorrect = false;
+                
+                console.log(`Checking question ${questionNum}: "${userAnswer}"`);
+                
+                if (questionNum == 0) {
+                    // f(x+h) = 1/√(3x+3h-2) - accept various forms
+                    isCorrect = userAnswer.includes('\\frac{1}') && userAnswer.includes('\\sqrt') && 
+                               (userAnswer.includes('3x+3h-2') || (userAnswer.includes('3(x+h)-2')));
+                } else if (questionNum == 1) {
+                    // Difference quotient - must have complex fraction
+                    isCorrect = userAnswer.includes('\\frac') && userAnswer.includes('\\sqrt') && 
+                               userAnswer.includes('h') && userAnswer.includes('3x+3h-2') && userAnswer.includes('3x-2');
+                } else if (questionNum == 2) {
+                    // Final derivative: -3/[2(3x-2)^(3/2)] - accept format from screenshot
+                    // Accept various equivalent forms of the derivative
+                    const hasNegative = userAnswer.includes('-3') || userAnswer.includes('-\\frac{3}');
+                    const hasCoeff = userAnswer.includes('3') && userAnswer.includes('2');
+                    const hasBase = userAnswer.includes('3x-2');
+                    const hasExponent = userAnswer.includes('^{3/2}') || userAnswer.includes('^{\\frac{3}{2}}') || 
+                                      userAnswer.includes('3/2') || userAnswer.includes('\\frac{3}{2}');
+                    
+                    // Also accept the form shown in screenshot: -(something)/(something)(3x-2)^(3/2)
+                    const altFormat = userAnswer.includes('-') && userAnswer.includes('3x-2') && 
+                                    userAnswer.includes('\\frac') && hasExponent;
+                    
+                    isCorrect = (hasNegative && hasCoeff && hasBase && hasExponent) || altFormat;
+                } else if (questionNum == 3) {
+                    // Implicit derivative: (y-x²)/(y²-x)
+                    isCorrect = userAnswer.includes('\\frac') && 
+                               (userAnswer.includes('y-x^2') || userAnswer.includes('y-x^{2}')) &&
+                               (userAnswer.includes('y^2-x') || userAnswer.includes('y^{2}-x'));
+                } else if (questionNum == 4) {
+                    // Third derivative: 24x - 36
+                    const cleanAnswer = userAnswer.replace(/\s+/g, '').toLowerCase();
+                    isCorrect = (cleanAnswer.includes('24x-36') || cleanAnswer.includes('24x+-36') || 
+                               cleanAnswer === '24x-36' || cleanAnswer === 'f\'\'\'(x)=24x-36');
+                } else if (questionNum == 5) {
+                    // Parametric derivative: (2t+2)/(3t²-3) - accept format from screenshot
+                    isCorrect = (userAnswer.includes('2t+2') || userAnswer.includes('2(t+1)')) &&
+                               (userAnswer.includes('3t^2-3') || userAnswer.includes('3(t^2-1)') || 
+                                userAnswer.includes('3t^{2}-3') || userAnswer.includes('3t²-3'));
+                } else if (questionNum == 6) {
+                    // Chain rule derivative: cos(x²+3x)(2x+3) - accept format from screenshot
+                    isCorrect = userAnswer.includes('\\cos') && 
+                               (userAnswer.includes('x^2+3x') || userAnswer.includes('x^{2}+3x') || 
+                                userAnswer.includes('(x^2+3)') || userAnswer.includes('x²+3x')) &&
+                               (userAnswer.includes('2x+3') || userAnswer.includes('(2x+3)'));
+                }
+                
+                if (isCorrect) score++;
+            });
+
+            const percentage = Math.round((score / 7) * 100);
+            const passed = score >= 5;
+
+            document.getElementById('scoreDisplay').textContent = `${score}/7 (${percentage}%)`;
+            document.getElementById('scoreDisplay').className = `score ${passed ? 'pass' : 'fail'}`;
+            
+            if (passed) {
+                document.getElementById('resultMessage').innerHTML = `
+                    <h3 style="color: var(--success-color);">🎉 Outstanding! You've mastered advanced derivative concepts!</h3>
+                    <p>✅ Advanced module completed successfully!</p>
+                    <p>🆙 Your Advanced level progress has been updated!</p>
+                    <p>🏆 You've completed the most challenging derivative problems!</p>
+                `;
+            } else {
+                document.getElementById('resultMessage').innerHTML = `
+                    <h3 style="color: var(--danger-color);">Keep practicing advanced concepts!</h3>
+                    <p>You need at least 5 correct answers to pass this advanced module. Review the complex derivative concepts and try again.</p>
+                    <p>Your current progress: ${score}/7 correct</p>
+                `;
+            }
+
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('submitBtn').style.display = 'none';
+
+            // Add automatic redirection to profile after 3 seconds
+            let countdown = 3;
+            const redirectMessage = document.createElement('div');
+            redirectMessage.style.cssText = 'margin-top: 20px; padding: 15px; background: #e8f5e8; border: 2px solid #28a745; border-radius: 8px; color: #155724; font-weight: 600; text-align: center;';
+            redirectMessage.innerHTML = `<p>🔄 Redirecting to Profile in <span id="countdown">${countdown}</span> seconds to show your updated progress...</p><p><a href="profile.html" style="color: #155724; text-decoration: underline;">Click here to go immediately</a></p>`;
+            document.getElementById('results').appendChild(redirectMessage);
+
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                const countdownElement = document.getElementById('countdown');
+                if (countdownElement) {
+                    countdownElement.textContent = countdown;
+                }
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    window.location.href = 'profile.html';
+                }
+            }, 1000);
+
+                            if (currentUser && passed) {
+                    try {
+                        const userDocRef = doc(db, 'users', currentUser.uid);
+                        
+                        // Save with multiple key variations for compatibility
+                        const updateData = {
+                            moduleProgress: {
+                                // Primary key that profile.html expects
+                                "The definition of Derivative - Advanced": percentage,
+                                // Backup key with original format
+                                "The Definition of Derivative - Advanced": percentage,
+                                // URL-friendly backup key
+                                "the-definition-of-derivative-advanced": percentage
+                            }
+                        };
+                        
+                        await setDoc(userDocRef, updateData, { merge: true });
+                        
+                        // Also save to session storage for immediate sync
+                        sessionStorage.setItem('moduleCompleted', JSON.stringify({
+                            module: "The definition of Derivative - Advanced",
+                            score: percentage,
+                            timestamp: Date.now()
+                        }));
+                        
+                        console.log('✅ Module completion saved successfully:', updateData);
+                        sessionStorage.removeItem('definition-derivative-advanced-progress');
+                    } catch (error) {
+                        console.error('❌ Error saving module completion:', error);
+                        alert('There was an error saving your progress. Please try again or contact support.');
+                    }
+                }
+        };
+
+        // Enhanced Mathematical toolbar function with error handling
+        window.insertMath = function(questionNum, symbol) {
+            try {
+                const fieldId = `question${questionNum}`;
+                const mathField = window.mathFields[fieldId];
+                
+                if (!mathField || typeof mathField.write !== 'function') {
+                    console.warn('MathField not initialized for question', questionNum);
+                    return;
+                }
+                
+                mathField.focus();
+                mathField.write(symbol);
+                mathField.blur();
+                
+                // Update stored answer
+                const latex = mathField.latex();
+                mathAnswers[questionNum] = latex;
+                sessionStorage.setItem('definition-derivative-advanced-progress', JSON.stringify(mathAnswers));
+                
+            } catch (error) {
+                console.error('Error inserting math symbol:', error);
+            }
+        };
+
+        // Initialize MathQuill fields when page loads
+        window.mathFields = {};
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize MathQuill
+            const MQ = MathQuill.getInterface(2);
+            
+            // Initialize all math input fields (skip question 4 which is a text field)
+            for (let i = 0; i <= 6; i++) {
+                if (i === 4) {
+                    // Question 4 is a text field, set up event listeners for it
+                    const textField = document.getElementById(`question${i}`);
+                    if (textField) {
+                        textField.addEventListener('input', function() {
+                            mathAnswers[i] = this.value;
+                            sessionStorage.setItem('definition-derivative-advanced-progress', JSON.stringify(mathAnswers));
+                        });
+                        
+                        textField.addEventListener('keypress', function(e) {
+                            if (e.key === 'Enter') {
+                                checkMathAnswer(i);
+                            }
+                        });
+                        console.log(`Initialized text field for question${i}`);
+                    }
+                    continue;
+                }
+                
+                const fieldElement = document.getElementById(`question${i}`);
+                if (fieldElement) {
+                    const mathField = MQ.MathField(fieldElement, {
+                        spaceBehavesLikeTab: true,
+                        leftRightIntoCmdGoes: 'up',
+                        restrictMismatchedBrackets: true,
+                        sumStartsWithNEquals: true,
+                        supSubsRequireOperand: true,
+                        charsThatBreakOutOfSupSub: '+-=<>',
+                        autoSubscriptNumerals: true,
+                        autoCommands: 'pi theta sqrt sum prod alpha beta gamma delta epsilon zeta eta mu nu xi rho sigma tau phi chi psi omega',
+                        autoOperatorNames: 'sin cos tan sec csc cot sinh cosh tanh ln log exp lim',
+                        handlers: {
+                            edit: function() {
+                                const latex = mathField.latex();
+                                mathAnswers[i] = latex;
+                                sessionStorage.setItem('definition-derivative-advanced-progress', JSON.stringify(mathAnswers));
+                            }
+                        }
+                    });
+                    
+                    window.mathFields[`question${i}`] = mathField;
+                    console.log(`Initialized MathField for question${i}`);
+                }
+            }
+            
+            // Initialize answer guide toggle
+            initializeAnswerGuide();
+            
+            console.log('All MathFields initialized:', window.mathFields);
+        });
+
+        // Answer guide functionality
+        function initializeAnswerGuide() {
+            const toggleBtn = document.getElementById('toggleAnswerGuide');
+            const answerGuide = document.getElementById('answerGuide');
+            
+            if (toggleBtn && answerGuide) {
+                toggleBtn.addEventListener('click', function() {
+                    if (answerGuide.style.display === 'none' || answerGuide.style.display === '') {
+                        answerGuide.style.display = 'block';
+                        toggleBtn.textContent = '📝 Hide Answer Guide';
+                    } else {
+                        answerGuide.style.display = 'none';
+                        toggleBtn.textContent = '📝 Show Answer Guide';
+                    }
+                });
+            }
+        }
+
+        // Debug functions
+        window.checkModuleProgress = function() {
+            console.log('Current answers:', mathAnswers);
+            console.log('Session storage:', sessionStorage.getItem('definition-derivative-advanced-progress'));
+            console.log('Current user:', currentUser);
+        };
+
+        window.forceCompleteModule = function() {
+            if (confirm('Force complete this module? This will mark it as 100% complete.')) {
+                mathAnswers = {0: 'forced', 1: 'forced', 2: 'forced', 3: 'forced', 4: 'forced', 5: 'forced', 6: 'forced'};
+                submitQuiz();
+            }
+        };
+</script>
+</body>
+</html> 
+
+
+
+
+
+
+

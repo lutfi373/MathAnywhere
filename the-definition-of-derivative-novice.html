@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Definition of Derivative - Novice | MathAnywhere</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- MathQuill resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+    
+    <!-- MathJax for rendering mathematical expressions -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Plotly for interactive graphs -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                packages: {'[+]': ['color']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <style>
+        :root {
+            --input-focus: #2d8cf0;
+            --font-color: #323232;
+            --font-color-sub: #666;
+            --bg-color: #f7f9fc;
+            --main-color: black;
+            --accent-color: #1dd1a1;
+            --secondary-color: #54a0ff;
+            --tertiary-color: #5f27cd;
+            --light-blue: #74b9ff;
+            --pink: #fd79a8;
+            --purple: #6c5ce7;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fira Code', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: var(--font-color);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(29, 209, 161, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(84, 160, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(95, 39, 205, 0.15) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            box-shadow: 
+                20px 20px 60px rgba(0, 0, 0, 0.1),
+                -20px -20px 60px rgba(255, 255, 255, 0.8),
+                inset 5px 5px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            border: 2px solid var(--main-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 3px solid var(--main-color);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 3em;
+            font-weight: 900;
+            position: relative;
+            z-index: 1;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.25);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+            z-index: 1;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 50px;
+        }
+
+        .question-container {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid var(--main-color);
+            box-shadow: 
+                8px 8px 20px rgba(0, 0, 0, 0.1),
+                -8px -8px 20px rgba(255, 255, 255, 0.7);
+            transition: all 0.4s ease;
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            border: 3px solid var(--main-color);
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            line-height: 1.7;
+            color: var(--font-color);
+            font-weight: 600;
+        }
+
+        .math-expression {
+            background: linear-gradient(135deg, #e8f8f5, #d1ecf1);
+            padding: 20px;
+            border-radius: 15px;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.4em;
+            text-align: center;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .math-input-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+            box-shadow: 
+                inset 2px 2px 5px rgba(0, 0, 0, 0.1),
+                inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .input-label {
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            display: block;
+            font-size: 1.1em;
+        }
+
+        .math-hint {
+            background: rgba(29, 209, 161, 0.1);
+            border-left: 4px solid var(--accent-color);
+            padding: 10px 15px;
+            margin-top: 10px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9em;
+        }
+
+        .math-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-family: 'Times New Roman', serif;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        .math-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(29, 209, 161, 0.3);
+            transform: scale(1.02);
+        }
+
+        .math-preview {
+            background: linear-gradient(135deg, #e8f8f5, #d1ecf1);
+            border: 2px solid var(--accent-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+        }
+
+        .answer-feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        .answer-feedback.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .answer-feedback.correct {
+            background: linear-gradient(135deg, var(--success-color), #20c997);
+            color: white;
+        }
+
+        .answer-feedback.incorrect {
+            background: linear-gradient(135deg, var(--danger-color), #fd7e14);
+            color: white;
+        }
+
+        .check-answer-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .check-answer-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--tertiary-color) 100%);
+            color: white;
+            border: 3px solid var(--main-color);
+            padding: 18px 50px;
+            border-radius: 50px;
+            font-size: 1.3em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            margin: 40px auto;
+            display: block;
+        }
+
+        .results {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+            text-align: center;
+            border: 3px solid var(--main-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .score {
+            font-size: 4em;
+            font-weight: 900;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .score.pass {
+            color: var(--success-color);
+        }
+
+        .score.fail {
+            color: var(--danger-color);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 3px solid var(--main-color);
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.4s ease;
+            flex: 1;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .nav-btn:hover {
+            color: white;
+            transform: translateY(-3px);
+            text-decoration: none;
+        }
+
+        .progress-bar {
+            background: rgba(233, 236, 239, 0.8);
+            height: 12px;
+            border-radius: 25px;
+            margin: 25px 0;
+            overflow: hidden;
+            border: 2px solid var(--main-color);
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--accent-color), var(--secondary-color), var(--tertiary-color));
+            height: 100%;
+            border-radius: 25px;
+            transition: width 0.6s ease;
+            width: 0%;
+        }
+
+        /* MathQuill styling */
+        .mathquill-field {
+            width: 100%;
+            margin: 15px 0;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            min-height: 50px;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.1),
+                -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .mathquill-field:focus-within {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(40, 167, 69, 0.3);
+            transform: scale(1.02);
+        }
+
+        /* Text input styling */
+        .text-input-field {
+            width: 100%;
+            margin: 15px 0;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            min-height: 50px;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.1),
+                -2px -2px 5px rgba(255, 255, 255, 0.8);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .text-input-field:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(40, 167, 69, 0.3);
+            transform: scale(1.02);
+            outline: none;
+        }
+
+        .text-input-field::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        /* Enhanced Mathematical Toolbar Styling */
+        .math-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid var(--main-color);
+            border-radius: 15px;
+            box-shadow: 
+                2px 2px 8px rgba(0, 0, 0, 0.1),
+                -2px -2px 8px rgba(255, 255, 255, 0.8);
+        }
+
+        .math-toolbar::before {
+            content: "📐 Math Toolbar";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .math-toolbar:hover::before {
+            transform: scale(1.05);
+        }
+
+        .math-btn {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 40px;
+            text-align: center;
+            color: var(--main-color);
+            box-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.1),
+                -1px -1px 3px rgba(255, 255, 255, 0.8);
+        }
+
+        .math-btn:hover {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 
+                3px 3px 8px rgba(0, 0, 0, 0.2),
+                -2px -2px 6px rgba(255, 255, 255, 0.9);
+        }
+
+        .math-btn:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        .function-btn {
+            background: linear-gradient(135deg, var(--tertiary-color), var(--accent-color));
+            color: white;
+            font-weight: 700;
+        }
+
+        .function-btn:hover {
+            background: linear-gradient(135deg, var(--accent-color), var(--main-color));
+        }
+
+        /* Operator button styling */
+        .math-btn[onclick*="'+'"], .math-btn[onclick*="'-'"], .math-btn[onclick*="'*'"], .math-btn[onclick*="'="], .math-btn[onclick*="'^'"] {
+            background: linear-gradient(145deg, #10b981, #047857);
+            color: white;
+            border-color: #047857;
+        }
+
+        /* Number button styling */
+        .math-btn[onclick*="'0'"], .math-btn[onclick*="'1'"], .math-btn[onclick*="'2'"], .math-btn[onclick*="'3'"], .math-btn[onclick*="'4'"], .math-btn[onclick*="'5'"], .math-btn[onclick*="'6'"], .math-btn[onclick*="'7'"], .math-btn[onclick*="'8'"], .math-btn[onclick*="'9'"] {
+            background: linear-gradient(145deg, #3b82f6, #1d4ed8);
+            color: white;
+            border-color: #1d4ed8;
+        }
+
+        /* Parentheses and brackets styling */
+        .math-btn[onclick*="'('"], .math-btn[onclick*="')'"] {
+            background: linear-gradient(145deg, #f59e0b, #d97706);
+            color: white;
+            border-color: #d97706;
+        }
+
+        /* Special symbols styling */
+        .math-btn[onclick*="'\\to'"], .math-btn[onclick*="'\\infty'"], .math-btn[onclick*="'\\Delta'"], .math-btn[onclick*="'\\partial'"] {
+            background: linear-gradient(145deg, #ef4444, #dc2626);
+            color: white;
+            border-color: #b91c1c;
+        }
+
+        /* Drag and Drop Styling */
+        .drag-drop-container {
+            display: flex;
+            gap: 30px;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            border: 2px solid var(--main-color);
+        }
+
+        .functions-column, .derivatives-column {
+            flex: 1;
+            padding: 20px;
+            background: linear-gradient(135deg, #e8f8f5, #d1ecf1);
+            border-radius: 12px;
+            border: 2px solid var(--accent-color);
+        }
+
+        .functions-column h4, .derivatives-column h4 {
+            text-align: center;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+
+        .drag-item {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            border: 2px solid var(--accent-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            cursor: grab;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 1.1em;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .drag-item:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-color: var(--secondary-color);
+        }
+
+        .drag-item.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+            cursor: grabbing;
+        }
+
+        .drop-zone {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            border: 2px dashed var(--secondary-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone.drag-over {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border-color: var(--main-color);
+            transform: scale(1.05);
+        }
+
+        .drop-zone.matched {
+            background: linear-gradient(135deg, var(--success-color), #20c997);
+            color: white;
+            border-color: var(--success-color);
+            animation: pulse-success 0.6s ease;
+        }
+
+        .drop-zone.incorrect {
+            background: linear-gradient(135deg, var(--danger-color), #fd7e14);
+            color: white;
+            border-color: var(--danger-color);
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes pulse-success {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Interactive Animation Container */
+        .animation-container {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid var(--accent-color);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .derivative-visualization {
+            width: 100%;
+            height: 300px;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        }
+
+        .step-by-step-container {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid var(--accent-color);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .step-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+
+        .step-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .step-btn:hover:not(:disabled) {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        .step-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .step-content {
+            min-height: 100px;
+            padding: 20px;
+            background: linear-gradient(135deg, #e8f8f5, #d1ecf1);
+            border-radius: 10px;
+            border: 2px solid var(--accent-color);
+        }
+
+        /* Adaptive Hints Styling */
+        .adaptive-hint {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 2px solid var(--warning-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+
+        .adaptive-hint.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Touch-friendly enhancements */
+        @media (max-width: 768px) {
+            .drag-drop-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .drag-item, .drop-zone {
+                padding: 20px;
+                font-size: 1.2em;
+            }
+            
+            .math-toolbar {
+                gap: 12px;
+            }
+            
+            .math-btn {
+                padding: 12px 16px;
+                font-size: 18px;
+                min-width: 50px;
+            }
+        }
+        
+        .answer-hint {
+            margin-top: 15px;
+            padding: 10px;
+            background: #e8f4ff;
+            border: 1px solid #4a86e8;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 1.2em;
+            letter-spacing: 1px;
+        }
+        
+        .hint-btn {
+            background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+            color: #333;
+            border: 1px solid #ccc;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            display: block;
+        }
+        
+        .hint-btn:hover {
+            background: linear-gradient(135deg, #c2e9fb, #a1c4fd);
+            transform: translateY(-2px);
+        }
+        
+        .show-answer-btn {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            color: #333;
+            border: 1px solid #ccc;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            display: block;
+        }
+        
+        .show-answer-btn:hover {
+            background: linear-gradient(135deg, #fad0c4, #ff9a9e);
+            transform: translateY(-2px);
+        }
+        
+        .try-again-btn {
+            background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+            color: #333;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+        
+        .try-again-btn:hover {
+            background: linear-gradient(135deg, #c2e9fb, #a1c4fd);
+            transform: translateY(-1px);
+        }
+
+        /* Style for the answer format guides */
+        .answer-format {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(52, 152, 219, 0.05);
+            border: 1px dashed #3498db;
+            border-radius: 8px;
+            color: #333;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            text-align: center;
+            font-weight: normal;
+            position: relative;
+        }
+        
+        .answer-format::before {
+            content: "📝 Answer Format Guide";
+            position: absolute;
+            top: -12px;
+            left: 10px;
+            background: #3498db;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        /* Style for blank spaces in cloze format */
+        .blank {
+            display: inline-block;
+            min-width: 30px;
+            margin: 0 2px;
+            position: relative;
+        }
+        
+        /* Style for the underscores in blanks */
+        .blank-line {
+            color: #3498db;
+            font-weight: bold;
+            font-size: 18px;
+            display: inline;
+        }
+        
+        /* Container for mathquill fields */
+        .mathquill-field-wrapper {
+            width: 100%;
+            margin: 15px 0;
+        }
+        
+        /* Make mathquill field background opaque */
+        .mathquill-field {
+            background: rgba(255, 255, 255, 0.95) !important;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+        <div class="header">
+            <h1>The Definition of Derivative</h1>
+            <p>Master the fundamental concepts of calculus</p>
+            <div class="difficulty-badge">Novice Level</div>
+    </div>
+
+        <div class="content">
+            <div id="questionsContainer">
+                <!-- Question 1 - Definition from Textbook Tutorial 7 -->
+                <div class="question-container">
+                    <div class="question-number">1</div>
+                    <div class="question-text">
+                        Use the definition of derivative to find $f'(x)$ for $f(x) = 2\sqrt{x}$.
+                    </div>
+                    <div class="math-expression">
+                        $$f(x) = 2\sqrt{x}$$
+                        $$f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$$
+                    </div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Step 1: Find $f(x+h)$</label>
+                        
+                        <!-- Enhanced Mathematical Toolbar -->
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(0, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(0, 'h')">h</button>
+                            <button class="math-btn" onclick="insertMath(0, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(0, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(0, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(0, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(0, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(0, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(0, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(0, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(0, '\\sqrt{}')">[√]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(0, '\\frac{}{}')">[/]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(0, '\\lim')">lim</button>
+                            <button class="math-btn" onclick="insertMath(0, '\\to')">→</button>
+                            <button class="math-btn" onclick="insertMath(0, '0')">0</button>
+                            <button class="math-btn function-btn" onclick="insertMath(0, 'f(x)')">f(x)</button>
+                            <button class="math-btn" onclick="insertMath(0, '2')">2</button>
+                        </div>
+                        
+                        <div class="mathquill-field-wrapper">
+                        <div class="mathquill-field" id="question0"></div>
+                            <div class="answer-format" id="format-0">2√(<span class="blank-line">_</span>+<span class="blank-line">_</span>)</div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(0)">Check Step 1</button>
+                        <div class="answer-feedback" id="feedback-0"></div>
+                </div>
+                
+                    <div class="math-input-container">
+                        <label class="input-label">Step 2: Set up the difference quotient $\frac{f(x+h) - f(x)}{h}$</label>
+                        
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(1, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(1, 'h')">h</button>
+                            <button class="math-btn" onclick="insertMath(1, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(1, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(1, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(1, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(1, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(1, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(1, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(1, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(1, '\\sqrt{}')">[√]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(1, '\\frac{}{}')">[/]</button>
+                            <button class="math-btn" onclick="insertMath(1, '2')">2</button>
+                    </div>
+                    
+                        <div class="mathquill-field-wrapper">
+                            <div class="mathquill-field" id="question1"></div>
+                            <div class="answer-format" id="format-1">
+                                <div style="display: inline-block; text-align: center;">
+                                    2√(<span class="blank-line">___</span>) - 2√(<span class="blank-line">_</span>)
+                                    <hr style="margin: 2px 0; border: 1px solid #333;">
+                                    <span class="blank-line">_</span>
+                        </div>
+                    </div>
+                </div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(1)">Check Step 2</button>
+                        <div class="answer-feedback" id="feedback-1"></div>
+                    </div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Step 3: Rationalize and simplify, then take the limit</label>
+                        
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(2, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(2, 'h')">h</button>
+                            <button class="math-btn" onclick="insertMath(2, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(2, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(2, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(2, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(2, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(2, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(2, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(2, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(2, '\\sqrt{}')">[√]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(2, '\\frac{}{}')">[/]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(2, '\\lim')">lim</button>
+                            <button class="math-btn" onclick="insertMath(2, '\\to')">→</button>
+                            <button class="math-btn" onclick="insertMath(2, '0')">0</button>
+                            <button class="math-btn" onclick="insertMath(2, '1')">1</button>
+                            <button class="math-btn" onclick="insertMath(2, '2')">2</button>
+                        </div>
+                        
+                        <div class="mathquill-field-wrapper">
+                        <div class="mathquill-field" id="question2"></div>
+                            <div class="answer-format" id="format-2">
+                                <div style="display: inline-block; text-align: center;">
+                                    <span class="blank-line">_</span>
+                                    <hr style="margin: 2px 0; border: 1px solid #333;">
+                                    √<span class="blank-line">_</span>
+                        </div>
+                    </div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(2)">Check Final Answer</button>
+                        <div class="answer-feedback" id="feedback-2"></div>
+                        <div class="math-hint">
+                            💡 Hint: Multiply by the conjugate $\frac{\sqrt{x+h} + \sqrt{x}}{\sqrt{x+h} + \sqrt{x}}$ to rationalize
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Question 2 - Drag & Drop Activity: Function-Derivative Matching -->
+                <div class="question-container">
+                    <div class="question-number">2</div>
+                    <div class="question-text">
+                        Match each function with its correct derivative using the definition of derivative
+                    </div>
+                    
+                    <div class="drag-drop-container" id="dragDropContainer">
+                        <div class="functions-column">
+                            <h4>Functions</h4>
+                            <div class="drag-item" draggable="true" data-function="sqrt3x-12">
+                                $f(x) = \sqrt{3x - 12}$
+                        </div>
+                            <div class="drag-item" draggable="true" data-function="x2+25">
+                                $f(x) = \sqrt{x^2 + 25}$
+                            </div>
+                            <div class="drag-item" draggable="true" data-function="1over3x-2">
+                                $f(x) = \frac{1}{3x - 2}$
+                            </div>
+                            <div class="drag-item" draggable="true" data-function="x2overx+3">
+                                $f(x) = \frac{x^2}{x + 3}$
+                    </div>
+                </div>
+
+                        <div class="derivatives-column">
+                            <h4>Derivatives</h4>
+                            <div class="drop-zone" data-derivative="sqrt3x-12">
+                                $f'(x) = \frac{3}{2\sqrt{3x - 12}}$
+                            </div>
+                            <div class="drop-zone" data-derivative="x2+25">
+                                $f'(x) = \frac{x}{\sqrt{x^2 + 25}}$
+                            </div>
+                            <div class="drop-zone" data-derivative="1over3x-2">
+                                $f'(x) = \frac{-3}{(3x - 2)^2}$
+                            </div>
+                            <div class="drop-zone" data-derivative="x2overx+3">
+                                $f'(x) = \frac{x^2 + 6x}{(x + 3)^2}$
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="check-answer-btn" onclick="checkDragDrop()">Check Matches</button>
+                    <div class="answer-feedback" id="feedback-dragdrop"></div>
+                        <div class="math-hint">
+                        💡 Hint: Use the definition $f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$ for each function
+                    </div>
+                </div>
+                
+                <!-- Question 3 - Interactive Animation: Derivative as Limit -->
+                <div class="question-container">
+                    <div class="question-number">3</div>
+                    <div class="question-text">
+                        Visualize how the derivative emerges as the limit of the difference quotient
+                    </div>
+                    
+                    <div class="animation-container">
+                        <h4>Interactive Derivative Visualization: $f(x) = x^2$</h4>
+                        <div class="derivative-visualization" id="derivativeGraph"></div>
+                        
+                        <div style="margin: 20px 0; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                            <label style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" id="showOriginal" checked onchange="updateNoviceGraph()">
+                                <span style="color: blue; font-weight: 600;">f(x) - Original</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" id="showFirstDerivative" checked onchange="updateNoviceGraph()">
+                                <span style="color: red; font-weight: 600;">f'(x) - First Derivative</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" id="showSecondDerivative" onchange="updateNoviceGraph()">
+                                <span style="color: green; font-weight: 600;">f''(x) - Second Derivative</span>
+                            </label>
+                        </div>
+                        
+                        <div style="display: flex; gap: 15px; justify-content: center; margin: 15px 0;">
+                            <button class="step-btn" onclick="animateNoviceDerivativeEvolution()">🎬 Animate Evolution</button>
+                            <button class="step-btn" onclick="showNoviceCriticalPoints()">📍 Show Critical Points</button>
+                            <button class="step-btn" onclick="showNoviceInflectionPoints()">🔄 Show Inflection Points</button>
+                            <button class="step-btn" onclick="resetNoviceAnimation()">🔄 Reset</button>
+                        </div>
+                        
+                        <div class="math-expression">
+                            $$f(x) = x^2$$
+                            $$f'(x) = 2x$$
+                            $$f''(x) = 2$$
+                        </div>
+                    </div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">What happens to the secant line as h approaches 0?</label>
+                        <div class="text-input-field-wrapper">
+                            <input type="text" class="text-input-field" id="question3" placeholder="Type your answer here...">
+                            <div class="answer-format" id="format-3">The secant line <span class="blank-line">_______</span> the <span class="blank-line">______</span> line</div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(3)">Check Understanding</button>
+                        <div class="answer-feedback" id="feedback-3"></div>
+                        <div class="adaptive-hint" id="hint-3">
+                            💡 Adaptive Hint: The secant line becomes the tangent line, giving us the instantaneous rate of change!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 4 - Step-by-Step Problem Solving -->
+                <div class="question-container">
+                    <div class="question-number">4</div>
+                    <div class="question-text">
+                        Step-by-Step: Find the derivative of $f(x) = \sqrt{5x - 1}$ using the definition
+                    </div>
+                    
+                    <div class="step-by-step-container">
+                        <div class="step-navigation">
+                            <button class="step-btn" id="prevStep" onclick="previousStep()" disabled>← Previous</button>
+                            <span id="stepIndicator" style="font-weight: 600; color: var(--accent-color);">Step 1 of 4</span>
+                            <button class="step-btn" id="nextStep" onclick="nextStep()">Next →</button>
+                        </div>
+                        
+                        <div class="step-content" id="stepContent">
+                            <h4>Step 1: Write the definition of derivative</h4>
+                            <p>For any function f(x), the derivative is defined as:</p>
+                            <div class="math-expression">
+                                $$f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$$
+                            </div>
+                            <p>For our function $f(x) = \sqrt{5x - 1}$, we need to find $f(x+h)$.</p>
+                    </div>
+                    
+                    <div class="math-input-container">
+                            <label class="input-label" id="stepLabel">Write $f(x+h)$ for $f(x) = \sqrt{5x - 1}$:</label>
+                            
+                            <div class="math-toolbar">
+                                <button class="math-btn" onclick="insertMath(4, 'x')">x</button>
+                                <button class="math-btn" onclick="insertMath(4, 'h')">h</button>
+                                <button class="math-btn" onclick="insertMath(4, '^')">^</button>
+                                <button class="math-btn" onclick="insertMath(4, '(')">(</button>
+                                <button class="math-btn" onclick="insertMath(4, ')')">)</button>
+                                <button class="math-btn" onclick="insertMath(4, '+')">+</button>
+                                <button class="math-btn" onclick="insertMath(4, '-')">-</button>
+                                <button class="math-btn" onclick="insertMath(4, '/')">/</button>
+                                <button class="math-btn" onclick="insertMath(4, '*')">×</button>
+                                <button class="math-btn" onclick="insertMath(4, '=')">=</button>
+                                <button class="math-btn function-btn" onclick="insertMath(4, '\\sqrt{}')">[√]</button>
+                                <button class="math-btn function-btn" onclick="insertMath(4, '\\frac{}{}')">[/]</button>
+                                <button class="math-btn function-btn" onclick="insertMath(4, '\\lim')">lim</button>
+                                <button class="math-btn" onclick="insertMath(4, '\\to')">→</button>
+                                <button class="math-btn" onclick="insertMath(4, '0')">0</button>
+                                <button class="math-btn" onclick="insertMath(4, '1')">1</button>
+                                <button class="math-btn" onclick="insertMath(4, '5')">5</button>
+                        </div>
+                            
+                            <div class="mathquill-field-wrapper">
+                                <div class="mathquill-field" id="question4"></div>
+                                <div class="answer-format" id="format-4">√(5(<span class="blank-line">_</span>+<span class="blank-line">_</span>)-1)</div>
+                            </div>
+                            <button class="check-answer-btn" onclick="checkStepAnswer(4)">Check This Step</button>
+                            <div class="answer-feedback" id="feedback-4"></div>
+                            <div class="adaptive-hint" id="hint-4">
+                                💡 Adaptive Hint: Replace every x in the original function with (x+h)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 5 - Constant Function -->
+                <div class="question-container">
+                    <div class="question-number">5</div>
+                    <div class="question-text">
+                        What is the derivative of a constant function like $f(x) = 7$?
+                    </div>
+                    <div class="math-expression">$f(x) = 7$, find $f'(x)$</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">f'(x) =</label>
+                        <div class="mathquill-field-wrapper">
+                            <div class="mathquill-field" id="question5"></div>
+                            <div class="answer-format" id="format-5"><span class="blank-line">_</span></div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(5)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-5"></div>
+                        <div class="math-hint">
+                            💡 Hint: Constants don't change, so their rate of change is...
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="submit-btn" id="submitBtn" onclick="submitQuiz()">Submit Quiz</button>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <button id="toggleAnswerGuide" class="nav-btn" style="background: linear-gradient(135deg, #ff7e5f, #feb47b); border: 2px solid #333; padding: 12px 25px; font-size: 16px;">
+                    📝 Show Answer Guide
+                </button>
+            </div>
+
+            <div id="results" class="results" style="display: none;">
+                <div class="score" id="scoreDisplay"></div>
+                <div id="resultMessage"></div>
+                <div class="navigation">
+                    <a href="profile.html" class="nav-btn">← Back to Profile</a>
+                    <a href="the-definition-of-derivative-intermediate.html" class="nav-btn">Next: Intermediate →</a>
+                </div>
+            </div>
+
+            <!-- Answer Guide Section -->
+            <div id="answerGuide" style="margin-top: 30px; padding: 20px; background: #f0f8ff; border: 2px solid #1e90ff; border-radius: 10px; display: none;">
+                <h4 style="color: #0066cc; margin-bottom: 15px;">📝 Answer Guide</h4>
+                <p style="font-size: 14px; color: #333; margin-bottom: 15px;">
+                    Use this guide if you're having trouble with the questions:
+                </p>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 1: Use the definition of derivative to find f'(x) for f(x) = 2√x</h5>
+                    <p><strong>Step 1:</strong> Find f(x+h) = 2√(x+h)</p>
+                    <p><strong>Step 2:</strong> Set up the difference quotient: [f(x+h) - f(x)]/h = [2√(x+h) - 2√x]/h</p>
+                    <p><strong>Step 3:</strong> Rationalize and simplify:</p>
+                    <p>Multiply by [√(x+h) + √x]/[√(x+h) + √x]:</p>
+                    <p>[2√(x+h) - 2√x]/h × [√(x+h) + √x]/[√(x+h) + √x] = [2(x+h) - 2x]/[h(√(x+h) + √x)] = [2h]/[h(√(x+h) + √x)] = 2/[√(x+h) + √x]</p>
+                    <p><strong>Final answer:</strong> As h→0, f'(x) = 1/√x</p>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 2: Match each function with its correct derivative</h5>
+                    <p>Correct matches:</p>
+                    <ul style="margin-left: 20px;">
+                        <li>f(x) = √(3x - 12) → f'(x) = 3/(2√(3x - 12))</li>
+                        <li>f(x) = √(x² + 25) → f'(x) = x/√(x² + 25)</li>
+                        <li>f(x) = 1/(3x - 2) → f'(x) = -3/(3x - 2)²</li>
+                        <li>f(x) = x²/(x + 3) → f'(x) = (x² + 6x)/(x + 3)²</li>
+                    </ul>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 3: Secant line as h approaches 0</h5>
+                    <p><strong>Answer:</strong> "The secant line becomes the tangent line as h approaches 0"</p>
+                    <p>Note: Your answer must include both "tangent" and either "becomes" or "approaches"</p>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 4: Step-by-Step for f(x) = √(5x - 1)</h5>
+                    <p><strong>Step 1:</strong> f(x+h) = √(5(x+h) - 1) = √(5x + 5h - 1)</p>
+                    <p><strong>Step 2:</strong> [f(x+h) - f(x)]/h = [√(5x + 5h - 1) - √(5x - 1)]/h</p>
+                    <p><strong>Step 3:</strong> Rationalize: [√(5x + 5h - 1) - √(5x - 1)]/h × [√(5x + 5h - 1) + √(5x - 1)]/[√(5x + 5h - 1) + √(5x - 1)]</p>
+                    <p>= [(5x + 5h - 1) - (5x - 1)]/[h(√(5x + 5h - 1) + √(5x - 1))] = [5h]/[h(√(5x + 5h - 1) + √(5x - 1))] = 5/[√(5x + 5h - 1) + √(5x - 1)]</p>
+                    <p><strong>Step 4:</strong> As h→0: f'(x) = 5/(2√(5x - 1))</p>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 5: Derivative of a constant function f(x) = 7</h5>
+                    <p><strong>Answer:</strong> f'(x) = 0</p>
+                    <p>Note: The derivative of any constant function is always zero</p>
+                </div>
+            </div>
+            
+            <!-- Debug Panel for Troubleshooting -->
+            <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border: 2px solid #dee2e6; border-radius: 10px;">
+                <h4 style="color: #495057; margin-bottom: 15px;">🛠️ Debug Panel</h4>
+                <p style="font-size: 14px; color: #6c757d; margin-bottom: 15px;">
+                    If your module completion isn't saving properly, use these tools:
+                </p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button onclick="checkModuleProgress()" class="nav-btn" style="flex: none; padding: 10px 15px; font-size: 14px;">
+                        📊 Check Progress
+                    </button>
+                    <button onclick="forceCompleteModule()" class="nav-btn" style="flex: none; padding: 10px 15px; font-size: 14px;">
+                        ✅ Force Complete
+                    </button>
+                </div>
+                <p style="font-size: 12px; color: #6c757d; margin-top: 10px;">
+                    Use "Check Progress" to see debug info in console, or "Force Complete" to manually mark as done.
+                </p>
+            </div>
+        </div>
+    </div>
+
+<script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+        import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBUfSOSpmCdWUGTVbSQsMCH-JVmrjpfdPY",
+        authDomain: "fyp-lutfi-naim.firebaseapp.com",
+        projectId: "fyp-lutfi-naim",
+        storageBucket: "fyp-lutfi-naim.firebasestorage.app",
+        messagingSenderId: "231274529807",
+        appId: "1:231274529807:web:c4ea279f9e7581bd674f7a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+        let mathAnswers = {};
+        let currentUser = null;
+        let currentStep = 1;
+        let maxSteps = 4;
+        let dragDropMatches = {};
+        let wrongAttempts = {};
+
+        const mathCorrectAnswers = {
+            0: "2\\sqrt{x+h}",
+            1: "\\frac{2\\sqrt{x+h}-2\\sqrt{x}}{h}",
+            2: "\\frac{1}{\\sqrt{x}}",
+            3: "becomes tangent",
+            4: "\\sqrt{5x+5h-1}",
+            5: "0"
+        };
+
+        // Step-by-step content for Tutorial 7 problems
+        const stepByStepContent = {
+            1: {
+                title: "Step 1: Write the definition of derivative",
+                content: "For any function f(x), the derivative is defined as: $$f'(x) = \\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h}$$ For our function $f(x) = \\sqrt{5x - 1}$, we need to find $f(x+h)$.",
+                label: "Write $f(x+h)$ for $f(x) = \\sqrt{5x - 1}$:",
+                answer: "\\sqrt{5(x+h) - 1}"
+            },
+            2: {
+                title: "Step 2: Set up the difference quotient",
+                content: "Now substitute into the definition: $$\\frac{f(x+h) - f(x)}{h} = \\frac{\\sqrt{5(x+h) - 1} - \\sqrt{5x - 1}}{h}$$ This creates an indeterminate form when h→0, so we need to rationalize.",
+                label: "Write the difference quotient:",
+                answer: "\\frac{\\sqrt{5(x+h) - 1} - \\sqrt{5x - 1}}{h}"
+            },
+            3: {
+                title: "Step 3: Rationalize the numerator",
+                content: "Multiply by the conjugate: $$\\frac{\\sqrt{5(x+h) - 1} - \\sqrt{5x - 1}}{h} \\cdot \\frac{\\sqrt{5(x+h) - 1} + \\sqrt{5x - 1}}{\\sqrt{5(x+h) - 1} + \\sqrt{5x - 1}}$$ This gives us: $$\\frac{(5(x+h) - 1) - (5x - 1)}{h(\\sqrt{5(x+h) - 1} + \\sqrt{5x - 1})} = \\frac{5h}{h(\\sqrt{5(x+h) - 1} + \\sqrt{5x - 1})}$$",
+                label: "Simplify after rationalization:",
+                answer: "\\frac{5}{\\sqrt{5(x+h) - 1} + \\sqrt{5x - 1}}"
+            },
+            4: {
+                title: "Step 4: Take the limit as h approaches 0",
+                content: "Now we can take the limit: $$\\lim_{h \\to 0} \\frac{5}{\\sqrt{5(x+h) - 1} + \\sqrt{5x - 1}} = \\frac{5}{\\sqrt{5x - 1} + \\sqrt{5x - 1}} = \\frac{5}{2\\sqrt{5x - 1}}$$",
+                label: "Final answer $f'(x) =$:",
+                answer: "\\frac{5}{2\\sqrt{5x - 1}}"
+            }
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                loadProgress();
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        function loadProgress() {
+            const saved = sessionStorage.getItem('definition-derivative-novice-progress');
+            if (saved) {
+                mathAnswers = JSON.parse(saved);
+                restoreAnswers();
+            }
+        }
+
+        function restoreAnswers() {
+            Object.keys(mathAnswers).forEach(questionNum => {
+                const input = document.querySelector(`[data-question="${questionNum}"]`);
+                if (input) {
+                    input.value = mathAnswers[questionNum];
+                    updateMathPreview(input);
+                }
+            });
+            updateProgress();
+        }
+
+        // Enhanced answer validation function
+        function normalizeAnswer(answer) {
+            return answer.toLowerCase()
+                .replace(/\s+/g, '') // Remove all spaces
+                .replace(/\$+/g, '') // Remove $ symbols
+                .replace(/\\cdot/g, '*') // Replace LaTeX multiplication
+                .replace(/\\times/g, '*') // Replace LaTeX multiplication
+                .replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, '($1)/($2)') // Convert fractions
+                .replace(/\{([^}]*)\}/g, '$1') // Remove braces
+                .replace(/\^(\d+)/g, '^$1') // Normalize exponents
+                .replace(/²/g, '^2') // Convert superscript 2
+                .replace(/³/g, '^3') // Convert superscript 3
+                .replace(/√/g, 'sqrt') // Convert square root symbol
+                .replace(/\\sin/g, 'sin') // Convert LaTeX sin
+                .replace(/\\cos/g, 'cos') // Convert LaTeX cos
+                .replace(/\\tan/g, 'tan') // Convert LaTeX tan
+                .replace(/π/g, 'pi') // Convert pi symbol
+                .replace(/∞/g, 'infinity') // Convert infinity symbol
+                .replace(/±/g, '+-') // Convert plus-minus
+                .replace(/≈/g, '=') // Convert approximately equal
+                .replace(/≠/g, '!=') // Convert not equal
+                .replace(/≤/g, '<=') // Convert less than or equal
+                .replace(/≥/g, '>=') // Convert greater than or equal
+                .replace(/∂/g, 'd') // Convert partial derivative symbol
+                .replace(/∫/g, 'integral') // Convert integral symbol
+                .replace(/∑/g, 'sum') // Convert summation symbol
+                .replace(/∏/g, 'product') // Convert product symbol
+                .replace(/∆/g, 'delta') // Convert delta symbol
+                .replace(/α/g, 'alpha') // Convert alpha
+                .replace(/β/g, 'beta') // Convert beta
+                .replace(/γ/g, 'gamma') // Convert gamma
+                .replace(/θ/g, 'theta') // Convert theta
+                .replace(/λ/g, 'lambda') // Convert lambda
+                .replace(/μ/g, 'mu') // Convert mu
+                .replace(/σ/g, 'sigma') // Convert sigma
+                .replace(/φ/g, 'phi') // Convert phi
+                .replace(/ω/g, 'omega'); // Convert omega
+        }
+
+        // Check if two mathematical expressions are equivalent
+        function areEquivalent(userAnswer, correctAnswer) {
+            // Don't allow empty answers
+            if (!userAnswer || userAnswer.trim() === '') return false;
+            
+            const normalizedUser = normalizeAnswer(userAnswer);
+            const normalizedCorrect = normalizeAnswer(correctAnswer);
+            
+            console.log('Comparing answers:', { 
+                original: { user: userAnswer, correct: correctAnswer },
+                normalized: { user: normalizedUser, correct: normalizedCorrect }
+            });
+            
+            // Direct match
+            if (normalizedUser === normalizedCorrect) return true;
+            
+            // For more strict matching, we'll only check specific equivalencies
+            // rather than general substring inclusion which can lead to false positives
+            
+            // Check for common mathematical equivalencies
+            const equivalencies = [
+                [normalizedUser, normalizedCorrect],
+                [normalizedUser.replace(/\*/g, ''), normalizedCorrect.replace(/\*/g, '')], // Remove multiplication signs
+                [normalizedUser.replace(/\s+/g, ''), normalizedCorrect.replace(/\s+/g, '')] // Remove all spaces
+            ];
+            
+            // Special case for fraction answers (like 1/√x)
+            if (correctAnswer.includes('\\frac') && userAnswer.includes('\\frac')) {
+                // Extract numerator and denominator from fractions
+                const userFracMatch = userAnswer.match(/\\frac\s*\{([^}]*)\}\s*\{([^}]*)\}/);
+                const correctFracMatch = correctAnswer.match(/\\frac\s*\{([^}]*)\}\s*\{([^}]*)\}/);
+                
+                if (userFracMatch && correctFracMatch) {
+                    const userNum = normalizeAnswer(userFracMatch[1]);
+                    const userDenom = normalizeAnswer(userFracMatch[2]);
+                    const correctNum = normalizeAnswer(correctFracMatch[1]);
+                    const correctDenom = normalizeAnswer(correctFracMatch[2]);
+                    
+                    // Check if numerator and denominator match independently
+                    if ((userNum === correctNum || userNum.replace(/\s+/g, '') === correctNum.replace(/\s+/g, '')) && 
+                        (userDenom === correctDenom || userDenom.replace(/\s+/g, '') === correctDenom.replace(/\s+/g, ''))) {
+                        return true;
+                    }
+                }
+            }
+            
+            // Special case for square roots
+            if (correctAnswer.includes('\\sqrt') && userAnswer.includes('\\sqrt')) {
+                const userSqrtMatch = userAnswer.match(/\\sqrt\s*\{([^}]*)\}/);
+                const correctSqrtMatch = correctAnswer.match(/\\sqrt\s*\{([^}]*)\}/);
+                
+                if (userSqrtMatch && correctSqrtMatch) {
+                    const userSqrtContent = normalizeAnswer(userSqrtMatch[1]);
+                    const correctSqrtContent = normalizeAnswer(correctSqrtMatch[1]);
+                    
+                    if (userSqrtContent === correctSqrtContent || 
+                        userSqrtContent.replace(/\s+/g, '') === correctSqrtContent.replace(/\s+/g, '')) {
+                        return true;
+                    }
+                }
+            }
+            
+            return equivalencies.some(([a, b]) => a === b);
+        }
+
+        window.checkMathAnswer = function(questionNum) {
+            const fieldId = `question${questionNum}`;
+            const feedback = document.getElementById(`feedback-${questionNum}`);
+            let userAnswer = '';
+            
+            // Handle different input types
+            if (questionNum === 3) {
+                // Question 3 uses a text input field
+                const textField = document.getElementById(fieldId);
+                userAnswer = textField ? textField.value : '';
+            } else {
+                // Other questions use MathQuill fields
+                const mathField = window.mathFields[fieldId];
+                userAnswer = mathField ? mathField.latex() : '';
+            }
+            
+            // Check for blank answers first
+            if (!userAnswer || userAnswer.trim() === '') {
+                feedback.classList.remove('correct', 'incorrect');
+                feedback.classList.add('show', 'incorrect');
+                feedback.innerHTML = '❌ Please enter an answer before checking.';
+                return;
+            }
+            
+            mathAnswers[questionNum] = userAnswer;
+            sessionStorage.setItem('definition-derivative-novice-progress', JSON.stringify(mathAnswers));
+            
+            let isCorrect = false;
+            const correctAnswer = mathCorrectAnswers[questionNum];
+            
+            console.log(`Question ${questionNum}: User answer: "${userAnswer}", Correct answer: "${correctAnswer}"`);
+            
+            // Simplified validation logic
+            if (questionNum == 0) {
+                // f(x+h) = 2√(x+h) - accept various forms
+                isCorrect = userAnswer.includes('2') && userAnswer.includes('\\sqrt') && 
+                           (userAnswer.includes('x+h') || userAnswer.includes('x + h'));
+            } else if (questionNum == 1) {
+                // Difference quotient - must have fraction with numerator and denominator
+                isCorrect = userAnswer.includes('\\frac') && userAnswer.includes('\\sqrt') && 
+                           userAnswer.includes('h') && userAnswer.includes('2');
+            } else if (questionNum == 2) {
+                // Final derivative: 1/√x
+                isCorrect = (userAnswer.includes('\\frac{1}') && userAnswer.includes('\\sqrt{x}')) ||
+                           userAnswer.includes('x^{-\\frac{1}{2}}') ||
+                           (userAnswer.includes('1') && userAnswer.includes('\\sqrt{x}'));
+            } else if (questionNum == 3) {
+                // Text answer about secant line becoming tangent line
+                const lowerAnswer = userAnswer.toLowerCase();
+                isCorrect = lowerAnswer.includes('tangent') && 
+                           (lowerAnswer.includes('becomes') || lowerAnswer.includes('approaches'));
+            } else if (questionNum == 4) {
+                // f(x+h) for √(5x-1) - accept both forms: √(5(x+h)-1) or √(5x+5h-1)
+                isCorrect = userAnswer.includes('\\sqrt') && userAnswer.includes('5') && 
+                           ((userAnswer.includes('x+h') && userAnswer.includes('-1')) || 
+                            (userAnswer.includes('5x') && userAnswer.includes('5h') && userAnswer.includes('-1')));
+            } else if (questionNum == 5) {
+                // Derivative of constant = 0 - accept various forms
+                const cleanAnswer = userAnswer.replace(/\s+/g, '').toLowerCase();
+                isCorrect = cleanAnswer === '0' || cleanAnswer === 'f\'(x)=0' || cleanAnswer === 'f\'x=0';
+            }
+            
+            feedback.classList.remove('correct', 'incorrect');
+            feedback.classList.add('show');
+            
+            if (isCorrect) {
+                feedback.classList.add('correct');
+                feedback.innerHTML = '✅ Excellent! You understand the concept!';
+            } else {
+                feedback.classList.add('incorrect');
+                feedback.innerHTML = '❌ Not quite right. Review the definition and try again!';
+            }
+            
+            updateProgress();
+        };
+
+        function updateProgress() {
+            const totalQuestions = 10;
+            const progress = (Object.keys(mathAnswers).length / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+    window.submitQuiz = async function() {
+            if (Object.keys(mathAnswers).length < 6) {
+                alert('Please answer all questions before submitting.');
+                return;
+            }
+
+            let score = 0;
+            
+            Object.keys(mathCorrectAnswers).forEach(questionNum => {
+                const userAnswer = mathAnswers[questionNum] || '';
+                let isCorrect = false;
+                
+                console.log(`Checking question ${questionNum}: "${userAnswer}"`);
+                
+                if (questionNum == 0) {
+                    // f(x+h) = 2√(x+h) - accept various forms
+                    isCorrect = userAnswer.includes('2') && userAnswer.includes('\\sqrt') && 
+                               (userAnswer.includes('x+h') || userAnswer.includes('x + h'));
+                } else if (questionNum == 1) {
+                    // Difference quotient - must have fraction with numerator and denominator
+                    isCorrect = userAnswer.includes('\\frac') && userAnswer.includes('\\sqrt') && 
+                               userAnswer.includes('h') && userAnswer.includes('2');
+                } else if (questionNum == 2) {
+                    // Final derivative: 1/√x
+                    isCorrect = (userAnswer.includes('\\frac{1}') && userAnswer.includes('\\sqrt{x}')) ||
+                               userAnswer.includes('x^{-\\frac{1}{2}}') ||
+                               (userAnswer.includes('1') && userAnswer.includes('\\sqrt{x}'));
+                } else if (questionNum == 3) {
+                    // Text answer about secant line becoming tangent line
+                    const lowerAnswer = userAnswer.toLowerCase();
+                    isCorrect = lowerAnswer.includes('tangent') && 
+                               (lowerAnswer.includes('becomes') || lowerAnswer.includes('approaches'));
+                } else if (questionNum == 4) {
+                    // f(x+h) for √(5x-1) - accept both forms: √(5(x+h)-1) or √(5x+5h-1)
+                    isCorrect = userAnswer.includes('\\sqrt') && userAnswer.includes('5') && 
+                               ((userAnswer.includes('x+h') && userAnswer.includes('-1')) || 
+                                (userAnswer.includes('5x') && userAnswer.includes('5h') && userAnswer.includes('-1')));
+                } else if (questionNum == 5) {
+                    // Derivative of constant = 0 - accept various forms
+                    const cleanAnswer = userAnswer.replace(/\s+/g, '').toLowerCase();
+                    isCorrect = cleanAnswer === '0' || cleanAnswer === 'f\'(x)=0' || cleanAnswer === 'f\'x=0';
+                }
+                
+                if (isCorrect) score++;
+            });
+
+            const percentage = Math.round((score / 6) * 100);
+            const passed = score >= 4;
+
+            document.getElementById('scoreDisplay').textContent = `${score}/6 (${percentage}%)`;
+            document.getElementById('scoreDisplay').className = `score ${passed ? 'pass' : 'fail'}`;
+            
+            if (passed) {
+                document.getElementById('resultMessage').innerHTML = `
+                    <h3 style="color: var(--success-color);">🎉 Fantastic! You understand the definition of derivatives!</h3>
+                    <p>✅ Module completed successfully!</p>
+                    <p>🆙 Your Novice level progress has been updated!</p>
+                    <p>➡️ You can now move to the Intermediate level!</p>
+                `;
+            } else {
+                document.getElementById('resultMessage').innerHTML = `
+                    <h3 style="color: var(--danger-color);">Keep learning!</h3>
+                    <p>You need at least 4 correct answers to pass. Review the concepts and try again.</p>
+                    <p>Your current progress: ${score}/6 correct</p>
+                `;
+            }
+
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('submitBtn').style.display = 'none';
+
+            // Add automatic redirection to profile after 3 seconds
+            let countdown = 3;
+            const redirectMessage = document.createElement('div');
+            redirectMessage.style.cssText = 'margin-top: 20px; padding: 15px; background: #e8f5e8; border: 2px solid #28a745; border-radius: 8px; color: #155724; font-weight: 600; text-align: center;';
+            redirectMessage.innerHTML = `<p>🔄 Redirecting to Profile in <span id="countdown">${countdown}</span> seconds to show your updated progress...</p><p><a href="profile.html" style="color: #155724; text-decoration: underline;">Click here to go immediately</a></p>`;
+            document.getElementById('results').appendChild(redirectMessage);
+
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                const countdownElement = document.getElementById('countdown');
+                if (countdownElement) {
+                    countdownElement.textContent = countdown;
+                }
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    window.location.href = 'profile.html';
+                }
+            }, 1000);
+
+                            if (currentUser && passed) {
+                    try {
+                        const userDocRef = doc(db, 'users', currentUser.uid);
+                        
+                        // Save with multiple key variations for compatibility
+                        const updateData = {
+                            moduleProgress: {
+                                // Primary key that profile.html expects
+                                "The definition of Derivative - Novice": percentage,
+                                // Backup key with original format
+                                "The Definition of Derivative - Novice": percentage,
+                                // URL-friendly backup key
+                                "the-definition-of-derivative-novice": percentage
+                            }
+                        };
+                        
+                        await setDoc(userDocRef, updateData, { merge: true });
+                        
+                        // Also save to session storage for immediate sync
+                        sessionStorage.setItem('moduleCompleted', JSON.stringify({
+                            module: "The definition of Derivative - Novice",
+                            score: percentage,
+                            timestamp: Date.now()
+                        }));
+                        
+                        console.log('✅ Module completion saved successfully:', updateData);
+                        sessionStorage.removeItem('definition-derivative-novice-progress');
+                    } catch (error) {
+                        console.error('❌ Error saving module completion:', error);
+                        alert('There was an error saving your progress. Please try again or contact support.');
+                    }
+                }
+        };
+
+        // Enhanced Mathematical toolbar function with error handling
+        window.insertMath = function(questionNum, symbol) {
+            try {
+                const fieldId = `question${questionNum}`;
+                const mathField = window.mathFields[fieldId];
+                
+                if (!mathField || typeof mathField.write !== 'function') {
+                    console.warn('MathField not initialized for question', questionNum);
+                    return;
+                }
+                
+                mathField.focus();
+                mathField.write(symbol);
+                mathField.blur();
+                
+                // Update stored answer
+                const latex = mathField.latex();
+                mathAnswers[questionNum] = latex;
+                sessionStorage.setItem('definition-derivative-novice-progress', JSON.stringify(mathAnswers));
+                
+            } catch (error) {
+                console.error('Error inserting math symbol:', error);
+            }
+        };
+
+        // Initialize MathQuill fields when page loads
+        window.mathFields = {};
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize MathQuill
+            const MQ = MathQuill.getInterface(2);
+            
+            // Initialize all math input fields (skip question 3 which is a text field)
+            for (let i = 0; i <= 5; i++) {
+                if (i === 3) {
+                    // Question 3 is a text field, set up event listeners for it
+                    const textField = document.getElementById(`question${i}`);
+                    if (textField) {
+                        textField.addEventListener('input', function() {
+                            mathAnswers[i] = this.value;
+                            sessionStorage.setItem('definition-derivative-novice-progress', JSON.stringify(mathAnswers));
+                        });
+                        
+                        textField.addEventListener('keypress', function(e) {
+                            if (e.key === 'Enter') {
+                                checkMathAnswer(i);
+                            }
+                        });
+                        console.log(`Initialized text field for question${i}`);
+                    }
+                    continue;
+                }
+                
+                const fieldElement = document.getElementById(`question${i}`);
+                if (fieldElement) {
+                    const mathField = MQ.MathField(fieldElement, {
+                        spaceBehavesLikeTab: true,
+                        leftRightIntoCmdGoes: 'up',
+                        restrictMismatchedBrackets: true,
+                        sumStartsWithNEquals: true,
+                        supSubsRequireOperand: true,
+                        charsThatBreakOutOfSupSub: '+-=<>',
+                        autoSubscriptNumerals: true,
+                        autoCommands: 'pi theta sqrt sum prod alpha beta gamma delta epsilon zeta eta mu nu xi rho sigma tau phi chi psi omega',
+                        autoOperatorNames: 'sin cos tan sec csc cot sinh cosh tanh ln log exp lim',
+                        handlers: {
+                            edit: function() {
+                                const latex = mathField.latex();
+                                mathAnswers[i] = latex;
+                                sessionStorage.setItem('definition-derivative-novice-progress', JSON.stringify(mathAnswers));
+                            }
+                        }
+                    });
+                    
+                    window.mathFields[`question${i}`] = mathField;
+                    console.log(`Initialized MathField for question${i}`);
+                }
+            }
+            
+            // Initialize Plotly graph for question 3
+            initializeNoviceGraph();
+            
+            // Initialize drag and drop for question 2
+            initializeDragAndDrop();
+            
+            // Initialize step-by-step navigation for question 4
+            initializeStepNavigation();
+            
+            // Initialize answer guide toggle
+            initializeAnswerGuide();
+            
+            console.log('All MathFields initialized:', window.mathFields);
+        });
+
+        // Initialize graph for question 3
+        function initializeNoviceGraph() {
+            try {
+                const x = [];
+                const originalFunction = [];
+                const firstDerivative = [];
+                const secondDerivative = [];
+                
+                for (let i = -3; i <= 3; i += 0.1) {
+                    x.push(i);
+                    originalFunction.push(i * i); // f(x) = x²
+                    firstDerivative.push(2 * i); // f'(x) = 2x
+                    secondDerivative.push(2); // f''(x) = 2
+                }
+                
+                const trace1 = {
+                    x: x,
+                    y: originalFunction,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: 'f(x) = x²',
+                    line: { color: 'blue', width: 3 }
+                };
+                
+                const trace2 = {
+                    x: x,
+                    y: firstDerivative,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: "f'(x) = 2x",
+                    line: { color: 'red', width: 3 }
+                };
+                
+                const trace3 = {
+                    x: x,
+                    y: secondDerivative,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: "f''(x) = 2",
+                    line: { color: 'green', width: 3 },
+                    visible: false
+                };
+                
+                const layout = {
+                    title: 'Derivative Visualization: f(x) = x²',
+                    xaxis: { title: 'x', range: [-3, 3] },
+                    yaxis: { title: 'y', range: [-6, 9] },
+                    showlegend: true,
+                    grid: { rows: 1, columns: 1 }
+                };
+                
+                Plotly.newPlot('derivativeGraph', [trace1, trace2, trace3], layout);
+            } catch (error) {
+                console.error('Error initializing graph:', error);
+            }
+        }
+
+        // Graph control functions
+        window.updateNoviceGraph = function() {
+            const showOriginal = document.getElementById('showOriginal').checked;
+            const showFirst = document.getElementById('showFirstDerivative').checked;
+            const showSecond = document.getElementById('showSecondDerivative').checked;
+            
+            const update = {
+                visible: [showOriginal, showFirst, showSecond]
+            };
+            
+            Plotly.restyle('derivativeGraph', update);
+        };
+
+        window.animateNoviceDerivativeEvolution = function() {
+            // Animation showing how derivative emerges
+            console.log('Animating derivative evolution...');
+        };
+
+        window.showNoviceCriticalPoints = function() {
+            // Show critical points on the graph
+            console.log('Showing critical points...');
+        };
+
+        window.showNoviceInflectionPoints = function() {
+            // Show inflection points on the graph
+            console.log('Showing inflection points...');
+        };
+
+        window.resetNoviceAnimation = function() {
+            initializeNoviceGraph();
+        };
+
+        // Initialize drag and drop functionality
+        function initializeDragAndDrop() {
+            const dragItems = document.querySelectorAll('.drag-item');
+            const dropZones = document.querySelectorAll('.drop-zone');
+            
+            dragItems.forEach(item => {
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragend', handleDragEnd);
+            });
+            
+            dropZones.forEach(zone => {
+                zone.addEventListener('dragover', handleDragOver);
+                zone.addEventListener('drop', handleDrop);
+                zone.addEventListener('dragenter', handleDragEnter);
+                zone.addEventListener('dragleave', handleDragLeave);
+            });
+        }
+
+        function handleDragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.dataset.function);
+            e.target.classList.add('dragging');
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+
+        function handleDragEnter(e) {
+            e.preventDefault();
+            e.target.classList.add('drag-over');
+        }
+
+        function handleDragLeave(e) {
+            e.target.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const functionType = e.dataTransfer.getData('text/plain');
+            const dropZone = e.target;
+            
+            dropZone.classList.remove('drag-over');
+            
+            if (functionType === dropZone.dataset.derivative) {
+                dropZone.classList.add('matched');
+                dropZone.innerHTML = `✅ Correct Match!`;
+                dragDropMatches[functionType] = true;
+            } else {
+                dropZone.classList.add('incorrect');
+                dropZone.innerHTML = `❌ Try Again`;
+                setTimeout(() => {
+                    dropZone.classList.remove('incorrect');
+                    dropZone.innerHTML = dropZone.querySelector('script') ? 
+                        dropZone.querySelector('script').innerHTML : 'Drop here';
+                }, 2000);
+            }
+        }
+
+        window.checkDragDrop = function() {
+            const totalMatches = Object.keys(dragDropMatches).length;
+            const feedback = document.getElementById('feedback-dragdrop');
+            
+            if (totalMatches === 4) {
+                feedback.classList.add('show', 'correct');
+                feedback.innerHTML = '🎉 Perfect! All functions matched correctly!';
+                mathAnswers[2] = 'drag-drop-complete';
+            } else {
+                feedback.classList.add('show', 'incorrect');
+                feedback.innerHTML = `❌ You have ${totalMatches}/4 correct matches. Keep trying!`;
+            }
+        };
+
+        // Step-by-step navigation
+        function initializeStepNavigation() {
+            updateStepContent();
+        }
+
+        function updateStepContent() {
+            const content = stepByStepContent[currentStep];
+            if (content) {
+                document.getElementById('stepContent').innerHTML = `
+                    <h4>${content.title}</h4>
+                    <p>${content.content}</p>
+                `;
+                document.getElementById('stepLabel').textContent = content.label;
+                document.getElementById('stepIndicator').textContent = `Step ${currentStep} of ${maxSteps}`;
+                
+                // Update navigation buttons
+                document.getElementById('prevStep').disabled = currentStep === 1;
+                document.getElementById('nextStep').disabled = currentStep === maxSteps;
+                
+                // Render MathJax
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            }
+        }
+
+        window.nextStep = function() {
+            if (currentStep < maxSteps) {
+                currentStep++;
+                updateStepContent();
+            }
+        };
+
+        window.previousStep = function() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStepContent();
+            }
+        };
+
+        window.checkStepAnswer = function(questionNum) {
+            checkMathAnswer(questionNum);
+        };
+
+        // Answer guide functionality
+        function initializeAnswerGuide() {
+            const toggleBtn = document.getElementById('toggleAnswerGuide');
+            const answerGuide = document.getElementById('answerGuide');
+            
+            if (toggleBtn && answerGuide) {
+                toggleBtn.addEventListener('click', function() {
+                    if (answerGuide.style.display === 'none' || answerGuide.style.display === '') {
+                        answerGuide.style.display = 'block';
+                        toggleBtn.textContent = '📝 Hide Answer Guide';
+                    } else {
+                        answerGuide.style.display = 'none';
+                        toggleBtn.textContent = '📝 Show Answer Guide';
+                    }
+                });
+            }
+        }
+
+        // Debug functions
+        window.checkModuleProgress = function() {
+            console.log('Current answers:', mathAnswers);
+            console.log('Session storage:', sessionStorage.getItem('definition-derivative-novice-progress'));
+            console.log('Current user:', currentUser);
+        };
+
+        window.forceCompleteModule = function() {
+            if (confirm('Force complete this module? This will mark it as 100% complete.')) {
+                mathAnswers = {0: 'forced', 1: 'forced', 2: 'forced', 3: 'forced', 4: 'forced', 5: 'forced'};
+                submitQuiz();
+            }
+        };
+</script>
+</body>
+</html> 
+
+
+
+
+
+
+

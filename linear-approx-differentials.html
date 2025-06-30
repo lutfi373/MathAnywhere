@@ -1,0 +1,4135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear Approximation and Differentials</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.5.1/math.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <!-- MathQuill -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.css">
+    <script type="text/javascript">
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            /* Color Variables */
+            --main-color: #323232;
+            --accent-color: #ff6b6b;
+            --secondary-color: #feca57;
+            --tertiary-color: #1dd1a1;
+            --bg-color: #f7f9fc;
+            --font-color: #323232;
+            --input-focus: #2d8cf0;
+            --shadow-md: 4px 4px var(--main-color);
+            --shadow-hover: 2px 2px var(--main-color);
+            --success-color: #2ecc71;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: var(--bg-color);
+            color: var(--font-color);
+            min-height: 100vh;
+            line-height: 1.6;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 260px;
+            height: 100%;
+            background-color: var(--secondary-color);
+            border-right: 2px solid var(--main-color);
+            box-shadow: 4px 0 var(--main-color);
+            overflow-x: hidden;
+            padding: 30px 20px;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar:hover {
+            box-shadow: 6px 0 var(--main-color);
+        }
+
+        .sidebar a {
+            padding: 15px 20px;
+            font-size: 16px;
+            color: var(--font-color);
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            margin: 8px 0;
+            text-decoration: none;
+            display: block;
+            border: 2px solid var(--main-color);
+            background-color: white;
+            width: calc(100% - 40px);
+            text-align: left;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: var(--shadow-md);
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .sidebar a:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-color);
+            transition: all 0.4s ease;
+            z-index: -1;
+            opacity: 0.7;
+        }
+
+        .sidebar a:hover:before {
+            left: 0;
+        }
+
+        .sidebar a:hover {
+            color: white;
+            background-color: transparent;
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 6px 6px var(--main-color);
+            border-color: var(--main-color);
+        }
+
+        .sidebar a:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px var(--main-color);
+        }
+
+        #main-content {
+            margin-left: 270px;
+            margin-top: 20px;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 35px;
+            border-radius: 15px;
+            background-color: white;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            transition: all 0.3s ease;
+            border: 2px solid var(--main-color);
+            text-align: left;
+        }
+
+        .container:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translate(3px, 3px);
+        }
+
+        h2 {
+            color: var(--font-color);
+            font-size: 2.2rem;
+            margin: 30px 0;
+            font-weight: 700;
+            text-align: center;
+            width: 100%;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 25%;
+            width: 50%;
+            height: 4px;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+
+        h2:hover:after {
+            width: 80%;
+            left: 10%;
+        }
+
+        h3 {
+            color: var(--font-color);
+            font-size: 1.5rem;
+            margin: 20px 0;
+            font-weight: 600;
+        }
+
+        .input {
+            padding: 10px;
+            border: 2px solid var(--main-color);
+            border-radius: 5px;
+            width: 100%;
+            max-width: 400px;
+            font-size: 1rem;
+            margin: 10px 0;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background-color: white;
+            color: var(--font-color);
+        }
+
+        .input:focus {
+            border-color: var(--input-focus);
+            box-shadow: 0 0 5px var(--input-focus);
+            outline: none;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .button-confirm {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, var(--accent-color), #ff8e8e);
+            color: white;
+            border: 2px solid var(--main-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 4px 4px 0px var(--main-color);
+            position: relative;
+            overflow: hidden;
+            min-width: 140px;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .button-confirm:hover {
+            background: linear-gradient(135deg, var(--tertiary-color), #4dd1a1);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--main-color);
+        }
+
+        .button-confirm:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--main-color);
+        }
+
+        .button-confirm::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .button-confirm:hover::before {
+            left: 100%;
+        }
+
+        .definition-container {
+            background-color: var(--bg-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.1rem;
+            border: 2px solid var(--main-color);
+            box-shadow: var(--shadow-md);
+        }
+
+        .output {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: var(--bg-color);
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2rem;
+            border: 2px solid var(--main-color);
+        }
+
+        .math-result {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 1.1rem;
+            border: 1px solid var(--accent-color);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .math-result p {
+            margin: 8px 0;
+        }
+
+        .math-info {
+            margin-top: 15px;
+            padding: 10px;
+            border-top: 1px dashed var(--main-color);
+            font-size: 0.95rem;
+            color: var(--font-color);
+        }
+
+        .definition-container p {
+            margin: 8px 0;
+            font-size: 1.1rem;
+        }
+
+        /* New CSS for additional content */
+        .concept-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .highlight-card {
+            background-color: var(--bg-color);
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid var(--main-color);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+
+        .highlight-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 6px 6px var(--main-color);
+        }
+
+        .highlight-card h3 {
+            color: var(--accent-color);
+            font-size: 1.3rem;
+            margin-top: 0;
+        }
+
+        .application-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .application-card {
+            background-color: var(--bg-color);
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid var(--main-color);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+
+        .application-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 6px 6px var(--main-color);
+        }
+
+        .application-card h3 {
+            color: var(--accent-color);
+            font-size: 1.3rem;
+            margin-top: 0;
+        }
+
+        .example-box {
+            background-color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+            border: 1px dashed var(--secondary-color);
+        }
+
+        .info-box {
+            background-color: var(--bg-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+            text-align: left;
+            border: 2px solid var(--main-color);
+            box-shadow: var(--shadow-md);
+        }
+
+        .info-box h3 {
+            color: var(--accent-color);
+            font-size: 1.3rem;
+            margin-top: 0;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .example-item {
+            background-color: var(--bg-color);
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid var(--main-color);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .example-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 6px 6px var(--main-color);
+            background-color: var(--secondary-color);
+        }
+
+        .example-item h3 {
+            font-size: 1.2rem;
+            margin-top: 0;
+            color: var(--font-color);
+        }
+
+        .solution-box {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 30px 0;
+            border: 2px solid var(--accent-color);
+            box-shadow: var(--shadow-md);
+            text-align: left;
+        }
+
+        .solution-box h3 {
+            color: var(--accent-color);
+            text-align: center;
+            margin-top: 0;
+        }
+
+        .interactive-graph {
+            width: 100%;
+            height: 400px;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+        }
+
+        .slider-container {
+            width: 100%;
+            padding: 20px 0;
+            margin: 20px 0;
+        }
+
+        .slider-container label {
+            display: inline-block;
+            width: 150px;
+            text-align: right;
+            margin-right: 10px;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            width: 60%;
+            height: 10px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            background: var(--tertiary-color);
+            transform: scale(1.2);
+        }
+
+        .value-display {
+            display: inline-block;
+            width: 50px;
+            text-align: left;
+            margin-left: 10px;
+        }
+
+        .interactive-controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .control-btn {
+            padding: 8px 15px;
+            background-color: var(--secondary-color);
+            color: var(--font-color);
+            border: 2px solid var(--main-color);
+            border-radius: 5px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background-color: var(--accent-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .control-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Enhanced MathQuill Styling */
+        .mathquill-editable {
+            border: 3px solid var(--main-color) !important;
+            border-radius: 12px !important;
+            padding: 15px 20px !important;
+            font-size: 1.4rem !important;
+            background: linear-gradient(135deg, #ffffff, #f8f9fa) !important;
+            min-height: 50px !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 4px 4px 0px var(--main-color) !important;
+            position: relative !important;
+            width: 100% !important;
+            max-width: 600px !important;
+            margin: 10px auto !important;
+            display: block !important;
+        }
+
+        .mathquill-editable:focus {
+            border-color: var(--input-focus) !important;
+            box-shadow: 0 0 15px rgba(45, 140, 240, 0.3), 6px 6px 0px var(--main-color) !important;
+            transform: translate(-2px, -2px) !important;
+            background: linear-gradient(135deg, #ffffff, #f0f8ff) !important;
+        }
+
+        .mathquill-editable:hover {
+            border-color: var(--tertiary-color) !important;
+            transform: translate(-1px, -1px) !important;
+            box-shadow: 5px 5px 0px var(--main-color) !important;
+        }
+
+        .mathquill-editable .mq-cursor {
+            border-color: var(--accent-color) !important;
+            border-width: 2px !important;
+        }
+
+        .mathquill-editable .mq-selection {
+            background-color: rgba(255, 107, 107, 0.3) !important;
+        }
+
+        /* MathQuill placeholder styling */
+        .mathquill-editable.mq-empty::after {
+            content: 'Type your mathematical expression here...' !important;
+            color: #999 !important;
+            font-style: italic !important;
+            font-size: 1.1rem !important;
+        }
+
+        /* Enhanced math input container for MathQuill */
+        .math-input-container .mathquill-editable {
+            margin: 15px auto !important;
+        }
+
+        /* Floating help button */
+        .math-help-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary-color), #ffda57);
+            border: 3px solid var(--main-color);
+            box-shadow: 4px 4px 0px var(--main-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .math-help-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--main-color);
+            background: linear-gradient(135deg, #ffb347, #ffa500);
+        }
+
+        .math-shortcuts-popup {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            background: white;
+            border: 3px solid var(--main-color);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 6px 6px 0px var(--main-color);
+            max-width: 300px;
+            z-index: 1001;
+        }
+
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .shortcut-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        /* Popup Card Styles */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+        }
+
+        .popup-card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 3px solid var(--main-color);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            box-shadow: 8px 8px var(--main-color);
+            animation: popupAppear 0.3s ease-out;
+        }
+
+        @keyframes popupAppear {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .popup-close:hover {
+            background: var(--tertiary-color);
+        }
+
+
+
+        /* Interactive Problem Cards */
+        .problem-card {
+            background-color: var(--bg-color);
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 6px 6px var(--main-color);
+        }
+
+        .problem-card.completed {
+            border-color: var(--success-color);
+            background-color: #f0fff0;
+        }
+
+        .step-indicator {
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            border: 2px solid var(--main-color);
+            text-align: center;
+            line-height: 21px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .step-indicator.completed {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .answer-feedback {
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .answer-feedback.correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .answer-feedback.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .hint-button {
+            background: linear-gradient(135deg, var(--secondary-color), #ffda57);
+            color: var(--font-color);
+            border: 2px solid var(--main-color);
+            border-radius: 12px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin: 10px 5px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 4px 4px 0px var(--main-color);
+            position: relative;
+            overflow: hidden;
+            min-width: 120px;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .hint-button:hover {
+            background: linear-gradient(135deg, #ffb347, #ffa500);
+            color: white;
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--main-color);
+        }
+
+        .hint-button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--main-color);
+        }
+
+        .section-card {
+            background-color: white;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+
+        .section-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translate(3px, 3px);
+        }
+
+        .formula-box {
+            background-color: var(--bg-color);
+            border: 2px dashed var(--accent-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.3rem;
+        }
+
+        /* Enhanced Interactive Elements */
+
+
+        .math-input-container {
+            position: relative;
+            margin: 25px 0;
+            padding: 25px;
+            background-color: #fafbfc;
+            border-radius: 12px;
+            border: 1px solid #e1e5e9;
+        }
+
+        .math-input-label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--font-color);
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .math-input-helper {
+            font-size: 0.9rem;
+            color: #666;
+            margin: 10px 0;
+            font-style: italic;
+            text-align: center;
+            background-color: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border-left: 3px solid var(--secondary-color);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 25px 0;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .action-buttons button {
+            min-width: 140px;
+            flex: 0 1 auto;
+        }
+
+        .celebration-animation {
+            animation: celebrate 0.6s ease-in-out;
+        }
+
+        @keyframes celebrate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); background-color: var(--success-color); }
+            100% { transform: scale(1); }
+        }
+
+        .thinking-prompt {
+            background: linear-gradient(135deg, #fff8e1, #fff3cd);
+            border: 2px solid #ffc107;
+            border-radius: 12px;
+            padding: 18px 20px;
+            margin: 20px 0;
+            font-style: italic;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.2);
+            position: relative;
+        }
+
+        .thinking-prompt::before {
+            content: "🤔 ";
+            font-size: 1.3rem;
+            margin-right: 8px;
+        }
+
+        .thinking-prompt::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 15px;
+            height: 15px;
+            background: #ffc107;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .math-palette {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            border: 2px solid #e1e5e9;
+            justify-content: center;
+        }
+
+        .math-symbol {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 45px;
+            min-height: 35px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 2px 2px 0px var(--main-color);
+        }
+
+        .math-symbol:hover {
+            background: linear-gradient(135deg, var(--secondary-color), #ffda57);
+            transform: translate(-1px, -1px);
+            box-shadow: 3px 3px 0px var(--main-color);
+        }
+
+        .math-symbol:active {
+            transform: translate(1px, 1px);
+            box-shadow: 1px 1px 0px var(--main-color);
+        }
+
+        .step-explanation {
+            background: linear-gradient(135deg, #e8f4f8, #f0f8ff);
+            border-left: 5px solid var(--tertiary-color);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 12px 12px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .step-explanation::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+        }
+
+        .step-explanation h4 {
+            margin: 0 0 10px 0;
+            color: var(--tertiary-color);
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .step-explanation p {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        /* Enhanced Popup for Hints */
+        .hint-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1001;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .hint-card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 3px solid var(--secondary-color);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 8px 8px var(--main-color);
+            animation: popIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes popIn {
+            from { 
+                opacity: 0;
+                transform: translate(-50%, -60%) scale(0.8);
+            }
+            to { 
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .hint-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .hint-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+
+        .hint-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--font-color);
+        }
+
+        .hint-content {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .hint-close-btn {
+            background: var(--tertiary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .hint-close-btn:hover {
+            background: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        /* Interactive Learning Features */
+        .math-solver-container {
+            background: linear-gradient(135deg, #f8f9ff, #e8f4f8);
+            border: 2px solid var(--main-color);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            box-shadow: 4px 4px 0px var(--main-color);
+        }
+
+        .solver-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .solver-header h3 {
+            color: var(--accent-color);
+            font-size: 1.4rem;
+            margin: 0;
+        }
+
+        .problem-generator {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, var(--tertiary-color), #4dd1a1);
+            color: white;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 3px 3px 0px var(--main-color);
+            transition: all 0.3s ease;
+        }
+
+        .generate-btn:hover {
+            transform: translate(-1px, -1px);
+            box-shadow: 4px 4px 0px var(--main-color);
+        }
+
+        .step-walkthrough {
+            background: white;
+            border: 2px solid var(--main-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 3px 3px 0px var(--main-color);
+        }
+
+        .step-navigation {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .step-btn {
+            background: linear-gradient(135deg, var(--secondary-color), #ffda57);
+            color: var(--font-color);
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 2px 2px 0px var(--main-color);
+            transition: all 0.3s ease;
+        }
+
+        .step-btn:hover {
+            background: linear-gradient(135deg, #ffb347, #ffa500);
+            transform: translate(-1px, -1px);
+            box-shadow: 3px 3px 0px var(--main-color);
+        }
+
+        .step-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 2px 2px 0px var(--main-color);
+        }
+
+        .step-content {
+            min-height: 100px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .drag-drop-container {
+            background: linear-gradient(135deg, #fff8e1, #f0f8ff);
+            border: 2px solid var(--main-color);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            box-shadow: 4px 4px 0px var(--main-color);
+        }
+
+        .drag-drop-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .functions-list, .derivatives-list {
+            min-height: 200px;
+            background: white;
+            border: 2px dashed var(--main-color);
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .draggable-item {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 8px 0;
+            cursor: grab;
+            transition: all 0.3s ease;
+            box-shadow: 2px 2px 0px var(--main-color);
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .draggable-item:hover {
+            transform: translate(-1px, -1px);
+            box-shadow: 3px 3px 0px var(--main-color);
+            background: linear-gradient(135deg, var(--secondary-color), #ffda57);
+        }
+
+        .draggable-item:active {
+            cursor: grabbing;
+        }
+
+        .drop-zone {
+            min-height: 50px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            margin: 5px 0;
+            padding: 10px;
+            background: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone.drag-over {
+            border-color: var(--tertiary-color);
+            background: #e8f5e8;
+        }
+
+        .drop-zone.correct {
+            border-color: var(--success-color);
+            background: #d4edda;
+        }
+
+        .drop-zone.incorrect {
+            border-color: var(--accent-color);
+            background: #f8d7da;
+        }
+
+        .animation-container {
+            background: white;
+            border: 2px solid var(--main-color);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            box-shadow: 4px 4px 0px var(--main-color);
+            text-align: center;
+        }
+
+        .limit-visualization {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .slider-control {
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        .slider-control input[type="range"] {
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: linear-gradient(to right, #ddd 0%, var(--accent-color) 100%);
+            outline: none;
+            -webkit-appearance: none;
+            transition: all 0.3s ease;
+        }
+
+        .slider-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-color), var(--tertiary-color));
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            border: 2px solid white;
+            transition: all 0.2s ease;
+        }
+
+        .slider-control input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        }
+
+        .slider-control input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-color), var(--tertiary-color));
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            border: 2px solid white;
+            transition: all 0.2s ease;
+        }
+
+        .feedback-panel {
+            background: linear-gradient(135deg, #e8f5e8, #f0fff0);
+            border: 2px solid var(--success-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 3px 3px 0px var(--main-color);
+        }
+
+        .performance-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .stat-card {
+            background: white;
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 2px 2px 0px var(--main-color);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .adaptive-hint {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 2px solid #ffc107;
+            border-radius: 12px;
+            padding: 18px;
+            margin: 15px 0;
+            box-shadow: 3px 3px 0px var(--main-color);
+            display: none;
+        }
+
+        .adaptive-hint.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .mistake-feedback {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            border: 2px solid #dc3545;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            color: #721c24;
+        }
+
+        .success-feedback {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border: 2px solid #28a745;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            color: #155724;
+        }
+
+        .touch-friendly {
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        /* Mobile Responsiveness Enhancements */
+        @media screen and (max-width: 768px) {
+            .math-palette {
+                justify-content: center;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .action-buttons button {
+                min-width: auto;
+                width: 100%;
+                margin: 8px 0;
+            }
+            
+            .hint-card {
+                padding: 20px;
+                max-width: 95%;
+            }
+            
+            .concept-highlights,
+            .examples-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .drag-drop-area {
+                grid-template-columns: 1fr;
+            }
+
+            .problem-generator {
+                flex-direction: column;
+            }
+
+            .step-navigation {
+                flex-direction: column;
+            }
+
+            .step-btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+
+            .draggable-item {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+
+            .performance-summary {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .math-symbol {
+                min-width: 35px;
+                padding: 4px 8px;
+                font-size: 1rem;
+            }
+            
+            .hint-card {
+                padding: 15px;
+            }
+            
+            .hint-title {
+                font-size: 1.1rem;
+            }
+            
+            .hint-content {
+                font-size: 1rem;
+            }
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 20px;
+            }
+
+            #main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            .popup-card {
+                max-width: 95%;
+                padding: 20px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            .mathquill-editable {
+                font-size: 1rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="sidebar" class="sidebar">
+    <a href="home.html">Home</a>
+    <a href="#section-29">2.9 Linear Approximations & Differentials</a>
+    <a href="#section-291">2.9.1 Linear Approximations</a>
+    <a href="#section-292">2.9.2 Differentials</a>
+    <a href="#examples">Worked Examples</a>
+    <a href="#interactive-problems">Interactive Problems</a>
+</div>
+
+<div id="main-content">
+
+
+    <section id="section-29">
+        <div class="section-card">
+            <h2>2.9 Linear Approximations & Differentials</h2>
+            <p>This section covers two closely related concepts that are fundamental in calculus and have extensive practical applications in science and engineering.</p>
+            
+            <div class="concept-highlights">
+                <div class="highlight-card">
+                    <h3>🎯 Learning Objectives</h3>
+                    <ul style="text-align: left;">
+                        <li>Understand the concept of linear approximation</li>
+                        <li>Apply the linear approximation formula</li>
+                        <li>Calculate and interpret differentials</li>
+                        <li>Solve real-world estimation problems</li>
+                        <li>Analyze approximation accuracy</li>
+                    </ul>
+                </div>
+                
+                <div class="highlight-card">
+                    <h3>🔗 Prerequisites</h3>
+                    <ul style="text-align: left;">
+                        <li>Understanding of derivatives</li>
+                        <li>Knowledge of the tangent line</li>
+                        <li>Basic function evaluation</li>
+                        <li>Chain rule (for complex functions)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="section-291">
+        <div class="section-card">
+            <h2>2.9.1 Linear Approximations</h2>
+            <p>Linear approximation uses the tangent line at a point to estimate nearby function values. This technique is particularly useful when exact calculations are difficult or when we need quick estimates.</p>
+            
+            <div class="formula-box">
+                <p><strong>Linear Approximation Formula:</strong></p>
+                <p>$f(x_0 + \delta x) = f(x_0) + f'(x_0) \delta x$</p>
+                <br>
+                <p><strong>Where:</strong></p>
+                <p>$\delta x = x - x_0$ (change in x)</p>
+                <p>$x_0$ = Initial value / Estimated value</p>
+                <p>$x$ = Latest value / Given value</p>
+                </div>
+            
+            <div class="info-box">
+                <h3>📝 Key Points</h3>
+                <ul style="text-align: left;">
+                    <li>The approximation is most accurate when $|\delta x|$ is small</li>
+                    <li>Choose $x_0$ to be a value where $f(x_0)$ and $f'(x_0)$ are easy to compute</li>
+                    <li>The linear approximation is the equation of the tangent line at $(x_0, f(x_0))$</li>
+                    <li>Error increases as we move further from the approximation point</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="section-292">
+        <div class="section-card">
+            <h2>2.9.2 Differentials</h2>
+            <p>Differentials provide a way to express small changes in functions and are closely related to linear approximations.</p>
+            
+            <div class="formula-box">
+                <p><strong>Differential Formula:</strong></p>
+                <p>$df = f'(x_0) \delta x$</p>
+                <br>
+                <p><strong>Where:</strong></p>
+                <p>$\delta x = x - x_0$ (change in x)</p>
+                <p>$x_0$ = Initial value / Estimated value</p>
+                <p>$x$ = Latest value / Given value</p>
+                    </div>
+            
+            <div class="info-box">
+                <h3>🔄 Relationship to Linear Approximation</h3>
+                <p>The differential $df$ represents the approximate change in the function value:</p>
+                <p>$f(x_0 + \delta x) \approx f(x_0) + df$</p>
+                <p>This shows that differentials are the "change" part of linear approximation.</p>
+                </div>
+        </div>
+    </section>
+
+
+
+    <section id="examples">
+        <div class="section-card">
+            <h2>📚 Worked Examples from Textbook</h2>
+            <p>Study these step-by-step solutions to master the concepts. Click on any example to see the complete solution in a popup.</p>
+            
+            <div class="examples-grid">
+                <div class="example-item" onclick="showTextbookExample(21)">
+                    <h3>Example 21</h3>
+                    <p><strong>(Need to define the function)</strong><br>
+                    Use differential to estimate the value of $\sqrt{63.99} + \frac{1}{\sqrt{63.99}}$ to three decimal places.</p>
+                    </div>
+                
+                <div class="example-item" onclick="showTextbookExample(22)">
+                    <h3>Example 22</h3>
+                    <p><strong>(Function is given)</strong><br>
+                    Estimate the value of $f(2.02)$ using differential. Give your answer correct to four decimal places.</p>
+                </div>
+                
+                <div class="example-item" onclick="showTextbookExample(23)">
+                    <h3>Example 23</h3>
+                    <p><strong>(Initial and latest values are given)</strong><br>
+                    Given $f(x) = x^2(x - 1)^3$. If $x$ changes from 3 to 3.01, estimate the value of $f(3.01)$ using differentials.</p>
+                    </div>
+                
+                <div class="example-item" onclick="showTextbookExample(24)">
+                    <h3>Example 24</h3>
+                    <p><strong>Use differential to estimate the value of $\sqrt{8 + (0.98)^2}$ to three decimal places.</p>
+                </div>
+                
+                <div class="example-item" onclick="showTextbookExample(25)">
+                    <h3>Example 25</h3>
+                    <p><strong>(Finding the differential)</strong><br>
+                    Find the differential for $f(x) = \sqrt{1 + x}$. Hence, estimate the value of $f(3.1)$ using differential.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="interactive-problems">
+        <div class="section-card">
+            <h2>🎮 Interactive Learning Hub</h2>
+            <p>Master differentiation through interactive exercises, games, and visualizations!</p>
+            
+            <!-- Math Solver with Input-Based Problems -->
+            <div class="math-solver-container">
+                <div class="solver-header">
+                    <h3>🧮 Interactive Derivative Solver</h3>
+                    <p>Practice solving derivatives with instant feedback!</p>
+            </div>
+            
+                <div class="problem-generator">
+                    <select id="problem-type" class="input touch-friendly">
+                        <option value="polynomial">Polynomial Functions</option>
+                        <option value="trigonometric">Trigonometric Functions</option>
+                        <option value="exponential">Exponential Functions</option>
+                        <option value="logarithmic">Logarithmic Functions</option>
+                        <option value="mixed">Mixed Problems</option>
+                    </select>
+                    <button class="generate-btn touch-friendly" onclick="generateProblem()">🎲 Generate New Problem</button>
+            </div>
+                
+                <div id="current-problem" style="text-align: center; margin: 20px 0; font-size: 1.2rem; font-weight: 600;">
+                    Click "Generate New Problem" to start!
+        </div>
+                
+                <div class="math-input-container">
+                    <label class="math-input-label">Your Answer: Find the derivative</label>
+                    <div id="solver-math-field" class="mathquill-editable"></div>
+                    <div class="math-input-helper">
+                        💡 Type your derivative here using standard notation<br>
+                        <small><strong>Quick Tips:</strong> x^2 for x², sqrt(x) for √x, sin(x) for sin(x), / for fractions, Enter to check</small>
+                    </div>
+                    
+                    <div class="math-palette">
+                        <span class="math-symbol touch-friendly" onclick="insertSolverSymbol('x')" title="Variable x">x</span>
+                        <span class="math-symbol touch-friendly" onclick="insertSolverSymbol('^{}')" title="Exponent">x^</span>
+                        <span class="math-symbol touch-friendly" onclick="insertSolverSymbol('\\frac{}{}')" title="Fraction">⅟</span>
+                        <span class="math-symbol touch-friendly" onclick="insertSolverSymbol('\\sqrt{}')" title="Square root">√</span>
+                        <span class="math-symbol touch-friendly" onclick="insertSolverSymbol('\\sin')" title="Sine">sin</span>
+                        <span class="math-symbol touch-friendly" onclick="insertSolverSymbol('\\cos')" title="Cosine">cos</span>
+                        <span class="math-symbol touch-friendly" onclick="insertSolverSymbol('\\ln')" title="Natural log">ln</span>
+                        <span class="math-symbol touch-friendly" onclick="insertSolverSymbol('e^{}')" title="Exponential">e^</span>
+                </div>
+                
+                    <div class="action-buttons">
+                        <button class="button-confirm touch-friendly" onclick="checkSolverAnswer()">✓ Check Answer</button>
+                        <button class="hint-button touch-friendly" onclick="showAdaptiveHint()">💡 Need Help?</button>
+                </div>
+                
+                    <div id="solver-feedback" style="display: none;"></div>
+                    <div id="adaptive-hint" class="adaptive-hint"></div>
+                </div>
+            </div>
+            
+            <!-- Step-by-Step Walkthrough -->
+            <div class="step-walkthrough">
+                <h3 style="text-align: center; color: var(--accent-color);">📚 Step-by-Step Derivative Walkthrough</h3>
+                <p style="text-align: center;">Learn differentiation one step at a time with guided explanations.</p>
+                
+                <div class="problem-generator">
+                    <select id="walkthrough-type" class="input touch-friendly">
+                        <option value="power-rule">Power Rule: d/dx[xⁿ] = nxⁿ⁻¹</option>
+                        <option value="product-rule">Product Rule: d/dx[uv] = u'v + uv'</option>
+                        <option value="quotient-rule">Quotient Rule: d/dx[u/v] = (u'v - uv')/v²</option>
+                        <option value="chain-rule">Chain Rule: d/dx[f(g(x))] = f'(g(x))·g'(x)</option>
+                    </select>
+                    <button class="generate-btn touch-friendly" onclick="startWalkthrough()">🚀 Start Walkthrough</button>
+            </div>
+                
+                <div id="walkthrough-problem" style="text-align: center; margin: 20px 0; font-size: 1.1rem;">
+                    Select a rule type and click "Start Walkthrough" to begin!
+        </div>
+                
+                <div class="step-navigation">
+                    <button class="step-btn touch-friendly" onclick="previousStep()" id="prev-btn" disabled>⬅️ Previous Step</button>
+                    <button class="step-btn touch-friendly" onclick="nextStep()" id="next-btn" disabled>➡️ Next Step</button>
+                    <button class="step-btn touch-friendly" onclick="explainStep()" id="explain-btn" disabled>🔍 Explain This Step</button>
+                </div>
+                
+                <div id="step-content" class="step-content">
+                    Ready to learn step-by-step differentiation!
+                </div>
+            </div>
+            
+            <!-- Drag and Drop Matching Game -->
+            <div class="drag-drop-container">
+                <h3 style="text-align: center; color: var(--accent-color);">🎯 Function-Derivative Matching Game</h3>
+                <p style="text-align: center;">Drag functions to match them with their correct derivatives!</p>
+                
+                <div class="problem-generator">
+                    <button class="generate-btn touch-friendly" onclick="initializeDragDrop()">🎮 Start New Game</button>
+                    <button class="generate-btn touch-friendly" onclick="checkMatches()">✅ Check All Matches</button>
+                </div>
+                
+                <div class="drag-drop-area">
+                    <div>
+                        <h4 style="text-align: center;">📋 Functions</h4>
+                        <div id="functions-list" class="functions-list">
+                            <!-- Functions will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    <div>
+                        <h4 style="text-align: center;">📐 Derivatives</h4>
+                        <div id="derivatives-list" class="derivatives-list">
+                            <!-- Derivatives will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="matching-feedback" style="display: none;"></div>
+            </div>
+            
+            <!-- Interactive Animation -->
+            <div class="animation-container">
+                <h3 style="color: var(--accent-color);">🎬 Derivative Limit Visualization</h3>
+                <p>Watch how a secant line becomes a tangent line as h approaches 0!</p>
+                
+                <div class="problem-generator">
+                    <select id="animation-function" class="input touch-friendly">
+                        <option value="quadratic">f(x) = x²</option>
+                        <option value="cubic">f(x) = x³</option>
+                        <option value="sine">f(x) = sin(x)</option>
+                        <option value="exponential">f(x) = e^x</option>
+                    </select>
+                    <button class="generate-btn touch-friendly" onclick="initializeAnimation()">🎬 Start Animation</button>
+                </div>
+                
+                <div id="limit-visualization" class="limit-visualization"></div>
+                
+                <div class="slider-control">
+                    <label for="h-slider">h value: <span id="h-value">1.0</span></label>
+                    <input type="range" id="h-slider" min="0.01" max="2" step="0.001" value="1" 
+                           oninput="smoothUpdateAnimation()" class="touch-friendly">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #666;">
+                        <span>0.01 (tangent)</span>
+                        <span>2.0 (secant)</span>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin: 15px 0;">
+                    <button class="step-btn touch-friendly" onclick="animateToLimit()">🎬 Animate h → 0</button>
+                    <button class="step-btn touch-friendly" onclick="resetAnimation()">🔄 Reset</button>
+                </div>
+                
+                <div id="slope-display" style="text-align: center; margin: 15px 0; font-size: 1.1rem; font-weight: 600;">
+                    Slope: <span id="current-slope">--</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Original Guided Problems -->
+    <div class="section-card">
+        <h2>📝 Guided Practice Problems</h2>
+        <p>Work through these step-by-step problems to master linear approximations!</p>
+            
+            <div class="problem-card" id="problem-1">
+                <h3><span class="step-indicator" id="step-1">1</span>Problem 1: Linear Approximation</h3>
+                <p>Approximate $\sqrt{65}$ using linear approximation at $x_0 = 64$.</p>
+                
+
+                
+                <div class="thinking-prompt">
+                    Think about what function gives us $\sqrt{x}$ as output when we input $x$.
+            </div>
+            
+                <div class="math-input-container">
+                    <label class="math-input-label"><strong>Step 1:</strong> Define the function $f(x) = $</label>
+                    <div id="math-field-1" class="mathquill-editable"></div>
+                    <div class="math-input-helper">💡 Type "sqrt(x)" or use the palette below</div>
+                    
+                    <div class="math-palette">
+                        <span class="math-symbol" onclick="insertSymbol(1, '\\sqrt{}')" title="Square root">√</span>
+                        <span class="math-symbol" onclick="insertSymbol(1, 'x')" title="Variable x">x</span>
+                        <span class="math-symbol" onclick="insertSymbol(1, '^{}')" title="Exponent">^</span>
+                        <span class="math-symbol" onclick="insertSymbol(1, '\\frac{}{}')" title="Fraction">⅟</span>
+            </div>
+            
+                    <div class="action-buttons">
+                        <button class="hint-button" onclick="showHint(1, 1)">💡 Get Hint</button>
+                        <button class="button-confirm" onclick="checkAnswer(1, 1)">✓ Check Answer</button>
+                    </div>
+                    <div id="feedback-1-1" class="answer-feedback" style="display: none;"></div>
+            </div>
+            
+                <div class="math-input-container" id="step-1-2" style="display: none;">
+                    <div class="step-explanation">
+                        <h4>Great! Now let's find the derivative</h4>
+                        <p>We need $f'(x)$ to calculate the slope of the tangent line at $x_0 = 64$.</p>
+                    </div>
+                    
+                    <label class="math-input-label"><strong>Step 2:</strong> Find $f'(x) = $</label>
+                    <div id="math-field-2" class="mathquill-editable"></div>
+                    <div class="math-input-helper">💡 Use the power rule: $\frac{d}{dx}[x^n] = nx^{n-1}$</div>
+                    
+                    <div class="math-palette">
+                        <span class="math-symbol" onclick="insertSymbol(2, '\\frac{}{}')" title="Fraction">⅟</span>
+                        <span class="math-symbol" onclick="insertSymbol(2, '\\sqrt{}')" title="Square root">√</span>
+                        <span class="math-symbol" onclick="insertSymbol(2, 'x')" title="Variable x">x</span>
+                        <span class="math-symbol" onclick="insertSymbol(2, '^{}')" title="Exponent">^</span>
+                        <span class="math-symbol" onclick="insertSymbol(2, '-')" title="Minus">−</span>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="hint-button" onclick="showHint(1, 2)">💡 Get Hint</button>
+                        <button class="button-confirm" onclick="checkAnswer(1, 2)">✓ Check Answer</button>
+                    </div>
+                    <div id="feedback-1-2" class="answer-feedback" style="display: none;"></div>
+                </div>
+                
+                <div class="math-input-container" id="step-1-3" style="display: none;">
+                    <div class="step-explanation">
+                        <h4>Now let's evaluate the function at our base point</h4>
+                        <p>We chose $x_0 = 64$ because $\sqrt{64}$ is easy to calculate.</p>
+                    </div>
+                    
+                    <label class="math-input-label"><strong>Step 3:</strong> Calculate $f(64) = \sqrt{64} = $</label>
+                    <div id="math-field-3" class="mathquill-editable"></div>
+                    <div class="math-input-helper">💡 What's the square root of 64?</div>
+                    
+                    <div class="action-buttons">
+                        <button class="hint-button" onclick="showHint(1, 3)">💡 Get Hint</button>
+                        <button class="button-confirm" onclick="checkAnswer(1, 3)">✓ Check Answer</button>
+                    </div>
+                    <div id="feedback-1-3" class="answer-feedback" style="display: none;"></div>
+                </div>
+                
+                <div class="math-input-container" id="step-1-4" style="display: none;">
+                    <div class="step-explanation">
+                        <h4>Now evaluate the derivative at $x_0 = 64$</h4>
+                        <p>This gives us the slope of the tangent line at the point $(64, 8)$.</p>
+                    </div>
+                    
+                    <label class="math-input-label"><strong>Step 4:</strong> Calculate $f'(64) = \frac{1}{2\sqrt{64}} = $</label>
+                    <div id="math-field-4" class="mathquill-editable"></div>
+                    <div class="math-input-helper">💡 Substitute $x = 64$ into your derivative</div>
+                    
+                    <div class="math-palette">
+                        <span class="math-symbol" onclick="insertSymbol(4, '\\frac{}{}')" title="Fraction">⅟</span>
+                        <span class="math-symbol" onclick="insertSymbol(4, '1')" title="One">1</span>
+                        <span class="math-symbol" onclick="insertSymbol(4, '16')" title="Sixteen">16</span>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="hint-button" onclick="showHint(1, 4)">💡 Get Hint</button>
+                        <button class="button-confirm" onclick="checkAnswer(1, 4)">✓ Check Answer</button>
+                    </div>
+                    <div id="feedback-1-4" class="answer-feedback" style="display: none;"></div>
+                </div>
+                
+                <div class="math-input-container" id="step-1-5" style="display: none;">
+                    <div class="step-explanation">
+                        <h4>Calculate the change in x</h4>
+                        <p>This is how far we're moving from our base point.</p>
+                    </div>
+                    
+                    <label class="math-input-label"><strong>Step 5:</strong> Find $\delta x = x - x_0 = 65 - 64 = $</label>
+                    <div id="math-field-5" class="mathquill-editable"></div>
+                    <div class="math-input-helper">💡 Simple subtraction: 65 - 64 = ?</div>
+                    
+                    <div class="action-buttons">
+                        <button class="hint-button" onclick="showHint(1, 5)">💡 Get Hint</button>
+                        <button class="button-confirm" onclick="checkAnswer(1, 5)">✓ Check Answer</button>
+                    </div>
+                    <div id="feedback-1-5" class="answer-feedback" style="display: none;"></div>
+                </div>
+                
+                <div class="math-input-container" id="step-1-6" style="display: none;">
+                    <div class="step-explanation">
+                        <h4>🎉 Final step! Apply the linear approximation formula</h4>
+                        <p>$f(x_0 + \delta x) \approx f(x_0) + f'(x_0) \cdot \delta x$</p>
+                        <p>$f(65) \approx f(64) + f'(64) \cdot \delta x = 8 + \frac{1}{16} \cdot 1$</p>
+                    </div>
+                    
+                    <label class="math-input-label"><strong>Step 6:</strong> Final Answer: $\sqrt{65} \approx $</label>
+                    <div id="math-field-6" class="mathquill-editable"></div>
+                    <div class="math-input-helper">💡 Calculate: $8 + \frac{1}{16} = 8 + 0.0625 = ?$</div>
+                    
+                    <div class="math-palette">
+                        <span class="math-symbol" onclick="insertSymbol(6, '8')" title="Eight">8</span>
+                        <span class="math-symbol" onclick="insertSymbol(6, '.')" title="Decimal point">.</span>
+                        <span class="math-symbol" onclick="insertSymbol(6, '0625')" title="0625">0625</span>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="hint-button" onclick="showHint(1, 6)">💡 Get Hint</button>
+                        <button class="button-confirm" onclick="checkAnswer(1, 6)">✓ Check Answer</button>
+                    </div>
+                    <div id="feedback-1-6" class="answer-feedback" style="display: none;"></div>
+                </div>
+            </div>
+            
+            <div class="problem-card" id="problem-2" style="display: none;">
+                <h3><span class="step-indicator" id="step-2">2</span>Problem 2: Differentials</h3>
+                <p>Find the differential $dy$ for $y = x^3 - 2x + 1$ when $x = 2$ and $dx = 0.1$.</p>
+                
+                <div style="margin: 20px 0;">
+                    <label><strong>Step 1:</strong> Find $\frac{dy}{dx} = $</label>
+                    <div id="math-field-7" class="mathquill-editable" style="margin: 10px 0;"></div>
+                    <button class="hint-button" onclick="showHint(2, 1)">Hint</button>
+                    <button class="button-confirm" onclick="checkAnswer(2, 1)">Check Answer</button>
+                    <div id="feedback-2-1" class="answer-feedback" style="display: none;"></div>
+                </div>
+                
+                <div style="margin: 20px 0;" id="step-2-2" style="display: none;">
+                    <label><strong>Step 2:</strong> Calculate $\frac{dy}{dx}|_{x=2} = $</label>
+                    <div id="math-field-8" class="mathquill-editable" style="margin: 10px 0;"></div>
+                    <button class="button-confirm" onclick="checkAnswer(2, 2)">Check Answer</button>
+                    <div id="feedback-2-2" class="answer-feedback" style="display: none;"></div>
+                </div>
+                
+                <div style="margin: 20px 0;" id="step-2-3" style="display: none;">
+                    <label><strong>Step 3:</strong> Apply formula: $dy = \frac{dy}{dx} \cdot dx = $</label>
+                    <div id="math-field-9" class="mathquill-editable" style="margin: 10px 0;"></div>
+                    <button class="button-confirm" onclick="checkAnswer(2, 3)">Check Answer</button>
+                    <div id="feedback-2-3" class="answer-feedback" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Popup Overlay for Examples -->
+<div id="popup-overlay" class="popup-overlay" onclick="closePopup()">
+    <div class="popup-card" onclick="event.stopPropagation()">
+        <button class="popup-close" onclick="closePopup()">×</button>
+        <div id="popup-content"></div>
+    </div>
+</div>
+
+<!-- Hint Popup Overlay -->
+<div id="hint-popup" class="hint-popup" onclick="closeHint()">
+    <div class="hint-card" onclick="event.stopPropagation()">
+        <div class="hint-header">
+            <span class="hint-icon">💡</span>
+            <span class="hint-title" id="hint-title">Helpful Hint</span>
+        </div>
+        <div class="hint-content" id="hint-content"></div>
+        <button class="hint-close-btn" onclick="closeHint()">Got it! 🚀</button>
+    </div>
+</div>
+
+<!-- Floating Math Help Button -->
+<div class="math-help-btn touch-friendly" onclick="toggleMathHelp()" title="Math Input Help">
+    📖
+</div>
+
+<!-- Math Shortcuts Popup -->
+<div id="math-shortcuts-popup" class="math-shortcuts-popup">
+    <h4 style="margin-top: 0; color: var(--accent-color);">🔢 Math Input Shortcuts</h4>
+    <div class="shortcut-grid">
+        <div class="shortcut-item">
+            <span><strong>x^2</strong></span>
+            <span>x²</span>
+        </div>
+        <div class="shortcut-item">
+            <span><strong>sqrt(x)</strong></span>
+            <span>√x</span>
+        </div>
+        <div class="shortcut-item">
+            <span><strong>sin(x)</strong></span>
+            <span>sin(x)</span>
+        </div>
+        <div class="shortcut-item">
+            <span><strong>ln(x)</strong></span>
+            <span>ln(x)</span>
+        </div>
+        <div class="shortcut-item">
+            <span><strong>1/x</strong></span>
+            <span>¹⁄ₓ</span>
+        </div>
+        <div class="shortcut-item">
+            <span><strong>pi</strong></span>
+            <span>π</span>
+        </div>
+        <div class="shortcut-item">
+            <span><strong>theta</strong></span>
+            <span>θ</span>
+        </div>
+        <div class="shortcut-item">
+            <span><strong>Enter</strong></span>
+            <span>Check</span>
+        </div>
+    </div>
+    <div style="margin-top: 15px; font-size: 0.8rem; color: #666; text-align: center;">
+        <strong>Pro Tip:</strong> Use Tab to navigate between fields, Arrow keys to move cursor
+    </div>
+</div>
+
+<script>
+    // Progress tracking variables
+    let completedSteps = new Set();
+    let totalSteps = 12; // Update this based on actual steps
+    let mathFields = {};
+    
+    // Interactive learning variables
+    let solverField;
+    let currentProblem = null;
+    let currentAnswer = null;
+    let attemptCount = 0;
+    let learningStats = {
+        problemsAttempted: 0,
+        problemsCorrect: 0,
+        hintsUsed: 0,
+        totalTime: 0,
+        startTime: null,
+        commonMistakes: []
+    };
+    
+    // Step-by-step walkthrough variables
+    let currentWalkthrough = null;
+    let currentStep = 0;
+    let walkthroughSteps = [];
+    
+    // Drag and drop variables
+    let dragDropPairs = [];
+    let draggedElement = null;
+    
+    // Animation variables
+    let animationData = null;
+    let animationChart = null;
+    let animationFrameId = null;
+    let isAnimating = false;
+    let animationStartTime = null;
+    let animationDuration = 3000; // 3 seconds
+    
+    // Initialize MathQuill on page load
+    document.addEventListener("DOMContentLoaded", function() {
+        console.log("DOM Content Loaded - Starting initialization");
+        
+        // Wait for MathQuill to be available
+        setTimeout(() => {
+            initializeMathQuill();
+            initializeOtherComponents();
+        }, 100);
+    });
+    
+    function initializeMathQuill() {
+        // Initialize MathQuill
+        if (typeof MathQuill !== 'undefined') {
+            console.log("MathQuill is available, initializing...");
+            var MQ = MathQuill.getInterface(2);
+            
+            // Enhanced MathQuill configuration
+            const mathQuillConfig = {
+                spaceBehavesLikeTab: true,
+                leftRightIntoCmdGoes: 'up',
+                restrictMismatchedBrackets: true,
+                sumStartsWithNEquals: true,
+                supSubsRequireOperand: true,
+                charsThatBreakOutOfSupSub: '+-=<>',
+                autoSubscriptNumerals: true,
+                autoCommands: 'pi theta sqrt sum prod alpha beta gamma delta epsilon zeta eta mu nu xi rho sigma tau phi chi psi omega int lim',
+                autoOperatorNames: 'sin cos tan ln log exp sec csc cot sinh cosh tanh arcsin arccos arctan',
+                handlers: {
+                    edit: function() {
+                        // Auto-save functionality
+                        const fieldId = this.__controller.container.id;
+                        localStorage.setItem('mathfield_' + fieldId, this.latex());
+                    }
+                }
+            };
+            
+            // Initialize all math fields with enhanced config
+            for (let i = 1; i <= 15; i++) {
+                const element = document.getElementById('math-field-' + i);
+                if (element) {
+                    mathFields[i] = MQ.MathField(element, mathQuillConfig);
+                    
+                    // Restore saved content
+                    const saved = localStorage.getItem('mathfield_math-field-' + i);
+                    if (saved) {
+                        mathFields[i].latex(saved);
+                    }
+                }
+            }
+            
+            // Initialize solver field with enhanced configuration
+            const solverElement = document.getElementById('solver-math-field');
+            if (solverElement) {
+                solverField = MQ.MathField(solverElement, {
+                    ...mathQuillConfig,
+                    handlers: {
+                        edit: function() {
+                            // Auto-save solver content
+                            localStorage.setItem('solver_content', this.latex());
+                            
+                            // Real-time validation feedback
+                            const content = this.latex();
+                            if (content.length > 0) {
+                                solverElement.style.borderColor = '#2d8cf0';
+                            } else {
+                                solverElement.style.borderColor = '';
+                            }
+                        },
+                        enter: function() {
+                            // Allow Enter key to check answer
+                            checkSolverAnswer();
+                        }
+                    }
+                });
+                
+                // Restore saved solver content
+                const savedSolver = localStorage.getItem('solver_content');
+                if (savedSolver) {
+                    solverField.latex(savedSolver);
+                }
+            }
+            
+            // Initialize additional MathQuill fields for walkthrough examples
+            const walkthroughFields = ['walkthrough-input-1', 'walkthrough-input-2', 'custom-problem-input'];
+            walkthroughFields.forEach(fieldId => {
+                const element = document.getElementById(fieldId);
+                if (element) {
+                    try {
+                        const field = MQ.MathField(element, mathQuillConfig);
+                        mathFields[fieldId] = field;
+                        console.log(`Initialized ${fieldId}`);
+                    } catch (error) {
+                        console.error(`Error initializing ${fieldId}:`, error);
+                    }
+                }
+            });
+        } else {
+            console.error("MathQuill is not available");
+            // Retry after a delay
+            setTimeout(initializeMathQuill, 500);
+        }
+    }
+    
+    function initializeOtherComponents() {
+        updateProgress();
+        
+        // Sidebar navigation
+        var sidebarLinks = document.querySelectorAll('.sidebar a');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                var targetId = this.getAttribute('href');
+                if (targetId === "index.html") {
+                    window.location.href = "home.html";
+                } else {
+                    var targetElement = document.getElementById(targetId.substring(1));
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+        
+        // Initialize interactive graph if needed
+        if (typeof initializeGraph === 'function') {
+            try {
+                initializeGraph();
+            } catch (error) {
+                console.error("Error initializing graph:", error);
+            }
+        }
+        
+        console.log("All components initialized");
+    }
+    
+    // Update step indicators
+    function updateProgress() {
+        // Update step indicators
+        completedSteps.forEach(step => {
+            const indicator = document.getElementById('step-' + step);
+            if (indicator) {
+                indicator.classList.add('completed');
+                indicator.innerHTML = '✓';
+            }
+        });
+    }
+    
+    // Show textbook example in popup
+    function showTextbookExample(exampleNum) {
+        const popupContent = document.getElementById('popup-content');
+        const popupOverlay = document.getElementById('popup-overlay');
+        
+        let content = '';
+        
+        switch(exampleNum) {
+            case 21:
+                content = `
+                    <h2>Example 21</h2>
+                    <p><strong>Problem:</strong> Use differential to estimate the value of $\\sqrt{63.99} + \\frac{1}{\\sqrt{63.99}}$ to three decimal places.</p>
+                    
+                    <div class="solution-box">
+                        <h3>Solution</h3>
+                        <p>Let $f(x) = \\sqrt{x} + \\frac{1}{\\sqrt{x}}$</p>
+                        <p>$= x^{\\frac{1}{2}} + x^{-\\frac{1}{2}}$</p>
+                        <br>
+                        <p>$f'(x) = \\frac{1}{2}x^{-\\frac{1}{2}} - \\frac{1}{2}x^{-\\frac{3}{2}}$</p>
+                        <p>$= \\frac{1}{2\\sqrt{x}} - \\frac{1}{2x\\sqrt{x}}$</p>
+                        <p>$= \\frac{1}{2x^{\\frac{3}{2}}} - \\frac{1}{2x^{\\frac{3}{2}}}$</p>
+                        <br>
+                        <p><strong>Given value:</strong> $x = 63.99$</p>
+                        <p><strong>Estimated value:</strong> $x_0 = 64$</p>
+                        <br>
+                        <p>$\\delta x = x - x_0 = 63.99 - 64 = -0.01$</p>
+                        <br>
+                        <p>$f(x_0 + \\delta x) = f(x_0) + f'(x_0)\\delta x$</p>
+                        <p>$\\sqrt{63.99} + \\frac{1}{\\sqrt{63.99}} = f(64) + f'(64)(-0.01)$</p>
+                        <br>
+                        <p>$= \\sqrt{64} + \\frac{1}{\\sqrt{64}} + \\left(\\frac{1}{3 \\cdot 64^{\\frac{2}{3}}}\\right)(-0.01)$</p>
+                        <p>$= 8 + \\frac{1}{8} + \\left(\\frac{1}{3 \\cdot 16}\\right)(-0.01)$</p>
+                        <p>$= 8.125 + \\frac{61}{3072}(-0.01)$</p>
+                        <p>$= 8.125 - 0.0002$</p>
+                        <p>$= 8.125$</p>
+                </div>
+                `;
+                break;
+                
+            case 22:
+                content = `
+                    <h2>Example 22</h2>
+                    <p><strong>Problem:</strong> Estimate the value of $f(2.02)$ using differential. Give your answer correct to four decimal places.</p>
+                    <p>Given: $f(x) = \\frac{1}{\\sqrt{2x^2 + 1}}$</p>
+                    
+                    <div class="solution-box">
+                        <h3>Solution</h3>
+                        <p>$f(x) = \\frac{1}{\\sqrt{2x^2 + 1}} = (2x^2 + 1)^{-\\frac{1}{2}}$</p>
+                        <br>
+                        <p>$f'(x) = -\\frac{1}{2}(2x^2 + 1)^{-\\frac{3}{2}} \\cdot 4x$</p>
+                        <p>$= -2x(2x^2 + 1)^{-\\frac{3}{2}}$</p>
+                        <p>$= \\frac{-2x}{(2x^2 + 1)^{\\frac{3}{2}}}$</p>
+                        <br>
+                        <p><strong>Given value:</strong> $x = 2.02$</p>
+                        <p><strong>Estimated value:</strong> $x_0 = 2$</p>
+                        <br>
+                        <p>$\\delta x = x - x_0 = 2.02 - 2 = 0.02$</p>
+                        <br>
+                        <p>$f(x_0 + \\delta x) = f(x_0) + f'(x_0)\\delta x$</p>
+                        <p>$f(2.02) = f(2) + f'(2)(0.02)$</p>
+                        <br>
+                        <p>$= \\frac{1}{\\sqrt{2(2)^2 + 1}} + \\frac{-2(2)}{(2(2)^2 + 1)^{\\frac{3}{2}}}(0.02)$</p>
+                        <p>$= \\frac{1}{\\sqrt{9}} + \\frac{-4}{9^{\\frac{3}{2}}}(0.02)$</p>
+                        <p>$= \\frac{1}{3} + \\frac{-4}{27}(0.02)$</p>
+                        <p>$= 0.3333 - 0.0030$</p>
+                        <p>$= 0.3304$</p>
+                    </div>
+                `;
+                break;
+                
+            case 23:
+                content = `
+                    <h2>Example 23</h2>
+                    <p><strong>Problem:</strong> Given $f(x) = x^2(x - 1)^3$. If $x$ changes from 3 to 3.01, estimate the value of $f(3.01)$ using differentials.</p>
+                    
+                    <div class="solution-box">
+                        <h3>Solution</h3>
+                        <p>$f(x) = x^2(x - 1)^3$</p>
+                        <br>
+                        <p>Using product rule:</p>
+                        <p>$f'(x) = 2x(x - 1)^3 + x^2 \\cdot 3(x - 1)^2$</p>
+                        <p>$= 2x(x - 1)^3 + 3x^2(x - 1)^2$</p>
+                        <p>$= x(x - 1)^2[2(x - 1) + 3x]$</p>
+                        <p>$= x(x - 1)^2(2x - 2 + 3x)$</p>
+                        <p>$= x(x - 1)^2(5x - 2)$</p>
+                        <br>
+                        <p><strong>Latest value:</strong> $x = 3.01$</p>
+                        <p><strong>Initial value:</strong> $x_0 = 3$</p>
+                        <br>
+                        <p>$\\delta x = x - x_0 = 3.01 - 3 = 0.01$</p>
+                        <br>
+                        <p>$f(x_0 + \\delta x) = f(x_0) + f'(x_0)\\delta x$</p>
+                        <p>$f(3.01) = f(3) + f'(3)(0.01)$</p>
+                        <br>
+                        <p>$f(3) = 3^2(3 - 1)^3 = 9(2)^3 = 9(8) = 72$</p>
+                        <p>$f'(3) = 3(3 - 1)^2(5(3) - 2) = 3(4)(13) = 156$</p>
+                        <br>
+                        <p>$f(3.01) = 72 + 156(0.01) = 72 + 1.56 = 73.56$</p>
+                    </div>
+                `;
+                break;
+                
+            case 24:
+                content = `
+                    <h2>Example 24</h2>
+                    <p><strong>Problem:</strong> Use differential to estimate the value of $\\sqrt{8 + (0.98)^2}$ to three decimal places.</p>
+                    
+                    <div class="solution-box">
+                        <h3>Solution</h3>
+                        <p>Let $f(x) = \\sqrt{8 + x^2}$</p>
+                        <br>
+                        <p>$f'(x) = \\frac{1}{2\\sqrt{8 + x^2}} \\cdot 2x = \\frac{x}{\\sqrt{8 + x^2}}$</p>
+                        <br>
+                        <p><strong>Given value:</strong> $x = 0.98$</p>
+                        <p><strong>Estimated value:</strong> $x_0 = 1$</p>
+                        <br>
+                        <p>$\\delta x = x - x_0 = 0.98 - 1 = -0.02$</p>
+                        <br>
+                        <p>$f(x_0 + \\delta x) = f(x_0) + f'(x_0)\\delta x$</p>
+                        <p>$\\sqrt{8 + (0.98)^2} = f(1) + f'(1)(-0.02)$</p>
+                        <br>
+                        <p>$= \\sqrt{8 + 1} + \\frac{1}{\\sqrt{8 + 1}}(-0.02)$</p>
+                        <p>$= \\sqrt{9} + \\frac{1}{\\sqrt{9}}(-0.02)$</p>
+                        <p>$= 3 + \\frac{1}{3}(-0.02)$</p>
+                        <p>$= 3 - 0.0067$</p>
+                        <p>$= 2.993$</p>
+                    </div>
+                `;
+                break;
+                
+            case 25:
+                content = `
+                    <h2>Example 25</h2>
+                    <p><strong>Problem:</strong> Find the differential for $f(x) = \\sqrt{1 + x}$. Hence, estimate the value of $f(3.1)$ using differential.</p>
+                    
+                    <div class="solution-box">
+                        <h3>Solution</h3>
+                        <p>$f(x) = \\sqrt{1 + x} = (1 + x)^{\\frac{1}{2}}$</p>
+                        <br>
+                        <p>$f'(x) = \\frac{1}{2}(1 + x)^{-\\frac{1}{2}} = \\frac{1}{2\\sqrt{1 + x}}$</p>
+                        <br>
+                        <p><strong>The differential:</strong> $df = f'(x)dx = \\frac{1}{2\\sqrt{1 + x}}dx$</p>
+                        <br>
+                        <p><strong>Given value:</strong> $x = 3.1$</p>
+                        <p><strong>Estimated value:</strong> $x_0 = 3$</p>
+                        <br>
+                        <p>$\\delta x = x - x_0 = 3.1 - 3 = 0.1$</p>
+                        <br>
+                        <p>$f(x_0 + \\delta x) = f(x_0) + f'(x_0)\\delta x$</p>
+                        <p>$f(3.1) = f(3) + f'(3)(0.1)$</p>
+                        <br>
+                        <p>$= \\sqrt{1 + 3} + \\frac{1}{2\\sqrt{1 + 3}}(0.1)$</p>
+                        <p>$= \\sqrt{4} + \\frac{1}{2\\sqrt{4}}(0.1)$</p>
+                        <p>$= 2 + \\frac{1}{4}(0.1)$</p>
+                        <p>$= 2 + 0.025$</p>
+                        <p>$= 2.025$</p>
+                    </div>
+                `;
+                break;
+        }
+        
+        popupContent.innerHTML = content;
+        popupOverlay.style.display = 'block';
+        
+        // Typeset math in popup
+            if (typeof MathJax !== 'undefined') {
+                if (MathJax.typesetPromise) {
+                    MathJax.typesetPromise();
+                } else if (MathJax.typeset) {
+                    MathJax.typeset();
+                } else if (MathJax.Hub && MathJax.Hub.Queue) {
+                    MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+                }
+            }
+        }
+    
+    // Close popup
+    function closePopup() {
+        document.getElementById('popup-overlay').style.display = 'none';
+    }
+
+    // Example display functions
+    function showExample(exampleNum) {
+        const exampleTitle = document.getElementById('example-title');
+        const exampleContent = document.getElementById('example-content');
+        const solutionBox = document.getElementById('example-solution');
+        
+        solutionBox.style.display = 'block';
+        
+        switch(exampleNum) {
+            case 1:
+                exampleTitle.textContent = 'Example 1: Square Root Function';
+                exampleContent.innerHTML = `
+                    <p>Problem: Approximate $\\sqrt{16.2}$ using linear approximation at $x = 16$</p>
+                    
+                    <div class="math-result">
+                        <p>Let $f(x) = \\sqrt{x}$</p>
+                        <p>$f'(x) = \\frac{1}{2\\sqrt{x}}$</p>
+                        <p>At $x = 16$: $f(16) = \\sqrt{16} = 4$</p>
+                        <p>$f'(16) = \\frac{1}{2\\sqrt{16}} = \\frac{1}{8}$</p>
+                        <p>Linear approximation: $L(x) = f(16) + f'(16)(x - 16)$</p>
+                        <p>$L(x) = 4 + \\frac{1}{8}(x - 16)$</p>
+                        <p>$L(16.2) = 4 + \\frac{1}{8}(16.2 - 16) = 4 + 0.025 = 4.025$</p>
+                    </div>
+                    
+                    <div class="math-info">
+                        <p>Actual value: $\\sqrt{16.2} = 4.0249$</p>
+                        <p>Error: $|\\sqrt{16.2} - L(16.2)| = |4.0249 - 4.025| = 0.0001$</p>
+                        <p>The approximation is very accurate because $16.2$ is close to the approximation point $16$.</p>
+                    </div>
+                `;
+                break;
+            case 2:
+                exampleTitle.textContent = 'Example 2: Trigonometric Function';
+                exampleContent.innerHTML = `
+                    <p>Problem: Approximate $\\sin(31°)$ using linear approximation at $x = 30°$</p>
+                    
+                    <div class="math-result">
+                        <p>Let $f(x) = \\sin(x)$ (we'll work in radians)</p>
+                        <p>$30° = \\frac{\\pi}{6}$ radians and $31° = \\frac{31\\pi}{180}$ radians</p>
+                        <p>$f'(x) = \\cos(x)$</p>
+                        <p>At $x = \\frac{\\pi}{6}$: $f(\\frac{\\pi}{6}) = \\sin(\\frac{\\pi}{6}) = 0.5$</p>
+                        <p>$f'(\\frac{\\pi}{6}) = \\cos(\\frac{\\pi}{6}) = \\frac{\\sqrt{3}}{2} \\approx 0.866$</p>
+                        <p>Linear approximation: $L(x) = f(\\frac{\\pi}{6}) + f'(\\frac{\\pi}{6})(x - \\frac{\\pi}{6})$</p>
+                        <p>$L(x) = 0.5 + 0.866(x - \\frac{\\pi}{6})$</p>
+                        <p>$L(\\frac{31\\pi}{180}) = 0.5 + 0.866(\\frac{31\\pi}{180} - \\frac{\\pi}{6})$</p>
+                        <p>$= 0.5 + 0.866 \\cdot \\frac{\\pi}{180} \\approx 0.5 + 0.015 = 0.515$</p>
+                    </div>
+                    
+                    <div class="math-info">
+                        <p>Actual value: $\\sin(31°) = 0.5150$</p>
+                        <p>Error: $|\\sin(31°) - L(31°)| \\approx 0.0000$</p>
+                        <p>This approximation is extremely accurate because the sine function is very close to linear near $30°$.</p>
+                    </div>
+                `;
+                break;
+            case 3:
+                exampleTitle.textContent = 'Example 3: Exponential Function';
+                exampleContent.innerHTML = `
+                    <p>Problem: Approximate $e^{0.1}$ using linear approximation at $x = 0$</p>
+                    
+                    <div class="math-result">
+                        <p>Let $f(x) = e^x$</p>
+                        <p>$f'(x) = e^x$</p>
+                        <p>At $x = 0$: $f(0) = e^0 = 1$</p>
+                        <p>$f'(0) = e^0 = 1$</p>
+                        <p>Linear approximation: $L(x) = f(0) + f'(0)(x - 0)$</p>
+                        <p>$L(x) = 1 + 1 \\cdot x = 1 + x$</p>
+                        <p>$L(0.1) = 1 + 0.1 = 1.1$</p>
+                    </div>
+                    
+                    <div class="math-info">
+                        <p>Actual value: $e^{0.1} = 1.1052$</p>
+                        <p>Error: $|e^{0.1} - L(0.1)| = |1.1052 - 1.1| = 0.0052$</p>
+                        <p>The approximation has more error than the previous examples because the exponential function curves more rapidly away from the linear approximation.</p>
+                    </div>
+                `;
+                break;
+        }
+        
+        // Typeset the math in the solution
+        if (typeof MathJax !== 'undefined') {
+            if (MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            } else if (MathJax.typeset) {
+                MathJax.typeset();
+            } else if (MathJax.Hub && MathJax.Hub.Queue) {
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            }
+        }
+    }
+
+    // Interactive visualization
+    let currentFunction = 'sqrt(x)';
+    let graph;
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Initialize interactive elements after the page is loaded
+        initializeGraph();
+        
+        // Slider event listeners
+        document.getElementById('point-slider').addEventListener('input', updateGraph);
+        document.getElementById('evaluate-slider').addEventListener('input', updateGraph);
+        
+        // Sidebar navigation
+        var sidebarLinks = document.querySelectorAll('.sidebar a');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                var targetId = this.getAttribute('href');
+                if (targetId === "index.html") {
+                    window.location.href = "home.html";
+                } else {
+                    var targetElement = document.getElementById(targetId.substring(1));
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+        
+        // Calculate on page load
+        computeApproximation();
+    });
+
+    function initializeGraph() {
+        const graphDiv = document.getElementById('interactive-graph');
+        
+        // Create initial data
+        updateGraph();
+    }
+
+    function updateGraph() {
+        try {
+            const a = parseFloat(document.getElementById('point-slider').value);
+            const x = parseFloat(document.getElementById('evaluate-slider').value);
+            
+            // Update display values
+            document.getElementById('point-value').textContent = a.toFixed(1);
+            document.getElementById('evaluate-value').textContent = x.toFixed(1);
+            
+            const f = math.compile(currentFunction);
+            const df = math.derivative(currentFunction, 'x');
+            
+            // Function value at point a
+            const fa = f.evaluate({x: a});
+            
+            // Derivative at point a
+            const dfa = df.evaluate({x: a});
+            
+            // Create x values for plotting
+            const xValues = [];
+            const originalFunctionValues = [];
+            const linearApproximationValues = [];
+            
+            // Generate points for the plot
+            const xMin = Math.max(0.5, a - 2);
+            const xMax = a + 2;
+            const step = (xMax - xMin) / 100;
+            
+            for (let xi = xMin; xi <= xMax; xi += step) {
+                xValues.push(xi);
+                originalFunctionValues.push(f.evaluate({x: xi}));
+                linearApproximationValues.push(fa + dfa * (xi - a));
+            }
+            
+            // Calculate function and approximation at the evaluation point
+            const fx = f.evaluate({x: x});
+            const Lx = fa + dfa * (x - a);
+            
+            // Plot the data
+            const data = [
+                {
+                    x: xValues,
+                    y: originalFunctionValues,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: `f(x) = ${currentFunction}`,
+                    line: {
+                        color: 'rgb(31, 119, 180)',
+                        width: 3
+                    }
+                },
+                {
+                    x: xValues,
+                    y: linearApproximationValues,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: 'Linear Approximation',
+                    line: {
+                        color: 'rgb(255, 99, 71)',
+                        width: 3
+                    }
+                },
+                {
+                    x: [a],
+                    y: [fa],
+                    type: 'scatter',
+                    mode: 'markers',
+                    name: `Point of Tangency (${a.toFixed(1)}, ${fa.toFixed(4)})`,
+                    marker: {
+                        color: 'rgb(50, 205, 50)',
+                        size: 10
+                    }
+                },
+                {
+                    x: [x],
+                    y: [fx],
+                    type: 'scatter',
+                    mode: 'markers',
+                    name: `Actual Value f(${x.toFixed(1)}) = ${fx.toFixed(4)}`,
+                    marker: {
+                        color: 'rgb(75, 0, 130)',
+                        size: 10,
+                        symbol: 'circle'
+                    }
+                },
+                {
+                    x: [x],
+                    y: [Lx],
+                    type: 'scatter',
+                    mode: 'markers',
+                    name: `Approximation L(${x.toFixed(1)}) = ${Lx.toFixed(4)}`,
+                    marker: {
+                        color: 'rgb(255, 165, 0)',
+                        size: 10,
+                        symbol: 'diamond'
+                    }
+                }
+            ];
+            
+            const layout = {
+                title: `Linear Approximation of ${currentFunction}`,
+                xaxis: {
+                    title: 'x'
+                },
+                yaxis: {
+                    title: 'y'
+                },
+                margin: { t: 50, b: 50, l: 50, r: 50 },
+                hovermode: 'closest',
+                showlegend: true,
+                legend: {
+                    x: 0,
+                    y: 1
+                }
+            };
+            
+            Plotly.newPlot('interactive-graph', data, layout);
+            
+            // Update the results display
+            document.getElementById('interactive-results').innerHTML = `
+                <div class="math-result">
+                    <p>Function: $f(x) = ${currentFunction.replace(/sqrt/g, '\\sqrt')}$</p>
+                    <p>Approximation point: $a = ${a.toFixed(1)}$, $f(a) = ${fa.toFixed(4)}$, $f'(a) = ${dfa.toFixed(4)}$</p>
+                    <p>Linear approximation: $L(x) = ${fa.toFixed(4)} + ${dfa.toFixed(4)}(x - ${a.toFixed(1)})$</p>
+                    <p>At $x = ${x.toFixed(1)}$: $L(${x.toFixed(1)}) = ${Lx.toFixed(4)}$, Actual: $f(${x.toFixed(1)}) = ${fx.toFixed(4)}$</p>
+                    <p>Error: $|f(x) - L(x)| = ${Math.abs(fx - Lx).toFixed(4)}$</p>
+                </div>
+            `;
+            
+            // Typeset math
+            if (typeof MathJax !== 'undefined') {
+                if (MathJax.typesetPromise) {
+                    MathJax.typesetPromise();
+                } else if (MathJax.typeset) {
+                    MathJax.typeset();
+                } else if (MathJax.Hub && MathJax.Hub.Queue) {
+                    MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+                }
+            }
+            
+        } catch (error) {
+            console.error("Error updating graph:", error);
+        }
+    }
+
+    function changeFunction(func) {
+        currentFunction = func;
+        updateGraph();
+    }
+
+    // Interactive graph initialization
+    function initializeGraph() {
+        console.log("Graph initialization called");
+        // This function can be expanded later for specific graph functionality
+    }
+    
+    // Interactive problem solving functions
+    function checkAnswer(problemNum, stepNum) {
+        const fieldIndex = problemNum === 1 ? stepNum : (6 + stepNum);
+        const field = mathFields[fieldIndex];
+        
+        if (!field) {
+            console.error(`MathField not found for problem ${problemNum}, step ${stepNum}, field index ${fieldIndex}`);
+            return;
+        }
+        
+        const answer = field.latex();
+        const feedbackId = `feedback-${problemNum}-${stepNum}`;
+        const feedback = document.getElementById(feedbackId);
+        
+        let correct = false;
+        let correctAnswer = '';
+        
+        // Problem 1 answers
+        if (problemNum === 1) {
+            switch(stepNum) {
+                case 1:
+                    correct = answer.includes('\\sqrt{x}') || answer.includes('x^{\\frac{1}{2}}');
+                    correctAnswer = '\\sqrt{x}';
+                    break;
+                case 2:
+                    correct = answer.includes('\\frac{1}{2\\sqrt{x}}') || answer.includes('\\frac{1}{2}x^{-\\frac{1}{2}}');
+                    correctAnswer = '\\frac{1}{2\\sqrt{x}}';
+                    break;
+                case 3:
+                    correct = answer.includes('8');
+                    correctAnswer = '8';
+                    break;
+                case 4:
+                    correct = answer.includes('\\frac{1}{16}') || answer.includes('0.0625');
+                    correctAnswer = '\\frac{1}{16}';
+                    break;
+                case 5:
+                    correct = answer.includes('1');
+                    correctAnswer = '1';
+                    break;
+                case 6:
+                    correct = answer.includes('8.0625') || answer.includes('8\\frac{1}{16}');
+                    correctAnswer = '8.0625';
+                    break;
+            }
+        }
+        // Problem 2 answers
+        else if (problemNum === 2) {
+            switch(stepNum) {
+                case 1:
+                    correct = answer.includes('3x^2-2') || answer.includes('3x^{2}-2');
+                    correctAnswer = '3x^2 - 2';
+                    break;
+                case 2:
+                    correct = answer.includes('10');
+                    correctAnswer = '10';
+                    break;
+                case 3:
+                    correct = answer.includes('1.0') || answer.includes('1');
+                    correctAnswer = '1.0';
+                    break;
+            }
+        }
+        
+        if (feedback) {
+            feedback.style.display = 'block';
+            if (correct) {
+                feedback.className = 'answer-feedback correct';
+                feedback.innerHTML = `🎉 Excellent! That's correct!`;
+                
+                // Add celebration animation
+                const problemCard = document.getElementById(`problem-${problemNum}`);
+                problemCard.classList.add('celebration-animation');
+                setTimeout(() => problemCard.classList.remove('celebration-animation'), 600);
+                
+
+                
+                // Mark step as completed and show next step
+                completedSteps.add(`${problemNum}-${stepNum}`);
+                updateProgress();
+                
+                // Show next step
+                const nextStep = document.getElementById(`step-${problemNum}-${stepNum + 1}`);
+                if (nextStep) {
+                    nextStep.style.display = 'block';
+                    nextStep.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else if (problemNum === 1 && stepNum === 6) {
+                    // Show problem 2
+                    document.getElementById('problem-2').style.display = 'block';
+                    document.getElementById('step-1').classList.add('completed');
+                    document.getElementById('step-1').innerHTML = '✓';
+                    document.getElementById('problem-2').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            } else {
+                feedback.className = 'answer-feedback incorrect';
+                feedback.innerHTML = `❌ Not quite right. The correct answer is: $${correctAnswer}$<br><small>💪 Keep trying! Learning happens through practice.</small>`;
+                
+                // Typeset the math
+                if (typeof MathJax !== 'undefined') {
+                    if (MathJax.typesetPromise) {
+                        MathJax.typesetPromise();
+                    } else if (MathJax.typeset) {
+                        MathJax.typeset();
+                    } else if (MathJax.Hub && MathJax.Hub.Queue) {
+                        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+                    }
+                }
+            }
+        }
+    }
+    
+
+    
+    // Enhanced hint system with popup cards
+    function showHint(problemNum, stepNum) {
+        const hintPopup = document.getElementById('hint-popup');
+        const hintTitle = document.getElementById('hint-title');
+        const hintContent = document.getElementById('hint-content');
+        
+        let title = '';
+        let content = '';
+        
+        if (problemNum === 1) {
+            switch(stepNum) {
+                case 1:
+                    title = 'Defining the Function 🎯';
+                    content = `
+                        <p><strong>Think about this:</strong> We want to approximate $\\sqrt{65}$.</p>
+                        <p>What function, when we input a value, gives us the square root as output?</p>
+                        <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                            <p><strong>💡 Key insight:</strong> If we want to find $\\sqrt{65}$, we need a function $f(x) = \\sqrt{x}$</p>
+                            <p>Then $f(65) = \\sqrt{65}$, which is what we're looking for!</p>
+                        </div>
+                        <p><strong>Try typing:</strong> <code>sqrt(x)</code> or <code>x^(1/2)</code></p>
+                    `;
+                    break;
+                case 2:
+                    title = 'Finding the Derivative 📐';
+                    content = `
+                        <p><strong>Remember the power rule:</strong> $\\frac{d}{dx}[x^n] = nx^{n-1}$</p>
+                        <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                            <p><strong>Step by step:</strong></p>
+                            <p>1. Rewrite: $f(x) = \\sqrt{x} = x^{\\frac{1}{2}}$</p>
+                            <p>2. Apply power rule: $f'(x) = \\frac{1}{2}x^{\\frac{1}{2}-1} = \\frac{1}{2}x^{-\\frac{1}{2}}$</p>
+                            <p>3. Simplify: $f'(x) = \\frac{1}{2\\sqrt{x}}$</p>
+                        </div>
+                        <p><strong>Try typing:</strong> <code>1/(2*sqrt(x))</code></p>
+                    `;
+                    break;
+                case 3:
+                    title = 'Evaluating at Base Point 🎯';
+                    content = `
+                        <p><strong>Why do we use $x_0 = 64$?</strong></p>
+                        <p>Because $\\sqrt{64}$ is easy to calculate!</p>
+                        <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                            <p><strong>Think:</strong> What number times itself equals 64?</p>
+                            <p>$8 \\times 8 = 64$</p>
+                            <p>So $\\sqrt{64} = 8$</p>
+                        </div>
+                        <p><strong>Answer:</strong> <code>8</code></p>
+                    `;
+                    break;
+                case 4:
+                    title = 'Evaluating the Derivative 📊';
+                    content = `
+                        <p><strong>Now substitute $x = 64$ into $f'(x) = \\frac{1}{2\\sqrt{x}}$</strong></p>
+                        <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                            <p><strong>Step by step:</strong></p>
+                            <p>$f'(64) = \\frac{1}{2\\sqrt{64}}$</p>
+                            <p>$= \\frac{1}{2 \\times 8}$</p>
+                            <p>$= \\frac{1}{16}$</p>
+                        </div>
+                        <p><strong>Try typing:</strong> <code>1/16</code> or as a decimal <code>0.0625</code></p>
+                    `;
+                    break;
+                case 5:
+                    title = 'Finding the Change 📏';
+                    content = `
+                        <p><strong>This is just simple subtraction!</strong></p>
+                        <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                            <p>We want to approximate $\\sqrt{65}$ starting from $\\sqrt{64}$</p>
+                            <p>$\\delta x = \\text{target} - \\text{base} = 65 - 64 = 1$</p>
+                        </div>
+                        <p><strong>Answer:</strong> <code>1</code></p>
+                    `;
+                    break;
+                case 6:
+                    title = 'Final Calculation 🎉';
+                    content = `
+                        <p><strong>Apply the linear approximation formula:</strong></p>
+                        <p>$f(x_0 + \\delta x) \\approx f(x_0) + f'(x_0) \\cdot \\delta x$</p>
+                        <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                            <p><strong>Substitute our values:</strong></p>
+                            <p>$\\sqrt{65} \\approx 8 + \\frac{1}{16} \\times 1$</p>
+                            <p>$= 8 + \\frac{1}{16}$</p>
+                            <p>$= 8 + 0.0625 = 8.0625$</p>
+                        </div>
+                        <p><strong>Try typing:</strong> <code>8.0625</code></p>
+                    `;
+                    break;
+            }
+        } else if (problemNum === 2) {
+            switch(stepNum) {
+                case 1:
+                    title = 'Finding the Derivative of a Polynomial 📚';
+                    content = `
+                        <p><strong>For $y = x^3 - 2x + 1$, differentiate each term:</strong></p>
+                        <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                            <p><strong>Term by term:</strong></p>
+                            <p>• $\\frac{d}{dx}[x^3] = 3x^2$</p>
+                            <p>• $\\frac{d}{dx}[-2x] = -2$</p>
+                            <p>• $\\frac{d}{dx}[1] = 0$</p>
+                        </div>
+                        <p><strong>Combined:</strong> $\\frac{dy}{dx} = 3x^2 - 2$</p>
+                    `;
+                    break;
+                case 2:
+                    title = 'Evaluating at x = 2 🎯';
+                    content = `
+                        <p><strong>Substitute $x = 2$ into $\\frac{dy}{dx} = 3x^2 - 2$</strong></p>
+                        <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                            <p>$\\frac{dy}{dx}|_{x=2} = 3(2)^2 - 2$</p>
+                            <p>$= 3(4) - 2$</p>
+                            <p>$= 12 - 2 = 10$</p>
+                        </div>
+                    `;
+                    break;
+                case 3:
+                    title = 'Calculating the Differential 📐';
+                    content = `
+                        <p><strong>Use the formula: $dy = \\frac{dy}{dx} \\cdot dx$</strong></p>
+                        <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                            <p>$dy = 10 \\times 0.1 = 1.0$</p>
+                        </div>
+                    `;
+                    break;
+            }
+        }
+        
+        hintTitle.textContent = title;
+        hintContent.innerHTML = content;
+        hintPopup.style.display = 'block';
+        
+        // Typeset math in hint with enhanced error handling and targeting
+        setTimeout(() => {
+            if (typeof MathJax !== 'undefined') {
+                try {
+                    if (MathJax.typesetPromise) {
+                        MathJax.typesetPromise([hintContent]).then(() => {
+                            console.log("Hint math typeset successfully");
+                        }).catch(err => {
+                            console.warn('MathJax hint typeset error:', err);
+                        });
+                    } else if (MathJax.typeset) {
+                        MathJax.typeset([hintContent]);
+                    } else if (MathJax.Hub && MathJax.Hub.Queue) {
+                        MathJax.Hub.Queue(["Typeset", MathJax.Hub, hintContent]);
+                    }
+                } catch (error) {
+                    console.warn('MathJax hint rendering error:', error);
+                }
+            } else {
+                console.warn('MathJax not available for hint rendering');
+            }
+        }, 100);
+    }
+    
+    // Close hint popup
+    function closeHint() {
+        document.getElementById('hint-popup').style.display = 'none';
+    }
+    
+    // Insert mathematical symbols into MathQuill fields
+    function insertSymbol(fieldNumber, symbol) {
+        const field = mathFields[fieldNumber];
+        if (field) {
+            field.write(symbol);
+            field.focus();
+        }
+    }
+
+    // Function to mark topic as completed and return to profile
+    function completeTopicAndReturn() {
+        const topicName = 'Linear Approximation & Differentials';
+        
+        // Mark topic as completed in session storage
+        const practiceAttempts = JSON.parse(sessionStorage.getItem('practiceAttempts') || '{}');
+        practiceAttempts[topicName] = (practiceAttempts[topicName] || 0) + 1;
+        sessionStorage.setItem('practiceAttempts', JSON.stringify(practiceAttempts));
+        
+        // Update mastery data
+        const masteryData = JSON.parse(sessionStorage.getItem('masteryData') || '[]');
+        masteryData.forEach(item => {
+            if (item.topic === topicName) {
+                // Increase mastery for completing theory
+                item.mastery = Math.min(100, item.mastery + 10);
+                
+                // Update badge if mastery level crossed threshold
+                if (item.mastery >= 80) {
+                    item.badge = 'M';  // Master
+                } else if (item.mastery >= 50) {
+                    item.badge = 'P';  // Proficient
+                } else if (item.mastery >= 20) {
+                    item.badge = 'L';  // Learning
+                }
+            }
+        });
+        sessionStorage.setItem('masteryData', JSON.stringify(masteryData));
+        
+        // Show completion message
+        alert('Congratulations! You have completed the "Linear Approximation & Differentials" topic. Your progress has been updated!');
+        
+        // Navigate to profile page
+        window.location.href = 'profile.html';
+    }
+    
+         // ===== MISSING FUNCTION DEFINITIONS =====
+     
+     // Function to mark topic as completed and return to profile
+     function completeTopicAndReturn() {
+         const topicName = 'Linear Approximation & Differentials';
+         
+         // Mark topic as completed in session storage
+         const practiceAttempts = JSON.parse(sessionStorage.getItem('practiceAttempts') || '{}');
+         practiceAttempts[topicName] = (practiceAttempts[topicName] || 0) + 1;
+         sessionStorage.setItem('practiceAttempts', JSON.stringify(practiceAttempts));
+         
+         // Update mastery data
+         const masteryData = JSON.parse(sessionStorage.getItem('masteryData') || '[]');
+         masteryData.forEach(item => {
+             if (item.topic === topicName) {
+                 // Increase mastery for completing theory
+                 item.mastery = Math.min(100, item.mastery + 10);
+                 
+                 // Update badge if mastery level crossed threshold
+                 if (item.mastery >= 80) {
+                     item.badge = 'M';  // Master
+                 } else if (item.mastery >= 50) {
+                     item.badge = 'P';  // Proficient
+                 } else if (item.mastery >= 20) {
+                     item.badge = 'L';  // Learning
+                 }
+             }
+         });
+         sessionStorage.setItem('masteryData', JSON.stringify(masteryData));
+         
+         // Show completion message
+         alert('Congratulations! You have completed the "Linear Approximation & Differentials" topic. Your progress has been updated!');
+         
+         // Navigate to profile page
+         window.location.href = 'profile.html';
+     }
+     
+     // ===== INTERACTIVE LEARNING FUNCTIONS =====
+    
+    // Problem generation for different types
+    const problemSets = {
+        polynomial: [
+            { problem: 'f(x) = x^3 + 2x^2 - 5x + 1', answer: '3x^2+4x-5', display: 'f(x) = x^3 + 2x^2 - 5x + 1' },
+            { problem: 'f(x) = 4x^5 - 3x^2 + 7', answer: '20x^4-6x', display: 'f(x) = 4x^5 - 3x^2 + 7' },
+            { problem: 'f(x) = x^4 + x^3 - 2x', answer: '4x^3+3x^2-2', display: 'f(x) = x^4 + x^3 - 2x' },
+            { problem: 'f(x) = 2x^3 - 6x + 4', answer: '6x^2-6', display: 'f(x) = 2x^3 - 6x + 4' }
+        ],
+        trigonometric: [
+            { problem: 'f(x) = sin(x) + cos(x)', answer: '\\cos(x)-\\sin(x)', display: 'f(x) = \\sin(x) + \\cos(x)' },
+            { problem: 'f(x) = 2sin(x)', answer: '2\\cos(x)', display: 'f(x) = 2\\sin(x)' },
+            { problem: 'f(x) = cos(2x)', answer: '-2\\sin(2x)', display: 'f(x) = \\cos(2x)' },
+            { problem: 'f(x) = tan(x)', answer: '\\sec^2(x)', display: 'f(x) = \\tan(x)' }
+        ],
+        exponential: [
+            { problem: 'f(x) = e^x', answer: 'e^x', display: 'f(x) = e^x' },
+            { problem: 'f(x) = 2e^x', answer: '2e^x', display: 'f(x) = 2e^x' },
+            { problem: 'f(x) = e^(2x)', answer: '2e^{2x}', display: 'f(x) = e^{2x}' },
+            { problem: 'f(x) = 3^x', answer: '3^x\\ln(3)', display: 'f(x) = 3^x' }
+        ],
+        logarithmic: [
+            { problem: 'f(x) = ln(x)', answer: '\\frac{1}{x}', display: 'f(x) = \\ln(x)' },
+            { problem: 'f(x) = log(x)', answer: '\\frac{1}{x\\ln(10)}', display: 'f(x) = \\log(x)' },
+            { problem: 'f(x) = ln(2x)', answer: '\\frac{1}{x}', display: 'f(x) = \\ln(2x)' },
+            { problem: 'f(x) = x*ln(x)', answer: '\\ln(x)+1', display: 'f(x) = x\\ln(x)' }
+        ]
+    };
+    
+    // Generate new problem
+    function generateProblem() {
+        const type = document.getElementById('problem-type').value;
+        let problems;
+        
+        if (type === 'mixed') {
+            const allProblems = [...problemSets.polynomial, ...problemSets.trigonometric, 
+                               ...problemSets.exponential, ...problemSets.logarithmic];
+            problems = allProblems;
+        } else {
+            problems = problemSets[type];
+        }
+        
+        currentProblem = problems[Math.floor(Math.random() * problems.length)];
+        currentAnswer = currentProblem.answer;
+        attemptCount = 0;
+        
+        document.getElementById('current-problem').innerHTML = 
+            `Find the derivative of: $${currentProblem.display}$`;
+        
+        // Clear previous feedback
+        document.getElementById('solver-feedback').style.display = 'none';
+        document.getElementById('adaptive-hint').classList.remove('show');
+        
+        if (solverField) {
+            solverField.latex('');
+        }
+        
+        // Start timing
+        learningStats.startTime = Date.now();
+        learningStats.problemsAttempted++;
+        
+        // Typeset math
+        if (typeof MathJax !== 'undefined') {
+            if (MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            } else if (MathJax.typeset) {
+                MathJax.typeset();
+            }
+        }
+    }
+    
+    // Check solver answer
+    function checkSolverAnswer() {
+        if (!currentProblem || !solverField) return;
+        
+        attemptCount++;
+        const userAnswer = solverField.latex().replace(/\s+/g, '');
+        const correctAnswer = currentAnswer.replace(/\s+/g, '');
+        
+        const feedback = document.getElementById('solver-feedback');
+        feedback.style.display = 'block';
+        
+        // Simple answer checking (could be enhanced with more sophisticated parsing)
+        const isCorrect = userAnswer === correctAnswer || 
+                         userAnswer.replace(/[{}]/g, '') === correctAnswer.replace(/[{}]/g, '') ||
+                         normalizeAnswer(userAnswer) === normalizeAnswer(correctAnswer);
+        
+        if (isCorrect) {
+            feedback.className = 'success-feedback';
+            feedback.innerHTML = `
+                🎉 <strong>Excellent!</strong> That's correct!<br>
+                <small>You got it in ${attemptCount} attempt(s). Great work!</small>
+            `;
+            learningStats.problemsCorrect++;
+            
+            // Add time to stats
+            if (learningStats.startTime) {
+                learningStats.totalTime += Date.now() - learningStats.startTime;
+            }
+        } else {
+            feedback.className = 'mistake-feedback';
+            feedback.innerHTML = `
+                ❌ <strong>Not quite right.</strong><br>
+                <small>💪 Keep trying! The correct answer is: $${currentAnswer}$</small>
+            `;
+            
+            // Track common mistakes
+            learningStats.commonMistakes.push({
+                problem: currentProblem.display,
+                userAnswer: userAnswer,
+                correctAnswer: correctAnswer
+            });
+            
+            // Show adaptive hint after first wrong attempt
+            if (attemptCount === 1) {
+                setTimeout(() => showAdaptiveHint(), 1000);
+            }
+        }
+        
+        // Typeset math in feedback
+        if (typeof MathJax !== 'undefined') {
+            if (MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            } else if (MathJax.typeset) {
+                MathJax.typeset();
+            }
+        }
+    }
+    
+    // Normalize answers for comparison
+    function normalizeAnswer(answer) {
+        return answer.toLowerCase()
+                    .replace(/\s+/g, '')
+                    .replace(/\{|\}/g, '')
+                    .replace(/\\\\/g, '\\')
+                    .replace(/cdot/g, '*');
+    }
+    
+    // Show adaptive hints
+    function showAdaptiveHint() {
+        if (!currentProblem) return;
+        
+        learningStats.hintsUsed++;
+        const hintDiv = document.getElementById('adaptive-hint');
+        
+        // Generate contextual hint based on problem type with proper LaTeX notation
+        let hint = '';
+        if (currentProblem.problem.includes('x^')) {
+            hint = `
+                <strong>💡 Power Rule Hint:</strong><br>
+                For $f(x) = x^n$, the derivative is $f'(x) = nx^{n-1}$<br>
+                <em>Don't forget to multiply by the coefficient and reduce the exponent by 1!</em>
+            `;
+        } else if (currentProblem.problem.includes('sin') || currentProblem.problem.includes('cos')) {
+            hint = `
+                <strong>💡 Trigonometric Hint:</strong><br>
+                • $\\frac{d}{dx}[\\sin(x)] = \\cos(x)$<br>
+                • $\\frac{d}{dx}[\\cos(x)] = -\\sin(x)$<br>
+                <em>Remember the chain rule if there's a coefficient inside!</em>
+            `;
+        } else if (currentProblem.problem.includes('e^')) {
+            hint = `
+                <strong>💡 Exponential Hint:</strong><br>
+                • $\\frac{d}{dx}[e^x] = e^x$<br>
+                • $\\frac{d}{dx}[e^{ax}] = a \\cdot e^{ax}$<br>
+                <em>The derivative of $e^x$ is itself!</em>
+            `;
+        } else if (currentProblem.problem.includes('ln')) {
+            hint = `
+                <strong>💡 Logarithmic Hint:</strong><br>
+                • $\\frac{d}{dx}[\\ln(x)] = \\frac{1}{x}$<br>
+                • $\\frac{d}{dx}[\\ln(ax)] = \\frac{1}{x}$<br>
+                <em>Use the chain rule for composite functions!</em>
+            `;
+        }
+        
+        hintDiv.innerHTML = hint;
+        hintDiv.classList.add('show');
+        
+        // Typeset math in adaptive hint
+        setTimeout(() => {
+            if (typeof MathJax !== 'undefined') {
+                try {
+                    if (MathJax.typesetPromise) {
+                        MathJax.typesetPromise([hintDiv]).then(() => {
+                            console.log("Adaptive hint math typeset successfully");
+                        }).catch(err => {
+                            console.warn('MathJax adaptive hint typeset error:', err);
+                        });
+                    } else if (MathJax.typeset) {
+                        MathJax.typeset([hintDiv]);
+                    } else if (MathJax.Hub && MathJax.Hub.Queue) {
+                        MathJax.Hub.Queue(["Typeset", MathJax.Hub, hintDiv]);
+                    }
+                } catch (error) {
+                    console.warn('MathJax adaptive hint rendering error:', error);
+                }
+            }
+        }, 100);
+    }
+    
+    // Insert symbols into solver field
+    function insertSolverSymbol(symbol) {
+        if (solverField) {
+            solverField.write(symbol);
+            solverField.focus();
+        }
+    }
+    
+    // ===== STEP-BY-STEP WALKTHROUGH =====
+    
+    const walkthroughData = {
+        'power-rule': {
+            problem: '$f(x) = 3x^4 + 2x^2 - 5x + 7$',
+            steps: [
+                {
+                    title: 'Identify the Function',
+                    content: 'We have $f(x) = 3x^4 + 2x^2 - 5x + 7$',
+                    explanation: 'This is a polynomial function with multiple terms. We\'ll differentiate each term separately using the power rule.'
+                },
+                {
+                    title: 'Apply Power Rule to First Term',
+                    content: '$\\frac{d}{dx}[3x^4] = 3 \\cdot 4x^{4-1} = 12x^3$',
+                    explanation: 'For $ax^n$, the derivative is $n \\cdot ax^{n-1}$. Here: coefficient 3, exponent 4, so we get $3 \\cdot 4 \\cdot x^3 = 12x^3$'
+                },
+                {
+                    title: 'Apply Power Rule to Second Term',
+                    content: '$\\frac{d}{dx}[2x^2] = 2 \\cdot 2x^{2-1} = 4x$',
+                    explanation: 'Again using the power rule: $2 \\cdot 2 \\cdot x^1 = 4x$'
+                },
+                {
+                    title: 'Apply Power Rule to Third Term',
+                    content: '$\\frac{d}{dx}[-5x] = -5 \\cdot 1x^{1-1} = -5$',
+                    explanation: 'For $-5x^1$, we get $-5 \\cdot 1 \\cdot x^0 = -5 \\cdot 1 = -5$'
+                },
+                {
+                    title: 'Handle the Constant',
+                    content: '$\\frac{d}{dx}[7] = 0$',
+                    explanation: 'The derivative of any constant is always 0'
+                },
+                {
+                    title: 'Combine All Terms',
+                    content: '$f\'(x) = 12x^3 + 4x - 5$',
+                    explanation: 'Adding all the derivatives together: $12x^3 + 4x + (-5) + 0 = 12x^3 + 4x - 5$'
+                }
+            ]
+        },
+        'product-rule': {
+            problem: '$f(x) = (2x + 1)(x^2 - 3)$',
+            steps: [
+                {
+                    title: 'Identify the Functions',
+                    content: 'Let $u = 2x + 1$ and $v = x^2 - 3$',
+                    explanation: 'For the product rule $(uv)\' = u\'v + uv\'$, we need to identify our two functions first.'
+                },
+                {
+                    title: 'Find $u\'$',
+                    content: '$u\' = \\frac{d}{dx}[2x + 1] = 2$',
+                    explanation: 'The derivative of $2x + 1$ is simply 2 (derivative of $2x$ is 2, derivative of 1 is 0)'
+                },
+                {
+                    title: 'Find $v\'$',
+                    content: '$v\' = \\frac{d}{dx}[x^2 - 3] = 2x$',
+                    explanation: 'Using the power rule: derivative of $x^2$ is $2x$, derivative of $-3$ is 0'
+                },
+                {
+                    title: 'Apply Product Rule Formula',
+                    content: '$f\'(x) = u\'v + uv\' = (2)(x^2 - 3) + (2x + 1)(2x)$',
+                    explanation: 'Substituting into the product rule formula: $u\'v + uv\'$'
+                },
+                {
+                    title: 'Expand First Term',
+                    content: '$(2)(x^2 - 3) = 2x^2 - 6$',
+                    explanation: 'Distribute the 2: $2 \\cdot x^2 - 2 \\cdot 3 = 2x^2 - 6$'
+                },
+                {
+                    title: 'Expand Second Term',
+                    content: '$(2x + 1)(2x) = 4x^2 + 2x$',
+                    explanation: 'Distribute: $2x \\cdot 2x + 1 \\cdot 2x = 4x^2 + 2x$'
+                },
+                {
+                    title: 'Combine and Simplify',
+                    content: '$f\'(x) = 2x^2 - 6 + 4x^2 + 2x = 6x^2 + 2x - 6$',
+                    explanation: 'Combine like terms: $(2x^2 + 4x^2) + 2x + (-6) = 6x^2 + 2x - 6$'
+                }
+            ]
+        },
+        'quotient-rule': {
+            problem: '$f(x) = \\frac{x^2 + 1}{2x - 3}$',
+            steps: [
+                {
+                    title: 'Identify the Functions',
+                    content: 'Let $u = x^2 + 1$ and $v = 2x - 3$',
+                    explanation: 'For the quotient rule $\\left(\\frac{u}{v}\\right)\' = \\frac{u\'v - uv\'}{v^2}$, we need to identify the numerator and denominator functions.'
+                },
+                {
+                    title: 'Find $u\'$',
+                    content: '$u\' = \\frac{d}{dx}[x^2 + 1] = 2x$',
+                    explanation: 'Using the power rule: derivative of $x^2$ is $2x$, derivative of 1 is 0'
+                },
+                {
+                    title: 'Find $v\'$',
+                    content: '$v\' = \\frac{d}{dx}[2x - 3] = 2$',
+                    explanation: 'The derivative of $2x - 3$ is simply 2 (derivative of $2x$ is 2, derivative of $-3$ is 0)'
+                },
+                {
+                    title: 'Apply Quotient Rule Formula',
+                    content: '$f\'(x) = \\frac{u\'v - uv\'}{v^2} = \\frac{(2x)(2x - 3) - (x^2 + 1)(2)}{(2x - 3)^2}$',
+                    explanation: 'Substituting into the quotient rule formula: $\\frac{u\'v - uv\'}{v^2}$'
+                },
+                {
+                    title: 'Expand the Numerator',
+                    content: 'Numerator $= (2x)(2x - 3) - (x^2 + 1)(2) = 4x^2 - 6x - 2x^2 - 2$',
+                    explanation: 'Expand both terms: $2x \\cdot 2x - 2x \\cdot 3 - x^2 \\cdot 2 - 1 \\cdot 2$'
+                },
+                {
+                    title: 'Simplify the Numerator',
+                    content: 'Numerator $= 4x^2 - 6x - 2x^2 - 2 = 2x^2 - 6x - 2$',
+                    explanation: 'Combine like terms: $(4x^2 - 2x^2) - 6x - 2 = 2x^2 - 6x - 2$'
+                },
+                {
+                    title: 'Final Answer',
+                    content: '$f\'(x) = \\frac{2x^2 - 6x - 2}{(2x - 3)^2}$',
+                    explanation: 'The final derivative with the simplified numerator and the denominator squared'
+                }
+            ]
+        },
+        'chain-rule': {
+            problem: '$f(x) = \\sin(3x^2 + 1)$',
+            steps: [
+                {
+                    title: 'Identify the Composite Function',
+                    content: 'Let $u = 3x^2 + 1$ and $f(u) = \\sin(u)$',
+                    explanation: 'For the chain rule $\\frac{d}{dx}[f(g(x))] = f\'(g(x)) \\cdot g\'(x)$, we identify the outer and inner functions.'
+                },
+                {
+                    title: 'Find the Derivative of the Outer Function',
+                    content: '$\\frac{d}{du}[\\sin(u)] = \\cos(u)$',
+                    explanation: 'The derivative of $\\sin(u)$ with respect to $u$ is $\\cos(u)$'
+                },
+                {
+                    title: 'Find the Derivative of the Inner Function',
+                    content: '$\\frac{d}{dx}[3x^2 + 1] = 6x$',
+                    explanation: 'Using the power rule: derivative of $3x^2$ is $6x$, derivative of 1 is 0'
+                },
+                {
+                    title: 'Apply the Chain Rule',
+                    content: '$f\'(x) = \\cos(3x^2 + 1) \\cdot 6x$',
+                    explanation: 'Chain rule: derivative of outer function evaluated at inner function, times derivative of inner function'
+                },
+                {
+                    title: 'Simplify',
+                    content: '$f\'(x) = 6x\\cos(3x^2 + 1)$',
+                    explanation: 'Rearranging for standard form: coefficient first, then the cosine function'
+                }
+            ]
+        }
+    };
+    
+    function startWalkthrough() {
+        const type = document.getElementById('walkthrough-type').value;
+        currentWalkthrough = walkthroughData[type];
+        currentStep = 0;
+        
+        if (currentWalkthrough) {
+            const problemDiv = document.getElementById('walkthrough-problem');
+            problemDiv.innerHTML = `
+                <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #fff8e1, #f0f8ff); border-radius: 12px; border: 2px solid var(--main-color); margin: 15px 0;">
+                    <h4 style="color: var(--accent-color); margin-bottom: 10px;">📝 Problem:</h4>
+                    <div style="font-size: 1.3rem; font-weight: 600;">
+                        Find the derivative of ${currentWalkthrough.problem}
+                    </div>
+                </div>
+            `;
+            
+            updateWalkthroughStep();
+            
+            // Enable navigation buttons
+            document.getElementById('prev-btn').disabled = true;
+            document.getElementById('next-btn').disabled = false;
+            document.getElementById('explain-btn').disabled = false;
+            
+            // Typeset the problem
+            setTimeout(() => {
+                if (typeof MathJax !== 'undefined') {
+                    try {
+                        if (MathJax.typesetPromise) {
+                            MathJax.typesetPromise([problemDiv]).catch(err => {
+                                console.warn('MathJax problem typeset error:', err);
+                            });
+                        } else if (MathJax.typeset) {
+                            MathJax.typeset([problemDiv]);
+                        } else if (MathJax.Hub && MathJax.Hub.Queue) {
+                            MathJax.Hub.Queue(["Typeset", MathJax.Hub, problemDiv]);
+                        }
+                    } catch (error) {
+                        console.warn('MathJax problem rendering error:', error);
+                    }
+                }
+            }, 100);
+        }
+    }
+    
+    function updateWalkthroughStep() {
+        if (!currentWalkthrough) return;
+        
+        const step = currentWalkthrough.steps[currentStep];
+        const content = document.getElementById('step-content');
+        
+        content.innerHTML = `
+            <h4 style="color: var(--accent-color); margin-bottom: 15px;">${step.title}</h4>
+            <div style="font-size: 1.2rem; margin: 20px 0; padding: 15px; background: white; border-radius: 8px; border-left: 4px solid var(--tertiary-color);">
+                ${step.content}
+            </div>
+            <div style="margin-top: 20px; padding: 15px; background: #e8f4f8; border-radius: 8px; border-left: 4px solid var(--secondary-color);">
+                <strong>💡 Explanation:</strong> ${step.explanation}
+            </div>
+            <div style="margin-top: 15px; padding: 10px; background: #f0f8ff; border-radius: 8px; text-align: center;">
+                <strong>Step ${currentStep + 1} of ${currentWalkthrough.steps.length}</strong>
+            </div>
+        `;
+        
+        // Update button states
+        document.getElementById('prev-btn').disabled = currentStep === 0;
+        document.getElementById('next-btn').disabled = currentStep === currentWalkthrough.steps.length - 1;
+        
+        // Typeset math with enhanced error handling
+        setTimeout(() => {
+            if (typeof MathJax !== 'undefined') {
+                try {
+                    if (MathJax.typesetPromise) {
+                        MathJax.typesetPromise([content]).catch(err => {
+                            console.warn('MathJax typeset error:', err);
+                        });
+                    } else if (MathJax.typeset) {
+                        MathJax.typeset([content]);
+                    } else if (MathJax.Hub && MathJax.Hub.Queue) {
+                        MathJax.Hub.Queue(["Typeset", MathJax.Hub, content]);
+                    }
+                } catch (error) {
+                    console.warn('MathJax rendering error:', error);
+                }
+            }
+        }, 100);
+    }
+    
+    function nextStep() {
+        if (currentWalkthrough && currentStep < currentWalkthrough.steps.length - 1) {
+            currentStep++;
+            updateWalkthroughStep();
+        }
+    }
+    
+    function previousStep() {
+        if (currentWalkthrough && currentStep > 0) {
+            currentStep--;
+            updateWalkthroughStep();
+        }
+    }
+    
+    function explainStep() {
+        if (!currentWalkthrough) return;
+        
+        const step = currentWalkthrough.steps[currentStep];
+        const hintContent = `
+            <div class="hint-header">
+                <span class="hint-icon">🔍</span>
+                <span class="hint-title">Step Explanation</span>
+            </div>
+            <div class="hint-content">
+                <h4>${step.title}</h4>
+                <p>${step.explanation}</p>
+            </div>
+        `;
+        
+        const hintContentElement = document.getElementById('hint-content');
+        hintContentElement.innerHTML = hintContent;
+        document.getElementById('hint-popup').style.display = 'block';
+        
+        // Typeset math in step explanation
+        setTimeout(() => {
+            if (typeof MathJax !== 'undefined') {
+                try {
+                    if (MathJax.typesetPromise) {
+                        MathJax.typesetPromise([hintContentElement]).then(() => {
+                            console.log("Step explanation math typeset successfully");
+                        }).catch(err => {
+                            console.warn('MathJax step explanation typeset error:', err);
+                        });
+                    } else if (MathJax.typeset) {
+                        MathJax.typeset([hintContentElement]);
+                    } else if (MathJax.Hub && MathJax.Hub.Queue) {
+                        MathJax.Hub.Queue(["Typeset", MathJax.Hub, hintContentElement]);
+                    }
+                } catch (error) {
+                    console.warn('MathJax step explanation rendering error:', error);
+                }
+            }
+        }, 100);
+    }
+    
+    // ===== DRAG AND DROP MATCHING GAME =====
+    
+    const matchingPairs = [
+        { func: 'x^2', derivative: '2x' },
+        { func: 'x^3', derivative: '3x^2' },
+        { func: 'sin(x)', derivative: 'cos(x)' },
+        { func: 'cos(x)', derivative: '-sin(x)' },
+        { func: 'e^x', derivative: 'e^x' },
+        { func: 'ln(x)', derivative: '1/x' },
+        { func: '2x^3', derivative: '6x^2' },
+        { func: 'x^4', derivative: '4x^3' }
+    ];
+    
+    function initializeDragDrop() {
+        // Select 6 random pairs
+        const selectedPairs = matchingPairs.sort(() => 0.5 - Math.random()).slice(0, 6);
+        dragDropPairs = selectedPairs;
+        
+        const functionsContainer = document.getElementById('functions-list');
+        const derivativesContainer = document.getElementById('derivatives-list');
+        
+        // Clear containers
+        functionsContainer.innerHTML = '<h5 style="margin: 0 0 10px 0;">Drag these functions:</h5>';
+        derivativesContainer.innerHTML = '<h5 style="margin: 0 0 10px 0;">To their derivatives:</h5>';
+        
+        // Shuffle derivatives for random order
+        const shuffledDerivatives = [...selectedPairs].sort(() => 0.5 - Math.random());
+        
+        // Add functions (draggable)
+        selectedPairs.forEach((pair, index) => {
+            const funcDiv = document.createElement('div');
+            funcDiv.className = 'draggable-item touch-friendly';
+            funcDiv.draggable = true;
+            funcDiv.innerHTML = `$${pair.func}$`;
+            funcDiv.dataset.function = pair.func;
+            funcDiv.dataset.derivative = pair.derivative;
+            
+            // Add touch and drag event listeners
+            funcDiv.addEventListener('dragstart', handleDragStart);
+            funcDiv.addEventListener('touchstart', handleTouchStart);
+            
+            functionsContainer.appendChild(funcDiv);
+        });
+        
+        // Add drop zones for derivatives
+        shuffledDerivatives.forEach((pair, index) => {
+            const dropZone = document.createElement('div');
+            dropZone.className = 'drop-zone touch-friendly';
+            dropZone.innerHTML = `$${pair.derivative}$ <div style="font-size: 0.8rem; color: #666; margin-top: 5px;">Drop function here</div>`;
+            dropZone.dataset.expectedFunction = pair.func;
+            dropZone.dataset.derivative = pair.derivative;
+            
+            // Add drop event listeners
+            dropZone.addEventListener('dragover', handleDragOver);
+            dropZone.addEventListener('drop', handleDrop);
+            dropZone.addEventListener('touchend', handleTouchEnd);
+            
+            derivativesContainer.appendChild(dropZone);
+        });
+        
+        // Clear feedback
+        document.getElementById('matching-feedback').style.display = 'none';
+        
+        // Typeset math
+        if (typeof MathJax !== 'undefined') {
+            if (MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            } else if (MathJax.typeset) {
+                MathJax.typeset();
+            }
+        }
+    }
+    
+    function handleDragStart(e) {
+        draggedElement = e.target;
+        e.dataTransfer.effectAllowed = 'move';
+    }
+    
+    function handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        e.target.classList.add('drag-over');
+    }
+    
+    function handleDrop(e) {
+        e.preventDefault();
+        e.target.classList.remove('drag-over');
+        
+        if (draggedElement) {
+            const droppedFunction = draggedElement.dataset.function;
+            const expectedFunction = e.target.dataset.expectedFunction;
+            
+            if (droppedFunction === expectedFunction) {
+                e.target.classList.add('correct');
+                e.target.innerHTML = `✅ $${draggedElement.dataset.function}$ → $${e.target.dataset.derivative}$`;
+                draggedElement.style.display = 'none';
+            } else {
+                e.target.classList.add('incorrect');
+                setTimeout(() => {
+                    e.target.classList.remove('incorrect');
+                }, 1000);
+            }
+        }
+        
+        draggedElement = null;
+        
+        // Typeset math
+        if (typeof MathJax !== 'undefined') {
+            if (MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            } else if (MathJax.typeset) {
+                MathJax.typeset();
+            }
+        }
+    }
+    
+    // Touch support for mobile
+    let touchStartElement = null;
+    
+    function handleTouchStart(e) {
+        touchStartElement = e.target;
+        e.target.style.opacity = '0.7';
+    }
+    
+    function handleTouchEnd(e) {
+        if (touchStartElement && e.target.classList.contains('drop-zone')) {
+            const droppedFunction = touchStartElement.dataset.function;
+            const expectedFunction = e.target.dataset.expectedFunction;
+            
+            if (droppedFunction === expectedFunction) {
+                e.target.classList.add('correct');
+                e.target.innerHTML = `✅ $${touchStartElement.dataset.function}$ → $${e.target.dataset.derivative}$`;
+                touchStartElement.style.display = 'none';
+            } else {
+                e.target.classList.add('incorrect');
+                setTimeout(() => {
+                    e.target.classList.remove('incorrect');
+                }, 1000);
+            }
+        }
+        
+        if (touchStartElement) {
+            touchStartElement.style.opacity = '1';
+            touchStartElement = null;
+        }
+        
+        // Typeset math
+        if (typeof MathJax !== 'undefined') {
+            if (MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            } else if (MathJax.typeset) {
+                MathJax.typeset();
+            }
+        }
+    }
+    
+    function checkMatches() {
+        const dropZones = document.querySelectorAll('.drop-zone');
+        let correct = 0;
+        let total = dropZones.length;
+        
+        dropZones.forEach(zone => {
+            if (zone.classList.contains('correct')) {
+                correct++;
+            }
+        });
+        
+        const feedback = document.getElementById('matching-feedback');
+        feedback.style.display = 'block';
+        
+        if (correct === total) {
+            feedback.className = 'success-feedback';
+            feedback.innerHTML = `
+                🎉 <strong>Perfect!</strong> You matched all ${correct} pairs correctly!<br>
+                <small>Excellent understanding of derivatives!</small>
+            `;
+        } else {
+            feedback.className = 'mistake-feedback';
+            feedback.innerHTML = `
+                📊 You got ${correct} out of ${total} matches correct.<br>
+                <small>Keep trying! Drag the remaining functions to their correct derivatives.</small>
+            `;
+        }
+    }
+    
+    // ===== INTERACTIVE ANIMATION =====
+    
+    function initializeAnimation() {
+        const functionType = document.getElementById('animation-function').value;
+        
+        // Create animation data based on function type
+        switch(functionType) {
+            case 'quadratic':
+                animationData = {
+                    func: (x) => x * x,
+                    derivative: (x) => 2 * x,
+                    name: 'f(x) = x²',
+                    derivativeName: "f'(x) = 2x"
+                };
+                break;
+            case 'cubic':
+                animationData = {
+                    func: (x) => x * x * x,
+                    derivative: (x) => 3 * x * x,
+                    name: 'f(x) = x³',
+                    derivativeName: "f'(x) = 3x²"
+                };
+                break;
+            case 'sine':
+                animationData = {
+                    func: (x) => Math.sin(x),
+                    derivative: (x) => Math.cos(x),
+                    name: 'f(x) = sin(x)',
+                    derivativeName: "f'(x) = cos(x)"
+                };
+                break;
+            case 'exponential':
+                animationData = {
+                    func: (x) => Math.exp(x),
+                    derivative: (x) => Math.exp(x),
+                    name: 'f(x) = eˣ',
+                    derivativeName: "f'(x) = eˣ"
+                };
+                break;
+        }
+        
+        updateAnimation();
+    }
+    
+    function updateAnimation() {
+        if (!animationData) return;
+        
+        const h = parseFloat(document.getElementById('h-slider').value);
+        const x0 = 1; // Fixed point for demonstration
+        
+        document.getElementById('h-value').textContent = h.toFixed(3);
+        
+        // Calculate slope of secant line
+        const secantSlope = (animationData.func(x0 + h) - animationData.func(x0)) / h;
+        const actualDerivative = animationData.derivative(x0);
+        const error = Math.abs(secantSlope - actualDerivative);
+        
+        document.getElementById('current-slope').innerHTML = 
+            `Secant Slope: <span style="color: var(--accent-color);">${secantSlope.toFixed(6)}</span><br>
+             Actual Derivative: <span style="color: var(--tertiary-color);">${actualDerivative.toFixed(6)}</span><br>
+             <small>Error: ${error.toFixed(6)}</small>`;
+        
+        // Create plot data with enhanced styling
+        const xValues = [];
+        const yValues = [];
+        const secantX = [x0 - 0.5, x0 + h + 0.5];
+        const secantSlope_calc = (animationData.func(x0 + h) - animationData.func(x0)) / h;
+        const secantY = secantX.map(x => animationData.func(x0) + secantSlope_calc * (x - x0));
+        
+        // Generate function curve with higher resolution
+        for (let x = -1.5; x <= 3.5; x += 0.05) {
+            xValues.push(x);
+            yValues.push(animationData.func(x));
+        }
+        
+        // Tangent line points
+        const tangentX = [x0 - 0.8, x0 + 0.8];
+        const tangentY = tangentX.map(x => animationData.func(x0) + actualDerivative * (x - x0));
+        
+        // Point markers
+        const pointX = [x0, x0 + h];
+        const pointY = [animationData.func(x0), animationData.func(x0 + h)];
+        
+        const data = [
+            {
+                x: xValues,
+                y: yValues,
+                type: 'scatter',
+                mode: 'lines',
+                name: animationData.name,
+                line: { color: '#2E86AB', width: 4 },
+                hovertemplate: 'x: %{x:.2f}<br>y: %{y:.2f}<extra></extra>'
+            },
+            {
+                x: secantX,
+                y: secantY,
+                type: 'scatter',
+                mode: 'lines',
+                name: `Secant line (h=${h.toFixed(3)})`,
+                line: { color: '#F24236', width: 3, dash: 'solid' },
+                hovertemplate: 'Secant slope: ' + secantSlope.toFixed(6) + '<extra></extra>'
+            },
+            {
+                x: tangentX,
+                y: tangentY,
+                type: 'scatter',
+                mode: 'lines',
+                name: 'Tangent line (h→0)',
+                line: { color: '#A23B72', width: 3, dash: 'dash' },
+                hovertemplate: 'Tangent slope: ' + actualDerivative.toFixed(6) + '<extra></extra>'
+            },
+            {
+                x: pointX,
+                y: pointY,
+                type: 'scatter',
+                mode: 'markers',
+                name: 'Points',
+                marker: { 
+                    size: [12, 10], 
+                    color: ['#F18F01', '#C73E1D'],
+                    line: { width: 2, color: 'white' }
+                },
+                hovertemplate: 'Point: (%{x:.2f}, %{y:.2f})<extra></extra>'
+            }
+        ];
+        
+        const layout = {
+            title: {
+                text: `${animationData.name} - Interactive Derivative Visualization`,
+                font: { size: 16, color: '#323232' }
+            },
+            xaxis: { 
+                title: 'x',
+                range: [-1.2, 3.2],
+                gridcolor: '#f0f0f0',
+                zerolinecolor: '#d0d0d0'
+            },
+            yaxis: { 
+                title: 'y',
+                gridcolor: '#f0f0f0',
+                zerolinecolor: '#d0d0d0'
+            },
+            margin: { t: 60, b: 50, l: 60, r: 50 },
+            showlegend: true,
+            legend: { x: 0.02, y: 0.98 },
+            plot_bgcolor: '#fafafa',
+            paper_bgcolor: 'white',
+            hovermode: 'closest',
+            transition: {
+                duration: 100,
+                easing: 'cubic-in-out'
+            }
+        };
+        
+        const config = {
+            responsive: true,
+            displayModeBar: false
+        };
+        
+        if (animationChart) {
+            Plotly.react('limit-visualization', data, layout, config);
+        } else {
+            Plotly.newPlot('limit-visualization', data, layout, config);
+            animationChart = true;
+        }
+    }
+    
+    // Smooth animation update with throttling
+    let updateTimeout = null;
+    function smoothUpdateAnimation() {
+        if (updateTimeout) {
+            clearTimeout(updateTimeout);
+        }
+        updateTimeout = setTimeout(() => {
+            updateAnimation();
+        }, 16); // ~60fps
+    }
+    
+    // Animate h value smoothly to 0
+    function animateToLimit() {
+        if (isAnimating) return;
+        
+        isAnimating = true;
+        animationStartTime = Date.now();
+        const startH = parseFloat(document.getElementById('h-slider').value);
+        const endH = 0.01;
+        const slider = document.getElementById('h-slider');
+        
+        function animate() {
+            const elapsed = Date.now() - animationStartTime;
+            const progress = Math.min(elapsed / animationDuration, 1);
+            
+            // Easing function for smooth animation
+            const easeInOutCubic = t => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+            const easedProgress = easeInOutCubic(progress);
+            
+            const currentH = startH + (endH - startH) * easedProgress;
+            slider.value = currentH;
+            updateAnimation();
+            
+            if (progress < 1) {
+                animationFrameId = requestAnimationFrame(animate);
+            } else {
+                isAnimating = false;
+                animationFrameId = null;
+            }
+        }
+        
+        animate();
+    }
+    
+    // Reset animation
+    function resetAnimation() {
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+        }
+        isAnimating = false;
+        
+        const slider = document.getElementById('h-slider');
+        slider.value = 1;
+        updateAnimation();
+    }
+    
+    // ===== PERFORMANCE TRACKING =====
+    
+    function showPerformanceSummary() {
+        const panel = document.getElementById('feedback-panel');
+        const summary = document.getElementById('performance-summary');
+        const tips = document.getElementById('personalized-tips');
+        
+        // Calculate performance metrics
+        const accuracy = learningStats.problemsAttempted > 0 ? 
+            Math.round((learningStats.problemsCorrect / learningStats.problemsAttempted) * 100) : 0;
+        const avgTime = learningStats.problemsCorrect > 0 ? 
+            Math.round(learningStats.totalTime / learningStats.problemsCorrect / 1000) : 0;
+        
+        // Create performance cards
+        summary.innerHTML = `
+            <div class="stat-card">
+                <div class="stat-number">${learningStats.problemsAttempted}</div>
+                <div class="stat-label">Problems Attempted</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">${learningStats.problemsCorrect}</div>
+                <div class="stat-label">Correct Answers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">${accuracy}%</div>
+                <div class="stat-label">Accuracy Rate</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">${learningStats.hintsUsed}</div>
+                <div class="stat-label">Hints Used</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">${avgTime}s</div>
+                <div class="stat-label">Avg Time/Problem</div>
+            </div>
+        `;
+        
+        // Generate personalized tips
+        let tipsHTML = '<h4>🎯 Personalized Learning Tips:</h4><ul>';
+        
+        if (accuracy < 50) {
+            tipsHTML += '<li>📚 Review the basic differentiation rules (power, product, quotient, chain)</li>';
+            tipsHTML += '<li>🎯 Focus on polynomial functions first before moving to trigonometric</li>';
+        } else if (accuracy < 80) {
+            tipsHTML += '<li>💪 You\'re doing well! Practice more complex functions to improve</li>';
+            tipsHTML += '<li>🔍 Pay attention to the chain rule for composite functions</li>';
+        } else {
+            tipsHTML += '<li>🌟 Excellent work! You\'ve mastered the basics</li>';
+            tipsHTML += '<li>🚀 Try challenging yourself with implicit differentiation</li>';
+        }
+        
+        if (learningStats.hintsUsed > learningStats.problemsAttempted * 0.5) {
+            tipsHTML += '<li>💡 Try solving problems without hints first to build confidence</li>';
+        }
+        
+        if (learningStats.commonMistakes.length > 0) {
+            tipsHTML += '<li>⚠️ Watch out for sign errors and coefficient mistakes</li>';
+        }
+        
+        tipsHTML += '</ul>';
+        tips.innerHTML = tipsHTML;
+        
+        panel.style.display = 'block';
+        panel.scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    function resetProgress() {
+        if (confirm('Are you sure you want to reset your learning progress?')) {
+            learningStats = {
+                problemsAttempted: 0,
+                problemsCorrect: 0,
+                hintsUsed: 0,
+                totalTime: 0,
+                startTime: null,
+                commonMistakes: []
+            };
+            
+            document.getElementById('feedback-panel').style.display = 'none';
+                         alert('Progress reset successfully! Start practicing to build new stats.');
+         }
+     }
+     
+     // ===== MATH HELP SYSTEM =====
+     
+     // Function to toggle math help popup
+     function toggleMathHelp() {
+         const popup = document.getElementById('math-shortcuts-popup');
+         if (popup.style.display === 'none' || popup.style.display === '') {
+             popup.style.display = 'block';
+             popup.style.animation = 'slideIn 0.3s ease-out';
+         } else {
+             popup.style.display = 'none';
+         }
+     }
+     
+     // Close math help when clicking outside
+     document.addEventListener('click', function(event) {
+         const popup = document.getElementById('math-shortcuts-popup');
+         const helpBtn = document.querySelector('.math-help-btn');
+         
+         if (!popup.contains(event.target) && !helpBtn.contains(event.target)) {
+             popup.style.display = 'none';
+         }
+     });
+     
+     // Debug function to check what's working
+     function debugFeatures() {
+         console.log("=== DEBUGGING LINEAR APPROXIMATIONS PAGE ===");
+         
+         // Check MathQuill
+         if (typeof MathQuill !== 'undefined') {
+             console.log("✅ MathQuill is loaded");
+             console.log("📊 MathFields initialized:", Object.keys(mathFields).length);
+         } else {
+             console.log("❌ MathQuill is not loaded");
+         }
+         
+         // Check Math.js
+         if (typeof math !== 'undefined') {
+             console.log("✅ Math.js is loaded");
+         } else {
+             console.log("❌ Math.js is not loaded");
+         }
+         
+         // Check Plotly
+         if (typeof Plotly !== 'undefined') {
+             console.log("✅ Plotly is loaded");
+         } else {
+             console.log("❌ Plotly is not loaded");
+         }
+         
+         // Check MathJax
+         if (typeof MathJax !== 'undefined') {
+             console.log("✅ MathJax is loaded");
+         } else {
+             console.log("❌ MathJax is not loaded");
+         }
+         
+         // Check key functions
+         const functions = [
+             'showTextbookExample', 'generateProblem', 'checkSolverAnswer', 
+             'startWalkthrough', 'initializeDragDrop', 'initializeAnimation',
+             'insertSymbol', 'insertSolverSymbol', 'showHint', 'checkAnswer'
+         ];
+         
+         functions.forEach(func => {
+             if (typeof window[func] === 'function') {
+                 console.log(`✅ ${func} is defined`);
+             } else {
+                 console.log(`❌ ${func} is missing`);
+             }
+         });
+         
+         console.log("=== END DEBUG ===");
+     }
+     
+     // Auto-run debug on page load (remove this in production)
+     setTimeout(debugFeatures, 2000);
+     
+     // Enhanced keyboard shortcuts for MathQuill
+     document.addEventListener('keydown', function(event) {
+         // Global shortcuts
+         if (event.ctrlKey || event.metaKey) {
+             switch(event.key) {
+                 case 'h':
+                     event.preventDefault();
+                     toggleMathHelp();
+                     break;
+                 case 'Enter':
+                     event.preventDefault();
+                     if (currentProblem) {
+                         checkSolverAnswer();
+                     }
+                     break;
+             }
+         }
+         
+         // Escape key to close popups
+         if (event.key === 'Escape') {
+             document.getElementById('math-shortcuts-popup').style.display = 'none';
+             closeHint();
+             closePopup();
+         }
+     });
+</script>
+
+<!-- Back to Profile Button -->
+<div style="margin: 40px auto; text-align: center; max-width: 800px;">
+    <div style="background: white; border: 2px solid black; border-radius: 10px; padding: 30px; box-shadow: 4px 4px black;">
+        <h3 style="color: #323232; margin-bottom: 20px;">Congratulations! You've finished this topic!</h3>
+        <p style="color: #666; margin-bottom: 25px;">Click the button below to mark this topic as completed and return to your profile.</p>
+        <button onclick="completeTopicAndReturn()" style="background: linear-gradient(135deg, #ff6b6b, #ff8e8e); color: white; border: 2px solid black; border-radius: 12px; padding: 18px 35px; font-size: 18px; font-weight: 700; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 6px 6px 0px black; position: relative; overflow: hidden; min-width: 280px; display: inline-flex; align-items: center; justify-content: center; gap: 10px;" onmouseover="this.style.transform='translate(-2px, -2px)'; this.style.boxShadow='8px 8px 0px black'; this.style.background='linear-gradient(135deg, #1dd1a1, #4dd1a1)'" onmouseout="this.style.transform='translate(0px, 0px)'; this.style.boxShadow='6px 6px 0px black'; this.style.background='linear-gradient(135deg, #ff6b6b, #ff8e8e)'" onmousedown="this.style.transform='translate(3px, 3px)'; this.style.boxShadow='3px 3px 0px black'" onmouseup="this.style.transform='translate(-2px, -2px)'; this.style.boxShadow='8px 8px 0px black'">
+            ✓ Complete Topic & Return to Profile
+        </button>
+    </div>
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+

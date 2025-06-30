@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derivative Calculator & Graph Generator - MathAnywhere</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/templatemo-topic-listing.css" rel="stylesheet">
+    
+    <!-- MathJax for LaTeX rendering -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- MathQuill for interactive math input -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+    
+    <!-- Math.js for calculations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.3.0/math.min.js"></script>
+    
+    <!-- Chart.js for graphing -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- SweetAlert2 for better alerts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+    <style>
+        :root {
+            /* Color Variables */
+            --main-color: #323232;
+            --accent-color: #ff6b6b;
+            --secondary-color: #feca57;
+            --tertiary-color: #1dd1a1;
+            --bg-color: #f7f9fc;
+            --font-color: #323232;
+            --font-color-sub: #666;
+            --input-focus: #2d8cf0;
+            --light-blue: #54a0ff;
+            --pink: #ff9ff3;
+            --purple: #5f27cd;
+            --success-color: #2ecc71;
+
+            /* Shadows */
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 4px 4px var(--main-color);
+            --shadow-lg: 6px 6px var(--main-color);
+            --shadow-hover: 2px 2px var(--main-color);
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            color: var(--font-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .calculator-container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            border: 2px solid var(--main-color);
+            transition: all 0.3s ease;
+        }
+
+        .calculator-header {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border: 2px solid var(--main-color);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .calculator-header h1 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 2.2rem;
+        }
+
+        .calculator-header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .calculator-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 2px solid var(--main-color);
+        }
+
+        .calculator-section:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-3px);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--font-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            font-size: 1.8rem;
+        }
+
+        .math-input-container {
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .math-input-label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--font-color);
+            display: block;
+        }
+
+        .math-field {
+            width: 100%;
+            min-height: 60px;
+            padding: 15px;
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+            font-size: 18px;
+            color: var(--font-color);
+            background-color: white;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .math-field:focus {
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 3px rgba(45, 140, 240, 0.1);
+        }
+
+        .math-keyboard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+            justify-content: center;
+            padding: 15px;
+            background-color: var(--bg-color);
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 2px solid var(--main-color);
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 16px;
+            color: var(--font-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .math-key:hover {
+            background-color: var(--accent-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .calculator-btn {
+            background-color: white;
+            color: var(--font-color);
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            margin: 10px 5px;
+        }
+
+        .calculator-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--tertiary-color);
+            transition: all 0.4s ease;
+            z-index: -1;
+        }
+
+        .calculator-btn:hover:before {
+            left: 0;
+        }
+
+        .calculator-btn:hover {
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .calculator-btn.primary {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+        }
+
+        .calculator-btn.primary:before {
+            background: linear-gradient(135deg, var(--secondary-color), var(--tertiary-color));
+        }
+
+        .result-container {
+            background-color: var(--bg-color);
+            border: 2px solid var(--tertiary-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-content {
+            font-size: 1.2rem;
+            color: var(--font-color);
+            text-align: center;
+        }
+
+        .result-latex {
+            font-size: 1.4rem;
+            color: var(--tertiary-color);
+            margin: 10px 0;
+        }
+
+        .graph-container {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            border: 2px solid var(--main-color);
+            box-shadow: var(--shadow-md);
+        }
+
+        #graphCanvas {
+            width: 100% !important;
+            height: 400px !important;
+            border-radius: 8px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .examples-section {
+            background: linear-gradient(135deg, var(--light-blue)15, var(--purple)05);
+            border: 2px solid var(--light-blue);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .example-btn {
+            background-color: var(--light-blue);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 15px;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .example-btn:hover {
+            background-color: var(--purple);
+            transform: translateY(-2px);
+        }
+
+        .toast-notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            background-color: white;
+            color: var(--font-color);
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 4px 4px var(--main-color);
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .toast-notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast-icon {
+            font-size: 24px;
+            margin-right: 15px;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--accent-color);
+        }
+
+        .toast-message {
+            font-size: 14px;
+            color: var(--font-color-sub);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse-animation {
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .calculator-container {
+                margin: 15px;
+                padding: 20px;
+            }
+            
+            .calculator-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .math-keyboard {
+                gap: 5px;
+            }
+            
+            .math-key {
+                padding: 6px 8px;
+                font-size: 14px;
+                min-width: 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="home.html">
+                <i class="bi-back"></i>
+                <span>MathAnywhere</span>
+            </a>
+
+            <div class="d-lg-none ms-auto me-4">
+                <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
+            </div>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-lg-5 me-lg-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#section_2">Lessons</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="quiz.html">Quiz</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="calculator-container">
+        <!-- Header -->
+        <div class="calculator-header">
+            <h1>🧮 Derivative Calculator & Graph Generator</h1>
+            <p>Calculate derivatives and visualize functions with interactive LaTeX input</p>
+        </div>
+
+        <!-- Derivative Calculator Section -->
+        <div class="calculator-section">
+            <div class="section-title">
+                <span class="section-icon">📊</span>
+                Derivative Calculator
+            </div>
+            <p>Enter a mathematical expression to calculate its derivative with respect to <strong>x</strong>:</p>
+            
+            <div class="math-input-container">
+                <label class="math-input-label">Function f(x):</label>
+                <span id="derivativeInput" class="math-field"></span>
+                
+                <!-- Math Keyboard -->
+                <div class="math-keyboard">
+                    <div class="math-key" data-symbol="x">x</div>
+                    <div class="math-key" data-symbol="^">^</div>
+                    <div class="math-key" data-symbol="(">(</div>
+                    <div class="math-key" data-symbol=")">)</div>
+                    <div class="math-key" data-symbol="+">+</div>
+                    <div class="math-key" data-symbol="-">-</div>
+                    <div class="math-key" data-symbol="*">×</div>
+                    <div class="math-key" data-symbol="/">/</div>
+                    <div class="math-key" data-symbol="sin">sin</div>
+                    <div class="math-key" data-symbol="cos">cos</div>
+                    <div class="math-key" data-symbol="tan">tan</div>
+                    <div class="math-key" data-symbol="ln">ln</div>
+                    <div class="math-key" data-symbol="log">log</div>
+                    <div class="math-key" data-symbol="e">e</div>
+                    <div class="math-key" data-symbol="pi">π</div>
+                    <div class="math-key" data-symbol="sqrt">√</div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="calculator-btn primary" onclick="calculateDerivative()">
+                    📈 Calculate Derivative
+                </button>
+                <button class="calculator-btn" onclick="clearDerivativeInput()">
+                    🗑️ Clear
+                </button>
+            </div>
+
+            <div id="derivativeResult" class="result-container" style="display: none;">
+                <div class="result-content">
+                    <div><strong>Derivative f'(x):</strong></div>
+                    <div id="derivativeLatex" class="result-latex"></div>
+                </div>
+            </div>
+
+            <!-- Examples Section -->
+            <div class="examples-section">
+                <h5>📝 Quick Examples:</h5>
+                <button class="example-btn" onclick="setExample('x^2')">x²</button>
+                <button class="example-btn" onclick="setExample('sin(x)')">sin(x)</button>
+                <button class="example-btn" onclick="setExample('e^x')">eˣ</button>
+                <button class="example-btn" onclick="setExample('ln(x)')">ln(x)</button>
+                <button class="example-btn" onclick="setExample('x^3 + 2*x^2 - 5*x + 1')">Polynomial</button>
+                <button class="example-btn" onclick="setExample('cos(x^2)')">cos(x²)</button>
+            </div>
+        </div>
+
+        <!-- Graph Generator Section -->
+        <div class="calculator-section">
+            <div class="section-title">
+                <span class="section-icon">📈</span>
+                Function Graph Generator
+            </div>
+            <p>Enter a mathematical expression to generate its graph:</p>
+            
+            <div class="math-input-container">
+                <label class="math-input-label">Function g(x):</label>
+                <span id="graphInput" class="math-field"></span>
+                
+                <!-- Math Keyboard for Graph -->
+                <div class="math-keyboard">
+                    <div class="math-key" data-target="graph" data-symbol="x">x</div>
+                    <div class="math-key" data-target="graph" data-symbol="^">^</div>
+                    <div class="math-key" data-target="graph" data-symbol="(">(</div>
+                    <div class="math-key" data-target="graph" data-symbol=")">)</div>
+                    <div class="math-key" data-target="graph" data-symbol="+">+</div>
+                    <div class="math-key" data-target="graph" data-symbol="-">-</div>
+                    <div class="math-key" data-target="graph" data-symbol="*">×</div>
+                    <div class="math-key" data-target="graph" data-symbol="/">/</div>
+                    <div class="math-key" data-target="graph" data-symbol="sin">sin</div>
+                    <div class="math-key" data-target="graph" data-symbol="cos">cos</div>
+                    <div class="math-key" data-target="graph" data-symbol="tan">tan</div>
+                    <div class="math-key" data-target="graph" data-symbol="ln">ln</div>
+                    <div class="math-key" data-target="graph" data-symbol="log">log</div>
+                    <div class="math-key" data-target="graph" data-symbol="e">e</div>
+                    <div class="math-key" data-target="graph" data-symbol="pi">π</div>
+                    <div class="math-key" data-target="graph" data-symbol="sqrt">√</div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="calculator-btn primary" onclick="generateGraph()">
+                    🎨 Generate Graph
+                </button>
+                <button class="calculator-btn" onclick="clearGraphInput()">
+                    🗑️ Clear
+                </button>
+                <button class="calculator-btn" onclick="showBothGraphs()">
+                    📊 Show f(x) & f'(x)
+                </button>
+            </div>
+
+            <div id="graphContainer" class="graph-container" style="display: none;">
+                <canvas id="graphCanvas"></canvas>
+            </div>
+        </div>
+
+        <!-- Back to Home Button -->
+        <div class="button-group">
+            <button class="calculator-btn" onclick="window.location.href='home.html'">
+                🏠 Back to Home
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let MQ = null;
+        let derivativeField = null;
+        let graphField = null;
+        let currentChart = null;
+
+        // Initialize MathQuill when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            MQ = MathQuill.getInterface(2);
+            
+            // Initialize derivative input field
+            derivativeField = MQ.MathField(document.getElementById('derivativeInput'), {
+                spaceBehavesLikeTab: true,
+                leftRightIntoCmdGoes: 'up',
+                restrictMismatchedBrackets: true,
+                sumStartsWithNEquals: true,
+                supSubsRequireOperand: true,
+                charsThatBreakOutOfSupSub: '+-=<>',
+                autoSubscriptNumerals: true,
+                autoCommands: 'pi theta sqrt sum prod alpha beta gamma delta epsilon zeta eta theta iota kappa lambda mu nu xi omicron rho sigma tau upsilon phi chi psi omega',
+                autoOperatorNames: 'sin cos tan sec csc cot sinh cosh tanh log ln exp lim max min',
+                handlers: {
+                    edit: function() {
+                        // Auto-save as user types
+                    }
+                }
+            });
+
+            // Initialize graph input field
+            graphField = MQ.MathField(document.getElementById('graphInput'), {
+                spaceBehavesLikeTab: true,
+                leftRightIntoCmdGoes: 'up',
+                restrictMismatchedBrackets: true,
+                sumStartsWithNEquals: true,
+                supSubsRequireOperand: true,
+                charsThatBreakOutOfSupSub: '+-=<>',
+                autoSubscriptNumerals: true,
+                autoCommands: 'pi theta sqrt sum prod alpha beta gamma delta epsilon zeta eta theta iota kappa lambda mu nu xi omicron rho sigma tau upsilon phi chi psi omega',
+                autoOperatorNames: 'sin cos tan sec csc cot sinh cosh tanh log ln exp lim max min',
+                handlers: {
+                    edit: function() {
+                        // Auto-save as user types
+                    }
+                }
+            });
+
+            // Setup math keyboard event listeners
+            setupMathKeyboard();
+        });
+
+        // Setup math keyboard functionality
+        function setupMathKeyboard() {
+            document.querySelectorAll('.math-key').forEach(key => {
+                key.addEventListener('click', function() {
+                    const symbol = this.getAttribute('data-symbol');
+                    const target = this.getAttribute('data-target');
+                    
+                    if (target === 'graph') {
+                        if (graphField) {
+                            insertSymbol(graphField, symbol);
+                        }
+                    } else {
+                        if (derivativeField) {
+                            insertSymbol(derivativeField, symbol);
+                        }
+                    }
+                });
+            });
+        }
+
+        // Insert symbol into MathQuill field
+        function insertSymbol(field, symbol) {
+            switch(symbol) {
+                case 'sin':
+                case 'cos':
+                case 'tan':
+                case 'ln':
+                case 'log':
+                    field.cmd('\\' + symbol);
+                    field.cmd('(');
+                    break;
+                case 'sqrt':
+                    field.cmd('\\sqrt');
+                    break;
+                case 'pi':
+                    field.cmd('\\pi');
+                    break;
+                case 'e':
+                    field.write('e');
+                    break;
+                case '*':
+                    field.write('\\cdot');
+                    break;
+                default:
+                    field.write(symbol);
+            }
+            field.focus();
+        }
+
+        // Calculate derivative function
+        function calculateDerivative() {
+            if (!derivativeField) {
+                showToast('Error', 'MathQuill not initialized', 'error');
+                return;
+            }
+
+            const latex = derivativeField.latex();
+            if (!latex.trim()) {
+                showToast('Input Required', 'Please enter a function to differentiate', 'warning');
+                return;
+            }
+
+            try {
+                // Convert LaTeX to math.js compatible format
+                const mathExpression = convertLatexToMathJS(latex);
+                console.log('Math expression:', mathExpression);
+
+                // Parse and differentiate
+                const parsedFunction = math.parse(mathExpression);
+                const derivative = math.derivative(parsedFunction, 'x');
+                
+                // Convert result back to LaTeX
+                const resultLatex = convertMathJSToLatex(derivative.toString());
+                
+                // Display result
+                document.getElementById('derivativeResult').style.display = 'block';
+                document.getElementById('derivativeLatex').innerHTML = `\\[${resultLatex}\\]`;
+                
+                // Re-render MathJax
+                if (window.MathJax && window.MathJax.typesetPromise) {
+                    window.MathJax.typesetPromise([document.getElementById('derivativeLatex')]);
+                }
+
+                showToast('Success!', 'Derivative calculated successfully', 'success');
+                
+            } catch (error) {
+                console.error('Derivative calculation error:', error);
+                showToast('Calculation Error', 'Invalid mathematical expression. Please check your input.', 'error');
+            }
+        }
+
+        // Generate graph function
+        function generateGraph() {
+            if (!graphField) {
+                showToast('Error', 'MathQuill not initialized', 'error');
+                return;
+            }
+
+            const latex = graphField.latex();
+            if (!latex.trim()) {
+                showToast('Input Required', 'Please enter a function to graph', 'warning');
+                return;
+            }
+
+            try {
+                // Convert LaTeX to math.js compatible format
+                const mathExpression = convertLatexToMathJS(latex);
+                console.log('Graph expression:', mathExpression);
+
+                // Parse the expression
+                const expr = math.compile(mathExpression);
+                
+                // Generate data points
+                const xValues = [];
+                const yValues = [];
+                
+                for (let x = -10; x <= 10; x += 0.1) {
+                    try {
+                        const y = expr.evaluate({ x });
+                        if (isFinite(y) && !isNaN(y)) {
+                            xValues.push(x);
+                            yValues.push(y);
+                        }
+                    } catch (e) {
+                        // Skip invalid points
+                    }
+                }
+
+                if (xValues.length === 0) {
+                    throw new Error('No valid points generated');
+                }
+
+                // Create the graph
+                createChart(xValues, yValues, `f(x) = ${latex}`, false);
+                
+                document.getElementById('graphContainer').style.display = 'block';
+                showToast('Success!', 'Graph generated successfully', 'success');
+                
+            } catch (error) {
+                console.error('Graph generation error:', error);
+                showToast('Graph Error', 'Unable to generate graph. Please check your function.', 'error');
+            }
+        }
+
+        // Show both function and derivative graphs
+        function showBothGraphs() {
+            if (!derivativeField || !graphField) {
+                showToast('Error', 'Please enter functions in both fields', 'warning');
+                return;
+            }
+
+            const functionLatex = graphField.latex();
+            const derivativeLatex = derivativeField.latex();
+            
+            if (!functionLatex.trim()) {
+                showToast('Input Required', 'Please enter a function to graph', 'warning');
+                return;
+            }
+
+            try {
+                // Convert LaTeX to math.js
+                const functionExpr = math.compile(convertLatexToMathJS(functionLatex));
+                
+                // Calculate derivative if not already done
+                let derivativeExpr;
+                if (derivativeLatex.trim()) {
+                    derivativeExpr = math.compile(convertLatexToMathJS(derivativeLatex));
+                } else {
+                    const parsedFunction = math.parse(convertLatexToMathJS(functionLatex));
+                    const derivative = math.derivative(parsedFunction, 'x');
+                    derivativeExpr = math.compile(derivative.toString());
+                }
+
+                // Generate data for both functions
+                const xValues = [];
+                const functionValues = [];
+                const derivativeValues = [];
+                
+                for (let x = -10; x <= 10; x += 0.1) {
+                    try {
+                        const fVal = functionExpr.evaluate({ x });
+                        const dfVal = derivativeExpr.evaluate({ x });
+                        
+                        if (isFinite(fVal) && !isNaN(fVal) && isFinite(dfVal) && !isNaN(dfVal)) {
+                            xValues.push(x);
+                            functionValues.push(fVal);
+                            derivativeValues.push(dfVal);
+                        }
+                    } catch (e) {
+                        // Skip invalid points
+                    }
+                }
+
+                // Create dual chart
+                createDualChart(xValues, functionValues, derivativeValues, functionLatex);
+                
+                document.getElementById('graphContainer').style.display = 'block';
+                showToast('Success!', 'Both graphs generated successfully', 'success');
+                
+            } catch (error) {
+                console.error('Dual graph error:', error);
+                showToast('Graph Error', 'Unable to generate graphs. Please check your functions.', 'error');
+            }
+        }
+
+        // Create single chart
+        function createChart(xValues, yValues, label, isDerivative = false) {
+            const ctx = document.getElementById('graphCanvas').getContext('2d');
+            
+            if (currentChart) {
+                currentChart.destroy();
+            }
+
+            const color = isDerivative ? 'rgba(255, 107, 107, 1)' : 'rgba(29, 209, 161, 1)';
+            const bgColor = isDerivative ? 'rgba(255, 107, 107, 0.1)' : 'rgba(29, 209, 161, 0.1)';
+
+            currentChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        label: label,
+                        data: yValues,
+                        borderColor: color,
+                        backgroundColor: bgColor,
+                        borderWidth: 3,
+                        fill: false,
+                        pointRadius: 0,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'x',
+                                font: { size: 16, weight: 'bold' }
+                            },
+                            grid: { color: 'rgba(0,0,0,0.1)' }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'y',
+                                font: { size: 16, weight: 'bold' }
+                            },
+                            grid: { color: 'rgba(0,0,0,0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Create dual chart for function and derivative
+        function createDualChart(xValues, functionValues, derivativeValues, functionLabel) {
+            const ctx = document.getElementById('graphCanvas').getContext('2d');
+            
+            if (currentChart) {
+                currentChart.destroy();
+            }
+
+            currentChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: xValues,
+                    datasets: [
+                        {
+                            label: `f(x) = ${functionLabel}`,
+                            data: functionValues,
+                            borderColor: 'rgba(29, 209, 161, 1)',
+                            backgroundColor: 'rgba(29, 209, 161, 0.1)',
+                            borderWidth: 3,
+                            fill: false,
+                            pointRadius: 0,
+                            tension: 0.1
+                        },
+                        {
+                            label: `f'(x)`,
+                            data: derivativeValues,
+                            borderColor: 'rgba(255, 107, 107, 1)',
+                            backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                            borderWidth: 3,
+                            fill: false,
+                            pointRadius: 0,
+                            tension: 0.1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'x',
+                                font: { size: 16, weight: 'bold' }
+                            },
+                            grid: { color: 'rgba(0,0,0,0.1)' }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'y',
+                                font: { size: 16, weight: 'bold' }
+                            },
+                            grid: { color: 'rgba(0,0,0,0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Convert LaTeX to Math.js compatible format
+        function convertLatexToMathJS(latex) {
+            let result = latex;
+            
+            // Handle common LaTeX commands
+            result = result.replace(/\\cdot/g, '*');
+            result = result.replace(/\\times/g, '*');
+            result = result.replace(/\\div/g, '/');
+            result = result.replace(/\\pi/g, 'pi');
+            result = result.replace(/\\sin/g, 'sin');
+            result = result.replace(/\\cos/g, 'cos');
+            result = result.replace(/\\tan/g, 'tan');
+            result = result.replace(/\\ln/g, 'log');
+            result = result.replace(/\\log/g, 'log10');
+            result = result.replace(/\\sqrt{([^}]+)}/g, 'sqrt($1)');
+            result = result.replace(/\\frac{([^}]+)}{([^}]+)}/g, '($1)/($2)');
+            result = result.replace(/\^{([^}]+)}/g, '^($1)');
+            result = result.replace(/_{([^}]+)}/g, '_($1)');
+            
+            // Handle implicit multiplication
+            result = result.replace(/(\d)([a-zA-Z])/g, '$1*$2');
+            result = result.replace(/([a-zA-Z])(\d)/g, '$1*$2');
+            result = result.replace(/\)(\w)/g, ')*$1');
+            result = result.replace(/(\w)\(/g, '$1*(');
+            
+            return result;
+        }
+
+        // Convert Math.js result to LaTeX
+        function convertMathJSToLatex(mathjs) {
+            let result = mathjs;
+            
+            // Convert common functions back to LaTeX
+            result = result.replace(/\*/g, ' \\cdot ');
+            result = result.replace(/sin/g, '\\sin');
+            result = result.replace(/cos/g, '\\cos');
+            result = result.replace(/tan/g, '\\tan');
+            result = result.replace(/log/g, '\\ln');
+            result = result.replace(/sqrt\(([^)]+)\)/g, '\\sqrt{$1}');
+            result = result.replace(/\^([^*+\-\/\s]+)/g, '^{$1}');
+            
+            return result;
+        }
+
+        // Set example function
+        function setExample(expression) {
+            if (derivativeField) {
+                derivativeField.latex(expression);
+                derivativeField.focus();
+            }
+            if (graphField) {
+                graphField.latex(expression);
+            }
+        }
+
+        // Clear derivative input
+        function clearDerivativeInput() {
+            if (derivativeField) {
+                derivativeField.latex('');
+                derivativeField.focus();
+            }
+            document.getElementById('derivativeResult').style.display = 'none';
+        }
+
+        // Clear graph input
+        function clearGraphInput() {
+            if (graphField) {
+                graphField.latex('');
+                graphField.focus();
+            }
+            document.getElementById('graphContainer').style.display = 'none';
+            if (currentChart) {
+                currentChart.destroy();
+                currentChart = null;
+            }
+        }
+
+        // Show toast notification
+        function showToast(title, message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = 'toast-notification';
+            
+            const icons = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: 'ℹ️'
+            };
+            
+            toast.innerHTML = `
+                <div class="toast-icon">${icons[type] || icons.info}</div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+            
+            // Animate out
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    if (document.body.contains(toast)) {
+                        document.body.removeChild(toast);
+                    }
+                }, 500);
+            }, 3000);
+        }
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+

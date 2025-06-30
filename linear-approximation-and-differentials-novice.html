@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear Approximation & Differentials - Novice | MathAnywhere</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- MathQuill resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+    
+    <!-- MathJax for rendering mathematical expressions -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Plotly for interactive graphs -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                packages: {'[+]': ['color']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <style>
+        :root {
+            --input-focus: #2d8cf0;
+            --font-color: #323232;
+            --font-color-sub: #666;
+            --bg-color: #f7f9fc;
+            --main-color: black;
+            --accent-color: #1dd1a1;
+            --secondary-color: #54a0ff;
+            --tertiary-color: #5f27cd;
+            --light-blue: #74b9ff;
+            --pink: #fd79a8;
+            --purple: #6c5ce7;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fira Code', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: var(--font-color);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(29, 209, 161, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(84, 160, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(95, 39, 205, 0.15) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            box-shadow: 
+                20px 20px 60px rgba(0, 0, 0, 0.1),
+                -20px -20px 60px rgba(255, 255, 255, 0.8),
+                inset 5px 5px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            border: 2px solid var(--main-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 3px solid var(--main-color);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 3em;
+            font-weight: 900;
+            position: relative;
+            z-index: 1;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.25);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+            z-index: 1;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 50px;
+        }
+
+        .question-container {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid var(--main-color);
+            box-shadow: 
+                8px 8px 20px rgba(0, 0, 0, 0.1),
+                -8px -8px 20px rgba(255, 255, 255, 0.7);
+            transition: all 0.4s ease;
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            border: 3px solid var(--main-color);
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            line-height: 1.7;
+            color: var(--font-color);
+            font-weight: 600;
+        }
+
+        .math-expression {
+            background: linear-gradient(135deg, #e8f8f5, #d1ecf1);
+            padding: 20px;
+            border-radius: 15px;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.4em;
+            text-align: center;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .math-input-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+            box-shadow: 
+                inset 2px 2px 5px rgba(0, 0, 0, 0.1),
+                inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .input-label {
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            display: block;
+            font-size: 1.1em;
+        }
+
+        .math-hint {
+            background: rgba(29, 209, 161, 0.1);
+            border-left: 4px solid var(--accent-color);
+            padding: 10px 15px;
+            margin-top: 10px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9em;
+        }
+
+        .answer-feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        .answer-feedback.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .answer-feedback.correct {
+            background: linear-gradient(135deg, var(--success-color), #20c997);
+            color: white;
+        }
+
+        .answer-feedback.incorrect {
+            background: linear-gradient(135deg, var(--danger-color), #fd7e14);
+            color: white;
+        }
+
+        .check-answer-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .check-answer-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--tertiary-color) 100%);
+            color: white;
+            border: 3px solid var(--main-color);
+            padding: 18px 50px;
+            border-radius: 50px;
+            font-size: 1.3em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            margin: 40px auto;
+            display: block;
+        }
+
+        .results {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+            text-align: center;
+            border: 3px solid var(--main-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .score {
+            font-size: 4em;
+            font-weight: 900;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .score.pass {
+            color: var(--success-color);
+        }
+
+        .score.fail {
+            color: var(--danger-color);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 3px solid var(--main-color);
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.4s ease;
+            flex: 1;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .nav-btn:hover {
+            color: white;
+            transform: translateY(-3px);
+            text-decoration: none;
+        }
+
+        .progress-bar {
+            background: rgba(233, 236, 239, 0.8);
+            height: 12px;
+            border-radius: 25px;
+            margin: 25px 0;
+            overflow: hidden;
+            border: 2px solid var(--main-color);
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--accent-color), var(--secondary-color), var(--tertiary-color));
+            height: 100%;
+            border-radius: 25px;
+            transition: width 0.6s ease;
+            width: 0%;
+        }
+
+        /* MathQuill styling */
+        .mathquill-field {
+            width: 100%;
+            margin: 15px 0;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            min-height: 50px;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.1),
+                -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .mathquill-field:focus-within {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(29, 209, 161, 0.3);
+            transform: scale(1.02);
+        }
+
+        /* Text input field styling */
+        .text-input-field-wrapper {
+            width: 100%;
+            margin: 15px 0;
+        }
+        
+        .text-input-field {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: rgba(255, 255, 255, 0.95);
+            transition: all 0.3s ease;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.1),
+                -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+        
+        .text-input-field:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(29, 209, 161, 0.3);
+            transform: scale(1.02);
+        }
+
+        /* Interactive Graph Container */
+        .graph-container {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid var(--accent-color);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .graph-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .graph-control-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .graph-control-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        .graph-visualization {
+            width: 100%;
+            height: 400px;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        }
+
+        /* Answer format guides */
+        .answer-format {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(52, 152, 219, 0.05);
+            border: 1px dashed #3498db;
+            border-radius: 8px;
+            color: #333;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            text-align: center;
+            font-weight: normal;
+            position: relative;
+        }
+        
+        .answer-format::before {
+            content: "📝 Answer Format Guide";
+            position: absolute;
+            top: -12px;
+            left: 10px;
+            background: #3498db;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Show answer guide button */
+        .show-answer-btn {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            color: #333;
+            border: 1px solid #ccc;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            display: block;
+        }
+        
+        .show-answer-btn:hover {
+            background: linear-gradient(135deg, #fad0c4, #ff9a9e);
+            transform: translateY(-2px);
+        }
+
+        /* Enhanced Mathematical Toolbar Styling */
+        .math-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid var(--main-color);
+            border-radius: 15px;
+            box-shadow: 
+                2px 2px 8px rgba(0, 0, 0, 0.1),
+                -2px -2px 8px rgba(255, 255, 255, 0.8);
+            position: relative;
+        }
+
+        .math-toolbar::before {
+            content: "📐 Math Toolbar";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .math-toolbar:hover::before {
+            transform: scale(1.05);
+        }
+
+        .math-btn {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 40px;
+            text-align: center;
+            color: var(--main-color);
+            box-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.1),
+                -1px -1px 3px rgba(255, 255, 255, 0.8);
+        }
+
+        .math-btn:hover {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 
+                3px 3px 8px rgba(0, 0, 0, 0.2),
+                -2px -2px 6px rgba(255, 255, 255, 0.9);
+        }
+
+        .math-btn:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        .function-btn {
+            background: linear-gradient(135deg, var(--tertiary-color), var(--accent-color));
+            color: white;
+            font-weight: 700;
+        }
+
+        /* Answer Guide Styling */
+        .answer-guide {
+            background: linear-gradient(135deg, rgba(29, 209, 161, 0.1), rgba(84, 160, 255, 0.1));
+            border: 2px solid var(--accent-color);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 
+                8px 8px 20px rgba(0, 0, 0, 0.1),
+                -8px -8px 20px rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .answer-guide h3 {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            text-align: center;
+            font-weight: 800;
+        }
+
+        .format-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .format-item {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid var(--secondary-color);
+            box-shadow: 
+                4px 4px 8px rgba(0, 0, 0, 0.1),
+                -4px -4px 8px rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .format-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                6px 6px 12px rgba(0, 0, 0, 0.15),
+                -6px -6px 12px rgba(255, 255, 255, 0.9);
+        }
+
+        .format-item strong {
+            color: var(--secondary-color);
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .format-item span {
+            color: var(--font-color);
+            font-family: 'Courier New', monospace;
+            background: rgba(84, 160, 255, 0.1);
+            padding: 5px 8px;
+            border-radius: 6px;
+            font-size: 0.95em;
+        }
+
+        .toggle-btn {
+            background: linear-gradient(135deg, var(--secondary-color), var(--tertiary-color));
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto;
+            box-shadow: 
+                4px 4px 8px rgba(0, 0, 0, 0.2),
+                -4px -4px 8px rgba(255, 255, 255, 0.8);
+        }
+
+        .toggle-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 
+                6px 6px 12px rgba(0, 0, 0, 0.3),
+                -6px -6px 12px rgba(255, 255, 255, 0.9);
+        }
+
+        @media (max-width: 768px) {
+            .format-examples {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .function-btn:hover {
+            background: linear-gradient(135deg, var(--accent-color), var(--main-color));
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Linear Approximation & Differentials</h1>
+            <p>Master the fundamentals of approximating functions with linear models</p>
+            <div class="difficulty-badge">Novice Level</div>
+        </div>
+
+        <div class="content">
+            <!-- Answer Format Guide -->
+            <div class="answer-guide" id="answerGuide">
+                <h3>📝 Answer Format Guide</h3>
+                <div class="format-examples">
+                    <div class="format-item">
+                        <strong>Linear Approximation:</strong>
+                        <span>L(x) = f(a) + f'(a)(x - a)</span>
+                    </div>
+                    <div class="format-item">
+                        <strong>Simple Text Answers:</strong>
+                        <span>estimate, approximate, find</span>
+                    </div>
+                    <div class="format-item">
+                        <strong>Square Roots:</strong>
+                        <span>Use sqrt(): sqrt(x), sqrt(9)</span>
+                    </div>
+                    <div class="format-item">
+                        <strong>Fractions:</strong>
+                        <span>Use / for division: 1/6, (x-9)/6</span>
+                    </div>
+                    <div class="format-item">
+                        <strong>Decimals:</strong>
+                        <span>Use appropriate precision: 2.967, 0.6</span>
+                    </div>
+                    <div class="format-item">
+                        <strong>Functions:</strong>
+                        <span>L(x) = 3 + (1/6)(x-9)</span>
+                    </div>
+                </div>
+                <button id="toggleAnswerGuide" class="toggle-btn">Hide Guide</button>
+            </div>
+
+            <div id="questionsContainer">
+                <!-- Question 1 - What is linear approximation? (Theory) -->
+                <div class="question-container">
+                    <div class="question-number">1</div>
+                    <div class="question-text">
+                        What is the main purpose of linear approximation?
+                    </div>
+                    <div class="math-expression">
+                        Linear approximation helps us estimate function values near a known point
+                    </div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Complete the sentence: "Linear approximation is used to _______ function values near a known point."</label>
+                        
+                        <div class="text-input-field-wrapper">
+                            <input type="text" class="text-input-field" id="question0" placeholder="Type your answer here...">
+                            <div class="answer-format" id="format-0">Hint: What do we do when we don't know the exact value?</div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(0)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-0"></div>
+                        <div class="math-hint">
+                            💡 Hint: Think about what we do when we want to find an approximate value
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Graph for Linear Approximation -->
+                <div class="question-container">
+                    <div class="question-number">📈</div>
+                    <div class="question-text">
+                        Interactive Linear Approximation Visualization
+                    </div>
+                    <div class="math-expression">Explore how tangent lines approximate functions</div>
+                    
+                    <div class="graph-container">
+                        <div class="graph-controls">
+                            <button class="graph-control-btn" onclick="showLinearApprox('sqrt')">f(x) = √x at x = 4</button>
+                            <button class="graph-control-btn" onclick="showLinearApprox('square')">f(x) = x² at x = 2</button>
+                            <button class="graph-control-btn" onclick="showLinearApprox('cubic')">f(x) = x³ at x = 1</button>
+                            <button class="graph-control-btn" onclick="animateLinearApprox()">🎬 Animate</button>
+                            <button class="graph-control-btn" onclick="resetLinearApproxGraph()">🔄 Reset</button>
+                        </div>
+                        <div id="linearApproxGraph" class="graph-visualization"></div>
+                        <p style="margin-top: 15px; color: #666; font-size: 0.9em;">
+                            Click on the function curve to see how well the linear approximation works at different points!
+                        </p>
+                    </div>
+                    </div>
+                    
+                <!-- Question 2 - Linear approximation formula -->
+                <div class="question-container">
+                    <div class="question-number">2</div>
+                    <div class="question-text">
+                        What is the general formula for linear approximation of f(x) near point a?
+                    </div>
+                    <div class="math-expression">
+                        The linear approximation uses the tangent line at point a
+                    </div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Choose the correct formula:</label>
+                        
+                        <div style="margin: 20px 0;">
+                            <div style="margin: 10px 0;">
+                                <input type="radio" id="option2a" name="question2" value="a">
+                                <label for="option2a" style="margin-left: 10px; font-size: 1.1em;">L(x) = f(a) + f'(a)(x - a)</label>
+                            </div>
+                            <div style="margin: 10px 0;">
+                                <input type="radio" id="option2b" name="question2" value="b">
+                                <label for="option2b" style="margin-left: 10px; font-size: 1.1em;">L(x) = f(a) + f'(x)(a - x)</label>
+                            </div>
+                            <div style="margin: 10px 0;">
+                                <input type="radio" id="option2c" name="question2" value="c">
+                                <label for="option2c" style="margin-left: 10px; font-size: 1.1em;">L(x) = f'(a) + f(a)(x - a)</label>
+                            </div>
+                            <div style="margin: 10px 0;">
+                                <input type="radio" id="option2d" name="question2" value="d">
+                                <label for="option2d" style="margin-left: 10px; font-size: 1.1em;">L(x) = f(x) + f'(a)(x - a)</label>
+                            </div>
+                    </div>
+                    
+                        <button class="check-answer-btn" onclick="checkMathAnswer(1)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-1"></div>
+                        <div class="math-hint">
+                            💡 Hint: The linear approximation is the tangent line equation: y - f(a) = f'(a)(x - a)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 3 - Find linear approximation of √x at x = 9 -->
+                <div class="question-container">
+                    <div class="question-number">3</div>
+                    <div class="question-text">
+                        Find the linear approximation of f(x) = √x at a = 9.
+                    </div>
+                    <div class="math-expression">f(x) = √x, a = 9</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Write the linear approximation L(x)</label>
+                        
+                        <div class="mathquill-field" id="question2"></div>
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(2, 'L(x)')">L(x)</button>
+                            <button class="math-btn" onclick="insertMath(2, '=')"> = </button>
+                            <button class="math-btn" onclick="insertMath(2, '3')">3</button>
+                            <button class="math-btn" onclick="insertMath(2, '+')"> + </button>
+                            <button class="math-btn" onclick="insertMath(2, '\\frac{1}{6}')">1/6</button>
+                            <button class="math-btn" onclick="insertMath(2, '(x-9)')">(x-9)</button>
+                            <button class="math-btn" onclick="insertMath(2, '(')"> ( </button>
+                            <button class="math-btn" onclick="insertMath(2, ')')"> ) </button>
+                        </div>
+                        <div class="answer-format" id="format-2">Expected form: L(x) = ___</div>
+                        
+                        <button class="check-answer-btn" onclick="checkMathAnswer(2)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-2"></div>
+                        <div class="math-hint">
+                            💡 Hint: f(9) = 3, f'(x) = 1/(2√x), so f'(9) = 1/6
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 4 - Use linear approximation to estimate √8.8 -->
+                <div class="question-container">
+                    <div class="question-number">4</div>
+                    <div class="question-text">
+                        Use your linear approximation from Question 3 to estimate √8.8.
+                    </div>
+                    <div class="math-expression">L(x) = 3 + (1/6)(x - 9), find L(8.8)</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Calculate L(8.8)</label>
+                        
+                        <div class="mathquill-field" id="question3"></div>
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(3, '2.97')">2.97</button>
+                            <button class="math-btn" onclick="insertMath(3, '2.96')">2.96</button>
+                            <button class="math-btn" onclick="insertMath(3, '2.967')">2.967</button>
+                            <button class="math-btn" onclick="insertMath(3, '3')">3</button>
+                            <button class="math-btn" onclick="insertMath(3, '-')"> - </button>
+                            <button class="math-btn" onclick="insertMath(3, '0.03')">0.03</button>
+                    </div>
+                        <div class="answer-format" id="format-3">Expected: A decimal number</div>
+                        
+                        <button class="check-answer-btn" onclick="checkMathAnswer(3)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-3"></div>
+                        <div class="math-hint">
+                            💡 Hint: L(8.8) = 3 + (1/6)(8.8 - 9) = 3 + (1/6)(-0.2)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 5 - Understanding differentials -->
+                <div class="question-container">
+                    <div class="question-number">5</div>
+                    <div class="question-text">
+                        If y = x², find dy when x = 3 and dx = 0.1.
+                    </div>
+                    <div class="math-expression">y = x², x = 3, dx = 0.1</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Calculate dy = f'(x) × dx</label>
+                        
+                        <div class="mathquill-field" id="question4"></div>
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(4, '0.6')">0.6</button>
+                            <button class="math-btn" onclick="insertMath(4, '0.06')">0.06</button>
+                            <button class="math-btn" onclick="insertMath(4, '6')">6</button>
+                            <button class="math-btn" onclick="insertMath(4, '0.3')">0.3</button>
+                            <button class="math-btn" onclick="insertMath(4, '2')">2</button>
+                            <button class="math-btn" onclick="insertMath(4, '3')">3</button>
+                    </div>
+                        <div class="answer-format" id="format-4">Expected: A decimal number</div>
+                        
+                        <button class="check-answer-btn" onclick="checkMathAnswer(4)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-4"></div>
+                        <div class="math-hint">
+                            💡 Hint: f'(x) = 2x, so f'(3) = 6, and dy = 6 × 0.1
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="submit-btn" id="submitBtn" onclick="submitQuiz()">Submit Quiz</button>
+            
+
+
+            <!-- DEBUG BUTTONS (Remove these after fixing the issue) -->
+            <div style="text-align: center; margin: 20px 0; padding: 15px; background: #f0f0f0; border-radius: 10px; border: 2px dashed #999;">
+                <h4 style="color: #666; margin-bottom: 10px;">🔧 Debug Tools (Temporary)</h4>
+                <button onclick="debugCheckModuleStatus()" class="nav-btn" style="background: #17a2b8; margin: 5px; padding: 8px 15px; font-size: 14px;">
+                    🔍 Check Module Status
+                </button>
+                <button onclick="debugForceCompleteModule()" class="nav-btn" style="background: #28a745; margin: 5px; padding: 8px 15px; font-size: 14px;">
+                    ✅ Force Complete Module
+                </button>
+                <p style="font-size: 12px; color: #666; margin-top: 10px;">
+                    Use these buttons to check and fix the module completion status
+                </p>
+            </div>
+
+            <div id="results" class="results" style="display: none;">
+                <div class="score" id="scoreDisplay"></div>
+                <div id="resultMessage"></div>
+                <div class="navigation">
+                    <a href="profile.html" class="nav-btn">← Back to Profile</a>
+                    <a href="linear-approximation-and-differentials-intermediate.html" class="nav-btn">Next: Intermediate →</a>
+                </div>
+            </div>
+
+            <!-- Answer Guide Section -->
+            <div id="answerGuide" style="margin-top: 30px; padding: 20px; background: #f0f8ff; border: 2px solid #1e90ff; border-radius: 10px; display: none;">
+                <h4 style="color: #0066cc; margin-bottom: 15px;">📝 Answer Guide</h4>
+                <p style="font-size: 14px; color: #333; margin-bottom: 15px;">
+                    Use this guide if you're having trouble with the questions:
+                </p>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 1: Purpose of linear approximation</h5>
+                    <p><strong>Answer:</strong> "Linear approximation is used to <strong>estimate</strong> function values near a known point."</p>
+                    <p>Other acceptable words: approximate, find, calculate, predict</p>
+                    <p><strong>Explanation:</strong> When we can't easily compute exact values, we use linear approximation to get close estimates.</p>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 2: Linear approximation formula</h5>
+                    <p><strong>Correct Answer:</strong> A) L(x) = f(a) + f'(a)(x - a)</p>
+                    <p><strong>Explanation:</strong> This is the tangent line equation rearranged: y = f(a) + f'(a)(x - a)</p>
+                </div>
+
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 3: Linear approximation of √x at a = 9</h5>
+                    <p><strong>Answer:</strong> L(x) = 3 + (1/6)(x - 9)</p>
+                    <p><strong>Step-by-step:</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li>f(9) = √9 = 3</li>
+                        <li>f'(x) = 1/(2√x), so f'(9) = 1/(2√9) = 1/6</li>
+                        <li>L(x) = f(9) + f'(9)(x - 9) = 3 + (1/6)(x - 9)</li>
+                    </ul>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 4: Estimate √8.8</h5>
+                    <p><strong>Answer:</strong> 2.967 (approximately)</p>
+                    <p><strong>Step-by-step:</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li>L(8.8) = 3 + (1/6)(8.8 - 9)</li>
+                        <li>L(8.8) = 3 + (1/6)(-0.2)</li>
+                        <li>L(8.8) = 3 - 0.2/6 = 3 - 0.033... ≈ 2.967</li>
+                    </ul>
+                </div>
+            
+                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ccc;">
+                    <h5 style="color: #0066cc; margin-bottom: 10px;">Question 5: Find dy when y = x²</h5>
+                    <p><strong>Answer:</strong> 0.6</p>
+                    <p><strong>Step-by-step:</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li>f'(x) = 2x, so f'(3) = 2(3) = 6</li>
+                        <li>dy = f'(3) × dx = 6 × 0.1 = 0.6</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+        import { getFirestore, doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBUfSOSpmCdWUGTVbSQsMCH-JVmrjpfdPY",
+            authDomain: "fyp-lutfi-naim.firebaseapp.com",
+            projectId: "fyp-lutfi-naim",
+            storageBucket: "fyp-lutfi-naim.firebasestorage.app",
+            messagingSenderId: "231274529807",
+            appId: "1:231274529807:web:c4ea279f9e7581bd674f7a"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let mathAnswers = {};
+        let currentUser = null;
+        let mathFields = {};
+        let currentLinearApproxFunction = 'sqrt';
+        let linearApproxAnimationRunning = false;
+
+        // Initialize MathQuill and page functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📐 Linear Approximation module DOM loaded');
+            
+            // Initialize MathQuill for mathematical input fields
+            if (typeof MathQuill !== 'undefined') {
+            const MQ = MathQuill.getInterface(2);
+            
+                // Initialize MathQuill fields for questions 2, 3, 4 (mathematical expressions)
+                for (let i = 2; i <= 4; i++) {
+                const element = document.getElementById(`question${i}`);
+                if (element) {
+                    mathFields[i] = MQ.MathField(element, {
+                        spaceBehavesLikeTab: true,
+                        handlers: {
+                            edit: function() {
+                                const questionNum = i;
+                                const latex = mathFields[questionNum].latex();
+                                mathAnswers[questionNum] = latex;
+                                sessionStorage.setItem('linear-approximation-novice-progress', JSON.stringify(mathAnswers));
+                            }
+                        }
+                    });
+                }
+            }
+            }
+            
+            // Set up text input event listeners
+            const textInput = document.getElementById('question0');
+            if (textInput) {
+                textInput.addEventListener('input', function() {
+                    mathAnswers[0] = this.value;
+                    sessionStorage.setItem('linear-approximation-novice-progress', JSON.stringify(mathAnswers));
+                });
+                
+                textInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        checkMathAnswer(0);
+                    }
+                });
+            }
+            
+            // Set up radio button event listeners
+            const radioButtons = document.querySelectorAll('input[type="radio"]');
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.name === 'question2') {
+                        mathAnswers[1] = this.value;
+                        sessionStorage.setItem('linear-approximation-novice-progress', JSON.stringify(mathAnswers));
+                    }
+                });
+            });
+            
+            // Set up answer guide toggle
+            document.getElementById('toggleAnswerGuide').addEventListener('click', toggleAnswerGuide);
+            
+            // Initialize the interactive graph with retry mechanism
+            function tryInitializeGraph(attempts = 0) {
+                if (attempts < 3) {
+                    setTimeout(() => {
+                        if (typeof Plotly !== 'undefined') {
+                            initializeLinearApproxGraph();
+                        } else {
+                            console.log(`Plotly not ready yet, attempt ${attempts + 1}/3`);
+                            tryInitializeGraph(attempts + 1);
+                        }
+                    }, 1000 + (attempts * 500));
+                } else {
+                    console.log('Plotly failed to load after 3 attempts, using fallback');
+                    createLinearApproxFallbackGraph();
+                }
+            }
+            
+            tryInitializeGraph();
+            
+            console.log('✅ Linear Approximation module initialized successfully');
+        });
+
+        const mathCorrectAnswers = {
+            0: "estimate", // "Linear approximation is used to estimate function values near a known point"
+            1: "a", // Linear approximation formula: L(x) = f(a) + f'(a)(x - a)
+            2: "L(x)=3+\\frac{1}{6}(x-9)", // Linear approximation of √x at a = 9
+            3: "2.967", // Estimate √8.8 using linear approximation
+            4: "0.6" // dy when y = x², x = 3, dx = 0.1
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                loadProgress();
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        function loadProgress() {
+            const saved = sessionStorage.getItem('linear-approximation-novice-progress');
+            if (saved) {
+                mathAnswers = JSON.parse(saved);
+                restoreAnswers();
+            }
+        }
+
+        function restoreAnswers() {
+            Object.keys(mathAnswers).forEach(questionNum => {
+                if (mathFields[questionNum]) {
+                    mathFields[questionNum].latex(mathAnswers[questionNum]);
+                }
+            });
+        }
+
+        window.checkMathAnswer = function(questionNum) {
+            let userAnswer = '';
+            const feedback = document.getElementById(`feedback-${questionNum}`);
+            
+            // Get user answer based on question type
+            if (questionNum === 0) {
+                // Text input question
+                const textInput = document.getElementById('question0');
+                userAnswer = textInput ? textInput.value.toLowerCase().trim() : '';
+            } else if (questionNum === 1) {
+                // Radio button question
+                const selectedRadio = document.querySelector('input[name="question2"]:checked');
+                userAnswer = selectedRadio ? selectedRadio.value : '';
+            } else if (questionNum >= 2 && questionNum <= 4) {
+                // MathQuill questions
+                userAnswer = mathFields[questionNum] ? mathFields[questionNum].latex().toLowerCase().replace(/\s/g, '') : '';
+            }
+            
+            // Check for blank answers
+            if (!userAnswer || userAnswer.trim() === '') {
+                feedback.classList.remove('correct', 'incorrect');
+                feedback.classList.add('show', 'incorrect');
+                feedback.innerHTML = '❌ Please provide an answer before checking.';
+                return;
+            }
+            
+            mathAnswers[questionNum] = userAnswer;
+            sessionStorage.setItem('linear-approximation-novice-progress', JSON.stringify(mathAnswers));
+            
+            let isCorrect = false;
+            
+            console.log(`Question ${questionNum}: User answer: "${userAnswer}", Expected: "${mathCorrectAnswers[questionNum]}"`);
+            
+            if (questionNum === 0) {
+                // Question 1: "Linear approximation is used to _____ function values near a known point"
+                isCorrect = userAnswer.includes('estimate') || userAnswer.includes('approximate') || 
+                           userAnswer.includes('find') || userAnswer.includes('calculate') || userAnswer.includes('predict');
+            } else if (questionNum === 1) {
+                // Question 2: Linear approximation formula (multiple choice)
+                isCorrect = userAnswer === 'a'; // L(x) = f(a) + f'(a)(x - a)
+            } else if (questionNum === 2) {
+                // Question 3: Linear approximation of √x at a = 9
+                isCorrect = userAnswer.includes('l(x)=3+') && userAnswer.includes('\\frac{1}{6}') && userAnswer.includes('(x-9)') ||
+                           userAnswer.includes('l(x)=3+(1/6)(x-9)') || (userAnswer.includes('3+') && userAnswer.includes('1/6') && userAnswer.includes('x-9'));
+            } else if (questionNum === 3) {
+                // Question 4: Estimate √8.8
+                isCorrect = userAnswer.includes('2.967') || userAnswer.includes('2.97') || userAnswer.includes('2.966');
+            } else if (questionNum === 4) {
+                // Question 5: dy when y = x², x = 3, dx = 0.1
+                isCorrect = userAnswer.includes('0.6') || userAnswer.includes('6/10') || userAnswer.includes('3/5');
+            }
+            
+            feedback.classList.remove('correct', 'incorrect');
+            feedback.classList.add('show');
+            
+            console.log(`Question ${questionNum} validation result: ${isCorrect ? 'CORRECT' : 'INCORRECT'}`);
+            
+            if (isCorrect) {
+                feedback.classList.add('correct');
+                feedback.innerHTML = '✅ Excellent! You understand this concept!';
+            } else {
+                feedback.classList.add('incorrect');
+                feedback.innerHTML = `❌ Not quite right. ${getHintForQuestion(questionNum)}`;
+            }
+        };
+
+        // Helper function to provide specific hints
+        function getHintForQuestion(questionNum) {
+            const hints = {
+                0: "Think about what we do when we want to find approximate values.",
+                1: "The linear approximation is the tangent line: y - f(a) = f'(a)(x - a), rearranged.",
+                2: "f(9) = 3, f'(x) = 1/(2√x), so f'(9) = 1/6. Use L(x) = f(a) + f'(a)(x - a).",
+                3: "Substitute x = 8.8 into L(x) = 3 + (1/6)(x - 9).",
+                4: "dy = f'(x) × dx. For y = x², f'(x) = 2x, so f'(3) = 6."
+            };
+            return hints[questionNum] || "Review the concept and try again.";
+        }
+
+        // Interactive Graph Functions for Linear Approximation
+        window.initializeLinearApproxGraph = function() {
+            console.log('Initializing linear approximation graph...');
+            console.log('Plotly available:', typeof Plotly !== 'undefined');
+            const graphDiv = document.getElementById('linearApproxGraph');
+            console.log('Graph div found:', !!graphDiv);
+            
+            if (typeof Plotly !== 'undefined' && graphDiv) {
+                showLinearApprox('sqrt');
+            } else {
+                console.log('Plotly or graph div not available, creating fallback');
+                createLinearApproxFallbackGraph();
+            }
+        };
+
+        window.showLinearApprox = function(functionType) {
+            console.log('Showing linear approximation for:', functionType);
+            currentLinearApproxFunction = functionType;
+            const graphDiv = document.getElementById('linearApproxGraph');
+            
+            console.log('Graph div element:', graphDiv);
+            console.log('Plotly object:', typeof Plotly);
+            
+            if (!graphDiv) {
+                console.error('Graph div not found!');
+                createLinearApproxFallbackGraphWithFunction(functionType);
+                return;
+            }
+            
+            if (typeof Plotly === 'undefined') {
+                console.error('Plotly not loaded!');
+                createLinearApproxFallbackGraphWithFunction(functionType);
+                return;
+            }
+            
+            // Stop any running animation
+            linearApproxAnimationRunning = false;
+            
+            let xValues = [], yValues = [], linearValues = [], functionText, a, fa, fPrimeA;
+            
+            switch(functionType) {
+                case 'sqrt':
+                    functionText = 'f(x) = √x at a = 4';
+                    a = 4;
+                    fa = 2; // √4 = 2
+                    fPrimeA = 0.25; // f'(4) = 1/(2√4) = 1/4
+                    for (let x = 0.5; x <= 8; x += 0.1) {
+                        xValues.push(x);
+                        yValues.push(Math.sqrt(x));
+                        linearValues.push(fa + fPrimeA * (x - a)); // L(x) = 2 + 0.25(x - 4)
+                    }
+                    break;
+                case 'square':
+                    functionText = 'f(x) = x² at a = 2';
+                    a = 2;
+                    fa = 4; // 2² = 4
+                    fPrimeA = 4; // f'(2) = 2(2) = 4
+                    for (let x = 0; x <= 4; x += 0.1) {
+                        xValues.push(x);
+                        yValues.push(x * x);
+                        linearValues.push(fa + fPrimeA * (x - a)); // L(x) = 4 + 4(x - 2)
+                    }
+                    break;
+                case 'cubic':
+                    functionText = 'f(x) = x³ at a = 1';
+                    a = 1;
+                    fa = 1; // 1³ = 1
+                    fPrimeA = 3; // f'(1) = 3(1)² = 3
+                    for (let x = -0.5; x <= 2.5; x += 0.1) {
+                        xValues.push(x);
+                        yValues.push(x * x * x);
+                        linearValues.push(fa + fPrimeA * (x - a)); // L(x) = 1 + 3(x - 1)
+                    }
+                    break;
+                default:
+                    return showLinearApprox('sqrt');
+            }
+            
+            const data = [
+                {
+                    x: xValues,
+                    y: yValues,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: functionText.split(' at ')[0],
+                    line: { color: 'blue', width: 3 },
+                    showlegend: true
+                },
+                {
+                    x: xValues,
+                    y: linearValues,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: `Linear Approximation at x = ${a}`,
+                    line: { color: 'red', width: 2, dash: 'dash' },
+                    showlegend: true
+                },
+                {
+                    x: [a],
+                    y: [fa],
+                    type: 'scatter',
+                    mode: 'markers',
+                    name: `Point (${a}, ${fa})`,
+                    marker: { color: 'red', size: 10 },
+                    showlegend: true
+                }
+            ];
+            
+            const layout = {
+                title: `Linear Approximation: ${functionText}`,
+                xaxis: { 
+                    title: 'x', 
+                    gridcolor: '#e1e1e1',
+                    zerolinecolor: '#666'
+                },
+                yaxis: { 
+                    title: 'y', 
+                    gridcolor: '#e1e1e1',
+                    zerolinecolor: '#666'
+                },
+                showlegend: true,
+                margin: { t: 60, r: 50, b: 50, l: 50 },
+                hovermode: 'closest',
+                plot_bgcolor: 'rgba(248,249,250,0.8)',
+                paper_bgcolor: 'rgba(255,255,255,0.9)'
+            };
+            
+            const config = {
+                responsive: true,
+                displayModeBar: false
+            };
+            
+            Plotly.newPlot(graphDiv, data, layout, config).then(() => {
+                console.log('Linear approximation plotted successfully');
+                
+                // Add click event to show approximation quality
+                graphDiv.on('plotly_click', function(eventData) {
+                    if (eventData.points && eventData.points.length > 0) {
+                        const x = eventData.points[0].x;
+                        const actualY = eventData.points[0].y;
+                        const linearY = fa + fPrimeA * (x - a);
+                        const error = Math.abs(actualY - linearY);
+                        console.log(`At x=${x.toFixed(2)}: Actual=${actualY.toFixed(3)}, Linear=${linearY.toFixed(3)}, Error=${error.toFixed(3)}`);
+                        
+                        // Update title with approximation info
+                        const update = {
+                            title: `${functionText} - At x=${x.toFixed(2)}: Actual=${actualY.toFixed(3)}, Linear≈${linearY.toFixed(3)}, Error=${error.toFixed(3)}`
+                        };
+                        Plotly.relayout(graphDiv, update);
+                    }
+                });
+            }).catch((error) => {
+                console.error('Error plotting linear approximation:', error);
+                createLinearApproxFallbackGraphWithFunction(functionType);
+            });
+        };
+
+        window.animateLinearApprox = function() {
+            console.log('Starting linear approximation animation...');
+            if (linearApproxAnimationRunning) return;
+            linearApproxAnimationRunning = true;
+            
+            const animateBtn = document.querySelector('button[onclick="animateLinearApprox()"]');
+            if (animateBtn) {
+                animateBtn.textContent = '⏸️ Animating...';
+                animateBtn.style.opacity = '0.7';
+            }
+            
+            // If Plotly is available, do actual animation
+            if (typeof Plotly !== 'undefined') {
+                console.log('Running Plotly animation...');
+            } else {
+                console.log('Animation not available in fallback mode');
+            }
+            
+            setTimeout(() => {
+                linearApproxAnimationRunning = false;
+                if (animateBtn) {
+                    animateBtn.textContent = '🎬 Animate';
+                    animateBtn.style.opacity = '1';
+                }
+            }, 3000);
+        };
+
+        window.resetLinearApproxGraph = function() {
+            console.log('Resetting linear approximation graph...');
+            linearApproxAnimationRunning = false;
+            setTimeout(() => {
+                showLinearApprox(currentLinearApproxFunction);
+            }, 100);
+        };
+
+        function createLinearApproxFallbackGraph() {
+            createLinearApproxFallbackGraphWithFunction('sqrt');
+        }
+
+        function createLinearApproxFallbackGraphWithFunction(functionType) {
+            const graphDiv = document.getElementById('linearApproxGraph');
+            if (!graphDiv) {
+                console.error('Cannot create fallback: graph div not found');
+                return;
+            }
+            
+            console.log('Creating fallback graph for function:', functionType);
+            
+            let functionInfo = {};
+            switch(functionType) {
+                case 'sqrt':
+                    functionInfo = {
+                        name: 'Square Root Function',
+                        equation: 'f(x) = √x',
+                        point: 'a = 4',
+                        linear: 'L(x) = 2 + (1/4)(x - 4)',
+                        description: 'Linear approximation of square root function at x = 4'
+                    };
+                    break;
+                case 'square':
+                    functionInfo = {
+                        name: 'Quadratic Function',
+                        equation: 'f(x) = x²',
+                        point: 'a = 2',
+                        linear: 'L(x) = 4 + 4(x - 2)',
+                        description: 'Linear approximation of quadratic function at x = 2'
+                    };
+                    break;
+                case 'cubic':
+                    functionInfo = {
+                        name: 'Cubic Function',
+                        equation: 'f(x) = x³',
+                        point: 'a = 1',
+                        linear: 'L(x) = 1 + 3(x - 1)',
+                        description: 'Linear approximation of cubic function at x = 1'
+                    };
+                    break;
+                default:
+                    functionInfo = {
+                        name: 'Square Root Function',
+                        equation: 'f(x) = √x',
+                        point: 'a = 4',
+                        linear: 'L(x) = 2 + (1/4)(x - 4)',
+                        description: 'Linear approximation of square root function at x = 4'
+                    };
+            }
+            
+            graphDiv.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; height: 400px; flex-direction: column; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 10px; padding: 20px;">
+                    <h3 style="color: #1dd1a1; margin-bottom: 15px; text-align: center;">📈 ${functionInfo.name}: ${functionInfo.equation}</h3>
+                    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 500px;">
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <div style="background: #1dd1a1; color: white; padding: 8px 16px; border-radius: 20px; display: inline-block; font-weight: 600;">
+                                Currently Selected: ${functionInfo.name}
+                            </div>
+                        </div>
+                        <p style="color: #333; text-align: center; margin-bottom: 15px; font-weight: 600;">
+                            Interactive graph temporarily unavailable
+                        </p>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                            <p style="color: #333; margin: 5px 0;"><strong>Function:</strong> ${functionInfo.equation}</p>
+                            <p style="color: #333; margin: 5px 0;"><strong>Point:</strong> ${functionInfo.point}</p>
+                            <p style="color: #333; margin: 5px 0;"><strong>Linear Approximation:</strong> ${functionInfo.linear}</p>
+                            <p style="color: #666; margin: 5px 0; font-size: 14px;">${functionInfo.description}</p>
+                        </div>
+                        <p style="color: #666; text-align: center; margin: 10px; font-size: 14px;">
+                            This section would normally show an interactive visualization where you can:
+                        </p>
+                        <ul style="color: #666; font-size: 14px; margin: 15px 0; padding-left: 20px;">
+                            <li>See the original function and its linear approximation</li>
+                            <li>Click on points to see approximation accuracy</li>
+                            <li>Compare different functions using the buttons above</li>
+                        </ul>
+                        <p style="color: #888; text-align: center; margin-top: 15px; font-size: 12px;">
+                            Try refreshing the page if the interactive graph doesn't load
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Math toolbar function
+        window.insertMath = function(questionNum, symbol) {
+            if (!mathFields[questionNum]) return;
+            
+            const field = mathFields[questionNum];
+            field.focus();
+            
+            switch(symbol) {
+                case 'L(x)':
+                    field.write('L(x)');
+                    break;
+                case '\\frac{1}{6}':
+                    field.write('\\frac{1}{6}');
+                    break;
+                case '(x-9)':
+                    field.write('(x-9)');
+                    break;
+                default:
+                    field.write(symbol);
+                    break;
+            }
+            
+            // Update stored answer
+            const latex = field.latex();
+            mathAnswers[questionNum] = latex;
+            sessionStorage.setItem('linear-approximation-novice-progress', JSON.stringify(mathAnswers));
+        };
+
+        // Answer Guide Toggle Function
+        function toggleAnswerGuide() {
+            const guide = document.getElementById('answerGuide');
+            const button = document.getElementById('toggleAnswerGuide');
+            
+            if (guide.style.display === 'none') {
+                guide.style.display = 'block';
+                button.textContent = 'Hide Guide';
+            } else {
+                guide.style.display = 'none';
+                button.textContent = 'Show Guide';
+            }
+        }
+
+        window.toggleAnswerGuide = toggleAnswerGuide;
+
+        window.submitQuiz = async function() {
+            // Check if all questions have been answered
+            const requiredQuestions = [0, 1, 2, 3, 4]; // 5 questions total
+            const unansweredQuestions = requiredQuestions.filter(q => 
+                !mathAnswers[q] || (typeof mathAnswers[q] === 'string' && mathAnswers[q].trim() === ''));
+                
+            if (unansweredQuestions.length > 0) {
+                alert(`Please answer all questions before submitting. Missing answers for questions: ${unansweredQuestions.map(q => q + 1).join(', ')}`);
+                return;
+            }
+
+            let score = 0;
+            // Check each question using the same validation logic as checkMathAnswer
+            requiredQuestions.forEach(questionNum => {
+                const userAnswer = mathAnswers[questionNum] || '';
+                let isCorrect = false;
+                
+                if (questionNum === 0) {
+                    // Question 1: "Linear approximation is used to _____ function values near a known point"
+                    const lowerAnswer = typeof userAnswer === 'string' ? userAnswer.toLowerCase() : '';
+                    isCorrect = lowerAnswer.includes('estimate') || lowerAnswer.includes('approximate') || 
+                               lowerAnswer.includes('find') || lowerAnswer.includes('calculate') || lowerAnswer.includes('predict');
+                } else if (questionNum === 1) {
+                    // Question 2: Linear approximation formula (multiple choice)
+                    isCorrect = userAnswer === 'a'; // L(x) = f(a) + f'(a)(x - a)
+                } else if (questionNum === 2) {
+                    // Question 3: Linear approximation of √x at a = 9
+                    const lowerAnswer = typeof userAnswer === 'string' ? userAnswer.toLowerCase().replace(/\s/g, '') : '';
+                    isCorrect = lowerAnswer.includes('l(x)=3+') && lowerAnswer.includes('\\frac{1}{6}') && lowerAnswer.includes('(x-9)') ||
+                               lowerAnswer.includes('l(x)=3+(1/6)(x-9)') || (lowerAnswer.includes('3+') && lowerAnswer.includes('1/6') && lowerAnswer.includes('x-9'));
+                } else if (questionNum === 3) {
+                    // Question 4: Estimate √8.8
+                    const lowerAnswer = typeof userAnswer === 'string' ? userAnswer.toLowerCase().replace(/\s/g, '') : '';
+                    isCorrect = lowerAnswer.includes('2.967') || lowerAnswer.includes('2.97') || lowerAnswer.includes('2.966');
+                } else if (questionNum === 4) {
+                    // Question 5: dy when y = x², x = 3, dx = 0.1
+                    const lowerAnswer = typeof userAnswer === 'string' ? userAnswer.toLowerCase().replace(/\s/g, '') : '';
+                    isCorrect = lowerAnswer.includes('0.6') || lowerAnswer.includes('6/10') || lowerAnswer.includes('3/5');
+                }
+                
+                // Log validation results for debugging
+                console.log(`Quiz submission - Question ${questionNum}: ${isCorrect ? 'CORRECT' : 'INCORRECT'}`, {
+                    userAnswer: userAnswer,
+                    isCorrect: isCorrect
+                });
+                
+                if (isCorrect) score++;
+            });
+
+            const percentage = Math.round((score / 5) * 100);
+            const passed = score >= 3;
+
+            document.getElementById('scoreDisplay').textContent = `${score}/5 (${percentage}%)`;
+            document.getElementById('scoreDisplay').className = `score ${passed ? 'pass' : 'fail'}`;
+            
+            if (passed) {
+                document.getElementById('resultMessage').innerHTML = `
+                    <h3 style="color: var(--success-color);">🎉 Excellent! You have mastered linear approximation fundamentals!</h3>
+                    <p>✅ Module completed successfully!</p>
+                    <p>🆙 Your Novice level progress has been updated!</p>
+                    <p>➡️ You can now move to the Intermediate level!</p>
+                `;
+            } else {
+                document.getElementById('resultMessage').innerHTML = `
+                    <h3 style="color: var(--danger-color);">Keep learning!</h3>
+                    <p>You need at least 3 correct answers to pass. Review the concepts and try again.</p>
+                    <p>Your current progress: ${score}/5 correct</p>
+                `;
+            }
+
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('submitBtn').style.display = 'none';
+
+            if (currentUser) {
+                try {
+                    const userDocRef = doc(db, 'users', currentUser.uid);
+                    
+                    // Get current user data
+                    const userDoc = await getDoc(userDocRef);
+                    let userData = userDoc.exists() ? userDoc.data() : {};
+                    
+                    // Initialize structures if they don't exist
+                    if (!userData.moduleProgress) userData.moduleProgress = {};
+                    if (!userData.levelProgress) userData.levelProgress = {};
+                    if (!userData.completedModules) userData.completedModules = [];
+                    
+                    // Update module progress - FIXED KEY NAMING TO MATCH PROFILE PAGE
+                    userData.moduleProgress["Linear Approximation & Differentials - Novice"] = percentage;  // Primary key for profile page
+                    userData.moduleProgress["linear-approximation-and-differentials-novice"] = percentage;    // URL-friendly key
+                    
+                    // If passed, mark as completed and update level progress
+                    if (passed) {
+                        const moduleKey = `Linear Approximation & Differentials - Novice`;  // Must match profile page exactly
+                        if (!userData.completedModules.includes(moduleKey)) {
+                            userData.completedModules.push(moduleKey);
+                        }
+                        
+                        // Update level progress - count completed modules in this level
+                        const noviceModules = userData.completedModules.filter(module => 
+                            module.includes('Novice')
+                        );
+                        userData.levelProgress['Novice'] = noviceModules.length;
+                        
+                        // Update overall progress
+                        userData.overallProgress = userData.completedModules.length;
+                        
+                        console.log('🎉 MODULE COMPLETED! Details:', {
+                            moduleKey: moduleKey,
+                            percentage: percentage,
+                            passed: passed,
+                            score: score,
+                            totalQuestions: 5,
+                            completedModules: userData.completedModules,
+                            completedModulesCount: userData.completedModules.length,
+                            noviceLevel: userData.levelProgress['Novice']
+                        });
+                    }
+                    
+                    // Save to Firestore with retry mechanism
+                    try {
+                        await setDoc(userDocRef, userData, { merge: true });
+                        console.log('✅ Data successfully saved to Firebase');
+                        
+                    sessionStorage.removeItem('linear-approximation-novice-progress');
+                    } catch (saveError) {
+                        console.error('❌ Error saving to Firebase:', saveError);
+                        try {
+                            await setDoc(userDocRef, userData, { merge: true });
+                            console.log('✅ Retry successful - Data saved to Firebase');
+                        } catch (retryError) {
+                            console.error('❌ Retry failed:', retryError);
+                            alert('Error saving progress. Please try again.');
+                            return;
+                        }
+                    }
+                    
+                    // Also update sessionStorage moduleProgress immediately for the profile page
+                    const currentModuleProgress = JSON.parse(sessionStorage.getItem('moduleProgress') || '{}');
+                    currentModuleProgress["Linear Approximation & Differentials - Novice"] = percentage;  // Primary key for profile page
+                    currentModuleProgress["linear-approximation-and-differentials-novice"] = percentage;    // URL-friendly key
+                    sessionStorage.setItem('moduleProgress', JSON.stringify(currentModuleProgress));
+                    
+                    // Also update completedModules in sessionStorage
+                    if (passed) {
+                        const completedModulesSession = JSON.parse(sessionStorage.getItem('completedModules') || '[]');
+                        const moduleKey = `Linear Approximation & Differentials - Novice`;  // Must match profile page exactly
+                        if (!completedModulesSession.includes(moduleKey)) {
+                            completedModulesSession.push(moduleKey);
+                            sessionStorage.setItem('completedModules', JSON.stringify(completedModulesSession));
+                        }
+                        console.log('🔄 SessionStorage updated:', {
+                            moduleProgress: currentModuleProgress,
+                            completedModules: completedModulesSession
+                        });
+                    }
+                    
+                    console.log('Progress successfully saved to Firebase');
+                
+                } catch (error) {
+                    console.error('Error saving progress:', error);
+                }
+            }
+        };
+
+        // DEBUG FUNCTION: Force mark this module as completed
+        window.debugForceCompleteModule = function() {
+            console.log('🔧 DEBUG: Force completing Linear Approximation & Differentials - Novice module');
+            
+            // Update sessionStorage
+            const currentModuleProgress = JSON.parse(sessionStorage.getItem('moduleProgress') || '{}');
+            currentModuleProgress["Linear Approximation & Differentials - Novice"] = 100;
+            currentModuleProgress["linear-approximation-and-differentials-novice"] = 100;
+            sessionStorage.setItem('moduleProgress', JSON.stringify(currentModuleProgress));
+            
+            const completedModulesSession = JSON.parse(sessionStorage.getItem('completedModules') || '[]');
+            const moduleKey = `Linear Approximation & Differentials - Novice`;
+            if (!completedModulesSession.includes(moduleKey)) {
+                completedModulesSession.push(moduleKey);
+                sessionStorage.setItem('completedModules', JSON.stringify(completedModulesSession));
+            }
+            
+            console.log('✅ Module forced to completed status in sessionStorage');
+            console.log('Module Progress:', currentModuleProgress);
+            console.log('Completed Modules:', completedModulesSession);
+            
+            alert('Debug: Module marked as completed! Go back to profile to see changes.');
+        };
+
+        // DEBUG FUNCTION: Check current module status
+        window.debugCheckModuleStatus = function() {
+            const moduleProgress = JSON.parse(sessionStorage.getItem('moduleProgress') || '{}');
+            const completedModules = JSON.parse(sessionStorage.getItem('completedModules') || '[]');
+            
+            const moduleKey = "Linear Approximation & Differentials - Novice";
+            const progress = moduleProgress[moduleKey] || 0;
+            const isCompleted = completedModules.includes(moduleKey);
+            
+            console.log('🔍 MODULE STATUS DEBUG:');
+            console.log('Module Key:', moduleKey);
+            console.log('Progress:', progress + '%');
+            console.log('Is in Completed Modules:', isCompleted);
+            console.log('All Module Progress:', moduleProgress);
+            console.log('All Completed Modules:', completedModules);
+            
+            alert(`Module Status:\nProgress: ${progress}%\nCompleted: ${isCompleted ? 'YES' : 'NO'}\nCheck console for full details.`);
+        };
+
+        // Auto-check status when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up answer guide toggle
+            document.getElementById('toggleAnswerGuide').addEventListener('click', toggleAnswerGuide);
+            
+            setTimeout(() => {
+                console.log('🔍 Auto-checking Linear Approximation module status...');
+                debugCheckModuleStatus();
+            }, 2000);
+        });
+    </script>
+</body>
+</html> 
+
+
+
+
+
+
+
