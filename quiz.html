@@ -1,0 +1,1507 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Interactive Calculus Quiz">
+    <meta name="author" content="">
+    <title>Calculus Quiz</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/templatemo-topic-listing.css" rel="stylesheet">
+    
+    <!-- MathJax for displaying math content -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- MathQuill for interactive math input -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+    
+    <!-- SweetAlert2 for better alerts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+    <style>
+        :root {
+            /* Color Variables */
+            --main-color: #323232;
+            --accent-color: #ff6b6b;
+            --secondary-color: #feca57;
+            --tertiary-color: #1dd1a1;
+            --bg-color: #f7f9fc;
+            --font-color: #323232;
+            --font-color-sub: #666;
+            --input-focus: #2d8cf0;
+            --light-blue: #54a0ff;
+            --pink: #ff9ff3;
+            --purple: #5f27cd;
+            --success-color: #2ecc71;
+
+            /* Shadows */
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 4px 4px var(--main-color);
+            --shadow-lg: 6px 6px var(--main-color);
+            --shadow-hover: 2px 2px var(--main-color);
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            color: var(--font-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .quiz-container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            border: 2px solid var(--main-color);
+            transition: all 0.3s ease;
+        }
+
+        .quiz-container:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translate(3px, 3px);
+        }
+
+        .quiz-header {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 30px;
+            border: 2px solid var(--main-color);
+            box-shadow: var(--shadow-md);
+        }
+
+        .quiz-header h1 {
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .quiz-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 2px solid var(--main-color);
+        }
+
+        .quiz-section:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-5px);
+        }
+
+        .question-number {
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+            border: 2px solid var(--main-color);
+        }
+
+        .question-text {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: var(--font-color);
+            font-weight: 600;
+            text-align: left;
+            display: flex;
+            align-items: center;
+        }
+
+        .question-topic {
+            background-color: var(--secondary-color);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: var(--font-color);
+            font-weight: 600;
+            margin-left: 10px;
+            border: 1px solid var(--main-color);
+        }
+
+        .math-input-container {
+            margin: 15px 0;
+            text-align: left;
+            position: relative;
+        }
+
+        .math-field {
+            width: 100%;
+            height: 50px;
+            padding: 10px;
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+            font-size: 18px;
+            color: var(--font-color);
+            background-color: white;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .math-field:focus {
+            border-color: var(--input-focus);
+            box-shadow: 0 0 10px rgba(45, 140, 240, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .hint-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--secondary-color);
+            color: var(--font-color);
+            border: 2px solid var(--main-color);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .hint-btn:hover {
+            background-color: var(--accent-color);
+            color: white;
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: var(--shadow-md);
+        }
+
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-btn {
+            background-color: white;
+            color: var(--font-color);
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .quiz-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-color);
+            transition: all 0.4s ease;
+            z-index: -1;
+        }
+
+        .quiz-btn:hover:before {
+            left: 0;
+        }
+
+        .quiz-btn:hover {
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .quiz-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .quiz-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            opacity: 0.5;
+        }
+
+        .submit-btn {
+            background-color: var(--tertiary-color);
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--tertiary-color);
+        }
+
+        .progress-container {
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid var(--main-color);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--accent-color), var(--tertiary-color));
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-image: linear-gradient(
+                -45deg,
+                rgba(255, 255, 255, 0.2) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0.2) 75%,
+                transparent 75%,
+                transparent
+            );
+            background-size: 50px 50px;
+            animation: progress-animation 2s linear infinite;
+            border-radius: 5px;
+        }
+
+        @keyframes progress-animation {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 50px 50px;
+            }
+        }
+
+        .progress-text {
+            margin-top: 5px;
+            text-align: right;
+            font-size: 14px;
+            color: var(--font-color);
+            font-weight: 600;
+        }
+
+        .result-container {
+            display: none;
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+            text-align: left;
+            border: 2px solid var(--main-color);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+
+        .result-container:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-3px);
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .result-score {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--font-color);
+        }
+
+        .result-level {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 16px;
+            margin-left: 10px;
+            border: 2px solid var(--main-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .topic-performance {
+            margin-top: 20px;
+        }
+
+        .topic-item {
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: var(--shadow-sm);
+            border: 2px solid var(--main-color);
+            transition: all 0.3s ease;
+        }
+
+        .topic-item:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-3px);
+        }
+
+        .topic-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .topic-title {
+            font-weight: 600;
+            color: var(--font-color);
+        }
+
+        .topic-score {
+            font-weight: 600;
+        }
+
+        .topic-progress {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--main-color);
+        }
+
+        .topic-progress-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        .good {
+            background-color: var(--tertiary-color);
+        }
+
+        .needs-improvement {
+            background-color: var(--accent-color);
+        }
+
+        .recommendations {
+            margin-top: 30px;
+        }
+
+        .recommendation-item {
+            background-color: rgba(29, 209, 161, 0.1);
+            border-left: 4px solid var(--tertiary-color);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 0 8px 8px 0;
+            transition: all 0.3s ease;
+        }
+
+        .recommendation-item:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .math-keyboard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+            justify-content: center;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 2px solid var(--main-color);
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 16px;
+            color: var(--font-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .math-key:hover {
+            background-color: var(--accent-color);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .question-difficulty {
+            font-size: 14px;
+            background-color: var(--bg-color);
+            color: var(--font-color);
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-left: 10px;
+            border: 1px solid var(--main-color);
+        }
+
+        .feedback-icon {
+            display: none;
+            margin-left: 10px;
+            font-size: 20px;
+        }
+
+        .correct-icon {
+            color: var(--tertiary-color);
+        }
+
+        .incorrect-icon {
+            color: var(--accent-color);
+        }
+
+        .timer-container {
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid var(--main-color);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+
+        .timer-container:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-3px);
+        }
+
+        .timer {
+            font-size: 18px;
+            color: var(--font-color);
+            font-weight: 600;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse-animation {
+            animation: pulse 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+<div class="quiz-container">
+    <div class="quiz-header">
+        <h1>Calculus Mastery Quiz</h1>
+        <p>Test your knowledge of differential calculus</p>
+    </div>
+    
+    <div class="timer-container">
+        <div class="timer">Time: <span id="minutes">00</span>:<span id="seconds">00</span></div>
+    </div>
+    
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+        <div class="progress-text">Question <span id="currentQuestion">1</span> of <span id="totalQuestions">10</span></div>
+    </div>
+    
+    <div id="questionContainer">
+            <!-- Questions will be dynamically inserted here -->
+    </div>
+    
+    <div class="quiz-navigation">
+        <button id="prevBtn" class="quiz-btn" disabled>Previous</button>
+        <button id="nextBtn" class="quiz-btn">Next</button>
+    </div>
+    
+    <button id="submitBtn" class="quiz-btn submit-btn" style="display: none;">Submit Quiz</button>
+    
+    <div id="resultContainer" class="result-container">
+        <!-- Results will be dynamically inserted here -->
+    </div>
+</div>
+
+<!-- Define questions in a regular script -->
+<script>
+    // Define questions categorized by topics
+    window.questions = [
+        // Introduction to derivatives
+        { 
+            id: 1,
+            topic: "Introduction to derivatives",
+            question: "What does a derivative represent in physical terms?",
+            answer: "rate of change",
+            difficulty: "Novice",
+            hint: "Think about how quantities change over time."
+        },
+        { 
+            id: 2,
+            topic: "Introduction to derivatives",
+            question: "If f(x) represents position, what does f'(x) represent?",
+            answer: "velocity",
+            difficulty: "Novice",
+            hint: "Position changes over time give us..."
+        },
+        
+        // Definition of Derivative
+        { 
+            id: 3,
+            topic: "The definition of Derivative",
+            question: "What is the limit definition of the derivative?",
+            answer: "lim h→0 [f(x+h)-f(x)]/h",
+            difficulty: "Intermediate",
+            hint: "It involves a limit as h approaches 0."
+        },
+        { 
+            id: 4,
+            topic: "The definition of Derivative",
+            question: "At what points is a function not differentiable?",
+            answer: "corners, cusps, discontinuities",
+            difficulty: "Intermediate",
+            hint: "Think about points where the function is not smooth."
+        },
+        
+        // Rules of Differentiation
+        { 
+            id: 5,
+            topic: "Rules of Differentiation",
+            question: "What is the derivative of x^2?",
+            answer: "2x",
+            difficulty: "Novice",
+            hint: "Use the power rule: d/dx(x^n) = n·x^(n-1)"
+        },
+        { 
+            id: 6,
+            topic: "Rules of Differentiation",
+            question: "What is the derivative of sin(x)?",
+            answer: "cos(x)",
+            difficulty: "Novice",
+            hint: "This is one of the basic trigonometric derivatives."
+        },
+        { 
+            id: 7,
+            topic: "Rules of Differentiation",
+            question: "What is the product rule for derivatives?",
+            answer: "f'g + fg'",
+            difficulty: "Intermediate",
+            hint: "When differentiating a product of two functions, each function gets differentiated separately."
+        },
+        { 
+            id: 8,
+            topic: "Rules of Differentiation",
+            question: "What is the quotient rule for derivatives?",
+            answer: "(f'g - fg')/g^2",
+            difficulty: "Advanced",
+            hint: "For f/g, remember: 'Low d-high minus high d-low over low squared'"
+        },
+        
+        // Equation of Tangent
+        { 
+            id: 9,
+            topic: "Equation of Tangent",
+            question: "What is the equation of a tangent line to f(x) at point (a, f(a))?",
+            answer: "y - f(a) = f'(a)(x - a)",
+            difficulty: "Intermediate",
+            hint: "Use point-slope form with the derivative as the slope."
+        },
+        { 
+            id: 10,
+            topic: "Equation of Tangent",
+            question: "If the slope of the tangent line at x=2 is 5, what is f'(2)?",
+            answer: "5",
+            difficulty: "Novice",
+            hint: "The derivative at a point equals the slope of the tangent line at that point."
+        },
+        
+        // Second Derivative
+        { 
+            id: 11,
+            topic: "Second Derivative",
+            question: "What does the second derivative measure?",
+            answer: "rate of change of the rate of change",
+            difficulty: "Intermediate",
+            hint: "If the first derivative measures rate of change, the second derivative measures..."
+        },
+        { 
+            id: 12,
+            topic: "Second Derivative",
+            question: "If f''(x) > 0 on an interval, the function is _____ on that interval.",
+            answer: "concave up",
+            difficulty: "Intermediate",
+            hint: "Think about the shape of the curve - is it holding water or spilling it?"
+        },
+        
+        // Implicit Differentiation
+        { 
+            id: 13,
+            topic: "Implicit Differentiations",
+            question: "What is dy/dx for the equation x² + y² = 25?",
+            answer: "-x/y",
+            difficulty: "Advanced",
+            hint: "Differentiate both sides with respect to x, and don't forget the chain rule for y terms."
+        },
+        { 
+            id: 14,
+            topic: "Implicit Differentiations",
+            question: "When using implicit differentiation, what do we apply to terms with y?",
+            answer: "chain rule",
+            difficulty: "Advanced",
+            hint: "Since y is a function of x, we need to use this rule when differentiating terms with y."
+        },
+        
+        // Linear Approximation
+        { 
+            id: 15,
+            topic: "Linear Approximation & Differentials",
+            question: "What is the linear approximation formula for f(x) near a?",
+            answer: "f(a) + f'(a)(x-a)",
+            difficulty: "Advanced",
+            hint: "It's the equation of the tangent line at x = a."
+        },
+        { 
+            id: 16,
+            topic: "Linear Approximation & Differentials",
+            question: "What is the relationship between differentials dy and dx?",
+            answer: "dy = f'(x)dx",
+            difficulty: "Advanced",
+            hint: "It involves the derivative of the function."
+        }
+    ];
+</script>
+
+<!-- Quiz interaction script -->
+<script>
+    // Global variables accessible across scripts
+    window.quizTime = { minutes: 0, seconds: 0 };
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize MathQuill
+        var MQ = MathQuill.getInterface(2);
+        window.MQ = MQ;
+        
+        // Set up variables
+        let currentQuestionIndex = 0;
+        let selectedQuestions = [];
+        let userAnswers = [];
+        let quizStarted = false;
+        let timerInterval;
+        
+        // Get DOM elements
+        const questionContainer = document.getElementById('questionContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const resultContainer = document.getElementById('resultContainer');
+        const progressFill = document.getElementById('progressFill');
+        const currentQuestionSpan = document.getElementById('currentQuestion');
+        const totalQuestionsSpan = document.getElementById('totalQuestions');
+        const minutesSpan = document.getElementById('minutes');
+        const secondsSpan = document.getElementById('seconds');
+        
+        // Fisher-Yates shuffle algorithm
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            const arrayCopy = [...array];
+            
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                
+                [arrayCopy[currentIndex], arrayCopy[randomIndex]] = [
+                    arrayCopy[randomIndex], arrayCopy[currentIndex]];
+            }
+            
+            return arrayCopy;
+        }
+        
+        // Select questions for the quiz
+        function selectQuestions() {
+            // Number of questions to select from each difficulty level
+            const noviceCount = 4;
+            const intermediateCount = 4;
+            const advancedCount = 2;
+            let selected = [];
+            
+            // Group questions by difficulty
+            const noviceQuestions = window.questions.filter(q => q.difficulty === "Novice");
+            const intermediateQuestions = window.questions.filter(q => q.difficulty === "Intermediate");
+            const advancedQuestions = window.questions.filter(q => q.difficulty === "Advanced");
+            
+            // Randomly select questions from each difficulty
+            selected = selected.concat(shuffle(noviceQuestions).slice(0, noviceCount));
+            selected = selected.concat(shuffle(intermediateQuestions).slice(0, intermediateCount));
+            selected = selected.concat(shuffle(advancedQuestions).slice(0, advancedCount));
+            
+            // Shuffle the selected questions
+            return shuffle(selected);
+        }
+        
+        // Start the quiz timer
+        function startTimer() {
+            timerInterval = setInterval(function() {
+                window.quizTime.seconds++;
+                if (window.quizTime.seconds >= 60) {
+                    window.quizTime.seconds = 0;
+                    window.quizTime.minutes++;
+                }
+                
+                // Update timer display
+                minutesSpan.textContent = window.quizTime.minutes < 10 ? '0' + window.quizTime.minutes : window.quizTime.minutes;
+                secondsSpan.textContent = window.quizTime.seconds < 10 ? '0' + window.quizTime.seconds : window.quizTime.seconds;
+            }, 1000);
+        }
+        
+        // Update progress bar
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / selectedQuestions.length) * 100;
+            progressFill.style.width = `${progress}%`;
+            currentQuestionSpan.textContent = currentQuestionIndex + 1;
+            totalQuestionsSpan.textContent = selectedQuestions.length;
+        }
+        
+        // Render math keys for input
+        function renderMathKeys(container) {
+            const mathKeyboard = document.createElement('div');
+            mathKeyboard.className = 'math-keyboard';
+            
+            // Define common math symbols for calculus
+            const symbols = [
+                'x', 'y', '^', '(', ')', '+', '-', '/', '·', '=', 
+                'sin', 'cos', 'tan', 'lim', '→', '∫', 'd', '∞', 'π'
+            ];
+            
+            symbols.forEach(symbol => {
+                const key = document.createElement('div');
+                key.className = 'math-key';
+                key.textContent = symbol;
+                key.onclick = function() {
+                    // Get the current answer input
+                    const index = currentQuestionIndex;
+                    const answerInput = document.getElementById(`answer-${index}`);
+                    const mqField = answerInput.mathfield;
+                    
+                    // Insert the symbol
+                    mqField.write(symbol);
+                    mqField.focus();
+                };
+                mathKeyboard.appendChild(key);
+            });
+            
+            container.appendChild(mathKeyboard);
+        }
+        
+        // Render a question
+        function renderQuestion(index) {
+            const question = selectedQuestions[index];
+            
+            // Create question section
+            const section = document.createElement('div');
+            section.className = 'quiz-section';
+            section.id = `question-section-${index}`;
+            
+            // Question header
+            const questionText = document.createElement('div');
+            questionText.className = 'question-text';
+            questionText.innerHTML = `
+                <span class="question-number">${index + 1}</span>
+                ${question.question}
+                <span class="question-topic">${question.topic}</span>
+                <span class="question-difficulty">${question.difficulty}</span>
+                <span class="feedback-icon correct-icon">✓</span>
+                <span class="feedback-icon incorrect-icon">✗</span>
+            `;
+            
+            // Create math input container
+            const inputContainer = document.createElement('div');
+            inputContainer.className = 'math-input-container';
+            
+            // Create math input field
+            const mathInput = document.createElement('span');
+            mathInput.className = 'math-field';
+            mathInput.id = `answer-${index}`;
+            
+            // Create hint button
+            const hintBtn = document.createElement('button');
+            hintBtn.className = 'hint-btn';
+            hintBtn.innerHTML = '?';
+            hintBtn.title = 'Show hint';
+            hintBtn.onclick = function() {
+                Swal.fire({
+                    title: 'Hint',
+                    text: question.hint,
+                    icon: 'info',
+                    confirmButtonColor: '#9c27b0'
+                });
+            };
+            
+            // Add elements to container
+            inputContainer.appendChild(mathInput);
+            inputContainer.appendChild(hintBtn);
+            
+            section.appendChild(questionText);
+            section.appendChild(inputContainer);
+            
+            // Add math keyboard
+            renderMathKeys(section);
+            
+            // Initialize MathQuill field
+            setTimeout(() => {
+                const answerMathField = MQ.MathField(mathInput, {
+                    handlers: {
+                        edit: function() {
+                            // Save answer when user types
+                            userAnswers[index] = answerMathField.latex();
+                        }
+                    }
+                });
+                mathInput.mathfield = answerMathField;
+                
+                // Load previous answer if exists
+                if (userAnswers[index]) {
+                    answerMathField.latex(userAnswers[index]);
+                }
+            }, 0);
+            
+            return section;
+        }
+        
+        // Show the current question
+        function showQuestion(index) {
+            // Hide all questions
+            const allSections = questionContainer.querySelectorAll('.quiz-section');
+            allSections.forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show the current question
+            const currentSection = document.getElementById(`question-section-${index}`);
+            if (currentSection) {
+                currentSection.style.display = 'block';
+            } else {
+                // Render the question if it doesn't exist yet
+                const newSection = renderQuestion(index);
+                questionContainer.appendChild(newSection);
+            }
+            
+            // Update buttons
+            prevBtn.disabled = index === 0;
+            if (index === selectedQuestions.length - 1) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'block';
+            } else {
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+            }
+            
+            // Update progress
+            updateProgress();
+        }
+        
+        // Initialize quiz
+        function initQuiz() {
+            // Select questions
+            selectedQuestions = selectQuestions();
+            
+            // Initialize user answers array
+            userAnswers = new Array(selectedQuestions.length).fill('');
+            
+            // Show first question
+            showQuestion(0);
+            
+            // Start timer if not already started
+            if (!quizStarted) {
+                startTimer();
+                quizStarted = true;
+            }
+        }
+        
+        // Event listeners for navigation buttons
+        prevBtn.addEventListener('click', function() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion(currentQuestionIndex);
+            }
+        });
+        
+        nextBtn.addEventListener('click', function() {
+            if (currentQuestionIndex < selectedQuestions.length - 1) {
+                currentQuestionIndex++;
+                showQuestion(currentQuestionIndex);
+            }
+        });
+        
+        submitBtn.addEventListener('click', function() {
+            Swal.fire({
+                title: 'Submit Quiz?',
+                text: 'Are you sure you want to submit your answers?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#4caf50',
+                cancelButtonColor: '#f44336',
+                confirmButtonText: 'Yes, submit'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    evaluateQuiz();
+                }
+            });
+        });
+        
+        // Evaluate quiz answers
+        function evaluateQuiz() {
+            // Stop the timer
+            clearInterval(timerInterval);
+            
+            // Calculate score and analyze performance
+            let score = 0;
+            let topicResults = {};
+            let difficultyResults = {
+                "Novice": { correct: 0, total: 0 },
+                "Intermediate": { correct: 0, total: 0 },
+                "Advanced": { correct: 0, total: 0 }
+            };
+            
+            // Initialize topic results
+            selectedQuestions.forEach(q => {
+                if (!topicResults[q.topic]) {
+                    topicResults[q.topic] = { correct: 0, total: 0 };
+                }
+            });
+            
+            // Check each answer
+            selectedQuestions.forEach((question, index) => {
+                const userAnswer = userAnswers[index]?.trim().toLowerCase() || '';
+                // Extract text from LaTeX if necessary
+                let processedAnswer = userAnswer.replace(/\\text\{([^}]*)\}/g, '$1')
+                                              .replace(/[\\{}]/g, '')
+                                              .toLowerCase();
+                
+                const correctAnswer = question.answer.toLowerCase();
+                const topic = question.topic;
+                const difficulty = question.difficulty;
+                
+                // Count topic statistics
+                topicResults[topic].total++;
+                difficultyResults[difficulty].total++;
+                
+                // Check if answer is correct
+                if (processedAnswer === correctAnswer) {
+                    score++;
+                    topicResults[topic].correct++;
+                    difficultyResults[difficulty].correct++;
+                    
+                    // Show correct feedback
+                    const questionSection = document.getElementById(`question-section-${index}`);
+                    if (questionSection) {
+                        const correctIcon = questionSection.querySelector('.correct-icon');
+                        correctIcon.style.display = 'inline';
+                    }
+                } else {
+                    // Show incorrect feedback
+                    const questionSection = document.getElementById(`question-section-${index}`);
+                    if (questionSection) {
+                        const incorrectIcon = questionSection.querySelector('.incorrect-icon');
+                        incorrectIcon.style.display = 'inline';
+                    }
+                }
+            });
+            
+            // Determine weak topics (less than 50% correct)
+            let weakTopics = [];
+            for (const [topic, result] of Object.entries(topicResults)) {
+                const percentage = (result.total > 0) ? (result.correct / result.total) * 100 : 0;
+                if (percentage < 50 && result.total > 0) {
+                    weakTopics.push(topic);
+                }
+            }
+            
+            // Generate recommendations based on weak topics
+            let recommendations = [];
+            weakTopics.forEach(topic => {
+                switch(topic) {
+                    case "Introduction to derivatives":
+                        recommendations.push("Review basic concepts of what derivatives represent in real-world scenarios.");
+                        break;
+                    case "The definition of Derivative":
+                        recommendations.push("Study the limit definition and practice identifying where functions are not differentiable.");
+                        break;
+                    case "Rules of Differentiation":
+                        recommendations.push("Practice applying derivative rules, especially product and quotient rules.");
+                        break;
+                    case "Equation of Tangent":
+                        recommendations.push("Work on problems that involve finding equations of tangent lines.");
+                        break;
+                    case "Second Derivative":
+                        recommendations.push("Study how the second derivative relates to concavity and acceleration.");
+                        break;
+                    case "Implicit Differentiations":
+                        recommendations.push("Practice differentiating equations where y is not isolated.");
+                        break;
+                    case "Linear Approximation & Differentials":
+                        recommendations.push("Work on using derivatives to approximate function values and understand error bounds.");
+                        break;
+                }
+            });
+            
+            // Determine level based on overall performance across difficulty levels
+            let level;
+            const noviceScore = difficultyResults["Novice"].total > 0 ? 
+                difficultyResults["Novice"].correct / difficultyResults["Novice"].total : 0;
+            const intermediateScore = difficultyResults["Intermediate"].total > 0 ? 
+                difficultyResults["Intermediate"].correct / difficultyResults["Intermediate"].total : 0;
+            const advancedScore = difficultyResults["Advanced"].total > 0 ? 
+                difficultyResults["Advanced"].correct / difficultyResults["Advanced"].total : 0;
+            
+            if (advancedScore >= 0.5 && intermediateScore >= 0.7) {
+                level = 'Advanced';
+            } else if (intermediateScore >= 0.5 && noviceScore >= 0.7) {
+                level = 'Intermediate';
+            } else {
+                level = 'Novice';
+            }
+            
+            // Display results
+            showResults(score, level, topicResults, weakTopics, recommendations);
+            
+            // Save results
+            if (typeof updateUserLevel === 'function') {
+                updateUserLevel(level, score, weakTopics, recommendations);
+            }
+        }
+        
+        // Show quiz results
+        function showResults(score, level, topicResults, weakTopics, recommendations) {
+            // Hide question container and navigation
+            questionContainer.style.display = 'none';
+            document.querySelector('.quiz-navigation').style.display = 'none';
+            submitBtn.style.display = 'none';
+            
+            // Show result container
+            resultContainer.style.display = 'block';
+            
+            // Build results HTML
+            let resultsHTML = `
+                <div class="result-header">
+                    <h2>Quiz Results</h2>
+                    <div class="result-score">
+                        You scored ${score}/${selectedQuestions.length}
+                        <span class="result-level">${level}</span>
+                    </div>
+                    <div>
+                        Time taken: ${window.quizTime.minutes}m ${window.quizTime.seconds}s
+                    </div>
+                </div>
+                
+                <div class="topic-performance">
+                    <h3>Topic Performance</h3>
+            `;
+            
+            // Add topic results
+            for (const [topic, result] of Object.entries(topicResults)) {
+                if (result.total > 0) {
+                    const percentage = Math.round((result.correct / result.total) * 100);
+                    const status = percentage < 50 ? 'needs-improvement' : 'good';
+                    
+                    resultsHTML += `
+                        <div class="topic-item">
+                            <div class="topic-header">
+                                <span class="topic-title">${topic}</span>
+                                <span class="topic-score">${result.correct}/${result.total} (${percentage}%)</span>
+                            </div>
+                            <div class="topic-progress">
+                                <div class="topic-progress-fill ${status}" style="width: ${percentage}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Add recommendations if there are weak topics
+            if (weakTopics.length > 0) {
+                resultsHTML += `
+                    <div class="recommendations">
+                        <h3>Recommendations</h3>
+                `;
+                
+                recommendations.forEach(rec => {
+                    resultsHTML += `
+                        <div class="recommendation-item">
+                            ${rec}
+                        </div>
+                    `;
+                });
+                
+                resultsHTML += `</div>`;
+            }
+            
+            // Add action buttons
+            resultsHTML += `
+                <div class="action-buttons">
+                    <button class="quiz-btn" onclick="window.location.href='profile.html'">Go to Profile</button>
+                    <button class="quiz-btn" onclick="window.location.reload()">Try Again</button>
+                </div>
+            `;
+            
+            // Set results HTML
+            resultContainer.innerHTML = resultsHTML;
+            
+            // Scroll to top to show results
+            window.scrollTo(0, 0);
+
+            // Add automatic redirection to profile after 5 seconds for assessment quiz
+            setTimeout(() => {
+                let countdown = 5;
+                const redirectMessage = document.createElement('div');
+                redirectMessage.style.cssText = 'margin-top: 20px; padding: 15px; background: #e8f5e8; border: 2px solid #28a745; border-radius: 8px; color: #155724; font-weight: 600; text-align: center;';
+                redirectMessage.innerHTML = `<p>🔄 Redirecting to Profile in <span id="quiz-countdown">${countdown}</span> seconds to show your updated progress...</p><p><a href="profile.html" style="color: #155724; text-decoration: underline;">Click here to go immediately</a></p>`;
+                resultContainer.appendChild(redirectMessage);
+
+                const countdownInterval = setInterval(() => {
+                    countdown--;
+                    const countdownElement = document.getElementById('quiz-countdown');
+                    if (countdownElement) {
+                        countdownElement.textContent = countdown;
+                    }
+                    if (countdown <= 0) {
+                        clearInterval(countdownInterval);
+                        window.location.href = 'profile.html';
+                    }
+                }, 1000);
+            }, 2000); // Wait 2 seconds before showing countdown
+        }
+        
+        // Initialize the quiz
+        initQuiz();
+    });
+</script>
+
+<!-- Firebase module script -->
+<script type="module">
+    // Import the functions you need from the SDKs
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBUfSOSpmCdWUGTVbSQsMCH-JVmrjpfdPY",
+        authDomain: "fyp-lutfi-naim.firebaseapp.com",
+        databaseURL: "https://fyp-lutfi-naim-default-rtdb.firebaseio.com",
+        projectId: "fyp-lutfi-naim",
+        storageBucket: "fyp-lutfi-naim.firebasestorage.app",
+        messagingSenderId: "231274529807",
+        appId: "1:231274529807:web:c4ea279f9e7581bd674f7a",
+        measurementId: "G-2D96FF3352"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Check authentication when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                console.log("No authenticated user found");
+                Swal.fire({
+                    title: 'Authentication Required',
+                    text: 'Please log in to take the quiz',
+                    icon: 'warning',
+                    confirmButtonColor: '#9c27b0',
+                    confirmButtonText: 'Go to Login'
+                }).then((result) => {
+                window.location.href = "index.html";
+                });
+                return;
+            }
+
+            console.log("User authenticated:", user.uid);
+        });
+    });
+
+    // Make updateUserLevel function available globally
+    window.updateUserLevel = async function(level, score, weakTopics, recommendations) {
+        try {
+            const user = auth.currentUser;
+            if (user) {
+                console.log("Updating user level:", level);
+
+                // Get the user document first to preserve other fields
+                const userDocRef = doc(db, 'users', user.uid);
+                const userDocSnap = await getDoc(userDocRef);
+
+                // Use email as username by default, remove "@" part if desired
+                let username = user.email ? user.email.split('@')[0] : 'Guest';
+                username = username.charAt(0).toUpperCase() + username.slice(1); // Capitalize first letter
+                
+                // Generate concept mastery data based on quiz results
+                const masteryData = [];
+                const conceptMap = {
+                    'Introduction to derivatives': { concept: 'Rate of Change', score: 0, count: 0 },
+                    'The definition of Derivative': { concept: 'Derivative Definition', score: 0, count: 0 },
+                    'Rules of Differentiation': { concept: 'Differentiation Rules', score: 0, count: 0 },
+                    'Equation of Tangent': { concept: 'Tangent Equations', score: 0, count: 0 },
+                    'Second Derivative': { concept: 'Second Derivatives', score: 0, count: 0 },
+                    'Implicit Differentiations': { concept: 'Implicit Differentiation', score: 0, count: 0 },
+                    'Linear Approximation & Differentials': { concept: 'Linear Approximation', score: 0, count: 0 }
+                };
+                
+                // Calculate mastery levels based on weak topics
+                Object.keys(conceptMap).forEach(topic => {
+                    const isWeak = weakTopics.includes(topic);
+                    const mastery = isWeak ? Math.floor(Math.random() * 40) + 10 : Math.floor(Math.random() * 40) + 60;
+                    let badge = null;
+                    
+                    if (mastery >= 80) badge = 'M'; // Master
+                    else if (mastery >= 50) badge = 'P'; // Proficient
+                    else if (mastery >= 20) badge = 'L'; // Learning
+                    
+                    masteryData.push({
+                        concept: conceptMap[topic].concept,
+                        mastery: mastery,
+                        badge: badge
+                    });
+                });
+                
+                // Generate learning path based on weak topics and level
+                const learningPath = [];
+                
+                // Add fundamentals for Novice
+                if (level === 'Novice') {
+                    learningPath.push({
+                        title: 'Calculus Fundamentals',
+                        content: 'Master the foundational concepts of calculus',
+                        status: 'current',
+                        action: 'Start',
+                        link: 'Introduction_to_derivatives.html'
+                    });
+                }
+                
+                // Add specific weak topics to learning path
+                weakTopics.forEach(topic => {
+                    let link = '';
+                    switch(topic) {
+                        case "Introduction to derivatives":
+                            link = "Introduction_to_derivatives.html";
+                            break;
+                        case "The definition of Derivative":
+                            link = "The_definition_of_derivative.html";
+                            break;
+                        case "Rules of Differentiation":
+                            link = "rule.html";
+                            break;
+                        case "Equation of Tangent":
+                            link = "Equation-of-tangent.html";
+                            break;
+                        case "Second Derivative":
+                            link = "Second-derivative.html";
+                            break;
+                        case "Implicit Differentiations":
+                            link = "Implicit-differentiation.html";
+                            break;
+                        case "Linear Approximation & Differentials":
+                            link = "linear-approx-differentials.html";
+                            break;
+                    }
+                    
+                    learningPath.push({
+                        title: topic,
+                        content: 'Focus on improving your understanding of this topic',
+                        status: 'current',
+                        action: 'Study',
+                        link: link
+                    });
+                });
+                
+                // Add advanced content for Intermediate and Advanced
+                if (level === 'Intermediate' || level === 'Advanced') {
+                    learningPath.push({
+                        title: 'Advanced Applications',
+                        content: 'Apply calculus concepts to complex problems',
+                        status: level === 'Advanced' ? 'current' : 'upcoming',
+                        action: level === 'Advanced' ? 'Continue' : 'Preview',
+                        link: 'Advanced.html'
+                    });
+                }
+                
+                // Generate achievements based on quiz performance
+                const achievements = [
+                    {
+                        icon: '🚀',
+                        title: 'First Step',
+                        description: 'Complete your first quiz',
+                        unlocked: true
+                    },
+                    {
+                        icon: '📚',
+                        title: 'Novice Calculus',
+                        description: 'Reach Novice level',
+                        unlocked: ['Novice', 'Intermediate', 'Advanced'].includes(level)
+                    },
+                    {
+                        icon: '🔍',
+                        title: 'Slope Seeker',
+                        description: 'Master derivatives',
+                        unlocked: level === 'Intermediate' || level === 'Advanced'
+                    },
+                    {
+                        icon: '📈',
+                        title: 'Graph Guru',
+                        description: 'Perfect score on curve sketching',
+                        unlocked: level === 'Advanced'
+                    },
+                    {
+                        icon: '🏆',
+                        title: 'Calculus Champion',
+                        description: 'Complete all modules with perfect scores',
+                        unlocked: score === 10
+                    },
+                    {
+                        icon: '⏱️',
+                        title: 'Speed Solver',
+                        description: 'Complete quiz in under 5 minutes',
+                        unlocked: window.quizTime && window.quizTime.minutes < 5
+                    },
+                    {
+                        icon: '🔄',
+                        title: 'Persistent Learner',
+                        description: 'Study for 5 days in a row',
+                        unlocked: false
+                    },
+                    {
+                        icon: '🧩',
+                        title: 'Concept Connector',
+                        description: 'Link multiple calculus concepts',
+                        unlocked: weakTopics.length < 2
+                    }
+                ];
+
+                if (userDocSnap.exists()) {
+                    // If there's already a username in the database, use that instead
+                    const userData = userDocSnap.data();
+                    if (userData.username && userData.username !== 'Guest') {
+                        username = userData.username;
+                    }
+
+                    // Update existing document
+                    await updateDoc(userDocRef, {
+                        level: level,
+                        progress: score * 10,
+                        username: username,
+                        email: user.email,
+                        weakTopics: weakTopics,
+                        recommendations: recommendations,
+                        masteryData: masteryData,
+                        learningPath: learningPath,
+                        achievements: achievements,
+                        lastUpdated: new Date().toISOString()
+                    });
+                } else {
+                    // Create new document if it doesn't exist
+                    await setDoc(userDocRef, {
+                        level: level,
+                        progress: score * 10,
+                        username: username,
+                        email: user.email,
+                        weakTopics: weakTopics,
+                        recommendations: recommendations,
+                        masteryData: masteryData,
+                        learningPath: learningPath,
+                        achievements: achievements,
+                        createdAt: new Date().toISOString(),
+                        lastUpdated: new Date().toISOString()
+                    });
+                }
+
+                // Store in session storage with consistent naming
+                sessionStorage.setItem('username', username);
+                sessionStorage.setItem('userName', username); // Keep both keys for backward compatibility
+                sessionStorage.setItem('userEmail', user.email);
+                sessionStorage.setItem('level', level);
+                sessionStorage.setItem('progress', score * 10);
+                sessionStorage.setItem('weakTopics', JSON.stringify(weakTopics));
+                sessionStorage.setItem('recommendations', JSON.stringify(recommendations));
+                sessionStorage.setItem('masteryData', JSON.stringify(masteryData));
+                sessionStorage.setItem('learningPath', JSON.stringify(learningPath));
+                sessionStorage.setItem('achievements', JSON.stringify(achievements));
+                
+                // If parent window has the updateUserLevel function, call it
+                if (window.opener && window.opener.updateUserLevel) {
+                    window.opener.updateUserLevel(level);
+                }
+
+                console.log("User data updated successfully with username:", username);
+
+                // Show success message using SweetAlert2
+                Swal.fire({
+                    title: 'Data Saved Successfully!',
+                    text: 'Your results have been saved.',
+                    icon: 'success',
+                    confirmButtonColor: '#4caf50'
+                });
+            } else {
+                console.error("No user is signed in");
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Please sign in to save your results',
+                    icon: 'error',
+                    confirmButtonColor: '#f44336'
+                });
+            }
+        } catch (error) {
+            console.error("Error updating user level:", error);
+            Swal.fire({
+                title: 'Error',
+                text: 'Error saving your results: ' + error.message,
+                icon: 'error',
+                confirmButtonColor: '#f44336'
+            });
+        }
+    };
+</script>
+</body>
+</html>
+
+
+
+
+
+
+

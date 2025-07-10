@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear Approximation & Differentials - Advanced | MathAnywhere</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- MathQuill resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+    
+    <!-- MathJax for rendering mathematical expressions -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                packages: {'[+]': ['color']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <style>
+        :root {
+            --input-focus: #2d8cf0;
+            --font-color: #323232;
+            --font-color-sub: #666;
+            --bg-color: #f7f9fc;
+            --main-color: black;
+            --accent-color: #1dd1a1;
+            --secondary-color: #54a0ff;
+            --tertiary-color: #5f27cd;
+            --light-blue: #74b9ff;
+            --pink: #fd79a8;
+            --purple: #6c5ce7;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fira Code', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: var(--font-color);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(29, 209, 161, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(84, 160, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(95, 39, 205, 0.15) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            box-shadow: 
+                20px 20px 60px rgba(0, 0, 0, 0.1),
+                -20px -20px 60px rgba(255, 255, 255, 0.8),
+                inset 5px 5px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            border: 2px solid var(--main-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--tertiary-color) 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 3px solid var(--main-color);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 3em;
+            font-weight: 900;
+            position: relative;
+            z-index: 1;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.25);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+            z-index: 1;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 50px;
+        }
+
+        .question-container {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid var(--main-color);
+            box-shadow: 
+                8px 8px 20px rgba(0, 0, 0, 0.1),
+                -8px -8px 20px rgba(255, 255, 255, 0.7),
+                inset 2px 2px 5px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, var(--accent-color), var(--tertiary-color));
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            border: 3px solid var(--main-color);
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            line-height: 1.7;
+            color: var(--font-color);
+            font-weight: 600;
+        }
+
+        .math-expression {
+            background: linear-gradient(135deg, #e8f8f5, #d1ecf1);
+            padding: 20px;
+            border-radius: 15px;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.4em;
+            text-align: center;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .math-input-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+            box-shadow: 
+                inset 2px 2px 5px rgba(0, 0, 0, 0.1),
+                inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .input-label {
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            display: block;
+            font-size: 1.1em;
+        }
+
+        .math-hint {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 2px solid var(--warning-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #856404;
+            font-weight: 600;
+        }
+
+        .answer-feedback {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+
+        .answer-feedback.show {
+            display: block;
+        }
+
+        .answer-feedback.correct {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border: 2px solid var(--success-color);
+            color: #155724;
+        }
+
+        .answer-feedback.incorrect {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            border: 2px solid var(--danger-color);
+            color: #721c24;
+        }
+
+        .check-answer-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 12px 25px;
+            border-radius: 20px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 15px 0;
+        }
+
+        .check-answer-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(29, 209, 161, 0.3);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--tertiary-color) 100%);
+            color: white;
+            border: 3px solid var(--main-color);
+            padding: 18px 50px;
+            border-radius: 50px;
+            font-size: 1.3em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            margin: 40px auto;
+            display: block;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(29, 209, 161, 0.4);
+        }
+
+        .results {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+            text-align: center;
+            border: 3px solid var(--main-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .score {
+            font-size: 4em;
+            font-weight: 900;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .score.pass {
+            color: var(--success-color);
+        }
+
+        .score.fail {
+            color: var(--danger-color);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 3px solid var(--main-color);
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.4s ease;
+            flex: 1;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .nav-btn:hover {
+            color: white;
+            transform: translateY(-3px);
+            text-decoration: none;
+        }
+
+        /* MathQuill styling */
+        .mathquill-field {
+            width: 100%;
+            margin: 15px 0;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            min-height: 50px;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.1),
+                -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .mathquill-field:focus-within {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(29, 209, 161, 0.3);
+            transform: scale(1.02);
+        }
+
+        /* Enhanced Mathematical Toolbar Styling */
+        .math-toolbar {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.95));
+            border: 2px solid var(--main-color);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 15px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .math-toolbar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .math-toolbar:hover::before {
+            left: 100%;
+        }
+
+        .math-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 40px;
+        }
+
+        .math-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 12px rgba(29, 209, 161, 0.3);
+        }
+
+        .function-btn {
+            background: linear-gradient(135deg, var(--tertiary-color), var(--purple));
+        }
+
+        .show-answer-btn {
+            background: linear-gradient(135deg, var(--warning-color), #f39c12);
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 0;
+        }
+
+        .show-answer-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        /* Answer format guides */
+        .answer-format {
+            margin-top: 10px;
+            padding: 15px;
+            background: rgba(52, 152, 219, 0.05);
+            border: 1px dashed #3498db;
+            border-radius: 8px;
+            color: #333;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            text-align: left;
+            font-weight: normal;
+            position: relative;
+        }
+        
+        .answer-format::before {
+            content: "📝 Answer Format Guide";
+            position: absolute;
+            top: -12px;
+            left: 10px;
+            background: #3498db;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .format-example {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 3px 8px;
+            margin: 2px;
+            border-radius: 4px;
+            border: 1px solid #3498db;
+            font-weight: 600;
+        }
+
+        /* Drag and Drop Styles */
+        .drag-drop-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+        }
+
+        .drag-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(240, 248, 255, 0.8);
+            border-radius: 10px;
+            border: 2px dashed var(--accent-color);
+        }
+
+        .draggable-item {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: grab;
+            font-weight: 600;
+            border: 2px solid var(--main-color);
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .draggable-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(29, 209, 161, 0.3);
+        }
+
+        .draggable-item.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+
+        .drop-zone {
+            min-width: 120px;
+            min-height: 40px;
+            border: 2px dashed var(--accent-color);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 5px;
+            padding: 8px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone.dragover {
+            background: rgba(29, 209, 161, 0.2);
+            border-color: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        .drop-zone.filled {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border-color: var(--main-color);
+        }
+
+        .equation-builder {
+            font-size: 1.2em;
+            font-family: 'Times New Roman', serif;
+            text-align: center;
+            margin: 20px 0;
+            line-height: 2;
+        }
+
+        /* MCQ Styles */
+        .mcq-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+        }
+
+        .mcq-options {
+            margin: 15px 0;
+        }
+
+        .mcq-option {
+            display: flex;
+            align-items: center;
+            margin: 12px 0;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mcq-option:hover {
+            border-color: var(--accent-color);
+            background: rgba(29, 209, 161, 0.1);
+            transform: translateX(5px);
+        }
+
+        .mcq-option.selected {
+            border-color: var(--accent-color);
+            background: rgba(29, 209, 161, 0.2);
+        }
+
+        .mcq-option input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+
+        .mcq-option label {
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 500;
+            flex: 1;
+        }
+
+        /* Answer Guide Styling */
+        .answer-guide {
+            background: linear-gradient(135deg, rgba(29, 209, 161, 0.1), rgba(84, 160, 255, 0.1));
+            border: 2px solid var(--accent-color);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 
+                8px 8px 20px rgba(0, 0, 0, 0.1),
+                -8px -8px 20px rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .answer-guide h3 {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            text-align: center;
+            font-weight: 800;
+        }
+
+        .format-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .format-item {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid var(--secondary-color);
+            box-shadow: 
+                4px 4px 8px rgba(0, 0, 0, 0.1),
+                -4px -4px 8px rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .format-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                6px 6px 12px rgba(0, 0, 0, 0.15),
+                -6px -6px 12px rgba(255, 255, 255, 0.9);
+        }
+
+        .format-item strong {
+            color: var(--secondary-color);
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .format-item span {
+            color: var(--font-color);
+            font-family: 'Courier New', monospace;
+            background: rgba(84, 160, 255, 0.1);
+            padding: 5px 8px;
+            border-radius: 6px;
+            font-size: 0.95em;
+        }
+
+        .toggle-btn {
+            background: linear-gradient(135deg, var(--secondary-color), var(--tertiary-color));
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto;
+            box-shadow: 
+                4px 4px 8px rgba(0, 0, 0, 0.2),
+                -4px -4px 8px rgba(255, 255, 255, 0.8);
+        }
+
+        .toggle-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 
+                6px 6px 12px rgba(0, 0, 0, 0.3),
+                -6px -6px 12px rgba(255, 255, 255, 0.9);
+        }
+
+        @media (max-width: 768px) {
+            .format-examples {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Linear Approximation & Differentials</h1>
+            <p>Master sophisticated optimization and theoretical applications</p>
+            <div class="difficulty-badge">Advanced Level</div>
+        </div>
+
+        <div class="content">
+
+
+            <div id="questionsContainer">
+                <!-- Question 1 - MCQ - Linear Approximation of √x -->
+                <div class="question-container">
+                    <div class="question-number">1</div>
+                    <div class="question-text">
+                        Find the linear approximation of $f(x) = \sqrt{x}$ at $a = 4$ and use it to estimate $\sqrt{4.1}$.
+                    </div>
+                    <div class="math-expression">$f(x) = \sqrt{x}$, $a = 4$</div>
+                    
+                    <div class="answer-format">
+                        📝 $L(x) = \_\_\_ + \_\_\_(x-\_\_\_)$, $\sqrt{4.1} \approx \_\_\_$
+                        <br><em>Choose the option that correctly fills all blanks</em>
+                    </div>
+                
+                    <div class="mcq-container">
+                        <div class="mcq-options" id="mcq-0">
+                            <div class="mcq-option" onclick="selectMCQ(0, 0)">
+                                <input type="radio" name="mcq-0" value="0" id="mcq-0-0">
+                                <label for="mcq-0-0">$L(x) = 2 + \frac{1}{4}(x-4)$, $\sqrt{4.1} \approx 2.025$</label>
+                            </div>
+                            <div class="mcq-option" onclick="selectMCQ(0, 1)">
+                                <input type="radio" name="mcq-0" value="1" id="mcq-0-1">
+                                <label for="mcq-0-1">$L(x) = 2 + \frac{1}{2}(x-4)$, $\sqrt{4.1} \approx 2.05$</label>
+                            </div>
+                            <div class="mcq-option" onclick="selectMCQ(0, 2)">
+                                <input type="radio" name="mcq-0" value="2" id="mcq-0-2">
+                                <label for="mcq-0-2">$L(x) = 4 + \frac{1}{4}(x-4)$, $\sqrt{4.1} \approx 4.025$</label>
+                            </div>
+                            <div class="mcq-option" onclick="selectMCQ(0, 3)">
+                                <input type="radio" name="mcq-0" value="3" id="mcq-0-3">
+                                <label for="mcq-0-3">$L(x) = 2 + 4(x-4)$, $\sqrt{4.1} \approx 2.4$</label>
+                            </div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMCQAnswer(0)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-0"></div>
+                        <div class="math-hint">
+                            💡 Hint: $L(x) = f(a) + f'(a)(x-a)$ where $f'(x) = \frac{1}{2\sqrt{x}}$
+                        </div>
+                    </div>
+                </div>
+                <!-- Question 2 - Drag and Drop - Multivariable Linear Approximation -->
+                <div class="question-container">
+                    <div class="question-number">2</div>
+                    <div class="question-text">
+                        Complete the multivariable linear approximation of $f(x,y) = x^2 + xy + y^2$ at point $(1,2)$ to estimate $f(1.1, 1.9)$.
+                    </div>
+                    <div class="math-expression">$f(x,y) = x^2 + xy + y^2$ at $(1,2)$</div>
+                    
+                    <div class="answer-format">
+                        📝 $L(x,y) = \_\_\_ + \_\_\_(x-\_\_\_) + \_\_\_(y-\_\_\_)$
+                        <br>$L(1.1, 1.9) \approx \_\_\_$
+                        <br><em>Drag the correct numbers to fill each blank</em>
+                    </div>
+                    
+                    <div class="drag-drop-container">
+                        <div class="input-label">Complete the linear approximation:</div>
+                        
+                        <div class="drag-items" id="drag-items-1">
+                            <div class="draggable-item" draggable="true" data-value="7">7</div>
+                            <div class="draggable-item" draggable="true" data-value="4">4</div>
+                            <div class="draggable-item" draggable="true" data-value="5">5</div>
+                            <div class="draggable-item" draggable="true" data-value="6.5">6.5</div>
+                            <div class="draggable-item" draggable="true" data-value="1">1</div>
+                            <div class="draggable-item" draggable="true" data-value="2">2</div>
+                        </div>
+                        
+                        <div class="equation-builder">
+                            L(x,y) = <div class="drop-zone" data-answer="7" data-question="1" data-position="0"></div> + <div class="drop-zone" data-answer="4" data-question="1" data-position="1"></div>(x-<div class="drop-zone" data-answer="1" data-question="1" data-position="2"></div>) + <div class="drop-zone" data-answer="5" data-question="1" data-position="3"></div>(y-<div class="drop-zone" data-answer="2" data-question="1" data-position="4"></div>)
+                            <br><br>
+                            L(1.1, 1.9) ≈ <div class="drop-zone" data-answer="6.5" data-question="1" data-position="5"></div>
+                        </div>
+                    
+                        <button class="check-answer-btn" onclick="checkDragDropAnswer(1)">Check Answer</button>
+                        <button class="check-answer-btn" onclick="resetDragDrop(1)" style="background: linear-gradient(135deg, #ff6b6b, #ee5a52); margin-left: 10px;">🔄 Reset</button>
+                        <div class="answer-feedback" id="feedback-1"></div>
+                        <div class="math-hint">
+                            💡 Hint: $L(x,y) = f(a,b) + f_x(a,b)(x-a) + f_y(a,b)(y-b)$
+                        </div>
+                    </div>
+                </div>
+                <!-- Question 3 - MathQuill - Error Estimation -->
+                <div class="question-container">
+                    <div class="question-number">3</div>
+                    <div class="question-text">
+                        Find the maximum error when using the linear approximation $L(x) = 1 + x$ to estimate $e^x$ on the interval $[0, 0.1]$.
+                    </div>
+                    <div class="math-expression">$f(x) = e^x$, $L(x) = 1 + x$ on $[0, 0.1]$</div>
+                    
+                    <div class="answer-format">
+                        📝 Maximum error bound = \_\_\_\_\_
+                        <br><em>Enter as decimal (e.g., 0.0055) or scientific notation (e.g., 5.5e-3)</em>
+                    </div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Maximum error bound</label>
+                        
+                        <!-- Mathematical Toolbar -->
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(2, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(2, 'e')">e</button>
+                            <button class="math-btn" onclick="insertMath(2, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(2, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(2, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(2, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(2, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(2, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(2, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(2, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(2, '\\frac{}{}')">[/]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(2, '\\sqrt{}')">[√]</button>
+                        </div>
+                        
+                        <div class="mathquill-field" id="question2"></div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(2)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-2"></div>
+                        <div class="math-hint">
+                            💡 Hint: Error bound is $\frac{M}{2!}|x-a|^2$ where $M = \max|f''(x)|$ on the interval
+                        </div>
+                    </div>
+                </div>
+                <!-- Question 4 - MCQ - Related Rates with Spherical Balloon -->
+                <div class="question-container">
+                    <div class="question-number">4</div>
+                    <div class="question-text">
+                        A spherical balloon is being inflated. When the radius is 10 cm, it is increasing at 4 cm/min. How fast is the volume increasing at that moment?
+                    </div>
+                    <div class="math-expression">$V = \frac{4}{3}\pi r^3$, $r = 10$ cm, $\frac{dr}{dt} = 4$ cm/min</div>
+                    
+                    <div class="answer-format">
+                        📝 $\frac{dV}{dt} = \_\_\_\_\pi$ cm³/min
+                        <br><em>Choose the option that correctly fills the blank</em>
+                    </div>
+                    
+                    <div class="mcq-container">
+                        <div class="mcq-options" id="mcq-3">
+                            <div class="mcq-option" onclick="selectMCQ(3, 0)">
+                                <input type="radio" name="mcq-3" value="0" id="mcq-3-0">
+                                <label for="mcq-3-0">$\frac{dV}{dt} = 800\pi$ cm³/min</label>
+                            </div>
+                            <div class="mcq-option" onclick="selectMCQ(3, 1)">
+                                <input type="radio" name="mcq-3" value="1" id="mcq-3-1">
+                                <label for="mcq-3-1">$\frac{dV}{dt} = 1600\pi$ cm³/min</label>
+                            </div>
+                            <div class="mcq-option" onclick="selectMCQ(3, 2)">
+                                <input type="radio" name="mcq-3" value="2" id="mcq-3-2">
+                                <label for="mcq-3-2">$\frac{dV}{dt} = 400\pi$ cm³/min</label>
+                            </div>
+                            <div class="mcq-option" onclick="selectMCQ(3, 3)">
+                                <input type="radio" name="mcq-3" value="3" id="mcq-3-3">
+                                <label for="mcq-3-3">$\frac{dV}{dt} = 160\pi$ cm³/min</label>
+                            </div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMCQAnswer(3)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-3"></div>
+                        <div class="math-hint">
+                            💡 Hint: Differentiate $V = \frac{4}{3}\pi r^3$ with respect to time: $\frac{dV}{dt} = 4\pi r^2 \frac{dr}{dt}$
+                        </div>
+                    </div>
+                </div>
+                <!-- Question 5 - Drag and Drop - Parametric Linear Approximation -->
+                <div class="question-container">
+                    <div class="question-number">5</div>
+                    <div class="question-text">
+                        For the parametric curve $x = t^2$, $y = t^3$, complete the linear approximation of $y$ with respect to $x$ at $t = 2$.
+                    </div>
+                    <div class="math-expression">$x = t^2$, $y = t^3$ at $t = 2$</div>
+                    
+                    <div class="answer-format">
+                        📝 At t = 2: $\_\_\_\_\_ = \_\_\_\_\_ = \_\_\_\_\_ \cdot t = \_\_\_$
+                        <br>Linear approximation: $y = \_\_\_ + 3(x - \_\_\_)$
+                        <br><em>Drag the correct terms to fill each blank</em>
+                    </div>
+
+                    <div class="drag-drop-container">
+                        <div class="input-label">Complete the parametric linear approximation:</div>
+                        
+                        <div class="drag-items" id="drag-items-4">
+                            <div class="draggable-item" draggable="true" data-value="3">3</div>
+                            <div class="draggable-item" draggable="true" data-value="8">8</div>
+                            <div class="draggable-item" draggable="true" data-value="4">4</div>
+                            <div class="draggable-item" draggable="true" data-value="dy/dx">dy/dx</div>
+                            <div class="draggable-item" draggable="true" data-value="3t²/2t">3t²/2t</div>
+                            <div class="draggable-item" draggable="true" data-value="3/2">3/2</div>
+                        </div>
+                    
+                        <div class="equation-builder">
+                            At t = 2: <div class="drop-zone" data-answer="dy/dx" data-question="4" data-position="0"></div> = <div class="drop-zone" data-answer="3t²/2t" data-question="4" data-position="1"></div> = <div class="drop-zone" data-answer="3/2" data-question="4" data-position="2"></div> · t = <div class="drop-zone" data-answer="3" data-question="4" data-position="3"></div>
+                            <br><br>
+                            Linear approximation: y = <div class="drop-zone" data-answer="8" data-question="4" data-position="4"></div> + 3(x - <div class="drop-zone" data-answer="4" data-question="4" data-position="5"></div>)
+                        </div>
+                        
+                        <button class="check-answer-btn" onclick="checkDragDropAnswer(4)">Check Answer</button>
+                        <button class="check-answer-btn" onclick="resetDragDrop(4)" style="background: linear-gradient(135deg, #ff6b6b, #ee5a52); margin-left: 10px;">🔄 Reset</button>
+                        <div class="answer-feedback" id="feedback-4"></div>
+                        <div class="math-hint">
+                            💡 Hint: For parametric curves: $\frac{dy}{dx} = \frac{dy/dt}{dx/dt}$, then use point-slope form
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 6 - MathQuill - Taylor Polynomial Linear Approximation -->
+                <div class="question-container">
+                    <div class="question-number">6</div>
+                    <div class="question-text">
+                        Find the linear approximation (first-order Taylor polynomial) of $f(x) = \ln(1+x)$ at $x = 0$ and use it to approximate $\ln(1.05)$.
+                    </div>
+                    <div class="math-expression">$f(x) = \ln(1+x)$ at $x = 0$</div>
+                    
+                    <div class="answer-format">
+                        📝 $L(x) = \_\_\_$, $\ln(1.05) \approx \_\_\_$
+                        <br><em>Enter the linear approximation and the numerical estimate</em>
+                    </div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Linear approximation L(x) =</label>
+                        
+                        <!-- Mathematical Toolbar -->
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(5, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(5, 'ln')">[ln]</button>
+                            <button class="math-btn" onclick="insertMath(5, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(5, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(5, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(5, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(5, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(5, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(5, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(5, '\\frac{}{}')">[/]</button>
+                        </div>
+                        
+                        <div class="mathquill-field" id="question5"></div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(5)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-5"></div>
+                        <div class="math-hint">
+                            💡 Hint: $f'(x) = \frac{1}{1+x}$, so $L(x) = f(0) + f'(0) \cdot x$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 7 - MCQ - Differential Approximation -->
+                <div class="question-container">
+                    <div class="question-number">7</div>
+                    <div class="question-text">
+                        A metal sphere is heated and its radius increases from 5 cm to 5.02 cm. Using differentials, approximate the change in surface area. (Surface area: $S = 4\pi r^2$)
+                    </div>
+                    <div class="math-expression">$S = 4\pi r^2$, $r = 5$ cm, $dr = 0.02$ cm</div>
+                    
+                    <div class="answer-format">
+                        📝 $dS = \_\_\_$ cm²
+                        <br><em>Choose the correct differential approximation</em>
+                    </div>
+                    
+                    <div class="mcq-container">
+                        <div class="mcq-options" id="mcq-6">
+                            <div class="mcq-option" onclick="selectMCQ(6, 0)">
+                                <input type="radio" name="mcq-6" value="0" id="mcq-6-0">
+                                <label for="mcq-6-0">$dS = 0.8\pi$ cm²</label>
+                            </div>
+                            <div class="mcq-option" onclick="selectMCQ(6, 1)">
+                                <input type="radio" name="mcq-6" value="1" id="mcq-6-1">
+                                <label for="mcq-6-1">$dS = 1.6\pi$ cm²</label>
+                            </div>
+                            <div class="mcq-option" onclick="selectMCQ(6, 2)">
+                                <input type="radio" name="mcq-6" value="2" id="mcq-6-2">
+                                <label for="mcq-6-2">$dS = 0.4\pi$ cm²</label>
+                            </div>
+                            <div class="mcq-option" onclick="selectMCQ(6, 3)">
+                                <input type="radio" name="mcq-6" value="3" id="mcq-6-3">
+                                <label for="mcq-6-3">$dS = 2.0\pi$ cm²</label>
+                            </div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMCQAnswer(6)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-6"></div>
+                        <div class="math-hint">
+                            💡 Hint: $dS = \frac{dS}{dr} \cdot dr = 8\pi r \cdot dr$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 8 - Drag and Drop - Multivariable Chain Rule Linear Approximation -->
+                <div class="question-container">
+                    <div class="question-number">8</div>
+                    <div class="question-text">
+                        Complete the linear approximation for $w = f(x,y) = x^2y + xy^2$ where $x = u + v$ and $y = u - v$. Find $\frac{\partial w}{\partial u}$ at $(u,v) = (2,1)$.
+                    </div>
+                    <div class="math-expression">$w = x^2y + xy^2$, $x = u + v$, $y = u - v$ at $(u,v) = (2,1)$</div>
+                    
+                    <div class="answer-format">
+                        📝 $\frac{\partial w}{\partial u} = \frac{\partial w}{\partial x} \cdot \_\_\_ + \frac{\partial w}{\partial y} \cdot \_\_\_ = \_\_\_$
+                        <br>At $(u,v) = (2,1)$: $\frac{\partial w}{\partial u} = \_\_\_$
+                        <br><em>Drag the correct terms to complete the chain rule</em>
+                    </div>
+
+                    <div class="drag-drop-container">
+                        <div class="input-label">Complete the multivariable chain rule:</div>
+                        
+                        <div class="drag-items" id="drag-items-7">
+                            <div class="draggable-item" draggable="true" data-value="∂x/∂u">∂x/∂u</div>
+                            <div class="draggable-item" draggable="true" data-value="∂y/∂u">∂y/∂u</div>
+                            <div class="draggable-item" draggable="true" data-value="1">1</div>
+                            <div class="draggable-item" draggable="true" data-value="2xy + y²">2xy + y²</div>
+                            <div class="draggable-item" draggable="true" data-value="x² + 2xy">x² + 2xy</div>
+                            <div class="draggable-item" draggable="true" data-value="18">18</div>
+                        </div>
+                    
+                        <div class="equation-builder">
+                            $\frac{\partial w}{\partial u} = \frac{\partial w}{\partial x} \cdot$ <div class="drop-zone" data-answer="∂x/∂u" data-question="7" data-position="0"></div> $+ \frac{\partial w}{\partial y} \cdot$ <div class="drop-zone" data-answer="∂y/∂u" data-question="7" data-position="1"></div>
+                            <br><br>
+                            $= ($ <div class="drop-zone" data-answer="2xy + y²" data-question="7" data-position="2"></div> $) \cdot$ <div class="drop-zone" data-answer="1" data-question="7" data-position="3"></div> $+ ($ <div class="drop-zone" data-answer="x² + 2xy" data-question="7" data-position="4"></div> $) \cdot$ <div class="drop-zone" data-answer="1" data-question="7" data-position="5"></div>
+                            <br><br>
+                            At $(u,v) = (2,1)$: $\frac{\partial w}{\partial u} =$ <div class="drop-zone" data-answer="18" data-question="7" data-position="6"></div>
+                        </div>
+                        
+                        <button class="check-answer-btn" onclick="checkDragDropAnswer(7)">Check Answer</button>
+                        <button class="check-answer-btn" onclick="resetDragDrop(7)" style="background: linear-gradient(135deg, #ff6b6b, #ee5a52); margin-left: 10px;">🔄 Reset</button>
+                        <div class="answer-feedback" id="feedback-7"></div>
+                        <div class="math-hint">
+                            💡 Hint: Use chain rule: $\frac{\partial w}{\partial u} = \frac{\partial w}{\partial x}\frac{\partial x}{\partial u} + \frac{\partial w}{\partial y}\frac{\partial y}{\partial u}$
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="submit-btn" id="submitBtn" onclick="submitQuiz()">🎯 Submit Advanced Quiz</button>
+            
+            <!-- DEBUG BUTTONS -->
+            <div style="text-align: center; margin: 20px 0; padding: 15px; background: #f0f0f0; border-radius: 10px; border: 2px dashed #999;">
+                <h4 style="color: #666; margin-bottom: 10px;">🔧 Debug Tools</h4>
+                <button onclick="debugCheckModuleStatus()" class="nav-btn" style="background: #17a2b8; margin: 5px; padding: 8px 15px; font-size: 14px;">
+                    🔍 Check Module Status
+                </button>
+                <button onclick="debugForceCompleteModule()" class="nav-btn" style="background: #28a745; margin: 5px; padding: 8px 15px; font-size: 14px;">
+                    ✅ Force Complete Module
+                </button>
+            </div>
+
+            <div id="results" class="results" style="display: none;">
+                <div class="score" id="scoreDisplay"></div>
+                <div id="resultMessage"></div>
+                <div class="navigation">
+                    <a href="linear-approximation-and-differentials-intermediate.html" class="nav-btn">← Back to Intermediate</a>
+                    <a href="profile.html" class="nav-btn">Complete Module →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+        import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBUfSOSpmCdWUGTVbSQsMCH-JVmrjpfdPY",
+            authDomain: "fyp-lutfi-naim.firebaseapp.com",
+            projectId: "fyp-lutfi-naim",
+            storageBucket: "fyp-lutfi-naim.firebasestorage.app",
+            messagingSenderId: "231274529807",
+            appId: "1:231274529807:web:c4ea279f9e7581bd674f7a"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let mathAnswers = {};
+        let mcqAnswers = {};
+        let dragDropAnswers = {};
+        let currentUser = null;
+        let mathFields = {};
+
+        // Initialize all question types
+        document.addEventListener('DOMContentLoaded', function() {
+            const MQ = MathQuill.getInterface(2);
+            
+            // Initialize MathQuill fields
+            const mathQuillQuestions = [2, 5];
+            mathQuillQuestions.forEach(i => {
+                const element = document.getElementById(`question${i}`);
+                if (element) {
+                    mathFields[i] = MQ.MathField(element, {
+                        spaceBehavesLikeTab: true,
+                        handlers: {
+                            edit: function() {
+                                const latex = mathFields[i].latex();
+                                mathAnswers[i] = latex;
+                                sessionStorage.setItem('linear-approximation-advanced-progress', JSON.stringify({
+                                    math: mathAnswers,
+                                    mcq: mcqAnswers,
+                                    dragDrop: dragDropAnswers
+                                }));
+                            }
+                        }
+                    });
+                }
+            });
+            
+            // Initialize drag and drop functionality
+            initializeDragAndDrop();
+        });
+
+        // Initialize drag and drop
+        function initializeDragAndDrop() {
+            document.querySelectorAll('.draggable-item').forEach(item => {
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragend', handleDragEnd);
+            });
+            
+            document.querySelectorAll('.drop-zone').forEach(zone => {
+                zone.addEventListener('dragover', handleDragOver);
+                zone.addEventListener('drop', handleDrop);
+                zone.addEventListener('dragenter', handleDragEnter);
+                zone.addEventListener('dragleave', handleDragLeave);
+            });
+        }
+
+        function handleDragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.dataset.value);
+            e.target.classList.add('dragging');
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+
+        function handleDragEnter(e) {
+            e.preventDefault();
+            e.target.classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.target.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.target.classList.remove('dragover');
+            
+            const draggedValue = e.dataTransfer.getData('text/plain');
+            const questionNum = e.target.dataset.question;
+            const position = e.target.dataset.position;
+            
+            e.target.textContent = draggedValue;
+            e.target.classList.add('filled');
+            
+            if (!dragDropAnswers[questionNum]) {
+                dragDropAnswers[questionNum] = {};
+            }
+            dragDropAnswers[questionNum][position] = draggedValue;
+            
+            sessionStorage.setItem('linear-approximation-advanced-progress', JSON.stringify({
+                math: mathAnswers,
+                mcq: mcqAnswers,
+                dragDrop: dragDropAnswers
+            }));
+        }
+
+        // MCQ Functions
+        window.selectMCQ = function(questionNum, optionNum) {
+            const options = document.querySelectorAll(`#mcq-${questionNum} .mcq-option`);
+            options.forEach(option => option.classList.remove('selected'));
+            
+            const selectedOption = document.querySelector(`#mcq-${questionNum}-${optionNum}`);
+            selectedOption.checked = true;
+            selectedOption.closest('.mcq-option').classList.add('selected');
+            
+            mcqAnswers[questionNum] = optionNum;
+            
+            sessionStorage.setItem('linear-approximation-advanced-progress', JSON.stringify({
+                math: mathAnswers,
+                mcq: mcqAnswers,
+                dragDrop: dragDropAnswers
+            }));
+        };
+
+        // Check MCQ Answer
+        window.checkMCQAnswer = function(questionNum) {
+            const feedback = document.getElementById(`feedback-${questionNum}`);
+            let isCorrect = false;
+            
+            const correctAnswers = {
+                0: 0, // Q1: Linear approximation of √x
+                3: 1, // Q4: Spherical balloon volume
+                6: 0  // Q7: Differential approximation (0.8π)
+            };
+            
+            isCorrect = mcqAnswers[questionNum] === correctAnswers[questionNum];
+            
+            feedback.classList.remove('correct', 'incorrect');
+            feedback.classList.add('show');
+            
+            if (isCorrect) {
+                feedback.classList.add('correct');
+                feedback.innerHTML = '✅ Excellent! You understand advanced linear approximation techniques!';
+            } else {
+                feedback.classList.add('incorrect');
+                feedback.innerHTML = '❌ Not quite right. Review the linear approximation concept and try again!';
+            }
+        };
+
+        // Check Drag Drop Answer
+        window.checkDragDropAnswer = function(questionNum) {
+            const feedback = document.getElementById(`feedback-${questionNum}`);
+            let isCorrect = false;
+            
+            const correctAnswers = {
+                1: { 0: "7", 1: "4", 2: "1", 3: "5", 4: "2", 5: "6.5" },
+                4: { 0: "dy/dx", 1: "3t²/2t", 2: "3/2", 3: "3", 4: "8", 5: "4" },
+                7: { 0: "∂x/∂u", 1: "∂y/∂u", 2: "2xy + y²", 3: "1", 4: "x² + 2xy", 5: "1", 6: "18" }
+            };
+            
+            const userAnswers = dragDropAnswers[questionNum] || {};
+            const expectedAnswers = correctAnswers[questionNum];
+            
+            isCorrect = Object.keys(expectedAnswers).every(pos => 
+                userAnswers[pos] === expectedAnswers[pos]
+            );
+            
+            feedback.classList.remove('correct', 'incorrect');
+            feedback.classList.add('show');
+            
+            if (isCorrect) {
+                feedback.classList.add('correct');
+                feedback.innerHTML = '✅ Perfect! You completed the linear approximation correctly!';
+            } else {
+                feedback.classList.add('incorrect');
+                feedback.innerHTML = '❌ Some items are in wrong positions. Try again!';
+            }
+        };
+
+        // Reset drag and drop
+        window.resetDragDrop = function(questionNum) {
+            const dropZones = document.querySelectorAll(`[data-question="${questionNum}"]`);
+            dropZones.forEach(zone => {
+                zone.textContent = '';
+                zone.classList.remove('filled');
+            });
+            
+            if (dragDropAnswers[questionNum]) {
+                delete dragDropAnswers[questionNum];
+            }
+            
+            const feedback = document.getElementById(`feedback-${questionNum}`);
+            if (feedback) {
+                feedback.classList.remove('show', 'correct', 'incorrect');
+                feedback.innerHTML = '';
+            }
+            
+            sessionStorage.setItem('linear-approximation-advanced-progress', JSON.stringify({
+                math: mathAnswers,
+                mcq: mcqAnswers,
+                dragDrop: dragDropAnswers
+            }));
+        };
+
+        // Math answer checking
+        window.checkMathAnswer = function(questionNum) {
+            const feedback = document.getElementById(`feedback-${questionNum}`);
+            const userAnswer = mathFields[questionNum] ? mathFields[questionNum].latex().toLowerCase().replace(/\s/g, '') : '';
+            
+            let isCorrect = false;
+            
+            if (questionNum == 2) {
+                isCorrect = (userAnswer.includes('0.0055') || userAnswer.includes('0.00551') ||
+                           userAnswer.includes('5.5') && userAnswer.includes('e-3') ||
+                           userAnswer.includes('5.51') && userAnswer.includes('e-3'));
+            } else if (questionNum == 5) {
+                // Check for L(x) = x and ln(1.05) ≈ 0.05
+                isCorrect = (userAnswer.includes('x') && 
+                           (userAnswer.includes('0.05') || userAnswer.includes('0.049')));
+            }
+            
+            feedback.classList.remove('correct', 'incorrect');
+            feedback.classList.add('show');
+            
+            if (isCorrect) {
+                feedback.classList.add('correct');
+                feedback.innerHTML = '✅ Outstanding! You have mastered error estimation in linear approximation!';
+            } else {
+                feedback.classList.add('incorrect');
+                feedback.innerHTML = '❌ Not quite right. Review the error bound formula and try again!';
+            }
+        };
+
+        // Math toolbar function
+        window.insertMath = function(questionNum, symbol) {
+            try {
+                if (!mathFields || !mathFields[questionNum]) return;
+                
+                const field = mathFields[questionNum];
+                
+                switch(symbol) {
+                    case '\\frac{}{}':
+                        field.write('\\frac{}{}');
+                        field.keystroke('Left Left Left');
+                        break;
+                    case '\\sqrt{}':
+                        field.write('\\sqrt{}');
+                        field.keystroke('Left');
+                        break;
+                    case '^':
+                        field.write('^{}');
+                        field.keystroke('Left');
+                        break;
+                    default:
+                        field.write(symbol + ' ');
+                        break;
+                }
+                
+                field.focus();
+            } catch (error) {
+                console.error('Error in insertMath function:', error);
+            }
+        };
+
+        // Toggle answer guide
+        window.toggleAnswerGuide = function() {
+            const answerGuide = document.getElementById('answerGuide');
+            const toggleBtn = document.getElementById('toggleAnswerGuide');
+            
+            if (answerGuide.style.display === 'none') {
+                answerGuide.style.display = 'block';
+                toggleBtn.textContent = 'Hide Guide';
+            } else {
+                answerGuide.style.display = 'none';
+                toggleBtn.textContent = 'Show Guide';
+            }
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        window.submitQuiz = async function() {
+            // Check if all questions have been answered
+            const mathMissing = [2, 5].filter(q => !mathAnswers[q] || mathAnswers[q].trim() === '');
+            const mcqMissing = [0, 3, 6].filter(q => mcqAnswers[q] === undefined);
+            const dragDropMissing = [1, 4, 7].filter(q => !dragDropAnswers[q] || Object.keys(dragDropAnswers[q]).length === 0);
+            
+            const allMissing = [...mathMissing, ...mcqMissing, ...dragDropMissing];
+            
+            if (allMissing.length > 0) {
+                alert(`Please answer all questions before submitting. Missing answers for questions: ${allMissing.map(q => q + 1).join(', ')}`);
+                return;
+            }
+
+            let score = 0;
+            
+            // Check MCQ questions
+            const mcqCorrectAnswers = { 0: 0, 3: 1, 6: 0 };
+            [0, 3, 6].forEach(questionNum => {
+                if (mcqAnswers[questionNum] === mcqCorrectAnswers[questionNum]) {
+                    score++;
+                }
+            });
+            
+            // Check drag and drop questions
+            const dragDropCorrectAnswers = {
+                1: { 0: "7", 1: "4", 2: "1", 3: "5", 4: "2", 5: "6.5" },
+                4: { 0: "dy/dx", 1: "3t²/2t", 2: "3/2", 3: "3", 4: "8", 5: "4" },
+                7: { 0: "∂x/∂u", 1: "∂y/∂u", 2: "2xy + y²", 3: "1", 4: "x² + 2xy", 5: "1", 6: "18" }
+            };
+            
+            [1, 4, 7].forEach(questionNum => {
+                const userAnswers = dragDropAnswers[questionNum] || {};
+                const expectedAnswers = dragDropCorrectAnswers[questionNum];
+                const isCorrect = Object.keys(expectedAnswers).every(pos => 
+                    userAnswers[pos] === expectedAnswers[pos]
+                );
+                
+                if (isCorrect) {
+                    score++;
+                }
+            });
+            
+            // Check MathQuill questions
+            // Question 3 - error estimation
+            const userAnswer2 = mathAnswers[2] ? mathAnswers[2].toLowerCase().replace(/\s/g, '') : '';
+            const mathCorrect2 = (userAnswer2.includes('0.0055') || userAnswer2.includes('0.00551') ||
+                                userAnswer2.includes('5.5') && userAnswer2.includes('e-3') ||
+                                userAnswer2.includes('5.51') && userAnswer2.includes('e-3'));
+            
+            if (mathCorrect2) {
+                score++;
+            }
+
+            // Question 6 - Taylor polynomial
+            const userAnswer5 = mathAnswers[5] ? mathAnswers[5].toLowerCase().replace(/\s/g, '') : '';
+            const mathCorrect5 = (userAnswer5.includes('x') && 
+                                 (userAnswer5.includes('0.05') || userAnswer5.includes('0.049')));
+            
+            if (mathCorrect5) {
+                score++;
+            }
+
+            const percentage = Math.round((score / 8) * 100);
+            const passed = score >= 6;
+
+            document.getElementById('scoreDisplay').textContent = `${score}/8 (${percentage}%)`;
+            document.getElementById('scoreDisplay').className = `score ${passed ? 'pass' : 'fail'}`;
+            document.getElementById('resultMessage').innerHTML = passed 
+                ? '<h3 style="color: var(--success-color);">🎉 Exceptional! You have mastered advanced linear approximation and differentials!</h3><p>You have completed the entire Linear Approximation & Differentials module!</p>'
+                : '<h3 style="color: var(--danger-color);">Keep pushing forward!</h3><p>You need at least 6 correct answers to pass. Review the concepts and try again.</p>';
+
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('submitBtn').style.display = 'none';
+
+            if (currentUser) {
+                try {
+                    const userDocRef = doc(db, 'users', currentUser.uid);
+                    const updateData = {
+                        moduleProgress: {
+                            [`Linear Approximation & Differentials - Advanced`]: percentage
+                        }
+                    };
+                    await setDoc(userDocRef, updateData, { merge: true });
+                    sessionStorage.removeItem('linear-approximation-advanced-progress');
+                } catch (error) {
+                    console.error('Error saving progress:', error);
+                }
+            }
+        };
+
+        // Debug functions for testing
+        window.debugCheckModuleStatus = function() {
+            console.log('Current user:', currentUser);
+            console.log('Math answers:', mathAnswers);
+            console.log('MCQ answers:', mcqAnswers);
+            console.log('Drag drop answers:', dragDropAnswers);
+            
+            alert(`Debug Info:
+User: ${currentUser ? currentUser.uid : 'Not logged in'}
+Math answers: ${Object.keys(mathAnswers).length}
+MCQ answers: ${Object.keys(mcqAnswers).length}
+Drag drop answers: ${Object.keys(dragDropAnswers).length}
+            `);
+        };
+
+        window.debugForceCompleteModule = function() {
+            if (!currentUser) {
+                alert('Please log in first!');
+                return;
+            }
+            
+            // Force complete the module
+            const userDocRef = doc(db, 'users', currentUser.uid);
+            const updateData = {
+                moduleProgress: {
+                    [`Linear Approximation & Differentials - Advanced`]: 100
+                }
+            };
+            
+            setDoc(userDocRef, updateData, { merge: true }).then(() => {
+                alert('Module marked as completed! (100%)');
+            }).catch(error => {
+                console.error('Error forcing completion:', error);
+                alert('Error forcing completion: ' + error.message);
+            });
+        };
+    </script>
+</body>
+</html> 
+
+
+
+
+
+
+

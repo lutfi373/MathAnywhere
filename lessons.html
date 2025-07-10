@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Differentiation Learning - Lessons</title>
+    
+    <!-- External CSS Libraries -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/lessons.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Montserrat">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- MathJax for displaying mathematical equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body, h1, h2, h3, h4, h5, h6 { font-family: 'Montserrat', sans-serif; }
+        html { scroll-behavior: smooth; }
+        .w3-sidebar a { font-family: "Roboto", sans-serif; }
+        .lessons-header { background-color: #f4f4f4; padding: 20px; text-align: center; }
+        .lessons-header h1 { font-size: 2.5rem; }
+        .lessons-main { display: flex; }
+        .lesson-sidebar { width: 250px; padding: 20px; background-color: #f8f8f8; }
+        .lesson-sidebar ul { list-style-type: none; padding-left: 0; }
+        .lesson-sidebar li { margin: 10px 0; }
+        .lesson-sidebar a { text-decoration: none; color: #333; font-size: 1.2rem; }
+        .lesson-sidebar a:hover { color: #007bff; }
+
+        .lesson-content { flex-grow: 1; padding: 20px; }
+        .lesson-content article { margin-bottom: 40px; }
+        .lesson-content h2 { font-size: 1.8rem; color: #007bff; }
+        .lesson-content p { font-size: 1.1rem; }
+
+        .w3-container { margin: 20px 0; }
+        .w3-button { margin-top: 10px; }
+
+        .lessons-footer { background-color: #333; color: white; padding: 10px; text-align: center; }
+        .correct { color: green; font-weight: bold; }
+        .incorrect { color: red; font-weight: bold; }
+
+        .interactive { background-color: #f4f4f4; padding: 20px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+
+    <!-- Overlay for mobile sidebar -->
+    <div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
+
+    <!-- Header Section -->
+    <header class="lessons-header">
+        <h1>Lessons</h1>
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="exercise.html">Exercises</a>
+            <a href="graphing.html">Graphing</a>
+            <a href="profile.html">Profile</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="lessons-main">
+        <!-- Sidebar Navigation for Lessons -->
+        <aside class="lesson-sidebar">
+            <ul>
+                <li><a href="#lesson1">1. Introduction to Differentiation</a></li>
+                <li><a href="#lesson2">2. Power Rule</a></li>
+                <li><a href="#lesson4">3. Limits and Differentiation</a></li>
+                <li><a href="#lesson5">4. The Slope of a Tangent to a Curve</a></li>
+                <li><a href="#lesson6">5. The Derivative from First Principles</a></li>
+                <li><a href="#lesson7">6. Derivatives of Polynomials</a></li>
+                <li><a href="#lesson8">7. Differentiating Powers of a Function</a></li>
+                <li><a href="#lesson9">8. Derivatives of Products and Quotients</a></li>
+            </ul>
+        </aside>
+
+        <!-- Lesson Content -->
+        <section class="lesson-content">
+            <article id="lesson1">
+                <h2>Lesson 1: Introduction to Differentiation</h2>
+                <p>Differentiation is a fundamental concept in calculus that deals with finding the rate at which a function is changing at any given point.</p>
+                <p>The derivative of a function \( f(x) \) is denoted by \( f'(x) \) or \( \frac{df}{dx} \).</p>
+                <h3>Basic Rules</h3>
+                <ul>
+                    <li><strong>Power Rule:</strong> If \( f(x) = x^n \), then \( f'(x) = nx^{n-1} \).</li>
+                    <li><strong>Constant Rule:</strong> If \( f(x) = c \), where \( c \) is a constant, then \( f'(x) = 0 \).</li>
+                    <li><strong>Sum Rule:</strong> If \( f(x) = g(x) + h(x) \), then \( f'(x) = g'(x) + h'(x) \).</li>
+                </ul>
+            </article>
+
+            <article id="lesson2">
+                <h2>Lesson 2: Power Rule</h2>
+                <p>The Power Rule is one of the most commonly used rules for differentiation.</p>
+                <p>If \( f(x) = x^n \), then \( f'(x) = nx^{n-1} \).</p>
+            </article>
+
+            <!-- Interactive Quiz Section -->
+            <div class="w3-container w3-padding-32 interactive" id="quizSection">
+                <h2>Quiz: Test Your Knowledge</h2>
+                <p>What is the derivative of \( f(x) = x^2 + 3x \)?</p>
+                <form id="quizForm" class="w3-padding-16">
+                    <input type="radio" name="answer" value="1"> \( f'(x) = 2x + 3 \)<br>
+                    <input type="radio" name="answer" value="2"> \( f'(x) = 2x + 6 \)<br>
+                    <input type="radio" name="answer" value="3"> \( f'(x) = 2x - 3 \)<br><br>
+                    <button type="button" class="w3-button w3-black" onclick="checkQuiz()">Submit Answer</button>
+                </form>
+                <p id="quizFeedback"></p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="lessons-footer">
+        <p>&copy; 2024 Math Differentiation Learning Website</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/script.js"></script>
+    <script>
+        // Quiz Functionality
+        function checkQuiz() {
+            const quizForm = document.forms['quizForm'];
+            const selectedAnswer = quizForm.answer.value;
+            const feedback = document.getElementById('quizFeedback');
+
+            if (selectedAnswer === "1") {
+                feedback.textContent = "Correct! The derivative of \( f(x) = x^2 + 3x \) is \( f'(x) = 2x + 3 \).";
+                feedback.classList.add("correct");
+                feedback.classList.remove("incorrect");
+            } else {
+                feedback.textContent = "Incorrect. Try again!";
+                feedback.classList.add("incorrect");
+                feedback.classList.remove("correct");
+            }
+        }
+
+        // Sidebar toggle for mobile view
+        function w3_open() {
+            document.getElementById("mySidebar").style.display = "block";
+            document.getElementById("myOverlay").style.display = "block";
+        }
+
+        function w3_close() {
+            document.getElementById("mySidebar").style.display = "none";
+            document.getElementById("myOverlay").style.display = "none";
+        }
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+

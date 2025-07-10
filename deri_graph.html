@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Function Grapher | MathAnywhere</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/templatemo-topic-listing.css" rel="stylesheet">
+
+    <!-- MathQuill resources - EXACTLY like the working module -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+    
+    <!-- Math.js and Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.3.0/math.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --primary-blue: #2d8cf0;
+            --accent-red: #ff6b6b;
+            --success-green: #1dd1a1;
+            --warning-orange: #feca57;
+            --purple: #5f27cd;
+            --light-blue: #54a0ff;
+            --bg-light: #f7f9fc;
+            --text-dark: #323232;
+            --text-muted: #666;
+            --border-color: #000;
+            --main-color: black;
+            --accent-color: #1dd1a1;
+            --font-color: #323232;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, var(--bg-light) 0%, #e3f2fd 100%);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(135deg, var(--warning-orange) 0%, #ffeb3b 100%);
+            border-bottom: 3px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
+        }
+
+        .navbar-brand {
+            color: var(--text-dark) !important;
+            font-weight: 700;
+            font-size: 1.6rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--text-dark) !important;
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 8px 16px !important;
+            margin: 0 8px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--primary-blue) !important;
+            border: 2px solid var(--primary-blue);
+            background: rgba(255,255,255,0.8);
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 30px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 3px solid var(--border-color);
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-red), var(--warning-orange), var(--success-green), var(--primary-blue), var(--purple));
+        }
+
+        .page-header h1 {
+            color: var(--primary-blue);
+            font-weight: 800;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .page-header p {
+            color: var(--text-muted);
+            font-size: 1.3rem;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        /* Graph Section */
+        .graph-section {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 3px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .graph-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--success-green), var(--light-blue));
+        }
+
+        .section-title {
+            color: var(--success-green);
+            font-weight: 700;
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .section-description {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* Function Input Section */
+        .function-input-section {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 3px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .function-input-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--purple));
+        }
+
+        .input-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .input-title {
+            color: var(--primary-blue);
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .input-subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .input-label-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding: 0 5px;
+        }
+
+        .input-label {
+            color: var(--text-dark);
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin: 0;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .input-hint {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        /* Math Input Container - EXACT COPY from working module */
+        .math-input-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+            box-shadow: 
+                inset 2px 2px 5px rgba(0, 0, 0, 0.1),
+                inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        /* MathQuill styling - EXACT COPY from working module */
+        .mathquill-field {
+            width: 100%;
+            margin: 15px 0;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            min-height: 50px;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.1),
+                -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .mathquill-field:focus-within {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(29, 209, 161, 0.3);
+            transform: scale(1.02);
+        }
+
+        /* Math Toolbar */
+        .math-toolbar {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px solid var(--accent-color);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .toolbar-title {
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .toolbar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .math-toolbar-section {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .math-toolbar-section:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(29, 209, 161, 0.2);
+        }
+
+        .math-toolbar-label {
+            font-weight: 700;
+            color: var(--primary-blue);
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            display: block;
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .toolbar-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .math-toolbar-btn {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #1976d2 100%);
+            color: white;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            font-family: 'Times New Roman', serif;
+        }
+
+        .math-toolbar-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(45, 140, 240, 0.4);
+            border-color: var(--primary-blue);
+        }
+
+        .math-toolbar-btn:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+
+        /* Specialized button styles */
+        .trig-btn {
+            background: linear-gradient(135deg, var(--purple) 0%, #8e44ad 100%);
+        }
+
+        .trig-btn:hover {
+            box-shadow: 0 6px 20px rgba(95, 39, 205, 0.4);
+        }
+
+        .log-btn {
+            background: linear-gradient(135deg, var(--warning-orange) 0%, #e67e22 100%);
+        }
+
+        .log-btn:hover {
+            box-shadow: 0 6px 20px rgba(254, 202, 87, 0.4);
+        }
+
+        .exp-btn {
+            background: linear-gradient(135deg, var(--accent-red) 0%, #e74c3c 100%);
+        }
+
+        .exp-btn:hover {
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .op-btn {
+            background: linear-gradient(135deg, var(--success-green) 0%, #27ae60 100%);
+        }
+
+        .op-btn:hover {
+            box-shadow: 0 6px 20px rgba(29, 209, 161, 0.4);
+        }
+
+        /* Usage Tips */
+        .usage-tips {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border: 2px solid var(--warning-orange);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+
+        .tips-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            color: #856404;
+            font-size: 1.1rem;
+        }
+
+        .tips-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .tip-item {
+            color: #856404;
+            font-size: 0.95rem;
+            padding: 5px 0;
+            border-left: 3px solid var(--warning-orange);
+            padding-left: 12px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--success-green) 0%, #00b894 100%);
+            color: white;
+            border: 3px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+            box-shadow: 0 4px 15px rgba(29, 209, 161, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--accent-red) 0%, #d63031 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+            border: 3px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 8px;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, var(--purple) 0%, #432818 100%);
+            transform: translateY(-2px);
+        }
+
+        /* Graph Container */
+        .graph-container {
+            background: white;
+            border: 3px solid var(--border-color);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            min-height: 500px;
+        }
+
+        #functionChart {
+            max-height: 500px;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            background: var(--success-green);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .status-loading {
+            background: var(--warning-orange);
+            animation: pulse 1.5s infinite;
+        }
+
+        .status-error {
+            background: var(--accent-red);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Error Notification */
+        .error-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--accent-red);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
+            z-index: 1000;
+            font-weight: 600;
+            max-width: 350px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 15px;
+            }
+            
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .page-header p {
+                font-size: 1.1rem;
+            }
+            
+            .function-input-section {
+                padding: 25px 20px;
+            }
+
+            .input-title {
+                font-size: 1.5rem;
+            }
+
+            .input-subtitle {
+                font-size: 1rem;
+            }
+            
+            .graph-section {
+                padding: 25px;
+            }
+            
+            .math-input-container {
+                max-width: 100%;
+            }
+
+            .math-toolbar {
+                padding: 20px 15px;
+            }
+
+            .toolbar-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .math-toolbar-section {
+                padding: 12px;
+            }
+            
+            .math-toolbar-btn {
+                padding: 8px 12px;
+                font-size: 14px;
+                min-width: 40px;
+                height: 40px;
+            }
+
+            .toolbar-buttons {
+                gap: 6px;
+            }
+
+            .usage-tips {
+                padding: 15px;
+                margin-top: 20px;
+            }
+
+            .tips-content {
+                gap: 10px;
+            }
+
+            .tip-item {
+                font-size: 0.9rem;
+            }
+
+            .btn-primary {
+                padding: 12px 20px;
+                font-size: 1rem;
+                margin: 5px;
+            }
+
+            .btn-secondary {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+                margin: 3px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .function-input-section {
+                padding: 20px 15px;
+            }
+
+            .input-title {
+                font-size: 1.3rem;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .input-label {
+                font-size: 1.2rem;
+            }
+
+            .input-label-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+
+            .toolbar-buttons {
+                justify-content: flex-start;
+            }
+
+            .math-toolbar-btn {
+                min-width: 35px;
+                height: 35px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="home.html">
+                <i class="bi-calculator"></i>
+                MathAnywhere
+            </a>
+
+            <div class="d-lg-none ms-auto me-4">
+                <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
+            </div>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+            
+
+                <div class="d-none d-lg-block">
+                    <a href="profile.html" class="navbar-icon bi-person smoothscroll"></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>📈 Math Function Grapher</h1>
+            <p>Visualize mathematical functions with interactive graphs</p>
+        </div>
+
+        <!-- Graph Generator Section -->
+        <div class="graph-section">
+            <h2 class="section-title">
+                <i class="bi bi-graph-up"></i>
+                Function Grapher
+                <span id="mathStatus" class="status-badge">Loading...</span>
+            </h2>
+            <p class="section-description">Enter any mathematical function and see its beautiful graph instantly</p>
+            
+            <!-- Main Input Section -->
+            <div class="function-input-section">
+                <div class="input-header">
+                    <h3 class="input-title">
+                        <i class="bi bi-pencil-square"></i>
+                        Enter Your Function
+                    </h3>
+                    <p class="input-subtitle">Create beautiful mathematical expressions using the toolbar or keyboard</p>
+                </div>
+
+                <!-- Primary Math Input -->
+                <div class="math-input-container">
+                    <div class="input-label-container">
+                        <label class="input-label">f(x) = </label>
+                        <span class="input-hint">Click here or use toolbar below</span>
+                    </div>
+                    <div class="mathquill-field" id="mathInput"></div>
+                </div>
+                
+                <!-- Math Toolbar -->
+                <div class="math-toolbar">
+                    <div class="toolbar-title">Mathematical Symbols & Functions</div>
+                    
+                    <div class="toolbar-grid">
+                        <div class="math-toolbar-section">
+                            <span class="math-toolbar-label">Variables & Constants</span>
+                            <div class="toolbar-buttons">
+                                <button class="math-toolbar-btn" onclick="insertMath('x')" title="Variable x">x</button>
+                                <button class="math-toolbar-btn" onclick="insertMath('y')" title="Variable y">y</button>
+                                <button class="math-toolbar-btn" onclick="insertMath('t')" title="Variable t">t</button>
+                                <button class="math-toolbar-btn" onclick="insertMath('\\pi')" title="Pi constant">π</button>
+                                <button class="math-toolbar-btn" onclick="insertMath('e')" title="Euler's number">e</button>
+                            </div>
+                        </div>
+                        
+                        <div class="math-toolbar-section">
+                            <span class="math-toolbar-label">Powers & Roots</span>
+                            <div class="toolbar-buttons">
+                                <button class="math-toolbar-btn" onclick="insertPower('2')" title="Square">x²</button>
+                                <button class="math-toolbar-btn" onclick="insertPower('3')" title="Cube">x³</button>
+                                <button class="math-toolbar-btn" onclick="insertPower('n')" title="Power">xⁿ</button>
+                                <button class="math-toolbar-btn" onclick="insertMath('\\sqrt{}')" title="Square root">√</button>
+                                <button class="math-toolbar-btn" onclick="insertPower('-1')" title="Reciprocal">x⁻¹</button>
+                            </div>
+                        </div>
+                        
+                        <div class="math-toolbar-section">
+                            <span class="math-toolbar-label">Fractions</span>
+                            <div class="toolbar-buttons">
+                                <button class="math-toolbar-btn" onclick="insertFraction()" title="Fraction">a/b</button>
+                                <button class="math-toolbar-btn" onclick="insertMath('\\frac{1}{x}')" title="One over x">1/x</button>
+                                <button class="math-toolbar-btn" onclick="insertMath('\\frac{1}{x^2}')" title="One over x squared">1/x²</button>
+                            </div>
+                        </div>
+                        
+                        <div class="math-toolbar-section">
+                            <span class="math-toolbar-label">Trigonometry</span>
+                            <div class="toolbar-buttons">
+                                <button class="math-toolbar-btn trig-btn" onclick="insertTrigFunction('sin')" title="Sine function">sin</button>
+                                <button class="math-toolbar-btn trig-btn" onclick="insertTrigFunction('cos')" title="Cosine function">cos</button>
+                                <button class="math-toolbar-btn trig-btn" onclick="insertTrigFunction('tan')" title="Tangent function">tan</button>
+                                <button class="math-toolbar-btn trig-btn" onclick="insertTrigFunction('sec')" title="Secant function">sec</button>
+                            </div>
+                        </div>
+                        
+                        <div class="math-toolbar-section">
+                            <span class="math-toolbar-label">Logarithms & Exponentials</span>
+                            <div class="toolbar-buttons">
+                                <button class="math-toolbar-btn log-btn" onclick="insertFunction('ln')" title="Natural logarithm">ln</button>
+                                <button class="math-toolbar-btn log-btn" onclick="insertFunction('log')" title="Common logarithm">log</button>
+                                <button class="math-toolbar-btn exp-btn" onclick="insertMath('e^{}')" title="Exponential function">eˣ</button>
+                                <button class="math-toolbar-btn exp-btn" onclick="insertMath('10^{}')" title="Power of 10">10ˣ</button>
+                            </div>
+                        </div>
+                        
+                        <div class="math-toolbar-section">
+                            <span class="math-toolbar-label">Operators</span>
+                            <div class="toolbar-buttons">
+                                <button class="math-toolbar-btn op-btn" onclick="insertMath('+')" title="Addition">+</button>
+                                <button class="math-toolbar-btn op-btn" onclick="insertMath('-')" title="Subtraction">−</button>
+                                <button class="math-toolbar-btn op-btn" onclick="insertMath('\\cdot')" title="Multiplication">·</button>
+                                <button class="math-toolbar-btn op-btn" onclick="insertMath('(')" title="Left parenthesis">(</button>
+                                <button class="math-toolbar-btn op-btn" onclick="insertMath(')')" title="Right parenthesis">)</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Usage Tips -->
+                <div class="usage-tips">
+                    <div class="tips-header">
+                        <i class="bi bi-lightbulb"></i>
+                        <strong>Quick Tips:</strong>
+                    </div>
+                    <div class="tips-content">
+                        <span class="tip-item"><strong>Keyboard:</strong> Type x^2 for x², / for fractions, sqrt() for roots</span>
+                        <span class="tip-item"><strong>Functions:</strong> sin(x), cos(x), ln(x), log(x)</span>
+                        <span class="tip-item"><strong>Examples:</strong> x² + 3x - 1, sin(x), ln(x + 1), √(x² + 1)</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn-primary" onclick="generateGraph()">
+                    <i class="bi bi-graph-up"></i> Generate Graph
+                </button>
+                <button class="btn-secondary" onclick="clearInput()">
+                    <i class="bi bi-eraser"></i> Clear
+                </button>
+                <button class="btn-secondary" onclick="loadExample()">
+                    <i class="bi bi-lightbulb"></i> Example
+                </button>
+                <button class="btn-secondary" onclick="showHelp()">
+                    <i class="bi bi-question-circle"></i> Help
+                </button>
+
+            </div>
+            
+            <!-- Graph Container -->
+            <div class="graph-container">
+                <canvas id="functionChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Global variables - EXACT COPY from working module
+        let MQ;
+        let mathField;
+        let mathQuillReady = false;
+        let chart;
+
+        // Initialize when DOM is loaded - EXACT COPY from working module
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Starting Math Function Grapher...');
+            updateStatus('Initializing...', 'status-loading');
+            
+            // Initialize MathQuill exactly like the working module
+            initializeMathQuill();
+        });
+
+        function updateStatus(text, className) {
+            const statusElement = document.getElementById('mathStatus');
+            if (statusElement) {
+                statusElement.textContent = text;
+                statusElement.className = 'status-badge ' + className;
+            }
+        }
+
+        function initializeMathQuill() {
+            try {
+                console.log('🔄 Initializing MathQuill exactly like working module...');
+                
+                // Get MathQuill interface
+                MQ = MathQuill.getInterface(2);
+                
+                // Get input element
+                const mathInputElement = document.getElementById('mathInput');
+                
+                if (!mathInputElement) {
+                    throw new Error('Math input element not found');
+                }
+
+                // Configure MathQuill options EXACTLY like working module
+                const config = {
+                    spaceBehavesLikeTab: true,
+                    leftRightIntoCmdGoes: 'up',
+                    restrictMismatchedBrackets: true,
+                    autoCommands: 'pi theta sqrt sum prod alpha beta gamma delta epsilon zeta eta mu nu xi rho sigma tau phi chi psi omega',
+                    autoOperatorNames: 'sin cos tan sec csc cot sinh cosh tanh ln log exp lim',
+                    handlers: {
+                        edit: function() {
+                            const latex = mathField.latex();
+                            console.log('Math field edited, LaTeX:', latex);
+                        },
+                        enter: function() {
+                            console.log('Enter pressed - generating graph');
+                            generateGraph();
+                        }
+                    }
+                };
+
+                // Create MathQuill field EXACTLY like working module
+                mathField = MQ.MathField(mathInputElement, config);
+                
+                if (!mathField) {
+                    throw new Error('Failed to create MathQuill field');
+                }
+
+                // Set initial value
+                mathField.latex('x^2');
+                mathQuillReady = true;
+                updateStatus('Ready ✓', 'status-ready');
+                mathField.focus();
+                
+                console.log('✅ MathQuill initialized successfully like working module!');
+                console.log('✅ Current field content:', mathField.latex());
+                
+            } catch (error) {
+                console.error('❌ MathQuill initialization failed:', error);
+                updateStatus('Error - Using Text Mode', 'status-error');
+                createFallbackInput();
+            }
+        }
+
+
+
+
+
+        function createFallbackInput() {
+            console.log('🔄 Creating enhanced fallback input...');
+            const container = document.querySelector('.math-input-container');
+            container.innerHTML = `
+                <div style="padding: 20px; background: white; border-radius: 12px;">
+                    <div style="margin-bottom: 10px; color: #666; font-size: 14px; text-align: center;">
+                        <strong>Math Input Mode:</strong> Type expressions like x^2, sin(x), sqrt(x), etc.
+                    </div>
+                    <input type="text" id="fallbackInput" value="x^2" 
+                           placeholder="Enter function (e.g., x^2, sin(x), ln(x), sqrt(x+1))" 
+                           style="width: 100%; padding: 25px; font-size: 24px; border: 2px solid #007bff; border-radius: 8px; font-family: 'Fira Code', monospace; text-align: center;"
+                           onkeypress="if(event.key==='Enter') generateGraph()"
+                           oninput="previewMathExpression(this.value)"
+                           onpaste="setTimeout(() => previewMathExpression(this.value), 10)">
+                    <div id="mathPreview" style="margin-top: 10px; padding: 15px; background: #f8f9fa; border-radius: 8px; font-family: 'Times New Roman', serif; font-size: 20px; text-align: center; min-height: 40px; border: 1px solid #dee2e6;">
+                        Preview: x²
+                    </div>
+                    <div style="margin-top: 10px; color: #666; font-size: 12px; text-align: center;">
+                        <strong>Shortcuts:</strong> x^2 → x², sin(x) → sin(x), sqrt(x) → √x, pi → π, * → ×
+                    </div>
+                    <div style="margin-top: 15px; text-align: center;">
+                        <button onclick="generateGraph()" style="padding: 12px 30px; background: #28a745; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; margin-right: 10px;">
+                            📈 Graph It!
+                        </button>
+                        <button onclick="testSimpleGraph()" style="padding: 12px 20px; background: #17a2b8; color: white; border: none; border-radius: 6px; font-size: 14px; cursor: pointer;">
+                            🧪 Test Simple
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            const input = document.getElementById('fallbackInput');
+            input.focus();
+            input.select(); // Select the default x^2
+            
+            // Generate initial preview
+            previewMathExpression('x^2');
+            
+            console.log('✅ Enhanced fallback input created');
+        }
+
+        function previewMathExpression(input) {
+            const preview = document.getElementById('mathPreview');
+            if (!preview) return;
+            
+            if (!input || input.trim() === '') {
+                preview.innerHTML = 'Preview: <span style="color: #999;">Enter a function...</span>';
+                return;
+            }
+            
+            let formatted = input
+                // Handle powers with multiple digits or expressions
+                .replace(/\^(-?\d+)/g, (match, exp) => {
+                    const superscripts = {'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','-':'⁻'};
+                    return exp.split('').map(char => superscripts[char] || char).join('');
+                })
+                .replace(/\^([a-zA-Z])/g, (match, exp) => {
+                    const superscripts = {'a':'ᵃ','b':'ᵇ','c':'ᶜ','n':'ⁿ','x':'ˣ','y':'ʸ'};
+                    return superscripts[exp] || '^' + exp;
+                })
+                .replace(/\^\(([^)]+)\)/g, '^($1)') // Keep complex powers in parentheses
+                .replace(/\^\{([^}]+)\}/g, '^($1)') // Handle braces from LaTeX
+                
+                // Mathematical functions and symbols
+                .replace(/sqrt\(([^)]+)\)/g, '√($1)')
+                .replace(/\babs\(([^)]+)\)/g, '|$1|')
+                .replace(/\bpi\b/g, 'π')
+                .replace(/\be\b(?!\w)/g, 'e') // e constant
+                .replace(/\*\s*/g, '×')
+                .replace(/\+\s*/g, ' + ')
+                .replace(/-\s*/g, ' - ')
+                .replace(/\/\s*/g, ' ÷ ')
+                
+                // Trigonometric functions
+                .replace(/\bsin\s*\(/g, 'sin(')
+                .replace(/\bcos\s*\(/g, 'cos(')
+                .replace(/\btan\s*\(/g, 'tan(')
+                .replace(/\bsec\s*\(/g, 'sec(')
+                .replace(/\bcsc\s*\(/g, 'csc(')
+                .replace(/\bcot\s*\(/g, 'cot(')
+                .replace(/\basin\s*\(/g, 'arcsin(')
+                .replace(/\bacos\s*\(/g, 'arccos(')
+                .replace(/\batan\s*\(/g, 'arctan(')
+                
+                // Logarithmic functions
+                .replace(/\bln\s*\(/g, 'ln(')
+                .replace(/\blog\s*\(/g, 'log(')
+                .replace(/\bexp\s*\(/g, 'exp(')
+                
+                // Clean up extra spaces
+                .replace(/\s+/g, ' ')
+                .trim();
+            
+            // Add color coding for different parts
+            formatted = formatted
+                .replace(/(sin|cos|tan|sec|csc|cot|arcsin|arccos|arctan|ln|log|exp|sqrt)/g, '<span style="color: #0066cc; font-weight: bold;">$1</span>')
+                .replace(/(π|e)/g, '<span style="color: #cc6600; font-weight: bold;">$1</span>')
+                .replace(/([⁰¹²³⁴⁵⁶⁷⁸⁹⁻]+)/g, '<span style="color: #006600;">$1</span>');
+            
+            preview.innerHTML = `Preview: ${formatted}`;
+        }
+
+        // Enhanced math input functions for proper mathematical notation
+        function insertMath(latex) {
+            if (mathQuillReady && mathField) {
+                mathField.write(latex);
+                mathField.focus();
+                console.log('✅ Inserted LaTeX:', latex, 'Current content:', mathField.latex());
+            } else {
+                const fallback = document.getElementById('fallbackInput');
+                if (fallback) {
+                    fallback.value += latex.replace(/\\/g, '').replace(/[{}]/g, '');
+                    fallback.focus();
+                    previewMathExpression(fallback.value);
+                }
+            }
+        }
+
+        function insertPower(exponent) {
+            if (mathQuillReady && mathField) {
+                // Insert superscript and move cursor into it
+                mathField.cmd('^');
+                mathField.write(exponent);
+                mathField.keystroke('Right'); // Move out of superscript
+                mathField.focus();
+            } else {
+                insertMath('^' + exponent);
+            }
+        }
+
+        function insertFraction() {
+            if (mathQuillReady && mathField) {
+                // Insert fraction and move cursor to numerator
+                mathField.cmd('\\frac');
+                mathField.focus();
+            } else {
+                insertMath('()/()');
+            }
+        }
+
+        function insertFunction(funcName) {
+            if (mathQuillReady && mathField) {
+                // Insert function with proper LaTeX formatting
+                mathField.write('\\' + funcName + '\\left(\\right)');
+                mathField.keystroke('Left'); // Move cursor inside parentheses
+                mathField.focus();
+                console.log('Inserted function:', funcName, 'Current LaTeX:', mathField.latex());
+            } else {
+                const fallback = document.getElementById('fallbackInput');
+                if (fallback) {
+                    fallback.value += funcName + '()';
+                    // Move cursor between parentheses
+                    const pos = fallback.value.length - 1;
+                    fallback.setSelectionRange(pos, pos);
+                    fallback.focus();
+                }
+            }
+        }
+
+        function insertTrigFunction(funcName) {
+            if (mathQuillReady && mathField) {
+                // Insert trigonometric function with x as default argument
+                mathField.write('\\' + funcName + '\\left(x\\right)');
+                // Select the x so user can replace it
+                mathField.keystroke('Left Left'); // Move cursor to select x
+                mathField.focus();
+                console.log('Inserted trig function:', funcName, 'Current LaTeX:', mathField.latex());
+            } else {
+                const fallback = document.getElementById('fallbackInput');
+                if (fallback) {
+                    fallback.value += funcName + '(x)';
+                    fallback.focus();
+                }
+            }
+        }
+
+        function insertSquareRoot() {
+            if (mathQuillReady && mathField) {
+                mathField.cmd('\\sqrt');
+                mathField.focus();
+            } else {
+                insertMath('sqrt()');
+            }
+        }
+
+        function insertSubscript() {
+            if (mathQuillReady && mathField) {
+                mathField.cmd('_');
+                mathField.focus();
+            } else {
+                insertMath('_');
+            }
+        }
+
+        function insertAbsoluteValue() {
+            if (mathQuillReady && mathField) {
+                mathField.write('\\left|\\right|');
+                mathField.keystroke('Left');
+                mathField.focus();
+            } else {
+                insertMath('||');
+            }
+        }
+
+        function clearInput() {
+            if (mathQuillReady && mathField) {
+                mathField.latex('');
+                mathField.focus();
+            } else {
+                const fallback = document.getElementById('fallbackInput');
+                if (fallback) {
+                    fallback.value = '';
+                    fallback.focus();
+                }
+            }
+        }
+
+        function loadExample() {
+            const examples = [
+                'x^2 + 3x - 1',
+                '\\sin\\left(x\\right)',
+                'x^3 - 3x + 1', 
+                'e^{-x^2}',
+                '\\frac{1}{x^2+1}',
+                '\\ln\\left(x\\right)',
+                '\\sqrt{x^2 + 1}',
+                '\\cos\\left(x\\right) \\cdot \\sin\\left(x\\right)',
+                '\\frac{x^2}{x+1}',
+                '\\tan\\left(x\\right)',
+                'e^x \\cdot \\ln\\left(x\\right)',
+                '\\frac{\\sin\\left(x\\right)}{x}',
+                'x^{\\frac{1}{2}}',
+                '\\left|x^2 - 4\\right|'
+            ];
+            const randomExample = examples[Math.floor(Math.random() * examples.length)];
+            
+            if (mathQuillReady && mathField) {
+                mathField.latex(randomExample);
+                mathField.focus();
+            } else {
+                const fallback = document.getElementById('fallbackInput');
+                if (fallback) {
+                    // Convert LaTeX to readable format for fallback
+                    let fallbackText = randomExample
+                        .replace(/\\sin\\left\(([^)]*)\)/g, 'sin($1)')
+                        .replace(/\\cos\\left\(([^)]*)\)/g, 'cos($1)')
+                        .replace(/\\tan\\left\(([^)]*)\)/g, 'tan($1)')
+                        .replace(/\\ln\\left\(([^)]*)\)/g, 'ln($1)')
+                        .replace(/\\sqrt\{([^}]*)\}/g, 'sqrt($1)')
+                        .replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, '($1)/($2)')
+                        .replace(/\\left\|([^|]*)\\right\|/g, 'abs($1)')
+                        .replace(/\\cdot/g, '*')
+                        .replace(/\{([^}]*)\}/g, '($1)')
+                        .replace(/\\/g, '');
+                    fallback.value = fallbackText;
+                    fallback.focus();
+                }
+            }
+        }
+
+        function getCurrentInput() {
+            if (mathQuillReady && mathField) {
+                const latex = mathField.latex();
+                console.log('📄 Got LaTeX from MathQuill:', latex);
+                return latex;
+            } else {
+                const fallback = document.getElementById('fallbackInput');
+                if (fallback) {
+                    const value = fallback.value || 'x^2';
+                    console.log('📄 Got text from fallback input:', value);
+                    return value;
+                }
+                console.warn('⚠️ No input method available, using default');
+                return 'x^2';
+            }
+        }
+
+
+
+
+
+        function generateGraph() {
+            try {
+                const input = getCurrentInput().trim();
+                
+                console.log('📈 Starting graph generation...');
+                console.log('📋 Raw input:', input);
+                console.log('📋 MathQuill ready:', mathQuillReady);
+                console.log('📋 MathField exists:', !!mathField);
+                
+                if (!input) {
+                    alert('Please enter a mathematical function first!\n\nTry typing something like: x^2, sin(x), or click the toolbar buttons.');
+                    return;
+                }
+
+                console.log('📈 Generating graph for:', input);
+
+                // Convert LaTeX to Math.js format
+                const mathExpression = convertLatexToMathJS(input);
+                console.log('🔄 Converted expression:', mathExpression);
+
+                if (!mathExpression || mathExpression.trim() === '') {
+                    throw new Error('Conversion failed - empty expression result');
+                }
+
+                // Test the expression first
+                try {
+                    const testResult = math.evaluate(mathExpression, { x: 1, e: Math.E, pi: Math.PI });
+                    console.log('✅ Expression test passed:', testResult);
+                } catch (testError) {
+                    console.error('❌ Expression test failed:', testError);
+                    throw new Error(`Invalid mathematical expression: ${mathExpression}\nOriginal: ${input}\nError: ${testError.message}`);
+                }
+
+                // Generate data points
+                const xValues = [];
+                const yValues = [];
+                const xMin = -10, xMax = 10, step = 0.1;
+                let validPoints = 0;
+
+                for (let x = xMin; x <= xMax; x += step) {
+                    try {
+                        const y = math.evaluate(mathExpression, { x: x, e: Math.E, pi: Math.PI });
+                        if (typeof y === 'number' && isFinite(y)) {
+                            xValues.push(x);
+                            yValues.push(y);
+                            validPoints++;
+                        }
+                    } catch (evalError) {
+                        // Skip invalid points
+                        continue;
+                    }
+                }
+
+                console.log(`📊 Generated ${validPoints} valid points out of ${Math.round((xMax - xMin) / step)} total points`);
+
+                if (xValues.length === 0) {
+                    throw new Error('No valid points generated. The function may be undefined for the range x = -10 to 10.\n\nTry a different function like x^2, sin(x), or ln(x+11).');
+                }
+
+                // Create or update chart
+                createChart(xValues, yValues, input);
+                console.log('✅ Graph created successfully!');
+
+            } catch (error) {
+                console.error('❌ Graph generation error:', error);
+                alert('Error generating graph:\n\n' + error.message + '\n\nDebug info:\n- Check console for details\n- Try simpler expressions like x^2 or sin(x)\n- Make sure to use proper mathematical notation');
+            }
+        }
+
+        function convertLatexToMathJS(latex) {
+            console.log('🔄 Converting LaTeX to Math.js:', latex);
+            
+            if (!latex || latex.trim() === '') {
+                console.log('❌ Empty input');
+                return '';
+            }
+            
+            let mathjs = latex.trim();
+
+            // STEP 1: Handle logarithmic functions FIRST (before any other processing)
+            // This is the most important fix - handle ln and log early to avoid interference
+            mathjs = mathjs.replace(/\\ln\s*\\left\s*\(\s*([^)]*)\s*\\right\s*\)/g, 'log($1)');
+            mathjs = mathjs.replace(/\\log\s*\\left\s*\(\s*([^)]*)\s*\\right\s*\)/g, 'log10($1)');
+            mathjs = mathjs.replace(/\\ln\s*\(([^)]*)\)/g, 'log($1)');
+            mathjs = mathjs.replace(/\\log\s*\(([^)]*)\)/g, 'log10($1)');
+            mathjs = mathjs.replace(/\\ln\s*\{([^}]*)\}/g, 'log($1)');
+            mathjs = mathjs.replace(/\\log\s*\{([^}]*)\}/g, 'log10($1)');
+            mathjs = mathjs.replace(/\\ln\s+([a-zA-Z_][a-zA-Z0-9_]*)/g, 'log($1)');
+            mathjs = mathjs.replace(/\\log\s+([a-zA-Z_][a-zA-Z0-9_]*)/g, 'log10($1)');
+            
+            console.log('✅ Step 1 (logarithms first) complete:', mathjs);
+
+            // STEP 2: Handle other trigonometric and exponential functions
+            mathjs = mathjs.replace(/\\sin\s*\\left\s*\(\s*([^)]*)\s*\\right\s*\)/g, 'sin($1)');
+            mathjs = mathjs.replace(/\\cos\s*\\left\s*\(\s*([^)]*)\s*\\right\s*\)/g, 'cos($1)');
+            mathjs = mathjs.replace(/\\tan\s*\\left\s*\(\s*([^)]*)\s*\\right\s*\)/g, 'tan($1)');
+            mathjs = mathjs.replace(/\\sec\s*\\left\s*\(\s*([^)]*)\s*\\right\s*\)/g, '(1/cos($1))');
+            mathjs = mathjs.replace(/\\csc\s*\\left\s*\(\s*([^)]*)\s*\\right\s*\)/g, '(1/sin($1))');
+            mathjs = mathjs.replace(/\\cot\s*\\left\s*\(\s*([^)]*)\s*\\right\s*\)/g, '(cos($1)/sin($1))');
+            mathjs = mathjs.replace(/\\exp\s*\\left\s*\(\s*([^)]*)\s*\\right\s*\)/g, 'exp($1)');
+            
+            mathjs = mathjs.replace(/\\sin\s*\(([^)]*)\)/g, 'sin($1)');
+            mathjs = mathjs.replace(/\\cos\s*\(([^)]*)\)/g, 'cos($1)');
+            mathjs = mathjs.replace(/\\tan\s*\(([^)]*)\)/g, 'tan($1)');
+            mathjs = mathjs.replace(/\\sec\s*\(([^)]*)\)/g, '(1/cos($1))');
+            mathjs = mathjs.replace(/\\csc\s*\(([^)]*)\)/g, '(1/sin($1))');
+            mathjs = mathjs.replace(/\\cot\s*\(([^)]*)\)/g, '(cos($1)/sin($1))');
+            mathjs = mathjs.replace(/\\exp\s*\(([^)]*)\)/g, 'exp($1)');
+            
+            mathjs = mathjs.replace(/\\sin\s*\{([^}]*)\}/g, 'sin($1)');
+            mathjs = mathjs.replace(/\\cos\s*\{([^}]*)\}/g, 'cos($1)');
+            mathjs = mathjs.replace(/\\tan\s*\{([^}]*)\}/g, 'tan($1)');
+            mathjs = mathjs.replace(/\\sec\s*\{([^}]*)\}/g, '(1/cos($1))');
+            mathjs = mathjs.replace(/\\csc\s*\{([^}]*)\}/g, '(1/sin($1))');
+            mathjs = mathjs.replace(/\\cot\s*\{([^}]*)\}/g, '(cos($1)/sin($1))');
+            mathjs = mathjs.replace(/\\exp\s*\{([^}]*)\}/g, 'exp($1)');
+            
+            // Handle functions without parentheses (MathQuill format)
+            mathjs = mathjs.replace(/\\sin\s+([a-zA-Z_][a-zA-Z0-9_]*)/g, 'sin($1)');
+            mathjs = mathjs.replace(/\\cos\s+([a-zA-Z_][a-zA-Z0-9_]*)/g, 'cos($1)');
+            mathjs = mathjs.replace(/\\tan\s+([a-zA-Z_][a-zA-Z0-9_]*)/g, 'tan($1)');
+            mathjs = mathjs.replace(/\\sec\s+([a-zA-Z_][a-zA-Z0-9_]*)/g, '(1/cos($1))');
+            mathjs = mathjs.replace(/\\csc\s+([a-zA-Z_][a-zA-Z0-9_]*)/g, '(1/sin($1))');
+            mathjs = mathjs.replace(/\\cot\s+([a-zA-Z_][a-zA-Z0-9_]*)/g, '(cos($1)/sin($1))');
+            mathjs = mathjs.replace(/\\exp\s+([a-zA-Z_][a-zA-Z0-9_]*)/g, 'exp($1)');
+            
+            console.log('✅ Step 2 (other functions) complete:', mathjs);
+
+            // STEP 3: Handle fractions
+            mathjs = mathjs.replace(/\\frac\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g, '(($1)/($2))');
+            
+            // STEP 4: Handle square roots
+            mathjs = mathjs.replace(/\\sqrt\s*\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g, 'sqrt($1)');
+            
+            // STEP 5: Handle plain text functions (for fallback input)
+            mathjs = mathjs.replace(/\bsin\s*\(([^)]*)\)/g, 'sin($1)');
+            mathjs = mathjs.replace(/\bcos\s*\(([^)]*)\)/g, 'cos($1)');
+            mathjs = mathjs.replace(/\btan\s*\(([^)]*)\)/g, 'tan($1)');
+            mathjs = mathjs.replace(/\bsec\s*\(([^)]*)\)/g, '(1/cos($1))');
+            mathjs = mathjs.replace(/\bcsc\s*\(([^)]*)\)/g, '(1/sin($1))');
+            mathjs = mathjs.replace(/\bcot\s*\(([^)]*)\)/g, '(cos($1)/sin($1))');
+            mathjs = mathjs.replace(/\bln\s*\(([^)]*)\)/g, 'log($1)');
+            mathjs = mathjs.replace(/\blog\s*\(([^)]*)\)/g, 'log10($1)');
+            mathjs = mathjs.replace(/\bexp\s*\(([^)]*)\)/g, 'exp($1)');
+            
+            console.log('✅ Step 5 (plain text functions) complete:', mathjs);
+            
+            // STEP 6: Handle inverse trigonometric functions
+            mathjs = mathjs.replace(/\\arcsin\s*\\left\s*\(\s*([^)]*)\s*\\right\s*\)/g, 'asin($1)');
+            mathjs = mathjs.replace(/\\arccos\s*\\left\s*\(\s*([^)]*)\s*\\right\s*\)/g, 'acos($1)');
+            mathjs = mathjs.replace(/\\arctan\s*\\left\s*\(\s*([^)]*)\s*\\right\s*\)/g, 'atan($1)');
+            mathjs = mathjs.replace(/\\arcsin\s*\(([^)]*)\)/g, 'asin($1)');
+            mathjs = mathjs.replace(/\\arccos\s*\(([^)]*)\)/g, 'acos($1)');
+            mathjs = mathjs.replace(/\\arctan\s*\(([^)]*)\)/g, 'atan($1)');
+            
+            // STEP 7: Handle absolute values
+            mathjs = mathjs.replace(/\\left\s*\|\s*([^|]*)\s*\\right\s*\|/g, 'abs($1)');
+            mathjs = mathjs.replace(/\|([^|]*)\|/g, 'abs($1)');
+            
+            // STEP 8: Handle exponentials and powers
+            mathjs = mathjs.replace(/e\s*\^\s*\{([^}]*)\}/g, 'exp($1)');
+            mathjs = mathjs.replace(/e\s*\^\s*([a-zA-Z0-9\-+]+)/g, 'exp($1)');
+            mathjs = mathjs.replace(/\^\s*\{([^}]*)\}/g, '^($1)');
+            
+            // STEP 9: Handle constants
+            mathjs = mathjs.replace(/\\pi/g, 'pi');
+            mathjs = mathjs.replace(/\\theta/g, 'theta');
+            mathjs = mathjs.replace(/\\alpha/g, 'alpha');
+            mathjs = mathjs.replace(/\\beta/g, 'beta');
+            mathjs = mathjs.replace(/\\gamma/g, 'gamma');
+            
+            // STEP 10: Handle multiplication symbols
+            mathjs = mathjs.replace(/\\cdot/g, '*');
+            mathjs = mathjs.replace(/\\times/g, '*');
+            
+            // STEP 11: Clean up remaining LaTeX commands
+            mathjs = mathjs.replace(/\\left/g, '');
+            mathjs = mathjs.replace(/\\right/g, '');
+            mathjs = mathjs.replace(/\\/g, '');
+            
+            console.log('✅ Step 11 (cleanup) complete:', mathjs);
+            
+            // STEP 12: Handle implicit multiplication MORE CAREFULLY
+            // Protect ALL function names including the ones we just created
+            const functionProtection = {};
+            let protectionCounter = 0;
+            
+            // Protect function calls - expanded list including log10
+            mathjs = mathjs.replace(/(sin|cos|tan|sec|csc|cot|log10|log|ln|exp|abs|sqrt|asin|acos|atan)\s*\(/g, (match) => {
+                const placeholder = `__FUNC_${protectionCounter++}__`;
+                functionProtection[placeholder] = match;
+                return placeholder;
+            });
+            
+            console.log('Protected functions, current state:', mathjs);
+            
+            // Apply implicit multiplication rules
+            mathjs = mathjs.replace(/(\d)\s*([a-zA-Z])/g, '$1*$2');
+            mathjs = mathjs.replace(/([a-zA-Z])\s*(\d)/g, '$1*$2');
+            mathjs = mathjs.replace(/\)\s*([a-zA-Z\d])/g, ')*$1');
+            mathjs = mathjs.replace(/([a-zA-Z])\s*\(/g, '$1*(');
+            
+            console.log('After implicit multiplication:', mathjs);
+            
+            // Restore protected functions
+            Object.keys(functionProtection).forEach(placeholder => {
+                mathjs = mathjs.replace(placeholder, functionProtection[placeholder]);
+            });
+            
+            console.log('After restoring functions:', mathjs);
+            
+            // STEP 13: Clean up extra spaces
+            mathjs = mathjs.replace(/\s+/g, ' ').trim();
+
+            console.log('✅ Final converted result:', mathjs);
+            return mathjs;
+        }
+
+        function createChart(xValues, yValues, functionName) {
+            const ctx = document.getElementById('functionChart').getContext('2d');
+            
+            // Destroy existing chart if it exists
+            if (chart) {
+                chart.destroy();
+            }
+
+            const data = xValues.map((x, i) => ({ x: x, y: yValues[i] }));
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: `f(x) = ${functionName}`,
+                        data: data,
+                        borderColor: '#ff6b6b',
+                        backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                        borderWidth: 3,
+                        pointRadius: 0,
+                        pointHoverRadius: 5,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `Graph of f(x) = ${functionName}`,
+                            font: { size: 16, weight: 'bold' }
+                        },
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            title: {
+                                display: true,
+                                text: 'x',
+                                font: { size: 14, weight: 'bold' }
+                            },
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'f(x)',
+                                font: { size: 14, weight: 'bold' }
+                            },
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            console.log('✅ Graph created successfully!');
+        }
+
+        function showHelp() {
+            alert(`📈 Math Function Grapher - Proper Mathematical Notation
+
+✨ WRITE MATH NATURALLY:
+• Use toolbar buttons for perfect notation: x², sin(x), √x, fractions
+• Type directly: x^2 becomes x², sin(x) becomes sin(x)
+• MathQuill automatically formats your expressions beautifully
+
+🔤 KEYBOARD SHORTCUTS:
+• x^2 → x² (automatic superscript)
+• / → fraction (creates proper fraction bar)
+• sqrt → √ (square root with radical)
+• sin, cos, tan → proper function notation
+• pi → π, alpha → α (Greek letters)
+
+📝 FUNCTIONS & NOTATION:
+• Powers: x², x³, x⁻¹, x^(1/2)
+• Fractions: ½, ¾, (x+1)/(x-1)
+• Trigonometry: sin(x), cos(x), tan(x), sec(x)
+• Logarithms: ln(x), log(x), log₁₀(x)
+• Roots: √x, ∛x, ⁿ√x
+• Constants: π, e, ∞
+
+🎯 EXAMPLES:
+• x² + 3x - 1
+• sin(x)·cos(x)
+• e^(-x²)
+• ln(x + 1)
+• √(x² + 1)
+• 1/(x² + 1)
+• |x² - 4|
+
+⚡ TIPS:
+• Press Enter to graph instantly
+• Use parentheses for grouping
+• Graph shows x from -10 to 10
+• Click buttons or type naturally!`);
+        }
+    </script>
+</body>
+</html>

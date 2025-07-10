@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Tools Test</title>
+    
+    <!-- MathQuill resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .mathquill-field {
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            min-height: 40px;
+            font-size: 18px;
+        }
+        
+        .mathquill-field:focus-within {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0,123,255,0.3);
+        }
+        
+        .math-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .math-btn {
+            background: linear-gradient(145deg, #ffffff, #f1f5f9);
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .math-btn:hover {
+            background: linear-gradient(145deg, #007bff, #0056b3);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .function-btn {
+            background: linear-gradient(145deg, #28a745, #1e7e34);
+            color: white;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    </style>
+</head>
+<body>
+    <h1>🧮 Math Tools Test Page</h1>
+    <p>This page tests the mathematical input tools used in the derivative modules.</p>
+    
+    <div class="test-container">
+        <h3>Test 1: Basic Math Input</h3>
+        <p>Try typing mathematical expressions and using the toolbar buttons:</p>
+        
+        <div class="math-toolbar">
+            <button class="math-btn" onclick="insertMath(0, 'x')">x</button>
+            <button class="math-btn" onclick="insertMath(0, 'y')">y</button>
+            <button class="math-btn" onclick="insertMath(0, '^')">^</button>
+            <button class="math-btn" onclick="insertMath(0, '(')">(</button>
+            <button class="math-btn" onclick="insertMath(0, ')')">)</button>
+            <button class="math-btn" onclick="insertMath(0, '+')">+</button>
+            <button class="math-btn" onclick="insertMath(0, '-')">-</button>
+            <button class="math-btn" onclick="insertMath(0, '*')">×</button>
+            <button class="math-btn" onclick="insertMath(0, '=')">=</button>
+            <button class="math-btn function-btn" onclick="insertMath(0, '\\frac{}{}')">[/]</button>
+            <button class="math-btn function-btn" onclick="insertMath(0, '\\sqrt{}')">[√]</button>
+            <button class="math-btn function-btn" onclick="insertMath(0, '\\sin')">[sin]</button>
+            <button class="math-btn function-btn" onclick="insertMath(0, '\\cos')">[cos]</button>
+            <button class="math-btn function-btn" onclick="insertMath(0, 'f(x)')">f(x)</button>
+            <button class="math-btn function-btn" onclick="insertMath(0, 'f\\\'(x)')">f'(x)</button>
+        </div>
+        
+        <div class="mathquill-field" id="test0"></div>
+        <button onclick="testField(0)" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Test Field 0</button>
+        <div id="result0" class="status info">Click "Test Field 0" to see the LaTeX output</div>
+    </div>
+    
+    <div class="test-container">
+        <h3>Test 2: Advanced Functions</h3>
+        <p>Test advanced mathematical functions:</p>
+        
+        <div class="math-toolbar">
+            <button class="math-btn function-btn" onclick="insertMath(1, '\\lim')">lim</button>
+            <button class="math-btn" onclick="insertMath(1, '\\to')">→</button>
+            <button class="math-btn function-btn" onclick="insertMath(1, '\\ln')">ln</button>
+            <button class="math-btn function-btn" onclick="insertMath(1, '\\log')">log</button>
+            <button class="math-btn function-btn" onclick="insertMath(1, 'e^{}')">e^</button>
+            <button class="math-btn function-btn" onclick="insertMath(1, '\\tan')">tan</button>
+            <button class="math-btn function-btn" onclick="insertMath(1, '\\sec')">sec</button>
+            <button class="math-btn function-btn" onclick="insertMath(1, '\\frac{dy}{dx}')">dy/dx</button>
+        </div>
+        
+        <div class="mathquill-field" id="test1"></div>
+        <button onclick="testField(1)" style="background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Test Field 1</button>
+        <div id="result1" class="status info">Click "Test Field 1" to see the LaTeX output</div>
+    </div>
+    
+    <div class="test-container">
+        <h3>Test 3: Number Buttons</h3>
+        <p>Test number input buttons:</p>
+        
+        <div class="math-toolbar">
+            <button class="math-btn" onclick="insertMath(2, '0')">0</button>
+            <button class="math-btn" onclick="insertMath(2, '1')">1</button>
+            <button class="math-btn" onclick="insertMath(2, '2')">2</button>
+            <button class="math-btn" onclick="insertMath(2, '3')">3</button>
+            <button class="math-btn" onclick="insertMath(2, '4')">4</button>
+            <button class="math-btn" onclick="insertMath(2, '5')">5</button>
+            <button class="math-btn" onclick="insertMath(2, '6')">6</button>
+            <button class="math-btn" onclick="insertMath(2, '7')">7</button>
+            <button class="math-btn" onclick="insertMath(2, '8')">8</button>
+            <button class="math-btn" onclick="insertMath(2, '9')">9</button>
+        </div>
+        
+        <div class="mathquill-field" id="test2"></div>
+        <button onclick="testField(2)" style="background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Test Field 2</button>
+        <div id="result2" class="status info">Click "Test Field 2" to see the LaTeX output</div>
+    </div>
+
+    <script>
+        let mathFields = {};
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const MQ = MathQuill.getInterface(2);
+            
+            // Initialize test fields
+            for (let i = 0; i < 3; i++) {
+                const element = document.getElementById(`test${i}`);
+                if (element) {
+                    mathFields[i] = MQ.MathField(element, {
+                        spaceBehavesLikeTab: true,
+                        autoCommands: 'pi theta sqrt sum prod alpha beta gamma delta epsilon zeta eta mu nu xi omicron rho sigma tau upsilon phi chi psi omega',
+                        autoOperatorNames: 'sin cos tan ln log exp lim',
+                        handlers: {
+                            edit: function() {
+                                console.log('Field edited:', this.latex());
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        
+        function insertMath(fieldNum, symbol) {
+            try {
+                if (!mathFields[fieldNum]) {
+                    console.error('Math field not initialized:', fieldNum);
+                    return;
+                }
+                
+                const field = mathFields[fieldNum];
+                field.focus();
+                
+                switch(symbol) {
+                    case '\\frac{}{}':
+                        field.write('\\frac{}{}');
+                        field.keystroke('Left Left Left');
+                        break;
+                    case '\\sqrt{}':
+                        field.write('\\sqrt{}');
+                        field.keystroke('Left');
+                        break;
+                    case 'e^{}':
+                        field.write('e^{}');
+                        field.keystroke('Left');
+                        break;
+                    case 'f(x)':
+                        field.write('f(x)');
+                        break;
+                    case 'f\\\'(x)':
+                        field.write('f\'(x)');
+                        break;
+                    case '\\frac{dy}{dx}':
+                        field.write('\\frac{dy}{dx}');
+                        break;
+                    case '\\lim':
+                        field.write('\\lim_{x \\to }');
+                        field.keystroke('Right');
+                        break;
+                    case '\\ln':
+                        field.write('\\ln\\left(\\right)');
+                        field.keystroke('Left Left Left Left Left Left Left');
+                        break;
+                    case '\\log':
+                        field.write('\\log\\left(\\right)');
+                        field.keystroke('Left Left Left Left Left Left Left Left');
+                        break;
+                    case '\\sin':
+                        field.write('\\sin\\left(\\right)');
+                        field.keystroke('Left Left Left Left Left Left Left Left');
+                        break;
+                    case '\\cos':
+                        field.write('\\cos\\left(\\right)');
+                        field.keystroke('Left Left Left Left Left Left Left Left');
+                        break;
+                    case '\\tan':
+                        field.write('\\tan\\left(\\right)');
+                        field.keystroke('Left Left Left Left Left Left Left Left');
+                        break;
+                    case '\\sec':
+                        field.write('\\sec\\left(\\right)');
+                        field.keystroke('Left Left Left Left Left Left Left Left');
+                        break;
+                    case '\\to':
+                        field.write('\\to ');
+                        break;
+                    case '*':
+                        field.write('\\cdot ');
+                        break;
+                    case '^':
+                        field.write('^{}');
+                        field.keystroke('Left');
+                        break;
+                    case '(':
+                        field.write('\\left(\\right)');
+                        field.keystroke('Left Left Left Left Left Left Left');
+                        break;
+                    case ')':
+                        field.write('\\right)');
+                        break;
+                    case '/':
+                        field.write('\\frac{}{}');
+                        field.keystroke('Left Left Left');
+                        break;
+                    default:
+                        field.write(symbol + ' ');
+                        break;
+                }
+                
+                field.blur();
+                field.focus();
+                
+            } catch (error) {
+                console.error('Error in insertMath:', error);
+            }
+        }
+        
+        function testField(fieldNum) {
+            try {
+                const field = mathFields[fieldNum];
+                const latex = field.latex();
+                const resultDiv = document.getElementById(`result${fieldNum}`);
+                
+                if (latex) {
+                    resultDiv.className = 'status success';
+                    resultDiv.innerHTML = `✅ Success! LaTeX: <code>${latex}</code>`;
+                } else {
+                    resultDiv.className = 'status error';
+                    resultDiv.innerHTML = '❌ Error: No content in field';
+                }
+                
+                console.log(`Field ${fieldNum} LaTeX:`, latex);
+                
+            } catch (error) {
+                const resultDiv = document.getElementById(`result${fieldNum}`);
+                resultDiv.className = 'status error';
+                resultDiv.innerHTML = `❌ Error: ${error.message}`;
+                console.error('Test error:', error);
+            }
+        }
+    </script>
+</body>
+</html> 
+
+
+
+
+
+
+

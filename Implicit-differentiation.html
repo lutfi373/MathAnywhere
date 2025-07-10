@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Implicit Differentiation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.5.1/math.min.js"></script>
+  <!-- Load MathJax first and configure it -->
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      startup: {
+        pageReady: function() {
+          // This will be executed when MathJax is loaded and ready
+          return MathJax.startup.defaultPageReady();
+        }
+      }
+    };
+  </script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script>
+  <!-- MathQuill dependencies -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+  <style>
+    :root {
+      /* Color Variables */
+      --main-color: #323232;
+      --accent-color: #ff6b6b;
+      --secondary-color: #feca57;
+      --tertiary-color: #1dd1a1;
+      --bg-color: #f7f9fc;
+      --font-color: #323232;
+      --input-focus: #2d8cf0;
+      --shadow-md: 4px 4px var(--main-color);
+      --shadow-hover: 2px 2px var(--main-color);
+      --success-color: #2ecc71;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background: var(--bg-color);
+      color: var(--font-color);
+      min-height: 100vh;
+      line-height: 1.6;
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 260px;
+      height: 100%;
+      background-color: #feca57;
+      border-right: 2px solid var(--main-color);
+      box-shadow: 4px 0 var(--main-color);
+      overflow-x: hidden;
+      padding: 30px 20px;
+      z-index: 100;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar:hover {
+      box-shadow: 6px 0 var(--main-color);
+    }
+
+    .sidebar a {
+      padding: 15px 20px;
+      font-size: 16px;
+      color: var(--font-color);
+      transition: all 0.3s ease;
+      border-radius: 10px;
+      margin: 8px 0;
+      text-decoration: none;
+      display: block;
+      border: 2px solid var(--main-color);
+      background-color: white;
+      width: calc(100% - 40px);
+      text-align: left;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: var(--shadow-md);
+      font-weight: 600;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .sidebar a:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--accent-color);
+      transition: all 0.4s ease;
+      z-index: -1;
+      opacity: 0.7;
+    }
+
+    .sidebar a:hover:before {
+      left: 0;
+    }
+
+    .sidebar a:hover {
+      color: white;
+      background-color: transparent;
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 6px 6px var(--main-color);
+      border-color: var(--main-color);
+    }
+
+    .sidebar a:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px var(--main-color);
+    }
+
+    #main-content {
+      margin-left: 270px;
+      margin-top: 20px;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 40px;
+      border-radius: 10px;
+      background-color: white;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      transition: all 0.3s ease;
+      border: 2px solid var(--main-color);
+    }
+
+    .container:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translate(3px, 3px);
+    }
+
+    h2 {
+      color: var(--font-color);
+      font-size: 2.2rem;
+      margin: 30px 0;
+      font-weight: 700;
+      text-align: center;
+      width: 100%;
+      position: relative;
+      display: inline-block;
+    }
+
+    h2:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 25%;
+      width: 50%;
+      height: 4px;
+      background-color: var(--accent-color);
+      transition: width 0.3s ease, left 0.3s ease;
+    }
+
+    h2:hover:after {
+      width: 80%;
+      left: 10%;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background-color: var(--tertiary-color);
+      transform: translateY(-3px);
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    .input {
+      padding: 10px;
+      border: 2px solid var(--main-color);
+      border-radius: 5px;
+      width: 100%;
+      max-width: 400px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .input:focus {
+      border-color: var(--input-focus);
+      box-shadow: 0 0 5px var(--input-focus);
+      outline: none;
+    }
+
+    .examples {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .example-card {
+      flex: 1 1 calc(33.333% - 20px);
+      background: var(--bg-color);
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      border: 2px solid var(--main-color);
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+    }
+
+    .example-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translate(3px, 3px);
+    }
+
+    .example-note {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--accent-color);
+      margin-top: 5px;
+      font-style: italic;
+    }
+
+    #steps p {
+      margin: 10px 0;
+      animation: fadeIn 0.5s ease;
+      text-align: left;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 15px 0;
+    }
+
+    .visualization-container {
+      width: 100%;
+      margin: 20px auto;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #implicit-graph {
+      width: 100%;
+      height: 400px;
+      border: 2px solid var(--main-color);
+      border-radius: 8px;
+      margin-bottom: 15px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .tangent-controls {
+      width: 100%;
+      padding: 15px;
+      background-color: var(--bg-color);
+      border-radius: 8px;
+      margin-top: 10px;
+      border: 2px solid var(--main-color);
+    }
+
+    .point-input {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .point-input input {
+      width: 60px;
+      padding: 5px;
+      border: 1px solid var(--main-color);
+      border-radius: 4px;
+    }
+
+    .steps-container {
+      padding: 15px;
+      border: 2px solid var(--main-color);
+      border-radius: 8px;
+      background-color: var(--bg-color);
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .steps-container h3 {
+      margin-top: 0;
+      color: var(--main-color);
+      text-align: center;
+    }
+
+    .application-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .application-card {
+      background: var(--bg-color);
+      padding: 20px;
+      border-radius: 8px;
+      border: 2px solid var(--main-color);
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+    }
+    
+    .application-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translate(3px, 3px);
+    }
+    
+    .application-card h3 {
+      color: var(--accent-color);
+      margin-top: 0;
+      font-size: 1.4rem;
+    }
+    
+    .formula-box {
+      background-color: white;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 15px;
+      font-size: 1.2rem;
+      border: 1px dashed var(--secondary-color);
+    }
+
+    /* Responsive Design */
+    @media screen and (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 20px;
+      }
+
+      #main-content {
+        margin-left: 0;
+        padding: 20px;
+      }
+
+      .container {
+        margin: 20px;
+        padding: 20px;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      h2 {
+        font-size: 1.8rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+    }
+
+    .math-field-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 15px 0;
+    }
+
+    .mathquill-input {
+      width: 100%;
+      min-height: 60px;
+      border: 2px solid var(--main-color);
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 1.2rem;
+      background-color: white;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-md);
+      color: var(--main-color);
+      margin-top: 10px;
+    }
+
+    .mathquill-input:focus-within {
+      border-color: var(--input-focus);
+      box-shadow: 0 0 10px var(--input-focus);
+      transform: translateY(-3px);
+    }
+
+    .math-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0;
+      justify-content: center;
+    }
+
+    .math-btn {
+      padding: 6px 12px;
+      background-color: white;
+      border: 1px solid var(--main-color);
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: bold;
+      color: black;
+    }
+
+    .math-btn:hover {
+      background-color: var(--secondary-color);
+      color: black;
+    }
+  </style>
+</head>
+<body>
+<div id="sidebar" class="sidebar">
+  <a href="home.html">Home</a>
+  <a href="#introduction">Introduction</a>
+  <a href="#examples">Examples</a>
+  <a href="#applications">Applications</a>
+  <a href="#calculator">Implicit Differentiation Calculator</a>
+</div>
+
+<div id="main-content">
+  <section id="introduction">
+    <div class="container">
+      <h2>Introduction</h2>
+      <p>
+        Implicit differentiation is a technique used to differentiate equations where \(y\) is not explicitly solved in terms of \(x\).
+        It is particularly useful for equations that are difficult or impossible to rearrange into the form \(y = f(x)\).
+      </p>
+      <p>
+        The key idea is to differentiate both sides of the equation with respect to \(x\), treating \(y\) as a function of \(x\),
+        and using the chain rule for terms involving \(y\).
+      </p>
+    </div>
+  </section>
+
+  <section id="examples">
+    <div class="container">
+      <h2>Examples</h2>
+      <p>Click on any example to load it into the calculator:</p>
+      <div class="examples">
+        <div class="example-card" onclick="loadExample('x^2 + y^2 - 25 = 0')">
+          <p>\( x^2 + y^2 - 25 = 0 \)</p>
+          <span class="example-note">Circle equation</span>
+        </div>
+        <div class="example-card" onclick="loadExample('x^2 + y^2 + 2y - 3x + 5 = 0')">
+          <p>\( x^2 + y^2 + 2y - 3x + 5 = 0 \)</p>
+          <span class="example-note">Shifted circle</span>
+        </div>
+        <div class="example-card" onclick="loadExample('xy = 4')">
+          <p>\( xy = 4 \)</p>
+          <span class="example-note">Hyperbola</span>
+        </div>
+        <div class="example-card" onclick="loadExample('sin(y) + x^2y^2 = 2')">
+          <p>\( \sin(y) + x^2y^2 = 2 \)</p>
+          <span class="example-note">Trigonometric</span>
+        </div>
+        <div class="example-card" onclick="loadExample('e^(xy) = 10')">
+          <p>\( e^{xy} = 10 \)</p>
+          <span class="example-note">Exponential</span>
+        </div>
+        <div class="example-card" onclick="loadExample('ln(x^2 + y^2) = 5')">
+          <p>\( \ln(x^2 + y^2) = 5 \)</p>
+          <span class="example-note">Logarithmic</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="applications">
+    <div class="container">
+      <h2>Real-World Applications</h2>
+      <p>Implicit differentiation has many practical applications in science, engineering, and mathematics:</p>
+      
+      <div class="application-cards">
+        <div class="application-card">
+          <h3>Related Rates</h3>
+          <p>
+            Finding how different quantities change in relation to each other over time.
+            For example, calculating how fast water level changes in a conical tank as it empties.
+          </p>
+          <div class="formula-box">
+            \( \frac{dV}{dt} = \frac{dV}{dr} \cdot \frac{dr}{dt} \)
+          </div>
+        </div>
+        
+        <div class="application-card">
+          <h3>Complex Curves</h3>
+          <p>
+            Finding tangent lines and normal lines to curves that can't easily be written in explicit form,
+            such as ellipses, hyperbolas, and more complex shapes.
+          </p>
+          <div class="formula-box">
+            \( \frac{x^2}{a^2} + \frac{y^2}{b^2} = 1 \)
+          </div>
+        </div>
+        
+        <div class="application-card">
+          <h3>Optimization Problems</h3>
+          <p>
+            Solving constrained optimization problems using Lagrange multipliers,
+            where constraints are often given in implicit form.
+          </p>
+          <div class="formula-box">
+            \( \nabla f(x,y) = \lambda \nabla g(x,y) \)
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="calculator">
+    <div class="container">
+      <h2>Implicit Differentiation Calculator</h2>
+      <p>Enter an equation involving \(x\) and \(y\):</p>
+      
+      <div class="math-field-container">
+        <div class="math-toolbar">
+          <button class="math-btn" onclick="insertMath('x^2')">x²</button>
+          <button class="math-btn" onclick="insertMath('y^2')">y²</button>
+          <button class="math-btn" onclick="insertMath('x^n')">xⁿ</button>
+          <button class="math-btn" onclick="insertMath('y^n')">yⁿ</button>
+          <button class="math-btn" onclick="insertMath('xy')">xy</button>
+          <button class="math-btn" onclick="insertMath('\\sqrt{x}')">√x</button>
+          <button class="math-btn" onclick="insertMath('\\sin(x)')">sin(x)</button>
+          <button class="math-btn" onclick="insertMath('\\cos(y)')">cos(y)</button>
+          <button class="math-btn" onclick="insertMath('\\tan(x)')">tan(x)</button>
+          <button class="math-btn" onclick="insertMath('e^{xy}')">eˣʸ</button>
+          <button class="math-btn" onclick="insertMath('\\ln(x)')">ln(x)</button>
+          <button class="math-btn" onclick="insertMath('+')">+</button>
+          <button class="math-btn" onclick="insertMath('-')">−</button>
+          <button class="math-btn" onclick="insertMath('\\cdot')">×</button>
+          <button class="math-btn" onclick="insertMath('/')">÷</button>
+          <button class="math-btn" onclick="insertMath('=0')">= 0</button>
+        </div>
+        <span id="math-input" class="mathquill-input"></span>
+        <input type="hidden" id="equationInput">
+      </div>
+      
+      <div class="controls">
+        <button onclick="computeDerivative()">Differentiate</button>
+      </div>
+
+      <h3>Result:</h3>
+      <p id="derivativeResult">\( \frac{dy}{dx} \) will appear here</p>
+      
+      <div class="steps-container">
+        <h3>Step-by-Step Solution:</h3>
+        <div id="steps"></div>
+      </div>
+    </div>
+  </section>
+</div>
+<script>
+  // Current equation and derivative
+  let currentEquation = "x^2 + y^2 - 25 = 0";
+  let currentDerivative = "";
+  let currentDerivativeFunc = null;
+  let mathField; // Variable to hold the MathQuill instance
+  
+  // Initialize when the document is ready
+  document.addEventListener("DOMContentLoaded", function() {
+    setupMathQuill();
+    
+    // Handle dropdown buttons if any
+    var dropdown = document.getElementsByClassName("dropdown-btn");
+    for (var i = 0; i < dropdown.length; i++) {
+      dropdown[i].addEventListener("click", function () {
+        this.classList.toggle("active");
+        var dropdownContent = this.nextElementSibling;
+        if (dropdownContent.style.maxHeight) {
+          dropdownContent.style.maxHeight = null;
+        } else {
+          dropdownContent.style.maxHeight = dropdownContent.scrollHeight + "px";
+        }
+      });
+    }
+    
+    // Example highlighting for sidebar
+    var sidebarLinks = document.querySelectorAll('.sidebar a');
+    sidebarLinks.forEach(link => {
+      link.addEventListener('click', function (event) {
+        var targetId = this.getAttribute('href');
+        // Only prevent default for anchor links
+        if (targetId && targetId.startsWith('#')) {
+          event.preventDefault();
+          var targetElement = document.getElementById(targetId.substring(1));
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop,
+              behavior: 'smooth'
+            });
+          }
+        } else if (targetId === 'index.html' || targetId === 'home.html') {
+          // For Home or Index, navigate to home.html
+          window.location.href = 'home.html';
+        }
+        // Otherwise, let the browser handle navigation
+      });
+    });
+    
+    // Ensure MathJax is loaded properly
+    if (typeof MathJax === 'undefined') {
+      console.log("MathJax not loaded yet, will wait before loading examples...");
+      window.addEventListener('load', function() {
+        console.log("Window loaded, loading example with delay...");
+        setTimeout(() => {
+          // Load default example
+          loadExample("x^2 + y^2 - 25 = 0");
+        }, 1000);
+      });
+    } else {
+      // MathJax is already defined, proceed normally
+      console.log("MathJax already loaded, loading example immediately...");
+      loadExample("x^2 + y^2 - 25 = 0");
+    }
+  });
+  
+  // Setup MathQuill input field
+  function setupMathQuill() {
+    var MQ = MathQuill.getInterface(2);
+    var mathInputSpan = document.getElementById('math-input');
+    
+    mathField = MQ.MathField(mathInputSpan, {
+      spaceBehavesLikeTab: true,
+      handlers: {
+        edit: function() {
+          // Update the hidden input with the LaTeX value when the math field changes
+          document.getElementById('equationInput').value = mathField.latex();
+        }
+      }
+    });
+    
+    // Set the initial value
+    mathField.latex('x^2 + y^2 - 25 = 0');
+  }
+  
+  // Function to insert mathematical symbols into the MathQuill field
+  function insertMath(latex) {
+    if (mathField) {
+      mathField.focus();
+      mathField.write(latex);
+    }
+  }
+  
+  // Function to load an example equation into the input
+  function loadExample(equation) {
+    try {
+      // Format equation for MathQuill display
+      if (mathField) {
+        let displayEq = equation
+          .replace(/\*/g, '') // Remove multiplication signs for display
+          .replace(/\^(\w)/g, '^{$1}') // Format single-character exponents
+          .replace(/sin\(/g, '\\sin(')  // Format trig functions
+          .replace(/cos\(/g, '\\cos(') 
+          .replace(/tan\(/g, '\\tan(')
+          .replace(/ln\(/g, '\\ln(')
+          .replace(/sqrt\(/g, '\\sqrt{')  // Fix sqrt
+          .replace(/sqrt\{([^)]+)\)/g, '\\sqrt{$1}'); // Close sqrt properly
+          
+        // Set the formatted equation in MathQuill
+        mathField.latex(displayEq);
+      }
+      
+      // Set values for computation
+      document.getElementById("equationInput").value = equation;
+      currentEquation = equation;
+      
+      // Calculate and display
+      computeDerivative();
+      
+      console.log("Example loaded:", equation);
+    } catch (error) {
+      console.error("Error loading example:", error);
+      alert("Error loading example: " + error.message);
+    }
+  }
+  
+  // Convert LaTeX notation to math.js compatible format
+  function convertLatexToMathJs(latex) {
+    try {
+      // Replace LaTeX commands with math.js syntax
+      let expr = latex
+        .replace(/\\cdot/g, '*')          // LaTeX multiplication dot to *
+        .replace(/\\sin/g, 'sin')         // LaTeX sin to math.js sin
+        .replace(/\\cos/g, 'cos')         // LaTeX cos to math.js cos
+        .replace(/\\tan/g, 'tan')         // LaTeX tan to math.js tan
+        .replace(/\\ln/g, 'log')          // LaTeX ln to math.js log
+        .replace(/e\^\{([^}]*)\}/g, 'exp($1)') // e^{...} to exp(...)
+        .replace(/\\sqrt\{([^}]*)\}/g, 'sqrt($1)') // LaTeX sqrt to math.js sqrt
+        .replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, '($1)/($2)') // LaTeX fractions
+        .replace(/\^\{([^}]*)\}/g, '^($1)')  // Convert x^{abc} to x^(abc)
+        .replace(/(\d)([a-zA-Z])/g, '$1*$2') // Implicit multiplication like 2x to 2*x
+        .replace(/([a-zA-Z])(\d)/g, '$1*$2') // Implicit multiplication like x2 to x*2
+        .replace(/([a-zA-Z])([a-zA-Z])/g, function(match, p1, p2) {
+          // Only replace xy with x*y when both are single variables
+          // Don't replace functions like sin, cos, etc.
+          if (p1.length === 1 && p2.length === 1 && p1 !== 'e') {
+            return p1 + '*' + p2;
+          }
+          return match;
+        });
+      
+      // Remove the "= 0" part if present for computation
+      expr = expr.replace(/\s*=\s*0\s*$/, "");
+      
+      console.log("Converted expression:", expr);
+      return expr;
+    } catch (error) {
+      console.error("Error converting LaTeX to math.js:", error);
+      return latex; // Return original in case of error
+    }
+  }
+  
+  function computeDerivative() {
+    try {
+      // Get the LaTeX from the MathQuill field
+      let latex = mathField ? mathField.latex() : document.getElementById("equationInput").value;
+      console.log("Original LaTeX:", latex);
+      
+      // Convert LaTeX to a format that math.js can understand
+      let expr = convertLatexToMathJs(latex);
+      currentEquation = expr;
+      console.log("Processed expression:", expr);
+      
+      // Parse the equation
+      let implicitEq;
+      try {
+        implicitEq = math.parse(expr);
+      } catch (parseError) {
+        console.error("Math.js parse error:", parseError);
+        alert("Error parsing the equation. Please check your syntax.");
+        return;
+      }
+      
+      // Calculate derivatives
+      let diffEqX, diffEqY;
+      try {
+        diffEqX = math.derivative(implicitEq, 'x').toString();
+        diffEqY = math.derivative(implicitEq, 'y').toString();
+        console.log("Derivatives calculated:", {x: diffEqX, y: diffEqY});
+      } catch (derivError) {
+        console.error("Derivative calculation error:", derivError);
+        alert("Error calculating derivatives. Please check your equation.");
+        return;
+      }
+      
+      // Create the derivative expression
+      let result = `(${diffEqX}) + (${diffEqY}) \\frac{dy}{dx} = 0`;
+      
+      // Solve for dy/dx
+      let dyDx = `\\frac{dy}{dx} = \\frac{-(${diffEqX})}{${diffEqY}}`;
+      
+      // Store the derivative function for later use
+      currentDerivative = dyDx;
+      currentDerivativeFunc = function(x, y) {
+        try {
+          let numerator = -math.evaluate(diffEqX, {x: x, y: y});
+          let denominator = math.evaluate(diffEqY, {x: x, y: y});
+          // Check for division by zero
+          if (Math.abs(denominator) < 1e-10) {
+            return NaN; // Undefined slope
+          }
+          return numerator / denominator;
+        } catch (error) {
+          console.error("Error evaluating derivative at point:", error);
+          return NaN;
+        }
+      };
+      
+      // Display the result
+      document.getElementById("derivativeResult").innerHTML = `\\[ ${dyDx} \\]`;
+      
+      // Generate step-by-step solution
+      generateSteps(expr, diffEqX, diffEqY);
+      
+      // Typeset math safely, checking if MathJax is defined and ready
+      typesetMath();
+      
+      console.log("Derivative calculation completed successfully");
+    } catch (error) {
+      console.error("Error in computeDerivative:", error);
+      alert("Error calculating derivatives: " + error.message);
+    }
+  }
+  
+  // Function to safely typeset math expressions
+  function typesetMath() {
+    console.log("Attempting to typeset math...");
+    // Check if MathJax is defined
+    if (typeof MathJax !== 'undefined') {
+      try {
+        if (MathJax.typesetPromise) {
+          // MathJax v3+
+          MathJax.typesetPromise().then(() => {
+            console.log("MathJax typesetting completed");
+          }).catch((err) => {
+            console.error("MathJax typesetting error:", err);
+          });
+        } else if (MathJax.typeset) {
+          // Alternate MathJax v3 method
+          MathJax.typeset();
+          console.log("MathJax typesetting done");
+        } else if (MathJax.Hub && MathJax.Hub.Queue) {
+          // MathJax v2
+          MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+          console.log("MathJax v2 typesetting queued");
+        } else {
+          console.warn("MathJax exists but typeset method not found");
+        }
+      } catch (error) {
+        console.error("Error trying to typeset with MathJax:", error);
+      }
+    } else {
+      console.warn("MathJax not defined yet, will retry in 1 second");
+      // Retry after a delay
+      setTimeout(typesetMath, 1000);
+    }
+  }
+  
+  function generateSteps(eq, diffEqX, diffEqY) {
+    try {
+      // Get the user's equation from MathQuill
+      let userEq = mathField ? mathField.latex() : document.getElementById("equationInput").value;
+      
+      // Process the equation to display it properly
+      let displayEq = userEq
+        .replace(/\\cdot/g, ' \\cdot ')
+        .replace(/\*/g, ' \\cdot ');
+      
+      // Normalize the equation display
+      if (!displayEq.includes('=')) {
+        displayEq += ' = 0';
+      }
+      
+      // Generate dynamic step-by-step solution
+      let steps = `
+        <div class="step-explanation">
+          <h4>Step 1: Identify the Implicit Function</h4>
+          <p>We start with the implicit function: $${displayEq}$</p>
+          <p>Since $y$ is not explicitly solved for, we need to use implicit differentiation.</p>
+        </div>
+
+        <div class="step-explanation">
+          <h4>Step 2: Apply the Differentiation Rules</h4>
+          <p>We differentiate both sides of the equation with respect to $x$, remembering that $y$ is a function of $x$.</p>
+          <p>When differentiating terms containing $y$, we apply the chain rule: $\\frac{d}{dx}[f(y)] = \\frac{df}{dy} \\cdot \\frac{dy}{dx}$</p>
+        </div>
+
+        <div class="step-explanation">
+          <h4>Step 3: Differentiate Each Term</h4>
+          <p>Differentiating the left side with respect to $x$:</p>
+          <p class="math-result">$\\frac{d}{dx}(${displayEq.split('=')[0]}) = ${diffEqX} + ${diffEqY} \\cdot \\frac{dy}{dx}$</p>`;
+          
+      // If there's a right side other than 0
+      if (displayEq.split('=')[1].trim() !== '0') {
+        steps += `
+          <p>Differentiating the right side with respect to $x$:</p>
+          <p class="math-result">$\\frac{d}{dx}(${displayEq.split('=')[1]}) = 0$</p>`;
+      }
+      
+      steps += `
+        </div>
+
+        <div class="step-explanation">
+          <h4>Step 4: Form the Implicit Derivative Equation</h4>
+          <p>Setting the derivatives equal:</p>
+          <p class="math-result">$${diffEqX} + ${diffEqY} \\cdot \\frac{dy}{dx} = 0$</p>
+        </div>
+
+        <div class="step-explanation">
+          <h4>Step 5: Solve for $\\frac{dy}{dx}$</h4>
+          <p>To isolate $\\frac{dy}{dx}$, we rearrange the equation:</p>
+          <p class="math-result">$${diffEqY} \\cdot \\frac{dy}{dx} = -${diffEqX}$</p>
+          <p>Dividing both sides by $${diffEqY}$:</p>
+          <p class="math-result">$\\frac{dy}{dx} = \\frac{-(${diffEqX})}{${diffEqY}}$</p>
+        </div>
+
+        <div class="step-explanation">
+          <h4>Step 6: Interpretation</h4>
+          <p>For the equation $${displayEq}$, the implicit derivative is $\\frac{dy}{dx} = \\frac{-(${diffEqX})}{${diffEqY}}$</p>
+          <p>This gives us the slope of the tangent line at any point $(x,y)$ that satisfies the original equation.</p>
+        </div>
+      `;
+      
+      document.getElementById("steps").innerHTML = steps;
+      
+      // Ensure the result displays correctly too
+      let simplifiedResult = `\\frac{-(${diffEqX})}{${diffEqY}}`;
+      document.getElementById("derivativeResult").innerHTML = `$\\frac{dy}{dx} = ${simplifiedResult}$`;
+      
+      // Add some CSS to improve the appearance of the step-by-step solution
+      let stepStyle = document.createElement('style');
+      stepStyle.textContent = `
+        .step-explanation {
+          margin-bottom: 25px;
+          border-left: 4px solid var(--accent-color);
+          padding-left: 15px;
+        }
+        .step-explanation h4 {
+          color: var(--accent-color);
+          margin-top: 0;
+          margin-bottom: 10px;
+        }
+        .math-result {
+          background-color: white;
+          padding: 10px 15px;
+          border-radius: 5px;
+          font-weight: bold;
+          display: inline-block;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+          margin: 10px 0;
+        }
+        .step-explanation ul {
+          padding-left: 20px;
+        }
+        .step-explanation ul li {
+          margin-bottom: 8px;
+        }
+      `;
+      document.head.appendChild(stepStyle);
+      
+      // Typeset math
+      typesetMath();
+    } catch (error) {
+      console.error("Error generating steps:", error);
+      document.getElementById("steps").innerHTML = "<p>Error generating step-by-step solution. Please try a different equation.</p>";
+    }
+  }
+
+  // Function to mark topic as completed and return to profile
+  function completeTopicAndReturn() {
+    const topicName = 'Implicit Differentiations';
+    
+    // Mark topic as completed in session storage
+    const practiceAttempts = JSON.parse(sessionStorage.getItem('practiceAttempts') || '{}');
+    practiceAttempts[topicName] = (practiceAttempts[topicName] || 0) + 1;
+    sessionStorage.setItem('practiceAttempts', JSON.stringify(practiceAttempts));
+    
+    // Update mastery data
+    const masteryData = JSON.parse(sessionStorage.getItem('masteryData') || '[]');
+    masteryData.forEach(item => {
+      if (item.topic === topicName) {
+        // Increase mastery for completing theory
+        item.mastery = Math.min(100, item.mastery + 10);
+        
+        // Update badge if mastery level crossed threshold
+        if (item.mastery >= 80) {
+          item.badge = 'M';  // Master
+        } else if (item.mastery >= 50) {
+          item.badge = 'P';  // Proficient
+        } else if (item.mastery >= 20) {
+          item.badge = 'L';  // Learning
+        }
+      }
+    });
+    sessionStorage.setItem('masteryData', JSON.stringify(masteryData));
+    
+    // Show completion message
+    alert('Congratulations! You have completed the "Implicit Differentiations" topic. Your progress has been updated!');
+    
+    // Navigate to profile page
+    window.location.href = 'profile.html';
+  }
+</script>
+
+<!-- Back to Profile Button -->
+<div style="margin: 40px auto; text-align: center; max-width: 800px;">
+  <div style="background: white; border: 2px solid black; border-radius: 10px; padding: 30px; box-shadow: 4px 4px black;">
+    <h3 style="color: #323232; margin-bottom: 20px;">Congratulations! You've finished this topic!</h3>
+    <p style="color: #666; margin-bottom: 25px;">Click the button below to mark this topic as completed and return to your profile.</p>
+    <button onclick="completeTopicAndReturn()" style="background: #ff6b6b; color: white; border: 2px solid black; border-radius: 10px; padding: 15px 30px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 4px 4px black;">
+      ✓ Complete Topic & Return to Profile
+    </button>
+  </div>
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+

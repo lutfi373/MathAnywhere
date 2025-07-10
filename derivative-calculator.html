@@ -1,0 +1,1000 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Derivative Calculator - MathAnywhere</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/templatemo-topic-listing.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --input-focus: #2d8cf0;
+            --font-color: #323232;
+            --font-color-sub: #666;
+            --bg-color: #f7f9fc;
+            --main-color: black;
+            --accent-color: #ff6b6b;
+            --secondary-color: #feca57;
+            --tertiary-color: #1dd1a1;
+            --light-blue: #54a0ff;
+            --pink: #ff9ff3;
+            --purple: #5f27cd;
+        }
+
+        body {
+            font-family: 'Fira Code', monospace;
+            background-color: var(--bg-color);
+            color: var(--font-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--secondary-color);
+            border-bottom: 2px solid var(--main-color);
+            box-shadow: 4px 4px var(--main-color);
+            margin-bottom: 10px;
+        }
+
+        .navbar-brand {
+            color: var(--accent-color);
+            font-weight: 700;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--font-color);
+            font-weight: 600;
+            border-radius: 5px;
+            padding: 8px 15px;
+            margin: 0 5px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--input-focus);
+            border: 2px solid var(--input-focus);
+            box-shadow: 3px 3px var(--main-color);
+            transform: translateY(-2px);
+        }
+
+        /* Main Calculator Section */
+        .calculator-section {
+            background: white;
+            padding: 60px 0;
+            border-bottom: 2px solid var(--main-color);
+            box-shadow: 0 4px 0 var(--main-color);
+            margin-bottom: 35px;
+        }
+
+        .calculator-container {
+            background-color: white;
+            border: 2px solid var(--main-color);
+            border-radius: 15px;
+            box-shadow: 6px 6px var(--main-color);
+            padding: 40px;
+            margin: 20px auto;
+            max-width: 900px;
+            transition: all 0.3s ease;
+        }
+
+        .calculator-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 8px 8px var(--main-color);
+        }
+
+        .calculator-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--font-color);
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, var(--accent-color), var(--light-blue), var(--tertiary-color));
+            background-size: 300% 100%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: gradient 3s ease infinite;
+        }
+
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Input Section */
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        .input-label {
+            font-weight: 700;
+            color: var(--font-color);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .function-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-family: 'Courier New', monospace;
+            background: rgba(255, 255, 255, 0.95);
+            transition: all 0.3s ease;
+            box-shadow: 4px 4px var(--main-color);
+        }
+
+        .function-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.3);
+            transform: scale(1.02);
+        }
+
+        /* Math Toolbar */
+        .math-toolbar {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.95));
+            border: 2px solid var(--main-color);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            gap: 10px;
+            box-shadow: 4px 4px var(--main-color);
+        }
+
+        .math-btn {
+            background: linear-gradient(135deg, var(--light-blue), var(--accent-color));
+            color: white;
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 3px 3px var(--main-color);
+        }
+
+        .math-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 5px 5px var(--main-color);
+            background: linear-gradient(135deg, var(--tertiary-color), var(--purple));
+        }
+
+        .math-btn:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn-calculate {
+            background: linear-gradient(135deg, var(--tertiary-color), var(--light-blue));
+            color: white;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 4px 4px var(--main-color);
+        }
+
+        .btn-calculate:hover {
+            background: linear-gradient(135deg, var(--accent-color), var(--purple));
+            transform: translateY(-3px);
+            box-shadow: 6px 6px var(--main-color);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary-color), var(--pink));
+            color: var(--main-color);
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 3px 3px var(--main-color);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, var(--purple), var(--accent-color));
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 5px 5px var(--main-color);
+        }
+
+        /* Result Section */
+        .result-section {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            border: 2px solid var(--main-color);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 4px 4px var(--main-color);
+            min-height: 200px;
+        }
+
+        .result-title {
+            font-weight: 700;
+            color: var(--font-color);
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            text-align: center;
+        }
+
+        .result-content {
+            font-size: 1.3rem;
+            font-family: 'Courier New', monospace;
+            color: var(--font-color);
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .steps-section {
+            background: var(--bg-color);
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .step-item {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .step-item:hover {
+            transform: translateX(10px);
+            box-shadow: 3px 3px var(--main-color);
+        }
+
+        .step-number {
+            background: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 10px;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .step-math {
+            flex: 1;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Examples Section */
+        .examples-section {
+            background: white;
+            border: 2px solid var(--main-color);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 4px 4px var(--main-color);
+        }
+
+        .example-item {
+            background: var(--bg-color);
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .example-item:hover {
+            background: var(--light-blue);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 3px 3px var(--main-color);
+        }
+
+        .example-function {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .example-description {
+            font-size: 0.9rem;
+            color: var(--font-color-sub);
+            margin-top: 5px;
+        }
+
+        /* Error and Info Messages */
+        .error-message {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            border: 2px solid #f44336;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: 600;
+        }
+
+        .info-message {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border: 2px solid #2196f3;
+            color: #1565c0;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .site-footer {
+            background-color: white;
+            color: var(--font-color);
+            border-top: 2px solid var(--main-color);
+            padding: 40px 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .calculator-title {
+                font-size: 2rem;
+            }
+            
+            .math-toolbar {
+                grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+                gap: 8px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn-calculate, .btn-secondary {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="home.html">
+                <i class="bi-back"></i>
+                <span>MathAnywhere</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-lg-5 me-lg-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="deri_graph.html">Graphing Tool</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html">Profile</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="calculator-section">
+        <div class="container">
+            <div class="calculator-container">
+                <h1 class="calculator-title">🧮 Derivative Calculator</h1>
+                
+                <!-- Input Section -->
+                <div class="input-section">
+                    <label class="input-label">Enter your function f(x):</label>
+                    <div id="functionInput" class="function-input" style="min-height: 60px; padding: 20px;"></div>
+                    <input type="hidden" id="functionInputText">
+                    
+                    <!-- Math Toolbar -->
+                    <div class="math-toolbar">
+                        <button class="math-btn" onclick="insertSymbol('x')">x</button>
+                        <button class="math-btn" onclick="insertSymbol('^2')">x²</button>
+                        <button class="math-btn" onclick="insertSymbol('^3')">x³</button>
+                        <button class="math-btn" onclick="insertSymbol('^')">x^n</button>
+                        <button class="math-btn" onclick="insertSymbol('sqrt()')">√x</button>
+                        <button class="math-btn" onclick="insertSymbol('sin()')">sin</button>
+                        <button class="math-btn" onclick="insertSymbol('cos()')">cos</button>
+                        <button class="math-btn" onclick="insertSymbol('tan()')">tan</button>
+                        <button class="math-btn" onclick="insertSymbol('ln()')">ln</button>
+                        <button class="math-btn" onclick="insertSymbol('log()')">log</button>
+                        <button class="math-btn" onclick="insertSymbol('e^()')">e^x</button>
+                        <button class="math-btn" onclick="insertSymbol('pi')">π</button>
+                        <button class="math-btn" onclick="insertSymbol('+')">+</button>
+                        <button class="math-btn" onclick="insertSymbol('-')">−</button>
+                        <button class="math-btn" onclick="insertSymbol('*')">×</button>
+                        <button class="math-btn" onclick="insertSymbol('/')">÷</button>
+                        <button class="math-btn" onclick="insertSymbol('(')">(</button>
+                        <button class="math-btn" onclick="insertSymbol(')')">)</button>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn-calculate" onclick="calculateDerivative()">
+                        <i class="bi bi-calculator"></i> Calculate Derivative
+                    </button>
+                    <button class="btn-secondary" onclick="clearInput()">
+                        <i class="bi bi-eraser"></i> Clear
+                    </button>
+                    <button class="btn-secondary" onclick="showExamples()">
+                        <i class="bi bi-lightbulb"></i> Examples
+                    </button>
+                </div>
+
+                <!-- Result Section -->
+                <div class="result-section" id="resultSection" style="display: none;">
+                    <h3 class="result-title">📊 Result:</h3>
+                    <div class="result-content" id="resultContent">
+                        Your derivative will appear here...
+                    </div>
+                    
+                    <!-- Steps Section -->
+                    <div class="steps-section" id="stepsSection" style="display: none;">
+                        <h4 style="color: var(--font-color); margin-bottom: 15px;">📝 Step-by-step solution:</h4>
+                        <div id="stepsContent"></div>
+                    </div>
+                </div>
+
+                <!-- Examples Section -->
+                <div class="examples-section" id="examplesSection" style="display: none;">
+                    <h3 style="color: var(--font-color); margin-bottom: 20px; text-align: center;">💡 Example Functions</h3>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="example-item" onclick="loadExample('x^2 + 3*x + 1')">
+                                <div class="example-function">f(x) = x² + 3x + 1</div>
+                                <div class="example-description">Basic polynomial function</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="example-item" onclick="loadExample('sin(x) + cos(x)')">
+                                <div class="example-function">f(x) = sin(x) + cos(x)</div>
+                                <div class="example-description">Trigonometric functions</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="example-item" onclick="loadExample('e^x * x^2')">
+                                <div class="example-function">f(x) = e^x × x²</div>
+                                <div class="example-description">Exponential with polynomial</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="example-item" onclick="loadExample('ln(x) / x')">
+                                <div class="example-function">f(x) = ln(x) ÷ x</div>
+                                <div class="example-description">Logarithmic quotient</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Message -->
+                <div class="info-message">
+                    <strong>💡 Tip:</strong> Use standard mathematical notation. Examples: x^2 for x², sin(x) for sine, ln(x) for natural log, e^x for exponential.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-footer section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-12 mb-4 pb-2">
+                    <a class="navbar-brand mb-2" href="home.html">
+                        <i class="bi-back"></i>
+                        <span>MathAnywhere</span>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-4 col-6 mb-4 mb-lg-0">
+                    <h6 class="site-footer-title mb-3">Information</h6>
+                    <p class="text-black d-flex mb-1">
+                        <a href="tel: 305-240-9671" class="site-footer-link">013-3321094</a>
+                    </p>
+                    <p class="text-black d-flex">
+                        <a href="mailto:info@company.com" class="site-footer-link">2022841556@student.uitm.edu.my</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
+    
+    <!-- MathQuill CSS and JS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+
+    <script>
+        // Initialize MathQuill
+        let MQ, mathField;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            MQ = MathQuill.getInterface(2);
+            mathField = MQ.MathField(document.getElementById('functionInput'), {
+                spaceBehavesLikeTab: true,
+                leftRightIntoCmdGoes: 'up',
+                restrictMismatchedBrackets: true,
+                autoCommands: 'pi theta sqrt sum prod alpha beta gamma delta epsilon zeta eta',
+                autoOperatorNames: 'sin cos tan ln log exp',
+                handlers: {
+                    edit: function() {
+                        // Update hidden input with LaTeX
+                        document.getElementById('functionInputText').value = mathField.latex();
+                    }
+                }
+            });
+            
+            // Set initial placeholder
+            mathField.latex('x^{2}+3x+1');
+        });
+        
+        // Insert symbol into MathQuill field
+        function insertSymbol(symbol) {
+            if (!mathField) return;
+            
+            // Map symbols to LaTeX/MathQuill commands
+            const symbolMap = {
+                'x': 'x',
+                '^2': '^{2}',
+                '^3': '^{3}',
+                '^': '^{}',
+                'sqrt()': '\\sqrt{}',
+                'sin()': '\\sin(',
+                'cos()': '\\cos(',
+                'tan()': '\\tan(',
+                'ln()': '\\ln(',
+                'log()': '\\log(',
+                'e^()': 'e^{}',
+                'pi': '\\pi',
+                '+': '+',
+                '-': '-',
+                '*': '\\cdot',
+                '/': '\\frac{}{}',
+                '(': '(',
+                ')': ')'
+            };
+            
+            const mathCommand = symbolMap[symbol] || symbol;
+            mathField.write(mathCommand);
+            mathField.focus();
+        }
+
+        // Clear input field
+        function clearInput() {
+            if (mathField) {
+                mathField.latex('');
+            }
+            document.getElementById('resultSection').style.display = 'none';
+            document.getElementById('examplesSection').style.display = 'none';
+        }
+
+        // Show/hide examples
+        function showExamples() {
+            const examplesSection = document.getElementById('examplesSection');
+            examplesSection.style.display = examplesSection.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Load example into input
+        function loadExample(example) {
+            if (mathField) {
+                mathField.latex(convertToLatex(example));
+            }
+            document.getElementById('examplesSection').style.display = 'none';
+            calculateDerivative();
+        }
+        
+                 // Convert standard notation to LaTeX
+         function convertToLatex(expr) {
+             return expr
+                 .replace(/\^2/g, '^{2}')
+                 .replace(/\^3/g, '^{3}')
+                 .replace(/\^(\d+)/g, '^{$1}')
+                 .replace(/sqrt\(/g, '\\sqrt{')
+                 .replace(/sin\(/g, '\\sin(')
+                 .replace(/cos\(/g, '\\cos(')
+                 .replace(/tan\(/g, '\\tan(')
+                 .replace(/ln\(/g, '\\ln(')
+                 .replace(/log\(/g, '\\log(')
+                 .replace(/\*/g, '\\cdot ')
+                 .replace(/pi/g, '\\pi');
+         }
+         
+         // Convert LaTeX to math.js format
+         function convertLatexToMathJs(latex) {
+             let result = latex;
+             
+             // Handle fractions
+             result = result.replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '($1)/($2)');
+             
+             // Handle square roots
+             result = result.replace(/\\sqrt\{([^}]+)\}/g, 'sqrt($1)');
+             
+             // Handle trigonometric functions with arguments
+             result = result.replace(/\\sin\s*\\left\(\s*([^)]+)\s*\\right\)/g, 'sin($1)');
+             result = result.replace(/\\cos\s*\\left\(\s*([^)]+)\s*\\right\)/g, 'cos($1)');
+             result = result.replace(/\\tan\s*\\left\(\s*([^)]+)\s*\\right\)/g, 'tan($1)');
+             
+             // Handle trigonometric functions without explicit parentheses
+             result = result.replace(/\\sin\s*\(/g, 'sin(');
+             result = result.replace(/\\cos\s*\(/g, 'cos(');
+             result = result.replace(/\\tan\s*\(/g, 'tan(');
+             result = result.replace(/\\sin\s+([a-zA-Z0-9]+)/g, 'sin($1)');
+             result = result.replace(/\\cos\s+([a-zA-Z0-9]+)/g, 'cos($1)');
+             result = result.replace(/\\tan\s+([a-zA-Z0-9]+)/g, 'tan($1)');
+             result = result.replace(/\\sin/g, 'sin(x)');
+             result = result.replace(/\\cos/g, 'cos(x)');
+             result = result.replace(/\\tan/g, 'tan(x)');
+             
+             // Handle logarithmic functions with arguments
+             result = result.replace(/\\ln\s*\\left\(\s*([^)]+)\s*\\right\)/g, 'log($1)');
+             result = result.replace(/\\log\s*\\left\(\s*([^)]+)\s*\\right\)/g, 'log10($1)');
+             
+             // Handle logarithmic functions without explicit parentheses
+             result = result.replace(/\\ln\s*\(/g, 'log(');
+             result = result.replace(/\\log\s*\(/g, 'log10(');
+             result = result.replace(/\\ln\s+([a-zA-Z0-9]+)/g, 'log($1)');
+             result = result.replace(/\\log\s+([a-zA-Z0-9]+)/g, 'log10($1)');
+             result = result.replace(/\\ln/g, 'log(x)');
+             result = result.replace(/\\log/g, 'log10(x)');
+             
+             // Handle exponential
+             result = result.replace(/e\^/g, 'e^');
+             
+             // Handle pi
+             result = result.replace(/\\pi/g, 'pi');
+             
+             // Handle multiplication
+             result = result.replace(/\\cdot/g, '*');
+             
+             // Handle exponents - be more careful with braces
+             result = result.replace(/\^{([^}]+)}/g, '^($1)');
+             result = result.replace(/\^(\d+)/g, '^$1');
+             
+             // Clean up remaining braces and spaces
+             result = result.replace(/\\left\(|\\\right\)/g, '');
+             result = result.replace(/[{}]/g, '');
+             result = result.replace(/\s+/g, '');
+             
+             // Handle implicit multiplication (like 3x -> 3*x)
+             result = result.replace(/(\d)([a-zA-Z])/g, '$1*$2');
+             result = result.replace(/([a-zA-Z])(\d)/g, '$1*$2');
+             
+             return result;
+         }
+
+        // Main calculation function
+        function calculateDerivative() {
+            const input = mathField ? mathField.latex() : '';
+            const resultSection = document.getElementById('resultSection');
+            const resultContent = document.getElementById('resultContent');
+            const stepsSection = document.getElementById('stepsSection');
+            const stepsContent = document.getElementById('stepsContent');
+
+            if (!input) {
+                showError('Please enter a function to differentiate.');
+                return;
+            }
+            
+            // Convert LaTeX to math.js format
+            const mathInput = convertLatexToMathJs(input);
+            console.log('Original LaTeX:', input);
+            console.log('Converted to Math.js:', mathInput);
+
+            try {
+                // Show result section
+                resultSection.style.display = 'block';
+                resultContent.innerHTML = 'Calculating...';
+                
+                // Calculate derivative using math.js
+                const derivative = calculateDerivativeSteps(mathInput);
+                
+                if (derivative.result) {
+                    // Create MathQuill field for result display
+                    resultContent.innerHTML = '';
+                    const resultMathField = MQ.StaticMath(resultContent);
+                    resultMathField.latex(`f'(x) = ${derivative.result}`);
+                    
+                    // Show steps if available
+                    if (derivative.steps && derivative.steps.length > 0) {
+                        stepsSection.style.display = 'block';
+                        stepsContent.innerHTML = derivative.steps.map((step, index) => 
+                            `<div class="step-item">
+                                <span class="step-number">${index + 1}</span>
+                                <span class="step-math" id="step-${index}"></span>
+                            </div>`
+                        ).join('');
+                        
+                        // Render each step with MathQuill
+                        derivative.steps.forEach((step, index) => {
+                            const stepElement = document.getElementById(`step-${index}`);
+                            if (stepElement) {
+                                const stepMathField = MQ.StaticMath(stepElement);
+                                stepMathField.latex(step);
+                            }
+                        });
+                    } else {
+                        stepsSection.style.display = 'none';
+                    }
+                } else {
+                    showError('Could not calculate derivative. Please check your function syntax.');
+                }
+                
+            } catch (error) {
+                showError('Error calculating derivative: ' + error.message);
+                console.error('Calculation error:', error);
+            }
+        }
+
+        // Calculate derivative with steps
+        function calculateDerivativeSteps(expression) {
+            try {
+                const steps = [];
+                let result = '';
+                
+                // Clean the expression for processing
+                let cleanExpr = expression
+                    .replace(/\s+/g, '')
+                    .replace(/\*/g, '*')
+                    .replace(/pi/g, 'PI');
+
+                steps.push(`\\text{Given: } f(x) = ${convertToLatexDisplay(expression)}`);
+
+                // Use math.js for symbolic differentiation
+                try {
+                    const math = window.math;
+                    
+                    // Parse and differentiate
+                    const expr = math.parse(cleanExpr);
+                    const derivative = math.derivative(expr, 'x');
+                    result = derivative.toString();
+                    
+                    // Add detailed step-by-step analysis
+                    analyzeDerivativeSteps(expression, steps);
+                    
+                    // Clean up the result for display in LaTeX format
+                    result = convertResultToLatex(result);
+                    steps.push(`\\text{Final result: } f'(x) = ${result}`);
+                    
+                } catch (mathError) {
+                    console.error('Math.js error:', mathError);
+                    // Try manual differentiation for common cases
+                    const manualResult = manualDifferentiation(expression, steps);
+                    if (manualResult) {
+                        result = manualResult;
+                    } else {
+                        result = `\\text{Unable to compute derivative}`;
+                        steps.push(`\\text{Error: } ${mathError.message}`);
+                    }
+                }
+
+                return {
+                    result: result,
+                    steps: steps
+                };
+
+            } catch (error) {
+                throw new Error('Invalid mathematical expression: ' + error.message);
+            }
+        }
+        
+                 // Analyze and add detailed steps in LaTeX format
+         function analyzeDerivativeSteps(expression, steps) {
+             const expr = expression.toLowerCase();
+             
+             // Check for different types of functions and add appropriate rules
+             if (expr.includes('+') || expr.includes('-')) {
+                 steps.push(`\\text{Apply sum/difference rule: } \\frac{d}{dx}[f(x) \\pm g(x)] = f'(x) \\pm g'(x)`);
+             }
+             
+             if (expr.includes('*') && expr.includes('x')) {
+                 steps.push(`\\text{Apply product rule where needed: } \\frac{d}{dx}[f(x) \\cdot g(x)] = f'(x) \\cdot g(x) + f(x) \\cdot g'(x)`);
+             }
+             
+             if (expr.includes('/')) {
+                 steps.push(`\\text{Apply quotient rule: } \\frac{d}{dx}\\left[\\frac{f(x)}{g(x)}\\right] = \\frac{f'(x) \\cdot g(x) - f(x) \\cdot g'(x)}{[g(x)]^2}`);
+             }
+             
+             if (expr.includes('^')) {
+                 steps.push(`\\text{Apply power rule: } \\frac{d}{dx}[x^n] = n \\cdot x^{n-1}`);
+             }
+             
+             if (expr.includes('sin')) {
+                 steps.push(`\\text{Apply trigonometric rule: } \\frac{d}{dx}[\\sin(x)] = \\cos(x)`);
+             }
+             
+             if (expr.includes('cos')) {
+                 steps.push(`\\text{Apply trigonometric rule: } \\frac{d}{dx}[\\cos(x)] = -\\sin(x)`);
+             }
+             
+             if (expr.includes('tan')) {
+                 steps.push(`\\text{Apply trigonometric rule: } \\frac{d}{dx}[\\tan(x)] = \\sec^2(x) = \\frac{1}{\\cos^2(x)}`);
+             }
+             
+             if (expr.includes('ln')) {
+                 steps.push(`\\text{Apply logarithmic rule: } \\frac{d}{dx}[\\ln(x)] = \\frac{1}{x}`);
+             }
+             
+             if (expr.includes('log')) {
+                 steps.push(`\\text{Apply logarithmic rule: } \\frac{d}{dx}[\\log(x)] = \\frac{1}{x \\cdot \\ln(10)}`);
+             }
+             
+             if (expr.includes('e^')) {
+                 steps.push(`\\text{Apply exponential rule: } \\frac{d}{dx}[e^x] = e^x`);
+             }
+             
+             if (expr.includes('sqrt')) {
+                 steps.push(`\\text{Apply power rule: } \\frac{d}{dx}[\\sqrt{x}] = \\frac{d}{dx}[x^{1/2}] = \\frac{1}{2} \\cdot x^{-1/2} = \\frac{1}{2\\sqrt{x}}`);
+             }
+         }
+        
+                 // Manual differentiation for common cases with LaTeX output
+         function manualDifferentiation(expression, steps) {
+             const expr = expression.replace(/\s+/g, '');
+             
+             // Simple polynomial: x^n
+             let match = expr.match(/^x\^(\d+)$/);
+             if (match) {
+                 const n = parseInt(match[1]);
+                 steps.push(`\\text{Apply power rule: } \\frac{d}{dx}[x^{${n}}] = ${n} \\cdot x^{${n-1}}`);
+                 return n === 1 ? '1' : n === 2 ? `${n}x` : `${n}x^{${n-1}}`;
+             }
+             
+             // Coefficient times x^n: ax^n
+             match = expr.match(/^(\d+)\*x\^(\d+)$/);
+             if (match) {
+                 const a = parseInt(match[1]);
+                 const n = parseInt(match[2]);
+                 const newCoeff = a * n;
+                 const newPower = n - 1;
+                 steps.push(`\\text{Apply power rule: } \\frac{d}{dx}[${a}x^{${n}}] = ${a} \\cdot ${n} \\cdot x^{${newPower}} = ${newCoeff}x^{${newPower}}`);
+                 return newPower === 1 ? `${newCoeff}x` : newPower === 0 ? `${newCoeff}` : `${newCoeff}x^{${newPower}}`;
+             }
+             
+             // Linear: ax + b
+             match = expr.match(/^(\d+)\*x\+(\d+)$|^(\d+)\*x-(\d+)$/);
+             if (match) {
+                 const a = parseInt(match[1] || match[3]);
+                 steps.push(`\\text{Apply linear rule: } \\frac{d}{dx}[${a}x + \\text{constant}] = ${a}`);
+                 return `${a}`;
+             }
+             
+             // Simple cases
+             if (expr === 'x') {
+                 steps.push(`\\text{Apply power rule: } \\frac{d}{dx}[x] = 1`);
+                 return '1';
+             }
+             
+             if (expr.match(/^\d+$/)) {
+                 steps.push(`\\text{Apply constant rule: } \\frac{d}{dx}[\\text{constant}] = 0`);
+                 return '0';
+             }
+             
+             return null;
+         }
+        
+                 // Convert expression to LaTeX for display
+         function convertToLatexDisplay(expr) {
+             return expr
+                 .replace(/\^(\d+)/g, '^{$1}')
+                 .replace(/\^{([^}]+)}/g, '^{$1}')
+                 .replace(/\*/g, ' \\cdot ')
+                 .replace(/sin\(/g, '\\sin(')
+                 .replace(/cos\(/g, '\\cos(')
+                 .replace(/tan\(/g, '\\tan(')
+                 .replace(/ln\(/g, '\\ln(')
+                 .replace(/log\(/g, '\\log(')
+                 .replace(/sqrt\(/g, '\\sqrt{')
+                 .replace(/pi/g, '\\pi')
+                 .replace(/e\^/g, 'e^');
+         }
+         
+         // Convert math.js result to LaTeX format
+         function convertResultToLatex(result) {
+             return result
+                 .replace(/\*\*/g, '^')
+                 .replace(/\^(\d+)/g, '^{$1}')
+                 .replace(/\^([a-zA-Z]+)/g, '^{$1}')
+                 .replace(/\*/g, ' \\cdot ')
+                 .replace(/PI/g, '\\pi')
+                 .replace(/log/g, '\\ln')
+                 .replace(/sin/g, '\\sin')
+                 .replace(/cos/g, '\\cos')
+                 .replace(/tan/g, '\\tan')
+                 .replace(/sqrt/g, '\\sqrt')
+                 .replace(/\s+/g, ' ')
+                 .trim();
+         }
+
+        // Show error message
+        function showError(message) {
+            const resultSection = document.getElementById('resultSection');
+            const resultContent = document.getElementById('resultContent');
+            
+            resultSection.style.display = 'block';
+            resultContent.innerHTML = `<div class="error-message">${message}</div>`;
+            document.getElementById('stepsSection').style.display = 'none';
+        }
+
+        // Enter key support for MathQuill will be handled internally
+
+        // Auto-hide examples when clicking outside
+        document.addEventListener('click', function(e) {
+            const examplesSection = document.getElementById('examplesSection');
+            const examplesButton = e.target.closest('button');
+            
+            if (examplesSection.style.display === 'block' && 
+                !examplesSection.contains(e.target) && 
+                (!examplesButton || !examplesButton.textContent.includes('Examples'))) {
+                examplesSection.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Second Derivative</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- MathQuill resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+    
+    <style>
+    :root {
+      --main-color: #323232;
+      --accent-color: #ff6b6b;
+      --secondary-color: #feca57;
+      --tertiary-color: #1dd1a1;
+      --bg-color: #f7f9fc;
+      --font-color: #323232;
+            --font-color-sub: #666;
+      --shadow-md: 4px 4px var(--main-color);
+            --shadow-lg: 6px 6px var(--main-color);
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background: var(--bg-color);
+      color: var(--font-color);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 40px;
+      border-radius: 10px;
+      background-color: white;
+      box-shadow: var(--shadow-md);
+      border: 2px solid var(--main-color);
+    }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 260px;
+            height: 100%;
+            background-color: #feca57;
+            border-right: 2px solid var(--main-color);
+            box-shadow: 4px 0 var(--main-color);
+            overflow-x: hidden;
+            padding: 20px;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar:hover {
+            box-shadow: 6px 0 var(--main-color);
+        }
+
+        .sidebar a {
+            padding: 15px 20px;
+            font-size: 16px;
+            color: var(--font-color);
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            margin: 8px 0;
+            text-decoration: none;
+            display: block;
+            border: 2px solid var(--main-color);
+            background-color: white;
+            width: calc(100% - 40px);
+            text-align: left;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: var(--shadow-md);
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .sidebar a:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-color);
+            transition: all 0.4s ease;
+            z-index: -1;
+            opacity: 0.7;
+        }
+
+        .sidebar a:hover:before {
+            left: 0;
+        }
+
+        .sidebar a:hover {
+            color: white;
+            background-color: transparent;
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 6px 6px var(--main-color);
+            border-color: var(--main-color);
+        }
+
+        .sidebar a:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px var(--main-color);
+        }
+
+        .sidebar a.active {
+            background-color: var(--accent-color);
+            color: white;
+            box-shadow: var(--shadow-hover);
+            transform: translate(2px, 2px);
+        }
+
+        /* Section Dropdown Styles (matching Equation of tangent) */
+        .page-sections h3 {
+            color: var(--main-color);
+            margin: 15px 0 10px 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .section-dropdown {
+            width: 100%;
+            text-align: left;
+            padding: 8px 12px;
+            background: white;
+            border: 2px solid var(--main-color);
+            border-radius: 6px;
+            margin: 4px 0;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+        }
+
+        .section-dropdown:hover {
+            background: var(--bg-color);
+            transform: translateX(5px);
+        }
+
+        .section-dropdown.active {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .section-dropdown i {
+            transition: transform 0.3s ease;
+        }
+
+        .section-dropdown.active i {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            margin-left: 15px;
+        }
+
+        .dropdown-content.show {
+            max-height: 500px;
+        }
+
+        .section-link {
+            display: block;
+            padding: 6px 10px;
+            margin: 3px 0;
+            text-decoration: none;
+            color: var(--main-color);
+            background: var(--bg-color);
+            border: 1px solid var(--main-color);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+            line-height: 1.2;
+        }
+
+        .section-link:hover {
+            transform: translateX(5px);
+            background: white;
+            color: var(--accent-color);
+        }
+
+        .section-link.active {
+            background: var(--secondary-color);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 220px;
+                padding: 15px;
+            }
+
+            .section-dropdown {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+
+            .section-link {
+                font-size: 0.75rem;
+                padding: 5px 8px;
+            }
+        }
+
+        h1 {
+      color: var(--font-color);
+            font-size: 2.5rem;
+            margin: 30px 0;
+            font-weight: 700;
+    }
+
+        h2 {
+      color: var(--font-color);
+            font-size: 2rem;
+            margin: 25px 0;
+      font-weight: 600;
+            background: var(--main-color);
+      color: white;
+            padding: 15px;
+            border-radius: 25px;
+        }
+
+        .definition-box {
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            padding: 35px;
+            border-radius: 20px;
+            margin: 30px 0;
+            box-shadow: 0 8px 25px rgba(50, 50, 50, 0.1);
+            border: 3px solid var(--main-color);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .definition-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color), var(--secondary-color), var(--tertiary-color));
+        }
+
+        .example-box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+            box-shadow: var(--shadow-md);
+      border: 2px solid var(--main-color);
+            text-align: left;
+        }
+
+        .example-title {
+            background: var(--main-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .button {
+            background: white;
+      color: var(--font-color);
+            padding: 12px 25px;
+      border: 2px solid var(--main-color);
+      border-radius: 10px;
+            box-shadow: var(--shadow-md);
+      cursor: pointer;
+      font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+        }
+
+        .button:hover {
+            background: var(--accent-color);
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+
+        p {
+            text-align: left;
+            margin: 15px 0;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Interactive Practice Section */
+        .interactive-section {
+            background: #e8f5e8;
+            border: 2px solid var(--tertiary-color);
+      border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .practice-problem {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+      border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .mathquill-field {
+            border: 3px solid var(--main-color);
+            border-radius: 12px;
+            padding: 20px 25px;
+            margin: 15px 0;
+            background: white;
+            min-height: 80px;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(50, 50, 50, 0.1);
+      width: 100%;
+            max-width: 600px;
+      display: flex;
+      align-items: center;
+            justify-content: flex-start;
+            position: relative;
+            cursor: text;
+        }
+
+        .mathquill-field:focus-within {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.4);
+            transform: translateY(-3px);
+            background: linear-gradient(145deg, #ffffff, #f8fafc);
+        }
+
+        .check-button, .hint-button {
+            background: var(--tertiary-color);
+            color: white;
+      padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+
+        .check-button:hover, .hint-button:hover {
+            background: #26a085;
+            transform: translateY(-2px);
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 8px;
+      margin: 15px 0;
+            font-weight: 600;
+            display: none;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* TryHackMe Style Format Guides */
+        .tryhackme-guide {
+            background: linear-gradient(145deg, #0f172a, #1e293b);
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            color: #e2e8f0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tryhackme-guide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6);
+        }
+
+        .format-guide-container {
+            background: linear-gradient(145deg, #0f172a, #1e293b);
+            border: 2px solid #10b981;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .format-guide-container::before {
+            content: '🎯 ANSWER FORMAT';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #10b981;
+            color: #0f172a;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .answer-format {
+            background: #1e293b;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            padding: 12px;
+      margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .format-pattern {
+            color: #fbbf24;
+      font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .format-example {
+            color: #94a3b8;
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        .character-counter {
+            background: #374151;
+            border: 1px solid #6b7280;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin: 8px 0;
+      display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .char-count {
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .char-target {
+            color: #94a3b8;
+        }
+
+        .hint-system {
+            background: #1f2937;
+            border-left: 4px solid #3b82f6;
+            border-radius: 0 8px 8px 0;
+            padding: 15px;
+            margin: 15px 0;
+      position: relative;
+        }
+
+        .hint-level {
+            background: #3b82f6;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+      position: absolute;
+            top: -8px;
+            left: 15px;
+        }
+
+        .hint-content {
+            color: #e5e7eb;
+            margin-top: 8px;
+            line-height: 1.5;
+    }
+
+    /* Responsive Design */
+    @media screen and (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 20px;
+      }
+
+      #main-content {
+        margin-left: 0;
+                padding: 10px;
+      }
+
+      .container {
+                margin: 10px;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+                padding: 10px;
+            }
+
+            .mathquill-field {
+                min-height: 70px;
+                font-size: 20px;
+                padding: 18px 20px;
+                max-width: 100%;
+            }
+        }
+
+        /* Topic Completion Section */
+        .topic-completion-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+      display: flex;
+            align-items: center;
+      justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .completion-card {
+            background: white;
+            border: 3px solid #333;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            padding: 0;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideInUp 0.5s ease;
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .completion-header {
+            text-align: center;
+            padding: 30px 30px 20px 30px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .completion-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .completion-header h2 {
+            color: #333;
+            font-size: 1.8rem;
+            margin: 0;
+            font-weight: 700;
+            background: none;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        .completion-content {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .completion-content p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .complete-topic-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ff5252);
+        color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .complete-topic-btn:hover {
+            background: linear-gradient(135deg, #ff5252, #f44336);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+    }
+    </style>
+</head>
+<body>
+
+<div id="sidebar" class="sidebar">
+    <a href="home.html">Home</a>
+        
+    <div class="page-sections">
+        <h3>Contents</h3>
+        <div class="section-links">
+            <button class="section-dropdown">
+                Definition
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a href="#definition" class="section-link">Second Derivative Concept</a>
+            </div>
+
+            <button class="section-dropdown">
+                Examples
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a href="#example-16" class="section-link">Example 16</a>
+                <a href="#example-17" class="section-link">Example 17</a>
+            </div>
+
+            <button class="section-dropdown">
+                Practice Problems
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a href="#interactive-section" class="section-link">Interactive Practice</a>
+                <a href="#practice-problem-1" class="section-link">Practice Problem 1</a>
+                <a href="#practice-problem-2" class="section-link">Practice Problem 2</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="main-content" style="margin-left:260px;margin-top:20px;">
+    
+    <div class="container">
+        <h1>2.7 Second Derivative</h1>
+        
+        <!-- Definition Section -->
+        <div class="definition-box" id="definition-box">
+            <h2 id="definition">Definition</h2>
+            <p>Consider the function \(y = f(x)\).</p>
+            <p>The first derivative is obtained by differentiating \(y\) with respect to \(x\), \(\frac{dy}{dx} = f'(x)\).</p>
+            <p>The second derivative can be obtained by differentiating \(\frac{dy}{dx}\) with respect to \(x\).</p>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid var(--main-color);">
+                \[\frac{d}{dx}\left(\frac{dy}{dx}\right) = \frac{d}{dx}[f'(x)]\]
+                \[\frac{d^2y}{dx^2} = f''(x)\]
+    </div>
+
+            <p style="text-align: center; font-style: italic; color: var(--accent-color);">
+                The process of differentiating twice is known as the <strong>second derivative</strong>.
+            </p>
+            </div>
+
+        <!-- Example 16 -->
+        <div class="example-box" id="example-16">
+            <div class="example-title">Example 16</div>
+            <p><strong>Given \(y = x^3 - 5x + \frac{1}{x}\), find \(\frac{d^2y}{dx^2}\).</strong></p>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4>Solution</h4>
+                <p>\(y = x^3 - 5x + \frac{1}{x}\)</p>
+                <p>\(= x^3 - 5x + x^{-1}\)</p>
+                <p>\(\frac{dy}{dx} = 3x^2 - 5 - 1x^{-2}\)</p>
+                <p>\(\frac{d^2y}{dx^2} = 6x - 0 + 2x^{-3}\)</p>
+                <p>\(= 6x + \frac{2}{x^3}\)</p>
+            </div>
+        </div>
+
+        <!-- Example 17 -->
+        <div class="example-box" id="example-17">
+            <div class="example-title">Example 17</div>
+            <p><strong>Given \(f(x) = (3x + 5)^4\), find \(f''(x)\).</strong></p>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                <h4>Solution</h4>
+                <p>\(f(x) = (3x + 5)^4\)</p>
+                <p>\(f'(x) = 4(3x + 5)^3(3)\)</p>
+                <p>\(= 12(3x + 5)^3\)</p>
+                <p>\(f''(x) = 36(3x + 5)^2(3)\)</p>
+                <p>\(= 108(3x + 5)^2\)</p>
+                </div>
+                </div>
+
+        <!-- Interactive Practice Section -->
+        <div class="interactive-section" id="interactive-section">
+            <h2 id="practice">Interactive Practice: Find Second Derivatives</h2>
+            <p>Practice finding second derivatives with step-by-step guidance.</p>
+            
+            <div class="practice-problem" id="practice-problem-1">
+                <h3 id="problem1">Practice Problem 1</h3>
+                <p>Find \(\frac{d^2y}{dx^2}\) for \(y = x^4 - 3x^2 + 2x\).</p>
+                
+                <!-- TryHackMe Style Format Guide -->
+                <div class="format-guide-container">
+                    <div class="answer-format">
+                        <div class="format-pattern">Expected Format: __x^_ + __</div>
+                        <div class="format-example">Example: 12x^2 - 6</div>
+                        </div>
+                    <div class="character-counter">
+                        <span>Character Count: <span class="char-count" id="prob1-count">0</span></span>
+                        <span class="char-target">Target: ~8-12 chars</span>
+                        </div>
+                        </div>
+                
+                <div style="text-align: center; margin: 20px 0;">
+                    <p style="font-weight: 600; color: var(--font-color);">Enter your answer for \(\frac{d^2y}{dx^2}\):</p>
+                    <div class="mathquill-field" id="problem1-input"></div>
+                    </div>
+                    
+                <div style="text-align: center;">
+                    <button class="check-button" onclick="checkProblem1()">Check Answer</button>
+                    <button class="hint-button" onclick="showHint(1, 1)">Hint Level 1</button>
+                    <button class="hint-button" onclick="showHint(1, 2)">Hint Level 2</button>
+                    <button class="hint-button" onclick="showHint(1, 3)">Show Solution</button>
+                    </div>
+                    
+                <div class="feedback" id="problem1-feedback"></div>
+                
+                <!-- Progressive Hint System -->
+                <div class="hint-system" id="hint1-level1" style="display: none;">
+                    <div class="hint-level">HINT LEVEL 1</div>
+                    <div class="hint-content">First find the first derivative: \(\frac{dy}{dx} = 4x^3 - 6x + 2\)</div>
+                    </div>
+                    
+                <div class="hint-system" id="hint1-level2" style="display: none;">
+                    <div class="hint-level">HINT LEVEL 2</div>
+                    <div class="hint-content">Now differentiate again: \(\frac{d^2y}{dx^2} = \frac{d}{dx}(4x^3 - 6x + 2)\)</div>
+                    </div>
+                
+                <div class="hint-system" id="hint1-level3" style="display: none;">
+                    <div class="hint-level">SOLUTION</div>
+                    <div class="hint-content">
+                        <strong>Complete Solution:</strong><br>
+                        1. \(y = x^4 - 3x^2 + 2x\)<br>
+                        2. \(\frac{dy}{dx} = 4x^3 - 6x + 2\)<br>
+                        3. \(\frac{d^2y}{dx^2} = 12x^2 - 6\)
+                </div>
+            </div>
+        </div>
+
+            <div class="practice-problem" id="practice-problem-2">
+                <h3 id="problem2">Practice Problem 2</h3>
+                <p>Find \(f''(x)\) for \(f(x) = (2x - 1)^3\).</p>
+                
+                <!-- TryHackMe Style Format Guide -->
+                <div class="format-guide-container">
+                    <div class="answer-format">
+                        <div class="format-pattern">Expected Format: __(2x - 1)</div>
+                        <div class="format-example">Example: 24(2x - 1)</div>
+                </div>
+                    <div class="character-counter">
+                        <span>Character Count: <span class="char-count" id="prob2-count">0</span></span>
+                        <span class="char-target">Target: ~10-15 chars</span>
+            </div>
+        </div>
+                
+                <div style="text-align: center; margin: 20px 0;">
+                    <p style="font-weight: 600; color: var(--font-color);">Enter your answer for \(f''(x)\):</p>
+                    <div class="mathquill-field" id="problem2-input"></div>
+                </div>
+                
+                <div style="text-align: center;">
+                    <button class="check-button" onclick="checkProblem2()">Check Answer</button>
+                    <button class="hint-button" onclick="showHint(2, 1)">Hint Level 1</button>
+                    <button class="hint-button" onclick="showHint(2, 2)">Hint Level 2</button>
+                    <button class="hint-button" onclick="showHint(2, 3)">Show Solution</button>
+                </div>
+
+                <div class="feedback" id="problem2-feedback"></div>
+                
+                <!-- Progressive Hint System -->
+                <div class="hint-system" id="hint2-level1" style="display: none;">
+                    <div class="hint-level">HINT LEVEL 1</div>
+                    <div class="hint-content">Use the chain rule: \(f'(x) = 3(2x - 1)^2 \cdot 2 = 6(2x - 1)^2\)</div>
+                    </div>
+                    
+                <div class="hint-system" id="hint2-level2" style="display: none;">
+                    <div class="hint-level">HINT LEVEL 2</div>
+                    <div class="hint-content">Apply chain rule again: \(f''(x) = 6 \cdot 2(2x - 1) \cdot 2\)</div>
+                    </div>
+                    
+                <div class="hint-system" id="hint2-level3" style="display: none;">
+                    <div class="hint-level">SOLUTION</div>
+                    <div class="hint-content">
+                        <strong>Complete Solution:</strong><br>
+                        1. \(f(x) = (2x - 1)^3\)<br>
+                        2. \(f'(x) = 3(2x - 1)^2 \cdot 2 = 6(2x - 1)^2\)<br>
+                        3. \(f''(x) = 6 \cdot 2(2x - 1) \cdot 2 = 24(2x - 1)\)
+                    </div>
+                </div>
+                    </div>
+                </div>
+
+        <!-- Topic Completion Section -->
+        <div class="topic-completion-section" id="topic-completion" style="display: none;">
+            <div class="completion-card">
+                <div class="completion-header">
+                    <div class="completion-icon">🏆</div>
+                    <h2>Congratulations! You've finished this topic!</h2>
+                    </div>
+                <div class="completion-content">
+                    <p>Click the button below to mark this topic as completed and return to your profile.</p>
+                    <button class="complete-topic-btn" onclick="completeTopicAndReturn()">
+                        ✓ Complete Topic & Return to Profile
+                    </button>
+                </div>
+                    </div>
+                </div>
+        
+        <!-- Navigation -->
+        <div style="text-align: center; margin: 40px 0;">
+            <a href="home.html" class="button">← Back to Home</a>
+            <a href="Implicit-differentiation.html" class="button">Next: Implicit Differentiation →</a>
+            <!-- Test button for completion -->
+            <button onclick="showTopicCompletion()" class="button" style="background: #28a745; color: white; margin-left: 10px;">
+                🏆 Test Completion
+            </button>
+            </div>
+        </div>
+</div>
+
+<script>
+    // Global variables
+    let mathFields = {};
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize section dropdown functionality (matching Equation of tangent)
+        const dropdowns = document.querySelectorAll('.section-dropdown');
+        
+        dropdowns.forEach(dropdown => {
+            dropdown.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const content = this.nextElementSibling;
+                content.classList.toggle('show');
+                
+                // Close other dropdowns
+                dropdowns.forEach(other => {
+                    if (other !== dropdown) {
+                        other.classList.remove('active');
+                        other.nextElementSibling.classList.remove('show');
+                    }
+                });
+            });
+        });
+
+        // Section link smooth scrolling
+        const sectionLinks = document.querySelectorAll('.section-link');
+        sectionLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = this.getAttribute('href');
+                const element = document.querySelector(target);
+                
+                if (element) {
+                    element.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start' 
+                    });
+                    
+                    // Add highlight effect
+                    element.style.transition = 'all 0.3s ease';
+                    element.style.background = 'rgba(255, 107, 107, 0.1)';
+                    element.style.transform = 'scale(1.02)';
+                    
+                    setTimeout(() => {
+                        element.style.background = '';
+                        element.style.transform = '';
+                    }, 2000);
+                }
+            });
+        });
+        
+        // Initialize MathQuill fields with delay
+        setTimeout(() => {
+            initializeMathQuill();
+        }, 500);
+    });
+
+    // Smooth scroll to section
+    function scrollToSection(elementId) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+            
+            // Add highlight effect
+            element.style.transition = 'all 0.3s ease';
+            element.style.background = 'rgba(255, 107, 107, 0.1)';
+            element.style.transform = 'scale(1.02)';
+            
+            setTimeout(() => {
+                element.style.background = '';
+                element.style.transform = '';
+            }, 2000);
+        }
+    }
+
+    // Initialize MathJax
+    window.MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)']],
+            displayMath: [['\\[', '\\]']]
+        },
+        svg: {
+            fontCache: 'global'
+        }
+    };
+
+    // Initialize MathQuill
+    function initializeMathQuill() {
+        console.log('Initializing MathQuill...');
+        
+        if (typeof MathQuill === 'undefined') {
+            console.error('MathQuill is not loaded!');
+            return;
+        }
+        
+        const MQ = MathQuill.getInterface(2);
+        
+        // Initialize all input fields
+        const fieldIds = ['problem1-input', 'problem2-input'];
+        
+        fieldIds.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                console.log(`Initializing MathQuill field: ${id}`);
+                try {
+                    mathFields[id] = MQ.MathField(element, {
+                        spaceBehavesLikeTab: true,
+                        handlers: {
+                            edit: function() {
+                                // Update character counter
+                                updateCharacterCounter(id, this.latex());
+                            }
+                        }
+                    });
+                    console.log(`Successfully initialized: ${id}`);
+                } catch (error) {
+                    console.error(`Error initializing ${id}:`, error);
+                }
+            } else {
+                console.warn(`Element not found: ${id}`);
+            }
+        });
+        
+        console.log('MathQuill initialization complete. Fields:', Object.keys(mathFields));
+    }
+
+    // Update character counter
+    function updateCharacterCounter(fieldId, latex) {
+        let counterId;
+        
+        if (fieldId === 'problem1-input') {
+            counterId = 'prob1-count';
+        } else if (fieldId === 'problem2-input') {
+            counterId = 'prob2-count';
+        }
+        
+        const counterElement = document.getElementById(counterId);
+        if (counterElement) {
+            const cleanLatex = latex.replace(/\s/g, ''); // Remove spaces for counting
+            counterElement.textContent = cleanLatex.length;
+            
+            // Color coding based on target length
+            const targetRanges = {
+                'prob1-count': [8, 12],
+                'prob2-count': [10, 15]
+            };
+            
+            const range = targetRanges[counterId];
+            if (range && cleanLatex.length >= range[0] && cleanLatex.length <= range[1]) {
+                counterElement.style.color = '#10b981'; // Green for good length
+            } else if (cleanLatex.length > 0) {
+                counterElement.style.color = '#fbbf24'; // Yellow for off-target
+            } else {
+                counterElement.style.color = '#10b981'; // Default green
+            }
+        }
+    }
+
+    // Show progressive hints
+    function showHint(problem, level) {
+        // Hide all hint levels for this problem
+        for (let i = 1; i <= 3; i++) {
+            const hintElement = document.getElementById(`hint${problem}-level${i}`);
+            if (hintElement) {
+                hintElement.style.display = 'none';
+            }
+        }
+        
+        // Show the requested hint level
+        const targetHint = document.getElementById(`hint${problem}-level${level}`);
+        if (targetHint) {
+            targetHint.style.display = 'block';
+            targetHint.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+
+    // Check Problem 1
+    function checkProblem1() {
+        console.log('checkProblem1 called');
+        
+        if (!mathFields['problem1-input']) {
+            console.error('MathQuill field problem1-input not found');
+            alert('Please wait for the page to fully load before checking your answer.');
+            return;
+        }
+        
+        const userAnswer = mathFields['problem1-input'].latex();
+        console.log('User answer:', userAnswer);
+        
+        const feedback = document.getElementById('problem1-feedback');
+        
+        // Check for correct answer: 12x^2 - 6
+        const correctPatterns = [
+            '12x^2-6',
+            '12x^{2}-6',
+            '12x^2 - 6',
+            '12x^{2} - 6'
+        ];
+        
+        const isCorrect = correctPatterns.some(pattern => 
+            userAnswer.replace(/\s/g, '').includes(pattern.replace(/\s/g, ''))
+        );
+        
+        if (isCorrect) {
+            feedback.innerHTML = '🎉 Excellent! The second derivative is 12x² - 6.';
+            feedback.className = 'feedback correct';
+            feedback.style.display = 'block';
+            
+            // Update progress display
+            updateProgressDisplay();
+            
+            // Check if both problems are completed
+            checkAllProblemsCompleted();
+        } else {
+            feedback.innerHTML = '❌ Not quite right. Remember to differentiate twice: first find dy/dx, then differentiate again.';
+            feedback.className = 'feedback incorrect';
+            feedback.style.display = 'block';
+        }
+    }
+
+    // Check Problem 2
+    function checkProblem2() {
+        console.log('checkProblem2 called');
+        
+        if (!mathFields['problem2-input']) {
+            console.error('MathQuill field problem2-input not found');
+            alert('Please wait for the page to fully load before checking your answer.');
+            return;
+        }
+        
+        const userAnswer = mathFields['problem2-input'].latex();
+        console.log('User answer:', userAnswer);
+        
+        const feedback = document.getElementById('problem2-feedback');
+        
+        // Check for correct answer: 24(2x - 1)
+        const correctPatterns = [
+            '24(2x-1)',
+            '24\\left(2x-1\\right)',
+            '24(2x - 1)',
+            '24\\left(2x - 1\\right)'
+        ];
+        
+        const isCorrect = correctPatterns.some(pattern => 
+            userAnswer.replace(/\s/g, '').includes(pattern.replace(/\s/g, ''))
+        );
+        
+        if (isCorrect) {
+            feedback.innerHTML = '🎉 Perfect! The second derivative is 24(2x - 1).';
+            feedback.className = 'feedback correct';
+            feedback.style.display = 'block';
+            
+            // Update progress display
+            updateProgressDisplay();
+            
+            // Check if both problems are completed
+            checkAllProblemsCompleted();
+        } else {
+            feedback.innerHTML = '❌ Try again. Use the chain rule twice: first for f\'(x), then for f\'\'(x).';
+            feedback.className = 'feedback incorrect';
+            feedback.style.display = 'block';
+        }
+    }
+
+    // Check if all problems are completed
+    function checkAllProblemsCompleted() {
+        const feedback1 = document.getElementById('problem1-feedback');
+        const feedback2 = document.getElementById('problem2-feedback');
+        
+        const problem1Correct = feedback1.classList.contains('correct') && feedback1.style.display === 'block';
+        const problem2Correct = feedback2.classList.contains('correct') && feedback2.style.display === 'block';
+        
+        if (problem1Correct && problem2Correct) {
+            setTimeout(() => {
+                showCelebration();
+            }, 1000);
+        }
+    }
+
+    // Show celebration
+    function showCelebration() {
+        const celebration = document.createElement('div');
+        celebration.innerHTML = `
+            <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+                        background: linear-gradient(145deg, #0f172a, #1e293b); padding: 40px; border-radius: 15px; 
+                        box-shadow: 0 0 50px rgba(16, 185, 129, 0.5); text-align: center; z-index: 1000; 
+                        border: 3px solid #10b981; color: #e2e8f0; font-family: 'Courier New', monospace;">
+                <div style="color: #10b981; font-size: 3rem; margin-bottom: 20px;">🏆</div>
+                <h2 style="color: #10b981; margin: 0 0 15px 0; font-size: 2rem;">MISSION ACCOMPLISHED!</h2>
+                <div style="background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 15px; margin: 20px 0;">
+                    <div style="color: #10b981;">user@calculus:~$ ./second_derivative_complete</div>
+                    <div style="color: #ffffff; margin-left: 20px;">✓ Problem 1: Second Derivative - COMPLETE</div>
+                    <div style="color: #ffffff; margin-left: 20px;">✓ Problem 2: Chain Rule Application - COMPLETE</div>
+                    <div style="color: #10b981; margin-left: 20px; margin-top: 10px;">Tasks: 2/2 Complete</div>
+                </div>
+                <p style="margin: 15px 0; font-size: 1.1rem; color: #94a3b8;">You've mastered second derivatives!</p>
+                <button onclick="showTopicCompletion()" 
+                        style="margin-top: 20px; padding: 12px 25px; background: #10b981; color: #0f172a; 
+                               border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 16px;
+                               transition: all 0.3s ease;" 
+                        onmouseover="this.style.background='#059669'" 
+                        onmouseout="this.style.background='#10b981'">
+                    CONTINUE LEARNING →
+                </button>
+            </div>
+            <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                        background: rgba(0,0,0,0.8); z-index: 999;" 
+                 onclick="this.parentElement.remove()"></div>
+        `;
+        document.body.appendChild(celebration);
+    }
+
+    // Show topic completion section
+    function showTopicCompletion() {
+        // Remove celebration overlay
+        const celebration = document.querySelector('[style*="position: fixed"][style*="z-index: 999"]');
+        if (celebration && celebration.parentElement) {
+            celebration.parentElement.remove();
+        }
+        
+        // Show completion section
+        const completionSection = document.getElementById('topic-completion');
+        if (completionSection) {
+            completionSection.style.display = 'flex';
+            
+            // Save completion status to localStorage
+            saveTopicCompletion();
+        }
+    }
+
+    // Save topic completion to localStorage
+    function saveTopicCompletion() {
+        const completionData = {
+            topic: 'second-derivative',
+            title: 'Second Derivative',
+            completedAt: new Date().toISOString(),
+            tasksCompleted: 2,
+            totalTasks: 2,
+            nextTopic: 'implicit-differentiation'
+        };
+        
+        // Get existing completions
+        let completions = JSON.parse(localStorage.getItem('topicCompletions') || '[]');
+        
+        // Remove any existing completion for this topic
+        completions = completions.filter(c => c.topic !== 'second-derivative');
+        
+        // Add new completion
+        completions.push(completionData);
+        
+        // Save back to localStorage
+        localStorage.setItem('topicCompletions', JSON.stringify(completions));
+        
+        console.log('Topic completion saved:', completionData);
+    }
+
+    // Complete topic and return to profile
+    function completeTopicAndReturn() {
+        // Show loading state
+        const button = document.querySelector('.complete-topic-btn');
+        const originalText = button.textContent;
+        button.textContent = '✓ Marking as Complete...';
+        button.disabled = true;
+        
+        // Simulate API call delay
+        setTimeout(() => {
+            // Update button to show success
+            button.textContent = '✓ Topic Completed!';
+            button.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+            
+            // Redirect after short delay
+            setTimeout(() => {
+                // Try to go to profile page, fallback to index
+                if (document.referrer && document.referrer.includes('profile')) {
+                    window.location.href = document.referrer;
+                } else {
+                    window.location.href = 'home.html';
+                }
+            }, 1000);
+        }, 1000);
+    }
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+

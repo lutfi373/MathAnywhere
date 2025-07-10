@@ -1,0 +1,1028 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Implicit Differentiation Practice Page">
+    <meta name="author" content="">
+    <title>Practice - Implicit Differentiation</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/templatemo-topic-listing.css" rel="stylesheet">
+    
+    <!-- MathJax for displaying math content -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- MathQuill for interactive math input -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+    
+    <!-- SweetAlert2 for better alerts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    
+    <style>
+        :root {
+            /* Color Variables */
+            --main-color: #323232;
+            --accent-color: #ff6b6b;
+            --secondary-color: #feca57;
+            --tertiary-color: #1dd1a1;
+            --bg-color: #f7f9fc;
+            --font-color: #323232;
+            --font-color-sub: #666;
+            --input-focus: #2d8cf0;
+            --light-blue: #54a0ff;
+            --pink: #ff9ff3;
+            --purple: #5f27cd;
+            --success-color: #2ecc71;
+
+            /* Shadows */
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 4px 4px var(--main-color);
+            --shadow-lg: 6px 6px var(--main-color);
+            --shadow-hover: 2px 2px var(--main-color);
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            color: var(--font-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .practice-container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            border: 2px solid var(--main-color);
+            transition: all 0.3s ease;
+        }
+
+        .practice-header {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 30px;
+            border: 2px solid var(--main-color);
+            box-shadow: var(--shadow-md);
+            position: relative;
+        }
+
+        .practice-header h1 {
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .practice-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 2px solid var(--main-color);
+        }
+
+        .practice-section:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-5px);
+        }
+
+        .mastery-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            border: 2px solid var(--main-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            box-shadow: 2px 2px var(--main-color);
+        }
+
+        .progress-container {
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid var(--main-color);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--accent-color), var(--tertiary-color));
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            margin-top: 5px;
+            text-align: right;
+            font-size: 14px;
+            color: var(--font-color);
+            font-weight: 600;
+        }
+
+        .time-display-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .time-display {
+            background-color: white;
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+            padding: 10px 20px;
+            display: inline-block;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+
+        .time-display:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .time-label {
+            font-size: 14px;
+            color: var(--font-color-sub);
+            margin-right: 8px;
+        }
+
+        .time-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .problem-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--font-color);
+        }
+
+        .problem-text {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .math-input-container {
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .math-field {
+            width: 100%;
+            height: 50px;
+            padding: 10px;
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+            font-size: 18px;
+            color: var(--font-color);
+            background-color: white;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .math-keyboard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+            justify-content: center;
+        }
+
+        .math-key {
+            background-color: white;
+            border: 2px solid var(--main-color);
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 16px;
+            color: var(--font-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .math-key:hover {
+            background-color: var(--accent-color);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .hint-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--secondary-color);
+            color: var(--font-color);
+            border: 2px solid var(--main-color);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .hint-btn:hover {
+            background-color: var(--accent-color);
+            color: white;
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: var(--shadow-md);
+        }
+
+        .practice-btn {
+            background-color: white;
+            color: var(--font-color);
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .practice-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-color);
+            transition: all 0.4s ease;
+            z-index: -1;
+        }
+
+        .practice-btn:hover:before {
+            left: 0;
+        }
+
+        .practice-btn:hover {
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .practice-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .feedback-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: var(--shadow-md);
+            border: 2px solid var(--main-color);
+            display: none;
+        }
+
+        .feedback-correct {
+            border-color: var(--tertiary-color);
+        }
+
+        .feedback-incorrect {
+            border-color: var(--accent-color);
+        }
+
+        .feedback-header {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .feedback-correct .feedback-header {
+            color: var(--tertiary-color);
+        }
+
+        .feedback-incorrect .feedback-header {
+            color: var(--accent-color);
+        }
+
+        .feedback-content {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .explanation {
+            background-color: var(--bg-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .explanation-title {
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--font-color);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .toast-notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            background-color: white;
+            color: var(--font-color);
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 4px 4px var(--main-color);
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .toast-notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast-icon {
+            font-size: 24px;
+            margin-right: 15px;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--accent-color);
+        }
+
+        .toast-message {
+            font-size: 14px;
+            color: var(--font-color-sub);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse-animation {
+            animation: pulse 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="home.html">
+                <i class="bi-back"></i>
+                <span>MathAnywhere</span>
+            </a>
+
+            <div class="d-lg-none ms-auto me-4">
+                <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
+            </div>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-lg-5 me-lg-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="home.html">Home</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#section_2">Lessons</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html">Profile</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="quiz.html">Quiz</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+        <div class="practice-container">
+            <div class="practice-header">
+            <h1>Practice: <span id="topicTitle">Implicit Differentiation</span></h1>
+            <p id="topicDescription">Differentiating equations where y is not isolated and using the chain rule</p>
+            <div class="mastery-badge" id="masteryBadge">L</div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+            <div class="progress-text">Mastery: <span id="masteryPercentage">0</span>%</div>
+            </div>
+            
+                <!-- Timer display removed -->
+            
+            <div id="practiceContent">
+            <!-- Practice content will be dynamically inserted here -->
+                </div>
+                
+        <div class="feedback-container" id="feedbackContainer">
+            <div class="feedback-header" id="feedbackHeader">Correct!</div>
+            <div class="feedback-content" id="feedbackContent">Great job! You've understood the concept correctly.</div>
+            <div class="explanation">
+                <div class="explanation-title">Explanation:</div>
+                <div id="explanationContent">The explanation will be shown here.</div>
+                    </div>
+                </div>
+                
+        <div class="button-container">
+            <button class="practice-btn" onclick="window.location.href='profile.html'">Back to Profile</button>
+            <button class="practice-btn" onclick="checkAnswer()" id="checkBtn">Check Answer</button>
+            <button class="practice-btn" style="display: none;" onclick="nextProblem()" id="nextBtn">Next Problem</button>
+            </div>
+        </div>
+
+    <script>
+        // Define the topic and its specific practice problems
+        const topicData = {
+            topic: "Implicit Differentiations",
+            title: "Implicit Differentiation",
+            description: "Differentiating equations where y is not isolated and using the chain rule",
+            problems: [
+                {
+                    id: 1,
+                    title: "Basic Implicit Differentiation",
+                    problem: "Find \\(\\frac{dy}{dx}\\) if \\(x^2 + y^2 = 25\\).",
+                    answer: "-x/y",
+                    hint: "Differentiate both sides with respect to x, remembering to use the chain rule for terms involving y.",
+                    explanation: "Differentiating both sides: \\(2x + 2y\\frac{dy}{dx} = 0\\). Solving for \\(\\frac{dy}{dx}\\): \\(2y\\frac{dy}{dx} = -2x\\), so \\(\\frac{dy}{dx} = -\\frac{x}{y}\\)."
+                },
+                {
+                    id: 2,
+                    title: "Product Rule with Implicit Differentiation",
+                    problem: "Find \\(\\frac{dy}{dx}\\) if \\(xy + y^2 = 6\\).",
+                    answer: "-y/(x+2y)",
+                    hint: "Use the product rule for xy and remember to apply the chain rule for y terms.",
+                    explanation: "Differentiating: \\(\\frac{d}{dx}[xy] + \\frac{d}{dx}[y^2] = \\frac{d}{dx}[6]\\). This gives us \\(x\\frac{dy}{dx} + y + 2y\\frac{dy}{dx} = 0\\). Collecting terms: \\((x + 2y)\\frac{dy}{dx} = -y\\), so \\(\\frac{dy}{dx} = -\\frac{y}{x + 2y}\\)."
+                },
+                {
+                    id: 3,
+                    title: "Chain Rule with Powers",
+                    problem: "Find \\(\\frac{dy}{dx}\\) if \\(x^3 + y^3 = 8\\).",
+                    answer: "-x^2/y^2",
+                    hint: "Apply the power rule and chain rule carefully to the y^3 term.",
+                    explanation: "Differentiating both sides: \\(3x^2 + 3y^2\\frac{dy}{dx} = 0\\). Solving for \\(\\frac{dy}{dx}\\): \\(3y^2\\frac{dy}{dx} = -3x^2\\), so \\(\\frac{dy}{dx} = -\\frac{x^2}{y^2}\\)."
+                },
+                {
+                    id: 4,
+                    title: "Trigonometric Implicit Differentiation",
+                    problem: "Find \\(\\frac{dy}{dx}\\) if \\(\\sin(xy) = x\\).",
+                    answer: "(1-y*cos(xy))/(x*cos(xy))",
+                    hint: "Use the chain rule for sin(xy), treating xy as a function that needs the product rule.",
+                    explanation: "Differentiating: \\(\\cos(xy) \\cdot \\frac{d}{dx}[xy] = 1\\). Using the product rule: \\(\\cos(xy) \\cdot (x\\frac{dy}{dx} + y) = 1\\). Expanding: \\(x\\cos(xy)\\frac{dy}{dx} + y\\cos(xy) = 1\\). Solving: \\(\\frac{dy}{dx} = \\frac{1 - y\\cos(xy)}{x\\cos(xy)}\\)."
+                },
+                {
+                    id: 5,
+                    title: "Complex Implicit Differentiation",
+                    problem: "Find \\(\\frac{dy}{dx}\\) if \\(x^2y + xy^2 = 6\\).",
+                    answer: "-(2xy+y^2)/(x^2+2xy)",
+                    hint: "Use the product rule for both terms on the left side.",
+                    explanation: "Differentiating term by term: \\(\\frac{d}{dx}[x^2y] + \\frac{d}{dx}[xy^2] = 0\\). For the first term: \\(2xy + x^2\\frac{dy}{dx}\\). For the second term: \\(y^2 + x \\cdot 2y\\frac{dy}{dx}\\). This gives: \\(2xy + x^2\\frac{dy}{dx} + y^2 + 2xy\\frac{dy}{dx} = 0\\). Collecting terms: \\((x^2 + 2xy)\\frac{dy}{dx} = -(2xy + y^2)\\), so \\(\\frac{dy}{dx} = -\\frac{2xy + y^2}{x^2 + 2xy}\\)."
+                },
+                {
+                    id: 6,
+                    title: "Exponential Implicit Differentiation",
+                    problem: "Find \\(\\frac{dy}{dx}\\) if \\(e^{xy} = x + y\\).",
+                    answer: "(1-y*e^(xy))/(x*e^(xy)-1)",
+                    hint: "Remember that the derivative of e^(xy) requires the chain rule and product rule.",
+                    explanation: "Differentiating: \\(e^{xy} \\cdot \\frac{d}{dx}[xy] = 1 + \\frac{dy}{dx}\\). Using the product rule: \\(e^{xy}(x\\frac{dy}{dx} + y) = 1 + \\frac{dy}{dx}\\). Expanding: \\(xe^{xy}\\frac{dy}{dx} + ye^{xy} = 1 + \\frac{dy}{dx}\\). Collecting terms: \\((xe^{xy} - 1)\\frac{dy}{dx} = 1 - ye^{xy}\\), so \\(\\frac{dy}{dx} = \\frac{1 - ye^{xy}}{xe^{xy} - 1}\\)."
+                },
+                {
+                    id: 7,
+                    title: "Logarithmic Implicit Differentiation",
+                    problem: "Find \\(\\frac{dy}{dx}\\) if \\(\\ln(x + y) = xy\\).",
+                    answer: "(y-1/(x+y))/(1/(x+y)-x)",
+                    hint: "Use the chain rule for ln(x + y) and the product rule for xy.",
+                    explanation: "Differentiating: \\(\\frac{1}{x + y} \\cdot (1 + \\frac{dy}{dx}) = x\\frac{dy}{dx} + y\\). Expanding: \\(\\frac{1}{x + y} + \\frac{1}{x + y}\\frac{dy}{dx} = x\\frac{dy}{dx} + y\\). Collecting terms: \\((\\frac{1}{x + y} - x)\\frac{dy}{dx} = y - \\frac{1}{x + y}\\), so \\(\\frac{dy}{dx} = \\frac{y - \\frac{1}{x + y}}{\\frac{1}{x + y} - x}\\)."
+                },
+                {
+                    id: 8,
+                    title: "Second Derivative Implicit",
+                    problem: "If \\(x^2 + y^2 = 25\\), find \\(\\frac{d^2y}{dx^2}\\) at the point (3, 4).",
+                    answer: "-25/64",
+                    hint: "First find dy/dx, then differentiate that expression implicitly to find d²y/dx².",
+                    explanation: "From \\(x^2 + y^2 = 25\\), we get \\(\\frac{dy}{dx} = -\\frac{x}{y}\\). To find the second derivative, differentiate this: \\(\\frac{d^2y}{dx^2} = -\\frac{y \\cdot 1 - x \\cdot \\frac{dy}{dx}}{y^2} = -\\frac{y - x(-\\frac{x}{y})}{y^2} = -\\frac{y + \\frac{x^2}{y}}{y^2} = -\\frac{y^2 + x^2}{y^3}\\). Since \\(x^2 + y^2 = 25\\), this becomes \\(\\frac{d^2y}{dx^2} = -\\frac{25}{y^3}\\). At (3, 4): \\(\\frac{d^2y}{dx^2} = -\\frac{25}{4^3} = -\\frac{25}{64}\\)."
+                }
+            ]
+        };
+
+        // Global variables
+        let currentProblemIndex = 0;
+        let userAnswers = [];
+        let practiceStarted = false;
+        let MQ = null;
+        let currentMathField = null;
+        let practiceSession = {
+            startTime: Date.now(),
+            totalQuestions: topicData.problems.length,
+            correctAnswers: 0,
+            attempts: {},
+            timeSpent: 0,
+            questionStartTime: Date.now(),
+            sessionId: 'session_' + Date.now(),
+            lastSaved: Date.now()
+        };
+
+        // Shuffle function for randomizing questions
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Initialize the practice page
+        document.addEventListener('DOMContentLoaded', function() {
+            MQ = MathQuill.getInterface(2);
+            
+            document.getElementById('topicTitle').textContent = topicData.title;
+            document.getElementById('topicDescription').textContent = topicData.description;
+            
+            // Randomize question order
+            topicData.problems = shuffleArray(topicData.problems);
+            
+            loadMasteryData();
+            loadPracticeSession();
+            showProblem(0);
+            
+            practiceStarted = true;
+        });
+
+        // Load practice session data
+        function loadPracticeSession() {
+            const sessionKey = `practice_session_${topicData.topic}`;
+            const saved = JSON.parse(sessionStorage.getItem(sessionKey) || '{}');
+            const localSaved = JSON.parse(localStorage.getItem(sessionKey) || '{}');
+            
+            // Use the most recent save (compare lastSaved timestamps)
+            const useSessionStorage = !localSaved.lastSaved || 
+                (saved.lastSaved && saved.lastSaved > localSaved.lastSaved);
+            
+            if (useSessionStorage && saved.sessionId) {
+                // Check if session is not too old (24 hours)
+                if (Date.now() - saved.lastSaved < 24 * 60 * 60 * 1000) {
+                    practiceSession = { ...practiceSession, ...saved };
+                    userAnswers = saved.userAnswers || [];
+                    currentProblemIndex = saved.currentProblemIndex || 0;
+                }
+            } else if (localSaved.sessionId) {
+                if (Date.now() - localSaved.lastSaved < 24 * 60 * 60 * 1000) {
+                    practiceSession = { ...practiceSession, ...localSaved };
+                    userAnswers = saved.userAnswers || [];
+                    currentProblemIndex = saved.currentProblemIndex || 0;
+                }
+            }
+        }
+
+        // Save practice session data
+        function savePracticeSession() {
+            practiceSession.userAnswers = userAnswers;
+            practiceSession.currentProblemIndex = currentProblemIndex;
+            practiceSession.lastSaved = Date.now();
+            practiceSession.timeSpent = Date.now() - practiceSession.startTime;
+            
+            const sessionKey = `practice_session_${topicData.topic}`;
+            sessionStorage.setItem(sessionKey, JSON.stringify(practiceSession));
+            localStorage.setItem(sessionKey, JSON.stringify(practiceSession));
+        }
+
+        // Auto-save session every 5 seconds
+        setInterval(savePracticeSession, 5000);
+
+        // Timer functionality removed
+
+        // Load mastery data from session storage
+        function loadMasteryData() {
+            const masteryData = JSON.parse(sessionStorage.getItem('masteryData') || '[]');
+            let topicMastery = 0;
+            let topicBadge = 'L';
+            
+            masteryData.forEach(item => {
+                if (item.topic === topicData.topic) {
+                    topicMastery = item.mastery;
+                    topicBadge = item.badge || 'L';
+                }
+            });
+            
+            document.getElementById('masteryPercentage').textContent = topicMastery;
+            document.getElementById('progressFill').style.width = `${topicMastery}%`;
+            document.getElementById('masteryBadge').textContent = topicBadge;
+        }
+
+        // Show a specific problem
+        function showProblem(index) {
+            if (index >= topicData.problems.length) {
+                showCompletionScreen();
+                return;
+            }
+            
+            const problem = topicData.problems[index];
+            const practiceContent = document.getElementById('practiceContent');
+            
+            const section = document.createElement('div');
+            section.className = 'practice-section';
+            
+            const title = document.createElement('div');
+            title.className = 'problem-title';
+            title.textContent = `${problem.title} (${index + 1}/${topicData.problems.length})`;
+            
+            const text = document.createElement('div');
+            text.className = 'problem-text';
+            text.innerHTML = problem.problem;
+            
+            const inputContainer = document.createElement('div');
+            inputContainer.className = 'math-input-container';
+            
+            const mathInput = document.createElement('span');
+            mathInput.className = 'math-field';
+            mathInput.id = `answer-${index}`;
+            
+            const hintBtn = document.createElement('button');
+            hintBtn.className = 'hint-btn';
+            hintBtn.innerHTML = '?';
+            hintBtn.title = 'Show hint';
+            hintBtn.onclick = function() {
+                Swal.fire({
+                    title: 'Hint',
+                    html: problem.hint,
+                    icon: 'info',
+                    confirmButtonColor: '#9c27b0'
+                });
+            };
+            
+            inputContainer.appendChild(mathInput);
+            inputContainer.appendChild(hintBtn);
+            
+            section.appendChild(title);
+            section.appendChild(text);
+            section.appendChild(inputContainer);
+            
+            renderMathKeys(section);
+            
+            practiceContent.innerHTML = '';
+            practiceContent.appendChild(section);
+            
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise([practiceContent]).catch((err) => console.log(err.message));
+            }
+            
+            document.getElementById('feedbackContainer').style.display = 'none';
+            document.getElementById('checkBtn').style.display = 'block';
+            document.getElementById('nextBtn').style.display = 'none';
+            
+            setTimeout(() => {
+                const answerMathField = MQ.MathField(mathInput, {
+                handlers: {
+                        edit: function() {
+                            userAnswers[index] = answerMathField.latex();
+                            savePracticeSession();
+                    }
+                }
+            });
+            
+                currentMathField = answerMathField;
+                
+                if (userAnswers[index]) {
+                    answerMathField.latex(userAnswers[index]);
+                }
+                
+                answerMathField.focus();
+            }, 0);
+            
+            currentProblemIndex = index;
+            savePracticeSession();
+        }
+
+        // Render math keys for input
+        function renderMathKeys(container) {
+            const mathKeyboard = document.createElement('div');
+            mathKeyboard.className = 'math-keyboard';
+            
+            const symbols = ['x', 'y', '^', '(', ')', '+', '-', '/', '·', '=', 'sin', 'cos', 'ln', 'e', 'd/dx', '^2', '^3', 'π'];
+            
+            symbols.forEach(symbol => {
+                const key = document.createElement('div');
+                key.className = 'math-key';
+                key.textContent = symbol;
+                key.onclick = function() {
+                    if (currentMathField) {
+                        currentMathField.write(symbol);
+                    currentMathField.focus();
+                    }
+                };
+                mathKeyboard.appendChild(key);
+            });
+            
+            container.appendChild(mathKeyboard);
+        }
+
+        // Check the user's answer
+        function checkAnswer() {
+            const problem = topicData.problems[currentProblemIndex];
+            const userAnswer = userAnswers[currentProblemIndex]?.trim() || '';
+            
+            // Track attempt
+            if (!practiceSession.attempts[currentProblemIndex]) {
+                practiceSession.attempts[currentProblemIndex] = 0;
+            }
+            practiceSession.attempts[currentProblemIndex]++;
+            
+            let processedAnswer = userAnswer.replace(/\\text\{([^}]*)\}/g, '$1')
+                                          .replace(/[\\{}]/g, '')
+                                          .toLowerCase()
+                                          .trim();
+            
+            const correctAnswer = problem.answer.toLowerCase().trim();
+            const isCorrect = processedAnswer === correctAnswer;
+            
+            const feedbackContainer = document.getElementById('feedbackContainer');
+            const feedbackHeader = document.getElementById('feedbackHeader');
+            const feedbackContent = document.getElementById('feedbackContent');
+            const explanationContent = document.getElementById('explanationContent');
+            
+            if (isCorrect) {
+                feedbackContainer.className = 'feedback-container feedback-correct';
+                feedbackHeader.textContent = 'Correct!';
+                feedbackContent.textContent = 'Excellent work! You\'ve mastered this implicit differentiation technique.';
+                
+                // Track correct answer (only count once per question)
+                if (practiceSession.attempts[currentProblemIndex] === 1) {
+                    practiceSession.correctAnswers++;
+                    trackCorrectAnswer(topicData.topic);
+                }
+                
+                updateMastery(15); // Higher points for more complex topic
+            } else {
+                feedbackContainer.className = 'feedback-container feedback-incorrect';
+                feedbackHeader.textContent = 'Not Quite Right';
+                feedbackContent.textContent = `The correct answer is: ${problem.answer}`;
+                
+                updateMastery(3); // Still give some progress for attempts
+            }
+            
+            explanationContent.innerHTML = problem.explanation;
+            feedbackContainer.style.display = 'block';
+            
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise([feedbackContainer]).catch((err) => console.log(err.message));
+            }
+            
+            document.getElementById('checkBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'block';
+            
+            savePracticeSession();
+        }
+
+        // Track correct answer for profile page mastery system
+        function trackCorrectAnswer(topic) {
+            const correctAnswers = JSON.parse(sessionStorage.getItem('correctAnswers') || '{}');
+            correctAnswers[topic] = (correctAnswers[topic] || 0) + 1;
+            sessionStorage.setItem('correctAnswers', JSON.stringify(correctAnswers));
+        }
+
+        // Update mastery level
+        function updateMastery(increase) {
+            const masteryData = JSON.parse(sessionStorage.getItem('masteryData') || '[]');
+            let dataUpdated = false;
+            
+            masteryData.forEach(item => {
+                if (item.topic === topicData.topic) {
+                    const newMastery = Math.min(100, item.mastery + increase);
+                    item.mastery = newMastery;
+                    dataUpdated = true;
+                    
+                    if (item.mastery >= 80) {
+                        item.badge = 'M';
+                    } else if (item.mastery >= 50) {
+                        item.badge = 'P';
+                    } else if (item.mastery >= 20) {
+                        item.badge = 'L';
+                    }
+                    
+                    document.getElementById('masteryPercentage').textContent = newMastery;
+                    document.getElementById('progressFill').style.width = `${newMastery}%`;
+                    document.getElementById('masteryBadge').textContent = item.badge;
+                }
+            });
+            
+            if (dataUpdated) {
+                sessionStorage.setItem('masteryData', JSON.stringify(masteryData));
+            }
+        }
+
+        // Move to next problem
+        function nextProblem() {
+            showProblem(currentProblemIndex + 1);
+        }
+
+        // Show completion screen
+        function showCompletionScreen() {
+            const practiceContent = document.getElementById('practiceContent');
+            const section = document.createElement('div');
+            section.className = 'practice-section';
+            
+            const completionTime = Math.round((Date.now() - practiceSession.startTime) / 1000 / 60);
+            const accuracy = Math.round((practiceSession.correctAnswers / topicData.problems.length) * 100);
+            
+            section.innerHTML = `
+                <h2>🎉 Practice Complete!</h2>
+                <div style="text-align: center; margin: 20px 0;">
+                    <p><strong>Results Summary:</strong></p>
+                    <p>Correct Answers: ${practiceSession.correctAnswers}/${topicData.problems.length}</p>
+                    <p>Accuracy: ${accuracy}%</p>
+                    <p>Time Spent: ${completionTime} minutes</p>
+                    <p>Your mastery of ${topicData.title} is now: 
+                       <strong>${document.getElementById('masteryPercentage').textContent}%</strong>
+                    </p>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="practice-btn" onclick="reviewMistakes()">Review Mistakes</button>
+                    <button class="practice-btn" onclick="window.location.reload()">Practice Again</button>
+                    <button class="practice-btn" onclick="window.location.href='profile.html'">Back to Profile</button>
+                </div>
+            `;
+            
+            practiceContent.innerHTML = '';
+            practiceContent.appendChild(section);
+            
+            document.getElementById('checkBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+            
+            // Clear practice session
+            sessionStorage.removeItem(`practice_${topicData.topic}`);
+            
+            updateMastery(10); // Completion bonus
+            showToast('Practice Complete', 'Your mastery has been updated!');
+        }
+
+        // Review mistakes function
+        function reviewMistakes() {
+            // Implementation for reviewing incorrect answers
+            Swal.fire({
+                title: 'Review Mode',
+                text: 'This feature will show you the problems you got wrong for focused practice.',
+                icon: 'info',
+                confirmButtonColor: '#9c27b0'
+            });
+        }
+
+        // Show toast notification
+        function showToast(title, message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast-notification';
+            toast.innerHTML = `
+                <div class="toast-icon">🎯</div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 500);
+            }, 3000);
+        }
+    </script>
+    
+    <!-- Firebase module script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBUfSOSpmCdWUGTVbSQsMCH-JVmrjpfdPY",
+            authDomain: "fyp-lutfi-naim.firebaseapp.com",
+            databaseURL: "https://fyp-lutfi-naim-default-rtdb.firebaseio.com",
+            projectId: "fyp-lutfi-naim",
+            storageBucket: "fyp-lutfi-naim.firebasestorage.app",
+            messagingSenderId: "231274529807",
+            appId: "1:231274529807:web:c4ea279f9e7581bd674f7a",
+            measurementId: "G-2D96FF3352"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            onAuthStateChanged(auth, (user) => {
+                if (!user) {
+                    Swal.fire({
+                        title: 'Authentication Required',
+                        text: 'Please log in to practice',
+                        icon: 'warning',
+                        confirmButtonColor: '#9c27b0',
+                        confirmButtonText: 'Go to Login'
+                    }).then((result) => {
+                        window.location.href = "index.html";
+                    });
+                    return;
+                }
+            });
+        });
+
+        window.saveUserData = async function(user) {
+            try {
+                const userDocRef = doc(db, 'users', user.uid);
+                const userDocSnap = await getDoc(userDocRef);
+
+                if (userDocSnap.exists()) {
+                    await updateDoc(userDocRef, {
+                        masteryData: JSON.parse(sessionStorage.getItem('masteryData') || '[]'),
+                        lastUpdated: new Date().toISOString()
+                    });
+                }
+            } catch (error) {
+                console.error("Error updating mastery data:", error);
+            }
+        };
+    </script>
+</body>
+</html> 
+
+
+
+
+
+
+

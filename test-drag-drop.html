@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop Test</title>
+    <style>
+        .drag-item {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px;
+            cursor: grab;
+            display: inline-block;
+            user-select: none;
+        }
+        
+        .drag-item:hover {
+            background: #bbdefb;
+        }
+        
+        .drag-item.dragging {
+            opacity: 0.5;
+        }
+        
+        .drop-zone {
+            background: #f3e5f5;
+            border: 2px dashed #9c27b0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .drop-zone.drag-over {
+            background: #e1bee7;
+            border-color: #7b1fa2;
+        }
+        
+        .container {
+            display: flex;
+            gap: 50px;
+            padding: 20px;
+        }
+        
+        .column {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <h1>Drag and Drop Test</h1>
+    <button onclick="initDragDrop()">Initialize Drag & Drop</button>
+    <button onclick="testLog()">Test Console Log</button>
+    
+    <div class="container">
+        <div class="column">
+            <h3>Drag Items</h3>
+            <div class="drag-item" draggable="true" data-function="item1">Item 1</div>
+            <div class="drag-item" draggable="true" data-function="item2">Item 2</div>
+            <div class="drag-item" draggable="true" data-function="item3">Item 3</div>
+        </div>
+        
+        <div class="column">
+            <h3>Drop Zones</h3>
+            <div class="drop-zone" data-derivative="zone1">Zone 1</div>
+            <div class="drop-zone" data-derivative="zone2">Zone 2</div>
+            <div class="drop-zone" data-derivative="zone3">Zone 3</div>
+        </div>
+    </div>
+    
+    <div id="results"></div>
+    
+    <script>
+        let matches = {};
+        
+        function testLog() {
+            console.log('Test console log working');
+            alert('Console log test - check browser console');
+        }
+        
+        function initDragDrop() {
+            console.log('Initializing drag and drop...');
+            
+            const dragItems = document.querySelectorAll('.drag-item');
+            const dropZones = document.querySelectorAll('.drop-zone');
+            
+            console.log(`Found ${dragItems.length} drag items and ${dropZones.length} drop zones`);
+            
+            dragItems.forEach(item => {
+                console.log('Adding listeners to:', item.dataset.function);
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragend', handleDragEnd);
+            });
+            
+            dropZones.forEach(zone => {
+                console.log('Adding listeners to:', zone.dataset.derivative);
+                zone.addEventListener('dragover', handleDragOver);
+                zone.addEventListener('drop', handleDrop);
+                zone.addEventListener('dragenter', handleDragEnter);
+                zone.addEventListener('dragleave', handleDragLeave);
+            });
+            
+            console.log('Initialization complete');
+            alert('Drag and drop initialized! Try dragging items now.');
+        }
+        
+        function handleDragStart(e) {
+            console.log('DRAG START:', e.target.dataset.function);
+            e.dataTransfer.setData('text/plain', e.target.dataset.function);
+            e.target.classList.add('dragging');
+        }
+        
+        function handleDragEnd(e) {
+            console.log('DRAG END');
+            e.target.classList.remove('dragging');
+        }
+        
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+        
+        function handleDragEnter(e) {
+            console.log('DRAG ENTER:', e.target.dataset.derivative);
+            e.preventDefault();
+            e.target.classList.add('drag-over');
+        }
+        
+        function handleDragLeave(e) {
+            console.log('DRAG LEAVE');
+            e.target.classList.remove('drag-over');
+        }
+        
+        function handleDrop(e) {
+            console.log('DROP EVENT');
+            e.preventDefault();
+            e.target.classList.remove('drag-over');
+            
+            const functionType = e.dataTransfer.getData('text/plain');
+            const derivativeType = e.target.dataset.derivative;
+            
+            console.log('Dropped:', functionType, 'on', derivativeType);
+            
+            matches[functionType] = derivativeType;
+            
+            e.target.innerHTML = `${derivativeType}<br><small>Matched with: ${functionType}</small>`;
+            
+            document.getElementById('results').innerHTML = `<h3>Matches:</h3><pre>${JSON.stringify(matches, null, 2)}</pre>`;
+        }
+        
+        // Auto-initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, auto-initializing...');
+            setTimeout(initDragDrop, 100);
+        });
+    </script>
+</body>
+</html> 
+
+
+
+
+
+
+

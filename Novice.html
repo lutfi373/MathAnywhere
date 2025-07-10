@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novice Level - Differentiation Quiz</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/templatemo-topic-listing.css">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f3e5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .form {
+            --input-focus: #7b1fa2;
+            --font-color: #4a148c;
+            --font-color-sub: #8e24aa;
+            --bg-color: #f3e5f5;
+            --main-color: #6a1b9a;
+            padding: 30px;
+            background: #e1bee7;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 20px;
+            border-radius: 10px;
+            border: 2px solid var(--main-color);
+            box-shadow: 6px 6px var(--main-color);
+        }
+        .title {
+            color: var(--font-color);
+            font-weight: 900;
+            font-size: 24px;
+            margin-bottom: 25px;
+        }
+        .topic-section {
+            width: 100%;
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: #f8f4ff;
+            border-radius: 8px;
+            border: 1px solid var(--main-color);
+        }
+        .topic-title {
+            color: var(--font-color);
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-align: center;
+            background-color: var(--main-color);
+            color: white;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        .question-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .question-label {
+            color: var(--font-color);
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .input {
+            width: 100%;
+            height: 45px;
+            border-radius: 5px;
+            border: 2px solid var(--main-color);
+            background-color: var(--bg-color);
+            box-shadow: 4px 4px var(--main-color);
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--font-color);
+            padding: 5px 10px;
+            outline: none;
+        }
+        .input::placeholder {
+            color: var(--font-color-sub);
+            opacity: 0.8;
+        }
+        .input:focus {
+            border: 2px solid var(--input-focus);
+        }
+        .button-confirm {
+            margin: 20px 0;
+            width: 140px;
+            height: 45px;
+            border-radius: 5px;
+            border: 2px solid var(--main-color);
+            background-color: var(--bg-color);
+            box-shadow: 4px 4px var(--main-color);
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--font-color);
+            cursor: pointer;
+        }
+        .button-confirm:hover {
+            background-color: var(--input-focus);
+            color: #fff;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #28a745;
+        }
+        .quiz-description {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #856404;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Novice Level - Differentiation Quiz</h1>
+    
+    <div class="quiz-description">
+        <strong>Welcome to the Novice Level!</strong><br>
+        This quiz covers fundamental concepts in differentiation. You'll be tested on:
+        <ul>
+            <li>Introduction to derivatives and their meaning</li>
+            <li>Basic differentiation rules (power rule, basic functions)</li>
+            <li>Understanding tangent lines and slopes</li>
+        </ul>
+        <em>Complete at least 6 out of 8 questions correctly to advance to Intermediate level.</em>
+    </div>
+
+    <div class="form">
+        <div class="title">Novice Differentiation Quiz</div>
+        <form id="quizForm">
+            
+            <!-- Introduction to Derivatives -->
+            <div class="topic-section">
+                <div class="topic-title">Introduction to Derivatives</div>
+                
+                <div class="question-group">
+                    <label class="question-label">1. What does a derivative represent in physical terms?</label>
+                    <input type="text" class="form-control input" name="question0" placeholder="Enter your answer..." required>
+                </div>
+                
+                <div class="question-group">
+                    <label class="question-label">2. If f(x) represents position, what does f'(x) represent?</label>
+                    <input type="text" class="form-control input" name="question1" placeholder="Enter your answer..." required>
+                </div>
+            </div>
+
+            <!-- Rules of Differentiation -->
+            <div class="topic-section">
+                <div class="topic-title">Basic Rules of Differentiation</div>
+                
+                <div class="question-group">
+                    <label class="question-label">3. What is the derivative of x²?</label>
+                    <input type="text" class="form-control input" name="question2" placeholder="Enter your answer..." required>
+                </div>
+                
+                <div class="question-group">
+                    <label class="question-label">4. What is the derivative of x³?</label>
+                    <input type="text" class="form-control input" name="question3" placeholder="Enter your answer..." required>
+                </div>
+                
+                <div class="question-group">
+                    <label class="question-label">5. What is the derivative of sin(x)?</label>
+                    <input type="text" class="form-control input" name="question4" placeholder="Enter your answer..." required>
+                </div>
+                
+                <div class="question-group">
+                    <label class="question-label">6. What is the derivative of cos(x)?</label>
+                    <input type="text" class="form-control input" name="question5" placeholder="Enter your answer..." required>
+                </div>
+            </div>
+
+            <!-- Equation of Tangent -->
+            <div class="topic-section">
+                <div class="topic-title">Understanding Tangent Lines</div>
+                
+                <div class="question-group">
+                    <label class="question-label">7. If the slope of the tangent line at x=2 is 5, what is f'(2)?</label>
+                    <input type="text" class="form-control input" name="question6" placeholder="Enter your answer..." required>
+                </div>
+                
+                <div class="question-group">
+                    <label class="question-label">8. What is the derivative of a constant (like f(x) = 5)?</label>
+                    <input type="text" class="form-control input" name="question7" placeholder="Enter your answer..." required>
+                </div>
+            </div>
+            
+        </form>
+        <button class="button-confirm" type="button" onclick="submitQuiz()">Submit</button>
+        <div id="result"></div>
+    </div>
+</div>
+
+<script>
+    window.questions = [
+        { question: "What does a derivative represent in physical terms?", answer: "rate of change", topic: "Introduction to derivatives" },
+        { question: "If f(x) represents position, what does f'(x) represent?", answer: "velocity", topic: "Introduction to derivatives" },
+        { question: "What is the derivative of x²?", answer: "2x", topic: "Rules of Differentiation" },
+        { question: "What is the derivative of x³?", answer: "3x^2", topic: "Rules of Differentiation" },
+        { question: "What is the derivative of sin(x)?", answer: "cos(x)", topic: "Rules of Differentiation" },
+        { question: "What is the derivative of cos(x)?", answer: "-sin(x)", topic: "Rules of Differentiation" },
+        { question: "If the slope of the tangent line at x=2 is 5, what is f'(2)?", answer: "5", topic: "Equation of Tangent" },
+        { question: "What is the derivative of a constant (like f(x) = 5)?", answer: "0", topic: "Rules of Differentiation" }
+    ];
+</script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBUfSOSpmCdWUGTVbSQsMCH-JVmrjpfdPY",
+        authDomain: "fyp-lutfi-naim.firebaseapp.com",
+        projectId: "fyp-lutfi-naim",
+        storageBucket: "fyp-lutfi-naim.firebasestorage.app",
+        messagingSenderId: "231274529807",
+        appId: "1:231274529807:web:c4ea279f9e7581bd674f7a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    function renderQuestions() {
+        const quizForm = document.getElementById('quizForm');
+        quizForm.innerHTML = '';
+        window.questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.classList.add('mb-3');
+            questionDiv.innerHTML = `
+                <label class="form-label">${index + 1}. ${q.question}</label>
+                <input type="text" class="form-control input" name="question${index}" required>
+            `;
+            quizForm.appendChild(questionDiv);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                console.log("No authenticated user found");
+                alert("Please log in to take the quiz");
+                window.location.href = "index.html";
+                return;
+            }
+
+            console.log("User authenticated:", user.uid);
+            renderQuestions();
+        });
+    });
+
+    window.updateUserLevel = async function(level, progress) {
+        try {
+            const user = auth.currentUser;
+            if (user) {
+                const userDocRef = doc(db, 'users', user.uid);
+                const userDocSnap = await getDoc(userDocRef);
+
+                let moduleProgress = {};
+                if (userDocSnap.exists()) {
+                    moduleProgress = userDocSnap.data().moduleProgress || {};
+                }
+
+                // Use the passed progress parameter
+                moduleProgress['Novice'] = progress;
+
+                await setDoc(userDocRef, {
+                    level: level,
+                    moduleProgress: moduleProgress
+                }, { merge: true });
+
+                sessionStorage.setItem('level', level);
+                sessionStorage.setItem('moduleProgress', JSON.stringify(moduleProgress));
+
+                console.log("User data updated successfully, redirecting to profile page");
+
+                setTimeout(() => {
+                    window.location.href = "profile.html";
+                }, 1500);
+            } else {
+                console.error("No user is signed in");
+                alert("Please sign in to save your results");
+                window.location.href = "index.html";
+            }
+        } catch (error) {
+            console.error("Error updating user level:", error);
+            alert("Error updating your profile. Please try again.");
+        }
+    };
+
+    async function updateOverallProgress() {
+        const user = auth.currentUser;
+        if (user) {
+            const userDocRef = doc(db, 'users', user.uid);
+            const userDocSnap = await getDoc(userDocRef);
+
+            if (userDocSnap.exists()) {
+                const userData = userDocSnap.data();
+                const moduleProgress = userData.moduleProgress || {};
+                
+                // Define the expected modules
+                const expectedModules = ['Novice', 'Intermediate', 'Advanced'];
+                const totalExpectedModules = expectedModules.length; // Always 3 modules
+                
+                // Calculate total progress including modules not yet started (as 0%)
+                let totalProgress = 0;
+                expectedModules.forEach(module => {
+                    // Get progress for this module, defaulting to 0 if not started
+                    // And treat any progress ≥80% as 100% complete
+                    const progress = moduleProgress[module] || 0;
+                    totalProgress += progress >= 80 ? 100 : progress;
+                });
+                
+                // Calculate overall progress as percentage of all expected modules
+                let overallProgress = Math.round(totalProgress / totalExpectedModules);
+                
+                // If all three modules are completed (≥80%), ensure overall is 100%
+                const noviceComplete = (moduleProgress['Novice'] || 0) >= 80;
+                const intermediateComplete = (moduleProgress['Intermediate'] || 0) >= 80;
+                const advancedComplete = (moduleProgress['Advanced'] || 0) >= 80;
+                
+                if (noviceComplete && intermediateComplete && advancedComplete) {
+                    overallProgress = 100;
+                }
+
+                await setDoc(userDocRef, { overallProgress }, { merge: true });
+                sessionStorage.setItem('overallProgress', overallProgress);
+            }
+        }
+    }
+
+    window.submitQuiz = async function() {
+        if (!auth.currentUser) {
+            alert("Please sign in to submit your quiz");
+            window.location.href = "index.html";
+            return;
+        }
+
+        const quizForm = document.getElementById('quizForm');
+        const formData = new FormData(quizForm);
+        let score = 0;
+
+        window.questions.forEach((q, index) => {
+            const userAnswer = formData.get(`question${index}`)?.trim() || '';
+            if (userAnswer.toLowerCase() === q.answer.toLowerCase()) {
+                score++;
+            }
+        });
+
+        let level;
+        if (score >= 6) {  // Need 6 out of 8 to advance
+            level = 'Intermediate';
+        } else {
+            level = 'Novice';
+        }
+
+        document.getElementById('result').innerHTML = `Your score: <strong>${score}/8</strong>. Your level is: <strong>${level}</strong>`;
+
+        // Calculate progress as percentage
+        const progress = Math.round((score / 8) * 100);
+        await updateUserLevel(level, progress);
+        await updateOverallProgress();
+    };
+</script>
+</body>
+</html>
+
+
+
+
+
+
+

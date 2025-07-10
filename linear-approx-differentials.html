@@ -1,0 +1,1923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linear Approximations & Differentials</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.0.0/math.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- MathQuill resources -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+  
+  <script type="text/javascript">
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+  
+  <style>
+    :root {
+      /* Color Variables */
+      --main-color: #323232;
+      --accent-color: #ff6b6b;
+      --secondary-color: #feca57;
+      --tertiary-color: #1dd1a1;
+      --bg-color: #f7f9fc;
+      --font-color: #323232;
+      --input-focus: #2d8cf0;
+      --shadow-md: 4px 4px var(--main-color);
+      --shadow-hover: 2px 2px var(--main-color);
+      --success-color: #2ecc71;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background: var(--bg-color);
+      color: var(--font-color);
+      min-height: 100vh;
+      line-height: 1.6;
+      letter-spacing: 0.5px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 40px;
+      border-radius: 10px;
+      background-color: white;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      transition: all 0.3s ease;
+      border: 2px solid var(--main-color);
+    }
+
+    .container:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translate(3px, 3px);
+    }
+
+    .form {
+      padding: 40px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: var(--shadow-md);
+      margin: 40px 0;
+      transition: all 0.3s ease;
+      color: var(--font-color);
+      border: 2px solid var(--main-color);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    .form:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translate(3px, 3px);
+    }
+
+    h2 {
+      color: var(--font-color);
+      font-size: 2.2rem;
+      margin: 30px 0;
+      font-weight: 700;
+      text-align: center;
+      width: 100%;
+      position: relative;
+      display: inline-block;
+    }
+
+    h2:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 25%;
+      width: 50%;
+      height: 4px;
+      background-color: var(--accent-color);
+      transition: width 0.3s ease, left 0.3s ease;
+    }
+
+    h2:hover:after {
+      width: 80%;
+      left: 10%;
+    }
+
+    p {
+      margin: 20px 0;
+      font-size: 1.1rem;
+      color: var(--font-color);
+      line-height: 1.8;
+      text-align: left;
+    }
+
+    .button {
+      padding: 10px 20px;
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .button:hover {
+      background-color: var(--tertiary-color);
+      transform: translateY(-3px);
+    }
+
+    .button:active {
+      transform: translateY(1px);
+    }
+
+    .rule-tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      padding: 10px 15px;
+      margin: 0 5px;
+      background-color: var(--bg-color);
+      border: 2px solid var(--main-color);
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background-color: var(--accent-color);
+      color: white;
+    }
+
+    .tab-btn:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-3px);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 260px;
+      height: 100%;
+      background-color: #feca57;
+      border-right: 2px solid var(--main-color);
+      box-shadow: 4px 0 var(--main-color);
+      overflow-x: hidden;
+      padding: 30px 20px;
+      z-index: 100;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar:hover {
+      box-shadow: 6px 0 var(--main-color);
+    }
+
+    .sidebar a, .dropdown-btn {
+      padding: 15px 20px;
+      font-size: 16px;
+      color: var(--font-color);
+      transition: all 0.3s ease;
+      border-radius: 10px;
+      margin: 8px 0;
+      text-decoration: none;
+      display: block;
+      border: 2px solid var(--main-color);
+      background-color: white;
+      width: calc(100% - 40px);
+      text-align: left;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: var(--shadow-md);
+      font-weight: 600;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .sidebar a:before, .dropdown-btn:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--accent-color);
+      transition: all 0.4s ease;
+      z-index: -1;
+      opacity: 0.7;
+    }
+
+    .sidebar a:hover:before, .dropdown-btn:hover:before {
+      left: 0;
+    }
+
+    .sidebar a:hover, .dropdown-btn:hover {
+      color: white;
+      background-color: transparent;
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 6px 6px var(--main-color);
+      border-color: var(--main-color);
+    }
+
+    .sidebar a:active, .dropdown-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px var(--main-color);
+    }
+
+    .dropdown-container {
+      background-color: transparent;
+      padding-left: 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .dropdown-btn.active + .dropdown-container {
+      max-height: 300px;
+    }
+
+    .dropdown-container a {
+      border-left: 3px solid var(--main-color);
+      border-radius: 0 10px 10px 0;
+      margin-left: 10px;
+      position: relative;
+    }
+
+    .dropdown-container a:hover {
+      margin-left: 15px;
+    }
+
+    .dropdown-btn::after {
+      content: '▼';
+      position: absolute;
+      right: 15px;
+      transition: transform 0.3s ease;
+      font-size: 12px;
+    }
+
+    .dropdown-btn.active::after {
+      transform: rotate(180deg);
+    }
+
+    section {
+      margin: 60px auto;
+      padding: 20px;
+      background-color: white;
+      border: 2px solid var(--main-color);
+      border-radius: 10px;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+      max-width: 1200px;
+    }
+
+    section:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+
+    .definition-box {
+      background: white;
+      border: 2px solid var(--main-color);
+      border-radius: 10px;
+      padding: 25px;
+      margin: 30px 0;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+    }
+
+    .definition-box:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+
+    .formula {
+      background: var(--bg-color);
+      padding: 15px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .example {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px dashed var(--main-color);
+    }
+
+    .step {
+      background: var(--bg-color);
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+
+    .rule-card {
+      background-color: white;
+      border: 2px solid var(--main-color);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 10px 0;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .rule-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .practice-button-container {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    
+    .practice-page-btn {
+      background-color: var(--accent-color);
+      color: white;
+      border: 2px solid var(--main-color);
+      border-radius: 10px;
+      padding: 12px 25px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-md);
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .practice-page-btn:hover {
+      background-color: var(--tertiary-color);
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* MathQuill Styles */
+    .mathquill-field {
+        border: 3px solid var(--main-color);
+        border-radius: 12px;
+        padding: 20px 25px;
+        margin: 15px 0;
+        background: white;
+        min-height: 80px;
+        font-size: 24px;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-md);
+        width: 100%;
+        max-width: 600px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        position: relative;
+        cursor: text;
+    }
+
+    .mathquill-field:focus-within {
+        border-color: var(--input-focus);
+        box-shadow: 0 0 12px rgba(45, 140, 240, 0.4);
+        transform: translateY(-3px);
+        background: linear-gradient(145deg, #ffffff, #f8fafc);
+    }
+
+    /* Drag and Drop Styles */
+    .drag-drop-container {
+        background: linear-gradient(145deg, #ffffff, #f8fafc);
+        border: 2px solid var(--main-color);
+        border-radius: 15px;
+        padding: 25px;
+        margin: 20px 0;
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
+    }
+
+    .drag-drop-container:hover {
+        box-shadow: var(--shadow-lg);
+        transform: translateY(-2px);
+        border-color: var(--accent-color);
+    }
+
+    .drag-items-bank {
+        background: linear-gradient(145deg, #f1f5f9, #e2e8f0);
+        border: 2px solid var(--main-color);
+        border-radius: 12px;
+        padding: 20px;
+        margin: 15px 0;
+        min-height: 120px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+    .drag-item {
+        background: linear-gradient(145deg, #ffffff, #f8fafc);
+        border: 2px solid var(--main-color);
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--font-color);
+        cursor: grab;
+        user-select: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: relative;
+        min-width: 60px;
+        text-align: center;
+    }
+
+    .drag-item:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        border-color: var(--accent-color);
+        background: var(--accent-color);
+        color: white;
+    }
+
+    .drag-item:active {
+        cursor: grabbing;
+        transform: scale(0.95);
+    }
+
+    .drag-item.dragging {
+        opacity: 0.5;
+        transform: rotate(5deg);
+        z-index: 1000;
+    }
+
+    .drop-zone {
+        background: linear-gradient(145deg, #ffffff, #f8fafc);
+        border: 3px dashed var(--main-color);
+        border-radius: 10px;
+        padding: 20px;
+        margin: 10px 5px;
+        min-height: 60px;
+        min-width: 80px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        color: #666;
+        transition: all 0.3s ease;
+        position: relative;
+        vertical-align: middle;
+    }
+
+    .drop-zone:hover {
+        border-color: var(--accent-color);
+        background: rgba(255, 107, 107, 0.1);
+        transform: scale(1.02);
+    }
+
+    .drop-zone.drag-over {
+        border-color: var(--tertiary-color);
+        background: rgba(29, 209, 161, 0.2);
+        border-style: solid;
+        animation: pulse 0.5s ease-in-out infinite alternate;
+    }
+
+    .drop-zone.filled {
+        background: linear-gradient(145deg, var(--tertiary-color), #16a085);
+        border-color: var(--tertiary-color);
+        border-style: solid;
+        color: white;
+        font-weight: 600;
+    }
+
+    .drop-zone.correct {
+        background: linear-gradient(145deg, var(--tertiary-color), #16a085);
+        border-color: var(--tertiary-color);
+        animation: correctPulse 0.6s ease-in-out;
+    }
+
+    .drop-zone.incorrect {
+        background: linear-gradient(145deg, var(--accent-color), #e74c3c);
+        border-color: var(--accent-color);
+        animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        100% { transform: scale(1.05); }
+    }
+
+    @keyframes correctPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+
+    .formula-template {
+        background: white;
+        border: 2px solid var(--main-color);
+        border-radius: 12px;
+        padding: 25px;
+        margin: 20px 0;
+        font-size: 24px;
+        text-align: center;
+        line-height: 1.8;
+        box-shadow: var(--shadow-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .formula-template .static-text {
+        font-weight: 600;
+        color: var(--font-color);
+        margin: 0 5px;
+    }
+
+    .drag-feedback {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 10px;
+        font-weight: 600;
+        text-align: center;
+        display: none;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .drag-feedback.success {
+        background: rgba(46, 204, 113, 0.1);
+        color: var(--tertiary-color);
+        border: 2px solid var(--tertiary-color);
+    }
+
+    .drag-feedback.error {
+        background: rgba(255, 107, 107, 0.1);
+        color: var(--accent-color);
+        border: 2px solid var(--accent-color);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .check-button-drag {
+        background: var(--tertiary-color);
+        color: white;
+        border: 2px solid var(--main-color);
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 10px 5px;
+    }
+
+    .check-button-drag:hover {
+        background: var(--accent-color);
+        transform: translateY(-2px);
+    }
+
+    .reset-button {
+        background: var(--secondary-color);
+        color: var(--font-color);
+        border: 2px solid var(--main-color);
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 10px 5px;
+    }
+
+    .reset-button:hover {
+        background: var(--accent-color);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .button-group {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin: 20px 0;
+    }
+
+    /* MathQuill Practice Styles */
+    .mathquill-practice {
+        background: linear-gradient(145deg, #f0f8ff, #e6f3ff);
+        border: 2px solid var(--main-color);
+        border-radius: 15px;
+        padding: 25px;
+        margin: 30px 0;
+        box-shadow: var(--shadow-md);
+    }
+
+    .step-by-step-solution {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .math-step {
+        background: white;
+        border: 2px solid var(--main-color);
+        border-radius: 10px;
+        padding: 20px;
+        margin: 15px 0;
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
+    }
+
+    .math-step:hover {
+        box-shadow: var(--shadow-lg);
+        transform: translateY(-2px);
+    }
+
+    .math-step label {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--font-color);
+        margin-bottom: 15px;
+        display: block;
+    }
+
+    .step-button {
+        background: var(--accent-color);
+        color: white;
+        border: 2px solid var(--main-color);
+        border-radius: 8px;
+        padding: 8px 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 10px 0;
+    }
+
+    .step-button:hover {
+        background: var(--tertiary-color);
+        transform: translateY(-2px);
+    }
+
+    .step-feedback {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 5px;
+        font-weight: 600;
+        display: none;
+    }
+
+    .step-feedback.correct {
+        background: rgba(46, 204, 113, 0.1);
+        color: var(--tertiary-color);
+        border: 1px solid var(--tertiary-color);
+    }
+
+    .step-feedback.incorrect {
+        background: rgba(255, 107, 107, 0.1);
+        color: var(--accent-color);
+        border: 1px solid var(--accent-color);
+    }
+
+
+
+    /* Interactive visualization */
+    .visualization-container {
+        margin: 20px 0;
+        border: 2px solid var(--main-color);
+        border-radius: 10px;
+        box-shadow: var(--shadow-md);
+        overflow: hidden;
+        background-color: white;
+        transition: all 0.3s ease;
+        padding: 20px;
+    }
+
+    .visualization-container:hover {
+        box-shadow: var(--shadow-lg);
+        transform: translateY(-3px);
+    }
+
+    .visualization-controls {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        justify-content: center;
+        margin: 15px 0;
+        flex-wrap: wrap;
+    }
+
+    .visualization-controls label {
+        font-weight: 600;
+        color: var(--font-color);
+    }
+
+    .visualization-controls input[type="range"] {
+        margin-left: 10px;
+        accent-color: var(--accent-color);
+    }
+
+    /* Matching container styles */
+    .matching-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin: 20px 0;
+        align-items: start;
+    }
+
+    .functions-column, .differentials-column {
+        background: linear-gradient(145deg, #f8fafc, #e2e8f0);
+        border: 2px solid var(--main-color);
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: var(--shadow-md);
+    }
+
+    .functions-column h5, .differentials-column h5 {
+        text-align: center;
+        color: var(--font-color);
+        margin-bottom: 15px;
+        font-weight: 600;
+        border-bottom: 2px solid var(--accent-color);
+        padding-bottom: 10px;
+    }
+
+    .function-item {
+        background: white;
+        border: 2px solid var(--main-color);
+        border-radius: 8px;
+        padding: 15px;
+        margin: 10px 0;
+        text-align: center;
+        font-size: 18px;
+        font-weight: 600;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .function-item:hover {
+        background: var(--secondary-color);
+        transform: translateY(-2px);
+    }
+
+    .drop-zone-diff {
+        background: linear-gradient(145deg, #ffffff, #f8fafc);
+        border: 3px dashed var(--main-color);
+        border-radius: 10px;
+        padding: 15px;
+        margin: 10px 0;
+        min-height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        color: #666;
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+
+    .drop-zone-diff:hover {
+        border-color: var(--accent-color);
+        background: rgba(255, 107, 107, 0.1);
+        transform: scale(1.02);
+    }
+
+    .drop-zone-diff.drag-over {
+        border-color: var(--tertiary-color);
+        background: rgba(29, 209, 161, 0.2);
+        border-style: solid;
+    }
+
+    .drop-zone-diff.filled {
+        background: linear-gradient(145deg, var(--tertiary-color), #16a085);
+        border-color: var(--tertiary-color);
+        border-style: solid;
+        color: white;
+        font-weight: 600;
+    }
+
+    .drop-zone-diff.correct {
+        background: linear-gradient(145deg, var(--tertiary-color), #16a085);
+        border-color: var(--tertiary-color);
+        animation: correctPulse 0.6s ease-in-out;
+    }
+
+    .drop-zone-diff.incorrect {
+        background: linear-gradient(145deg, var(--accent-color), #e74c3c);
+        border-color: var(--accent-color);
+        animation: shake 0.5s ease-in-out;
+    }
+
+    /* Step solution styles */
+    .step-solution {
+        background: white;
+        border: 2px solid var(--main-color);
+        border-radius: 12px;
+        padding: 25px;
+        margin: 20px 0;
+        box-shadow: var(--shadow-md);
+    }
+
+    .solution-step {
+        display: flex;
+        align-items: center;
+        margin: 15px 0;
+        padding: 15px;
+        background: var(--bg-color);
+        border-radius: 8px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .solution-step p {
+        margin: 0;
+        font-weight: 600;
+        color: var(--font-color);
+    }
+
+    .solution-step span {
+        font-weight: 600;
+        color: var(--font-color);
+        margin: 0 5px;
+    }
+
+    /* Practice section styles */
+    .practice-section {
+        margin-top: 30px;
+        padding: 20px;
+        background: linear-gradient(145deg, #f0f8ff, #e6f3ff);
+        border: 2px solid var(--main-color);
+        border-radius: 15px;
+        box-shadow: var(--shadow-md);
+    }
+
+    .practice-section h3 {
+        color: var(--font-color);
+        text-align: center;
+        margin-bottom: 25px;
+        font-size: 1.5rem;
+    }
+
+    .practice-section h4 {
+        color: var(--font-color);
+        margin: 20px 0 15px 0;
+        font-weight: 600;
+    }
+
+    /* Responsive Design */
+    @media screen and (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 20px;
+      }
+
+      #main-content {
+        margin-left: 0;
+        padding: 20px;
+      }
+
+      .container {
+        margin: 20px;
+        padding: 20px;
+      }
+
+      .form {
+        padding: 25px;
+      }
+
+      .rule-tabs {
+        flex-wrap: wrap;
+      }
+
+      .tab-btn {
+        margin: 5px 0;
+        width: 100%;
+      }
+
+      .drag-items-bank {
+        justify-content: center;
+      }
+      
+      .formula-template {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .button-group {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .button-group button {
+        width: 100%;
+        margin: 5px 0;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      h2 {
+        font-size: 1.8rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+
+      .drag-item {
+        font-size: 14px;
+        padding: 8px 12px;
+      }
+
+      .mathquill-field {
+        font-size: 18px;
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="sidebar" class="sidebar">
+  <a href="home.html">Home</a>
+  <button class="dropdown-btn">Linear Approximations
+    <i class="fa fa-caret-down"></i>
+  </button>
+  <div class="dropdown-container">
+    <a href="#" onclick="openRuleTab(event, 'linear-approximation')">Linear Approximation</a>
+    <a href="#" onclick="openRuleTab(event, 'differentials')">Differentials</a>
+    <a href="#" onclick="openRuleTab(event, 'examples')">Examples</a>
+    <a href="#" onclick="openRuleTab(event, 'applications')">Applications</a>
+  </div>
+  
+  <button class="dropdown-btn">Practice Problems
+    <i class="fa fa-caret-down"></i>
+  </button>
+  <div class="dropdown-container">
+    <a href="#" onclick="scrollToPractice('linear-approximation')">Practice Linear Approximations</a>
+    <a href="#" onclick="scrollToPractice('differentials')">Practice Differentials</a>
+    <a href="#" onclick="scrollToPractice('word-problems')">Word Problems</a>
+  </div>
+  
+  <a href="#linear-approximations">Your Learning Progress</a>
+</div>
+
+<div id="main-content" style="margin-left:260px;margin-top:20px;">
+
+  <section id="linear-approximations">
+    <div class="container">
+      <h1>Linear Approximations & Differentials</h1>
+      
+      <div class="practice-button-container">
+          <a href="practice-linear-approx-differentials.html" class="practice-page-btn">Practice This Topic</a>
+      </div>
+
+
+
+      <!-- Interactive rule navigation tabs -->
+      <div class="rule-tabs">
+        <button class="tab-btn active" onclick="openRuleTab(event, 'linear-approximation')">Linear Approximation</button>
+        <button class="tab-btn" onclick="openRuleTab(event, 'differentials')">Differentials</button>
+        <button class="tab-btn" onclick="openRuleTab(event, 'examples')">Examples</button>
+        <button class="tab-btn" onclick="openRuleTab(event, 'applications')">Applications</button>
+      </div>
+
+      <!-- Linear Approximation Content -->
+      <div id="linear-approximation" class="rule-content active">
+        <div class="definition-box">
+          <h3>Linear Approximation</h3>
+          <p>Linear approximation uses the tangent line at a point to estimate nearby function values.</p>
+
+          <!-- Interactive Rule Cards -->
+          <div class="rule-cards">
+            <div class="rule-card" onclick="toggleRuleCard(this)">
+              <div class="rule-card-header">Linear Approximation Formula</div>
+              <div class="rule-card-content">
+                <p class="formula">$$f(x_0 + \Delta x) \approx f(x_0) + f'(x_0) \Delta x$$</p>
+                <div class="example">
+                  <p>Where: $$\Delta x = x - x_0 \text{ (change in x)}$$</p>
+                  <p>$$x_0 = \text{base point}, \quad x = \text{target point}$$</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="rule-card" onclick="toggleRuleCard(this)">
+              <div class="rule-card-header">When to Use</div>
+              <div class="rule-card-content">
+                <p>Best when:</p>
+                <ul style="text-align: left;">
+                  <li>$$|\Delta x|$$ is small</li>
+                  <li>$$f(x_0)$$ and $$f'(x_0)$$ are easy to compute</li>
+                  <li>Exact calculation is difficult</li>
+                  <li>Quick estimates are needed</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="rule-card" onclick="toggleRuleCard(this)">
+              <div class="rule-card-header">Geometric Interpretation</div>
+              <div class="rule-card-content">
+                <p>The linear approximation is the tangent line equation:</p>
+                <p class="formula">$$L(x) = f(x_0) + f'(x_0)(x - x_0)$$</p>
+                <div class="example">
+                  <p>The tangent line "touches" the curve at $$(x_0, f(x_0))$$</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Drag and Drop Practice -->
+          <div class="practice-section">
+            <h3>🎯 Interactive Practice: Build the Linear Approximation</h3>
+            
+            <!-- Problem 1: Complete the Formula -->
+            <div class="drag-drop-container">
+              <h4>Problem 1: Complete the Linear Approximation Formula</h4>
+              <p>Drag the correct terms to complete the formula:</p>
+              
+              <div class="formula-template">
+                <div style="background: white; border: 2px solid var(--main-color); border-radius: 15px; padding: 25px; margin: 20px 0; box-shadow: var(--shadow-md);">
+                  <p style="margin: 15px 0; font-size: 24px; text-align: center; font-weight: 600;">
+                    $$f(x_0 + \Delta x) \approx \square + \square \cdot \square$$
+                  </p>
+                  <div style="display: flex; justify-content: center; gap: 40px; margin: 25px 0; flex-wrap: wrap;">
+                    <div style="text-align: center;">
+                      <label style="display: block; font-weight: 600; margin-bottom: 10px; color: var(--font-color); font-size: 16px;">Function value:</label>
+                      <div class="drop-zone" data-correct="f(x₀)" data-problem="1" data-position="1" style="min-width: 100px; min-height: 60px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600;">Drop here</div>
+                    </div>
+                    <div style="text-align: center;">
+                      <label style="display: block; font-weight: 600; margin-bottom: 10px; color: var(--font-color); font-size: 16px;">Derivative:</label>
+                      <div class="drop-zone" data-correct="f'(x₀)" data-problem="1" data-position="2" style="min-width: 100px; min-height: 60px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600;">Drop here</div>
+                    </div>
+                    <div style="text-align: center;">
+                      <label style="display: block; font-weight: 600; margin-bottom: 10px; color: var(--font-color); font-size: 16px;">Change in x:</label>
+                      <div class="drop-zone" data-correct="Δx" data-problem="1" data-position="3" style="min-width: 100px; min-height: 60px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600;">Drop here</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="drag-items-bank" id="bank-1">
+                <div class="drag-item" draggable="true" data-value="f(x₀)">f(x₀)</div>
+                <div class="drag-item" draggable="true" data-value="f'(x₀)">f'(x₀)</div>
+                <div class="drag-item" draggable="true" data-value="Δx">Δx</div>
+                <div class="drag-item" draggable="true" data-value="f(x)">f(x)</div>
+                <div class="drag-item" draggable="true" data-value="x₀">x₀</div>
+                <div class="drag-item" draggable="true" data-value="f''(x₀)">f''(x₀)</div>
+              </div>
+              
+              <div class="button-group">
+                <button class="check-button-drag" onclick="checkDragAnswer(1)">Check Answer</button>
+                <button class="reset-button" onclick="resetDragProblem(1)">Reset</button>
+              </div>
+              
+              <div class="drag-feedback" id="feedback-1"></div>
+            </div>
+
+            <!-- Problem 2: Apply to √65 -->
+            <div class="drag-drop-container">
+              <h4>Problem 2: Approximate $$\sqrt{65}$$ using $$x_0 = 64$$</h4>
+              <p>Drag the correct values to build the approximation:</p>
+              
+              <div class="formula-template">
+                <span class="static-text">$$\sqrt{65} \approx$$</span>
+                <div class="drop-zone" data-correct="8" data-problem="2" data-position="1">f(64)</div>
+                <span class="static-text">$$+$$</span>
+                <div class="drop-zone" data-correct="1/16" data-problem="2" data-position="2">f'(64)</div>
+                <span class="static-text">$$\times$$</span>
+                <div class="drop-zone" data-correct="1" data-problem="2" data-position="3">Δx</div>
+                <span class="static-text">$$=$$</span>
+                <div class="drop-zone" data-correct="8.0625" data-problem="2" data-position="4">Result</div>
+              </div>
+              
+              <div class="drag-items-bank" id="bank-2">
+                <div class="drag-item" draggable="true" data-value="8">8</div>
+                <div class="drag-item" draggable="true" data-value="1/16">1/16</div>
+                <div class="drag-item" draggable="true" data-value="1">1</div>
+                <div class="drag-item" draggable="true" data-value="8.0625">8.0625</div>
+                <div class="drag-item" draggable="true" data-value="64">64</div>
+                <div class="drag-item" draggable="true" data-value="65">65</div>
+                <div class="drag-item" draggable="true" data-value="1/8">1/8</div>
+                <div class="drag-item" draggable="true" data-value="8.125">8.125</div>
+              </div>
+              
+              <div class="button-group">
+                <button class="check-button-drag" onclick="checkDragAnswer(2)">Check Answer</button>
+                <button class="reset-button" onclick="resetDragProblem(2)">Reset</button>
+              </div>
+              
+              <div class="drag-feedback" id="feedback-2"></div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Differentials Content -->
+      <div id="differentials" class="rule-content" style="display: none;">
+        <div class="definition-box">
+          <h3>Differentials</h3>
+          <p>Differentials provide a way to express small changes in functions.</p>
+
+          <div class="rule-cards">
+            <div class="rule-card" onclick="toggleRuleCard(this)">
+              <div class="rule-card-header">Differential Formula</div>
+              <div class="rule-card-content">
+                <p class="formula">$$df = f'(x_0) \Delta x$$</p>
+                <div class="example">
+                  <p>Where:</p>
+                  <ul style="text-align: left;">
+                    <li>$$df$$ = differential (approximate change in $$f$$)</li>
+                    <li>$$f'(x_0)$$ = derivative at base point</li>
+                    <li>$$\Delta x = dx$$ = small change in $$x$$</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="rule-card" onclick="toggleRuleCard(this)">
+              <div class="rule-card-header">Relationship to Linear Approximation</div>
+              <div class="rule-card-content">
+                <p class="formula">$$f(x_0 + \Delta x) \approx f(x_0) + df$$</p>
+                <div class="example">
+                  <p>The differential $$df$$ represents the "change" part of linear approximation</p>
+                  <p>$$\Delta y \approx dy = f'(x_0) dx$$</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="rule-card" onclick="toggleRuleCard(this)">
+              <div class="rule-card-header">Common Differentials</div>
+              <div class="rule-card-content">
+                <p>Important formulas to remember:</p>
+                <ul style="text-align: left;">
+                  <li>$$d(x^n) = nx^{n-1} dx$$</li>
+                  <li>$$d(\sin x) = \cos x \, dx$$</li>
+                  <li>$$d(\cos x) = -\sin x \, dx$$</li>
+                  <li>$$d(e^x) = e^x dx$$</li>
+                  <li>$$d(\ln x) = \frac{1}{x} dx$$</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Differential Practice -->
+          <div class="practice-section">
+            <h3>🔧 Interactive Practice: Calculate Differentials</h3>
+            
+            <!-- Problem 1: Match differentials -->
+            <div class="drag-drop-container">
+              <h4>Problem 1: Match Functions with their Differentials</h4>
+              <p>Drag each differential to match its function:</p>
+              
+              <div class="matching-container">
+                <div class="functions-column">
+                  <h5>Functions</h5>
+                  <div class="function-item">$$f(x) = x^3$$</div>
+                  <div class="function-item">$$f(x) = \sin x$$</div>
+                  <div class="function-item">$$f(x) = e^x$$</div>
+                  <div class="function-item">$$f(x) = \ln x$$</div>
+                </div>
+                
+                <div class="differentials-column">
+                  <h5>Differentials</h5>
+                  <div class="drop-zone-diff" data-correct="3x^2 dx" data-function="x^3">Drop here</div>
+                  <div class="drop-zone-diff" data-correct="cos x dx" data-function="sin x">Drop here</div>
+                  <div class="drop-zone-diff" data-correct="e^x dx" data-function="e^x">Drop here</div>
+                  <div class="drop-zone-diff" data-correct="1/x dx" data-function="ln x">Drop here</div>
+                </div>
+              </div>
+              
+              <div class="drag-items-bank" id="bank-diff">
+                <div class="drag-item" draggable="true" data-value="3x^2 dx">$$3x^2 dx$$</div>
+                <div class="drag-item" draggable="true" data-value="cos x dx">$$\cos x \, dx$$</div>
+                <div class="drag-item" draggable="true" data-value="e^x dx">$$e^x dx$$</div>
+                <div class="drag-item" draggable="true" data-value="1/x dx">$$\frac{1}{x} dx$$</div>
+                <div class="drag-item" draggable="true" data-value="x^2 dx">$$x^2 dx$$</div>
+                <div class="drag-item" draggable="true" data-value="sin x dx">$$\sin x \, dx$$</div>
+              </div>
+              
+              <div class="button-group">
+                <button class="check-button-drag" onclick="checkDifferentialMatching()">Check Matching</button>
+                <button class="reset-button" onclick="resetDifferentialMatching()">Reset</button>
+              </div>
+              
+              <div class="drag-feedback" id="feedback-diff"></div>
+            </div>
+
+            <!-- Problem 2: Calculate specific differential -->
+            <div class="drag-drop-container">
+              <h4>Problem 2: Find $$dy$$ for $$y = x^2 - 3x + 5$$ when $$dx = 0.02$$</h4>
+              
+              <div class="step-solution">
+                <div class="solution-step">
+                  <p><strong>Step 1:</strong> Find $$\frac{dy}{dx} =$$</p>
+                  <div class="drop-zone" data-correct="2x - 3" data-problem="diff2" data-position="1">Drop derivative</div>
+                </div>
+                
+                <div class="solution-step">
+                  <p><strong>Step 2:</strong> At $$x = 4$$: $$\frac{dy}{dx} =$$</p>
+                  <div class="drop-zone" data-correct="5" data-problem="diff2" data-position="2">Drop value</div>
+                </div>
+                
+                <div class="solution-step">
+                  <p><strong>Step 3:</strong> Therefore $$dy =$$</p>
+                  <div class="drop-zone" data-correct="5" data-problem="diff2" data-position="3">Drop coefficient</div>
+                  <span>$$ \times 0.02 = $$</span>
+                  <div class="drop-zone" data-correct="0.1" data-problem="diff2" data-position="4">Drop result</div>
+                </div>
+              </div>
+              
+              <div class="drag-items-bank" id="bank-diff2">
+                <div class="drag-item" draggable="true" data-value="2x - 3">$$2x - 3$$</div>
+                <div class="drag-item" draggable="true" data-value="5">$$5$$</div>
+                <div class="drag-item" draggable="true" data-value="0.1">$$0.1$$</div>
+                <div class="drag-item" draggable="true" data-value="2x + 3">$$2x + 3$$</div>
+                <div class="drag-item" draggable="true" data-value="8">$$8$$</div>
+                <div class="drag-item" draggable="true" data-value="0.2">$$0.2$$</div>
+              </div>
+              
+              <div class="button-group">
+                <button class="check-button-drag" onclick="checkDragAnswer('diff2')">Check Answer</button>
+                <button class="reset-button" onclick="resetDragProblem('diff2')">Reset</button>
+              </div>
+              
+              <div class="drag-feedback" id="feedback-diff2"></div>
+            </div>
+
+            <!-- Interactive Visualization -->
+            <div class="visualization-container">
+              <h4>📊 Interactive Differential Visualization</h4>
+              <div id="differential-plot" style="width: 100%; height: 350px;"></div>
+              <div class="visualization-controls">
+                <label>Function: $$f(x) = x^2$$</label>
+                <label>Base point $$x_0$$: <input type="range" id="x0-slider" min="0" max="5" step="0.1" value="2"></label>
+                <label>Change $$dx$$: <input type="range" id="dx-slider" min="0.1" max="1" step="0.05" value="0.5"></label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Examples Content -->
+      <div id="examples" class="rule-content" style="display: none;">
+        <div class="definition-box">
+          <h3>Worked Examples</h3>
+          
+          <div class="rule-card">
+            <div class="rule-card-header">Example 1: Approximate $$\sqrt{65}$$</div>
+            <div class="rule-card-content">
+              <div class="step">
+                <p><strong>Step 1:</strong> Choose $$f(x) = \sqrt{x}$$ and $$x_0 = 64$$</p>
+              </div>
+              <div class="step">
+                <p><strong>Step 2:</strong> Find $$f'(x) = \frac{1}{2\sqrt{x}}$$</p>
+              </div>
+              <div class="step">
+                <p><strong>Step 3:</strong> Calculate $$f(64) = 8$$ and $$f'(64) = \frac{1}{16}$$</p>
+              </div>
+              <div class="step">
+                <p><strong>Step 4:</strong> $$\Delta x = 65 - 64 = 1$$</p>
+              </div>
+              <div class="step">
+                <p><strong>Result:</strong> $$\sqrt{65} \approx 8 + \frac{1}{16}(1) = 8.0625$$</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="rule-card">
+            <div class="rule-card-header">Example 2: Differential of $$y = x^3 - 2x + 1$$</div>
+            <div class="rule-card-content">
+              <div class="step">
+                <p><strong>Step 1:</strong> Find $$\frac{dy}{dx} = 3x^2 - 2$$</p>
+              </div>
+              <div class="step">
+                <p><strong>Step 2:</strong> At $$x = 2$$: $$\frac{dy}{dx} = 3(4) - 2 = 10$$</p>
+              </div>
+              <div class="step">
+                <p><strong>Step 3:</strong> If $$dx = 0.1$$, then $$dy = 10(0.1) = 1.0$$</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Applications Content -->
+      <div id="applications" class="rule-content" style="display: none;">
+        <div class="definition-box">
+          <h3>Real-World Applications</h3>
+          
+          <div class="rule-cards">
+            <div class="rule-card">
+              <div class="rule-card-header">Engineering</div>
+              <div class="rule-card-content">
+                <p>Error analysis and tolerance calculations</p>
+                <ul style="text-align: left;">
+                  <li>Measuring uncertainty</li>
+                  <li>Quality control</li>
+                  <li>Safety margins</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="rule-card">
+              <div class="rule-card-header">Physics</div>
+              <div class="rule-card-content">
+                <p>Small-angle approximations and perturbation theory</p>
+                <ul style="text-align: left;">
+                  <li>Pendulum motion</li>
+                  <li>Wave equations</li>
+                  <li>Quantum mechanics</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="rule-card">
+              <div class="rule-card-header">Economics</div>
+              <div class="rule-card-content">
+                <p>Marginal analysis and sensitivity studies</p>
+                <ul style="text-align: left;">
+                  <li>Marginal cost</li>
+                  <li>Elasticity</li>
+                  <li>Optimization</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<!-- Back to Profile Button -->
+<div style="margin: 40px auto; text-align: center; display: flex; justify-content: center;">
+    <div style="background: white; border: 2px solid black; border-radius: 10px; padding: 30px; box-shadow: 4px 4px black; max-width: 800px; width: 100%; text-align: center;">
+        <h3 style="color: #323232; margin-bottom: 20px;">Congratulations! You've finished this topic!</h3>
+        <p style="color: #666; margin-bottom: 25px;">Click the button below to mark this topic as completed and return to your profile.</p>
+        <button onclick="completeTopicAndReturn()" style="background: #ff6b6b; color: white; border: 2px solid black; border-radius: 10px; padding: 15px 30px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 4px 4px black;">
+            ✓ Complete Topic & Return to Profile
+        </button>
+    </div>
+</div>
+
+<script>
+// Initialize on page load
+document.addEventListener("DOMContentLoaded", function() {
+    // Initialize sidebar navigation
+    initializeSidebarNavigation();
+    // Initialize tab functionality
+    initializeTabs();
+    // Initialize rule cards
+    initializeRuleCards();
+    // Initialize MathQuill
+    initializeMathQuill();
+    // Initialize drag and drop
+    initializeDragAndDrop();
+    // Initialize visualization
+    initializeVisualization();
+});
+
+function initializeSidebarNavigation() {
+    var sidebarLinks = document.querySelectorAll('.sidebar a');
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+            var targetId = this.getAttribute('href');
+            // Only prevent default for anchor links
+            if (targetId && targetId.startsWith('#')) {
+                event.preventDefault();
+                var targetElement = document.getElementById(targetId.substring(1));
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            } else if (targetId === 'index.html' || targetId === 'home.html') {
+                // For home navigation, allow normal link behavior
+                window.location.href = "home.html";
+            }
+        });
+    });
+
+    // Initialize dropdown functionality
+    var dropdownBtns = document.querySelectorAll('.dropdown-btn');
+    dropdownBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.classList.toggle('active');
+            var dropdownContent = this.nextElementSibling;
+            if (dropdownContent.style.maxHeight) {
+                dropdownContent.style.maxHeight = null;
+            } else {
+                dropdownContent.style.maxHeight = dropdownContent.scrollHeight + "px";
+            }
+        });
+    });
+}
+
+function initializeTabs() {
+    // Show the first tab by default
+    const firstTab = document.querySelector('.tab-btn.active');
+    if (firstTab) {
+        const targetId = firstTab.getAttribute('onclick').match(/'([^']+)'/)[1];
+        showTab(targetId);
+    }
+}
+
+function initializeRuleCards() {
+    const ruleCards = document.querySelectorAll('.rule-card');
+    ruleCards.forEach(card => {
+        // Add click event if not already present
+        if (!card.onclick) {
+            card.addEventListener('click', function() {
+                toggleRuleCard(this);
+            });
+        }
+    });
+}
+
+function openRuleTab(evt, tabName) {
+    // Hide all tab content
+    var tabContent = document.getElementsByClassName("rule-content");
+    for (var i = 0; i < tabContent.length; i++) {
+        tabContent[i].style.display = "none";
+    }
+    
+    // Remove active class from all tab buttons
+    var tabButtons = document.getElementsByClassName("tab-btn");
+    for (var i = 0; i < tabButtons.length; i++) {
+        tabButtons[i].classList.remove("active");
+    }
+    
+    // Show the selected tab content
+    document.getElementById(tabName).style.display = "block";
+    
+    // Add active class to the clicked tab button
+    if (evt && evt.currentTarget) {
+        evt.currentTarget.classList.add("active");
+    }
+    
+
+    
+    // Typeset math
+    if (typeof MathJax !== 'undefined') {
+        setTimeout(() => {
+            if (MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            } else if (MathJax.typeset) {
+                MathJax.typeset();
+            }
+        }, 200);
+    }
+}
+
+function showTab(tabName) {
+    // Hide all tab content
+    var tabContent = document.getElementsByClassName("rule-content");
+    for (var i = 0; i < tabContent.length; i++) {
+        tabContent[i].style.display = "none";
+    }
+    
+    // Show the selected tab content
+    const targetTab = document.getElementById(tabName);
+    if (targetTab) {
+        targetTab.style.display = "block";
+    }
+}
+
+function toggleRuleCard(card) {
+    const content = card.querySelector('.rule-card-content');
+    if (content) {
+        if (content.style.display === 'none' || content.style.display === '') {
+            content.style.display = 'block';
+            card.style.background = 'linear-gradient(145deg, #f8f9fa, #e9ecef)';
+        } else {
+            content.style.display = 'none';
+            card.style.background = '';
+        }
+        
+        // Typeset math
+        if (typeof MathJax !== 'undefined') {
+            setTimeout(() => {
+                if (MathJax.typesetPromise) {
+                    MathJax.typesetPromise();
+                } else if (MathJax.typeset) {
+                    MathJax.typeset();
+                }
+            }, 200);
+        }
+    }
+}
+
+function scrollToPractice(sectionId) {
+    // First open the appropriate tab
+    const tabEvent = { currentTarget: document.querySelector(`.tab-btn[onclick*="${sectionId}"]`) };
+    openRuleTab(tabEvent, sectionId);
+    
+    // Then scroll to the practice section within that tab
+    setTimeout(() => {
+        const practiceSection = document.querySelector(`#${sectionId} .practice-section`);
+        if (practiceSection) {
+            practiceSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, 100);
+}
+
+
+
+function completeTopicAndReturn() {
+    const topicName = 'Linear Approximations & Differentials';
+    
+    // Mark topic as completed in local storage
+    const completedTopics = JSON.parse(localStorage.getItem('completedTopics') || '[]');
+    if (!completedTopics.includes(topicName)) {
+        completedTopics.push(topicName);
+        localStorage.setItem('completedTopics', JSON.stringify(completedTopics));
+    }
+    
+    // Mark topic as completed in session storage
+    const practiceAttempts = JSON.parse(sessionStorage.getItem('practiceAttempts') || '{}');
+    practiceAttempts[topicName] = (practiceAttempts[topicName] || 0) + 1;
+    sessionStorage.setItem('practiceAttempts', JSON.stringify(practiceAttempts));
+    
+    // Update mastery data
+    let masteryData = JSON.parse(sessionStorage.getItem('masteryData') || '[]');
+    
+    // Find the topic and update mastery, or add it if it doesn't exist
+    let topicFound = false;
+    masteryData.forEach(item => {
+        if (item.topic === topicName || item.topic.includes('Linear Approximation')) {
+            item.mastery = Math.min(100, item.mastery + 15);
+            topicFound = true;
+            
+            // Update badge if mastery level crossed threshold
+            if (item.mastery >= 80) {
+                item.badge = 'M';  // Master
+            } else if (item.mastery >= 50) {
+                item.badge = 'P';  // Proficient
+            } else if (item.mastery >= 20) {
+                item.badge = 'L';  // Learning
+            }
+        }
+    });
+    
+    // If topic not found, add it
+    if (!topicFound) {
+        masteryData.push({
+            topic: topicName,
+            mastery: 20,
+            badge: 'L'
+        });
+    }
+    
+    sessionStorage.setItem('masteryData', JSON.stringify(masteryData));
+    
+    // Show completion message
+    alert('🎉 Congratulations! You have completed the "Linear Approximations & Differentials" topic. Your progress has been updated!');
+    
+    // Navigate to profile page
+    window.location.href = 'profile.html';
+}
+
+// Initialize MathQuill
+function initializeMathQuill() {
+    // MathQuill initialization is no longer needed since Interactive Problem Solver was removed
+    // This function is kept for compatibility but does nothing
+}
+
+// Initialize drag and drop functionality
+function initializeDragAndDrop() {
+    // Add event listeners to all draggable items
+    const dragItems = document.querySelectorAll('.drag-item');
+    dragItems.forEach(item => {
+        item.addEventListener('dragstart', handleDragStart);
+        item.addEventListener('dragend', handleDragEnd);
+    });
+    
+    // Add event listeners to all drop zones
+    const dropZones = document.querySelectorAll('.drop-zone, .drop-zone-diff');
+    dropZones.forEach(zone => {
+        zone.addEventListener('dragover', handleDragOver);
+        zone.addEventListener('dragenter', handleDragEnter);
+        zone.addEventListener('dragleave', handleDragLeave);
+        zone.addEventListener('drop', handleDrop);
+    });
+}
+
+// Drag and drop event handlers
+let draggedElement = null;
+
+function handleDragStart(e) {
+    draggedElement = this;
+    this.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', this.outerHTML);
+}
+
+function handleDragEnd(e) {
+    this.classList.remove('dragging');
+    draggedElement = null;
+}
+
+function handleDragOver(e) {
+    if (e.preventDefault) {
+        e.preventDefault();
+    }
+    e.dataTransfer.dropEffect = 'move';
+    return false;
+}
+
+function handleDragEnter(e) {
+    this.classList.add('drag-over');
+}
+
+function handleDragLeave(e) {
+    this.classList.remove('drag-over');
+}
+
+function handleDrop(e) {
+    if (e.stopPropagation) {
+        e.stopPropagation();
+    }
+    
+    this.classList.remove('drag-over');
+    
+    if (draggedElement) {
+        // Update drop zone content
+        this.textContent = draggedElement.textContent;
+        this.classList.add('filled');
+        this.setAttribute('data-dropped', draggedElement.getAttribute('data-value'));
+        
+        // Hide the dragged item (or move it back to bank)
+        draggedElement.style.opacity = '0.3';
+        draggedElement.style.pointerEvents = 'none';
+    }
+    
+    return false;
+}
+
+// Check drag and drop answers
+function checkDragAnswer(problemId) {
+    const dropZones = document.querySelectorAll(`[data-problem="${problemId}"]`);
+    const feedback = document.getElementById(`feedback-${problemId}`);
+    let allCorrect = true;
+    let correctCount = 0;
+    
+    dropZones.forEach(zone => {
+        const correct = zone.getAttribute('data-correct');
+        const dropped = zone.getAttribute('data-dropped');
+        
+        if (dropped === correct) {
+            zone.classList.add('correct');
+            zone.classList.remove('incorrect');
+            correctCount++;
+        } else {
+            zone.classList.add('incorrect');
+            zone.classList.remove('correct');
+            allCorrect = false;
+        }
+    });
+    
+    // Show feedback
+    feedback.style.display = 'block';
+    if (allCorrect) {
+        feedback.className = 'drag-feedback success';
+        feedback.innerHTML = '🎉 Excellent! All answers are correct!';
+    } else {
+        feedback.className = 'drag-feedback error';
+        feedback.innerHTML = `❌ ${correctCount}/${dropZones.length} correct. Try again!`;
+    }
+    
+    // Typeset math
+    if (typeof MathJax !== 'undefined') {
+        setTimeout(() => {
+            if (MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            } else if (MathJax.typeset) {
+                MathJax.typeset();
+            }
+        }, 200);
+    }
+}
+
+// Reset drag and drop problems
+function resetDragProblem(problemId) {
+    const dropZones = document.querySelectorAll(`[data-problem="${problemId}"]`);
+    const bank = document.getElementById(`bank-${problemId}`);
+    const feedback = document.getElementById(`feedback-${problemId}`);
+    
+    // Reset drop zones
+    dropZones.forEach(zone => {
+        zone.textContent = zone.getAttribute('data-original') || 'Drop here';
+        zone.classList.remove('filled', 'correct', 'incorrect');
+        zone.removeAttribute('data-dropped');
+    });
+    
+    // Reset draggable items
+    const dragItems = bank.querySelectorAll('.drag-item');
+    dragItems.forEach(item => {
+        item.style.opacity = '1';
+        item.style.pointerEvents = 'auto';
+    });
+    
+    // Hide feedback
+    feedback.style.display = 'none';
+}
+
+// Check differential matching
+function checkDifferentialMatching() {
+    const dropZones = document.querySelectorAll('.drop-zone-diff');
+    const feedback = document.getElementById('feedback-diff');
+    let allCorrect = true;
+    let correctCount = 0;
+    
+    dropZones.forEach(zone => {
+        const correct = zone.getAttribute('data-correct');
+        const dropped = zone.getAttribute('data-dropped');
+        
+        if (dropped === correct) {
+            zone.classList.add('correct');
+            zone.classList.remove('incorrect');
+            correctCount++;
+        } else {
+            zone.classList.add('incorrect');
+            zone.classList.remove('correct');
+            allCorrect = false;
+        }
+    });
+    
+    // Show feedback
+    feedback.style.display = 'block';
+    if (allCorrect) {
+        feedback.className = 'drag-feedback success';
+        feedback.innerHTML = '🎉 Perfect matching! You understand differentials!';
+    } else {
+        feedback.className = 'drag-feedback error';
+        feedback.innerHTML = `❌ ${correctCount}/${dropZones.length} correct matches. Review the formulas and try again!`;
+    }
+}
+
+// Reset differential matching
+function resetDifferentialMatching() {
+    const dropZones = document.querySelectorAll('.drop-zone-diff');
+    const bank = document.getElementById('bank-diff');
+    const feedback = document.getElementById('feedback-diff');
+    
+    // Reset drop zones
+    dropZones.forEach(zone => {
+        zone.textContent = 'Drop here';
+        zone.classList.remove('filled', 'correct', 'incorrect');
+        zone.removeAttribute('data-dropped');
+    });
+    
+    // Reset draggable items
+    const dragItems = bank.querySelectorAll('.drag-item');
+    dragItems.forEach(item => {
+        item.style.opacity = '1';
+        item.style.pointerEvents = 'auto';
+    });
+    
+    // Hide feedback
+    feedback.style.display = 'none';
+}
+
+
+
+// Initialize visualization
+function initializeVisualization() {
+    if (typeof Plotly !== 'undefined') {
+        createDifferentialPlot();
+        
+        // Add event listeners to sliders
+        const x0Slider = document.getElementById('x0-slider');
+        const dxSlider = document.getElementById('dx-slider');
+        
+        if (x0Slider) x0Slider.addEventListener('input', updateDifferentialPlot);
+        if (dxSlider) dxSlider.addEventListener('input', updateDifferentialPlot);
+    }
+}
+
+// Create differential visualization
+function createDifferentialPlot() {
+    const x0 = parseFloat(document.getElementById('x0-slider')?.value || 2);
+    const dx = parseFloat(document.getElementById('dx-slider')?.value || 0.5);
+    
+    // Function values
+    const xVals = [];
+    const yVals = [];
+    for (let x = 0; x <= 5; x += 0.1) {
+        xVals.push(x);
+        yVals.push(x * x);
+    }
+    
+    // Tangent line
+    const f_x0 = x0 * x0;
+    const f_prime_x0 = 2 * x0;
+    const tangentX = [x0 - 1, x0 + 1];
+    const tangentY = tangentX.map(x => f_x0 + f_prime_x0 * (x - x0));
+    
+    // Differential visualization
+    const actualY = (x0 + dx) * (x0 + dx);
+    const approxY = f_x0 + f_prime_x0 * dx;
+    
+    const data = [
+        {
+            x: xVals,
+            y: yVals,
+            type: 'scatter',
+            name: 'f(x) = x²',
+            line: { color: '#ff6b6b', width: 3 }
+        },
+        {
+            x: tangentX,
+            y: tangentY,
+            type: 'scatter',
+            name: 'Tangent Line',
+            line: { color: '#1dd1a1', width: 2, dash: 'dash' }
+        },
+        {
+            x: [x0, x0 + dx, x0 + dx, x0],
+            y: [f_x0, f_x0, approxY, f_x0],
+            type: 'scatter',
+            fill: 'toself',
+            name: 'Differential dy',
+            fillcolor: 'rgba(29, 209, 161, 0.3)',
+            line: { color: '#1dd1a1' }
+        },
+        {
+            x: [x0, x0 + dx],
+            y: [f_x0, actualY],
+            type: 'scatter',
+            name: 'Actual Change',
+            mode: 'markers+lines',
+            marker: { color: '#323232', size: 8 },
+            line: { color: '#323232', width: 2 }
+        }
+    ];
+    
+    const layout = {
+        title: 'Linear Approximation vs Actual Change',
+        xaxis: { title: 'x' },
+        yaxis: { title: 'f(x)' },
+        showlegend: true,
+        margin: { t: 50, r: 50, b: 50, l: 50 }
+    };
+    
+    Plotly.newPlot('differential-plot', data, layout, {responsive: true});
+}
+
+// Update differential plot
+function updateDifferentialPlot() {
+    createDifferentialPlot();
+}
+
+
+
+// Typeset math on page load
+if (typeof MathJax !== 'undefined') {
+    setTimeout(() => {
+        if (MathJax.typesetPromise) {
+            MathJax.typesetPromise();
+        } else if (MathJax.typeset) {
+            MathJax.typeset();
+        }
+    }, 1000);
+}
+</script>
+
+</body>
+</html> 

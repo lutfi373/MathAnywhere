@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Introduction of derivatives</title>
+
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+
+
+
+    :root {
+      /* Color Variables */
+      --input-focus: #2d8cf0;
+      --font-color: #323232;
+      --font-color-sub: #666;
+      --bg-color: #f7f9fc;
+      --main-color: black;
+      --accent-color: #ff6b6b;
+      --secondary-color: #feca57;
+      --tertiary-color: #1dd1a1;
+      --light-blue: #54a0ff;
+      --pink: #ff9ff3;
+      --purple: #5f27cd;
+
+      /* Shadows */
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+      --shadow-md: 4px 4px var(--main-color);
+      --shadow-lg: 6px 6px var(--main-color);
+      --shadow-hover: 2px 2px var(--main-color);
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background: var(--bg-color);
+      color: var(--font-color);
+      min-height: 100vh;
+      line-height: 1.6;
+      letter-spacing: 0.5px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 40px;
+      border-radius: 10px;
+      background-color: white;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      transition: all 0.3s ease;
+      border: 2px solid var(--main-color);
+    }
+
+    .container:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translate(3px, 3px);
+    }
+
+    .form {
+      padding: 40px;
+      background: white;
+      border-radius: 10px;
+        box-shadow: var(--shadow-md);
+      margin: 40px 0;
+        transition: all 0.3s ease;
+      color: var(--font-color);
+      border: 2px solid var(--main-color);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    .form:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translate(3px, 3px);
+    }
+
+    h2 {
+      color: var(--font-color);
+      font-size: 2.2rem;
+      margin: 30px 0;
+      font-weight: 700;
+      text-align: center;
+      width: 100%;
+      position: relative;
+      display: inline-block;
+    }
+    
+    h2:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 25%;
+      width: 50%;
+      height: 4px;
+      background-color: var(--accent-color);
+      transition: width 0.3s ease, left 0.3s ease;
+    }
+    
+    h2:hover:after {
+      width: 80%;
+      left: 10%;
+    }
+
+    p {
+      margin: 20px 0;
+      font-size: 1.1rem;
+      color: var(--font-color);
+      line-height: 1.8;
+      text-align: left;
+    }
+
+    .graph-container {
+      width: 95%;
+      max-width: 900px;
+      margin: 50px auto;
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
+      border: 2px solid var(--main-color);
+    }
+
+    .graph-container:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-5px);
+    }
+
+    .slider-container {
+      margin: 30px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+        box-shadow: var(--shadow-md);
+      max-width: 700px;
+        transition: all 0.3s ease;
+      color: var(--font-color);
+      border: 2px solid var(--main-color);
+    }
+
+    .slider-container:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-5px);
+    }
+
+    .math-formula {
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      margin: 40px 0;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+      color: var(--font-color);
+      border: 2px solid var(--main-color);
+      text-align: center;
+    }
+
+    .math-formula:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-5px);
+    }
+
+    .popup-trigger {
+      color: var(--font-color);
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 10px;
+      background: var(--accent-color);
+      transition: all 0.3s ease;
+        cursor: pointer;
+      display: inline-block;
+      border: 2px solid var(--main-color);
+      box-shadow: 3px 3px var(--main-color);
+      font-weight: 600;
+    }
+
+    .popup-trigger:hover {
+      background: var(--tertiary-color);
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 5px 5px var(--main-color);
+    }
+    
+    .popup-trigger:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px var(--main-color);
+    }
+
+    .card {
+      font-family: 'Poppins', sans-serif;
+      width: 100%;
+      height: auto;
+      min-height: 200px;
+      background: white;
+      border: 2px solid var(--main-color);
+      border-radius: 10px;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-5px);
+    }
+
+    .head {
+      font-size: 20px;
+      font-weight: 700;
+      width: 100%;
+      padding: 20px;
+      background: var(--accent-color);
+      color: white;
+      border-bottom: 2px solid var(--main-color);
+    }
+
+    .content {
+      padding: 25px;
+      font-size: 16px;
+      color: var(--font-color);
+      line-height: 1.6;
+    }
+
+    .button {
+      margin: 25px auto;
+      background: white;
+      color: var(--font-color);
+      padding: 12px 25px;
+      border: 2px solid var(--main-color);
+      border-radius: 10px;
+      box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 16px;
+      display: block;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .button:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--accent-color);
+      transition: all 0.4s ease;
+      z-index: -1;
+    }
+    
+    .button:hover:before {
+      left: 0;
+    }
+
+    .button:hover {
+      color: white;
+      transform: translateY(-5px);
+      box-shadow: 6px 6px var(--main-color);
+    }
+    
+    .button:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px var(--main-color);
+    }
+
+    input[type=range] {
+      width: 100%;
+      max-width: 500px;
+      margin: 20px auto;
+      background: var(--bg-color);
+      border: 2px solid var(--main-color);
+      border-radius: 5px;
+      height: 8px;
+      box-shadow: var(--shadow-md);
+      display: block;
+      -webkit-appearance: none;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      background: var(--accent-color);
+      border: 2px solid var(--main-color);
+      box-shadow: var(--shadow-md);
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    input[type=range]::-webkit-slider-thumb:hover {
+      background: var(--tertiary-color);
+      transform: scale(1.2);
+    }
+
+    #slope-text, #slope-text2, #derivative-text {
+      padding: 15px;
+      background-color: white;
+      border-radius: 10px;
+      border: 2px solid var(--main-color);
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+      display: inline-block;
+      margin: 20px auto;
+      font-weight: 600;
+    }
+
+    #slope-text:hover, #slope-text2:hover, #derivative-text:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+
+    section {
+      margin: 60px auto;
+      padding: 20px;
+      background-color: white;
+      border: 2px solid var(--main-color);
+      border-radius: 10px;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+      max-width: 1200px;
+    }
+
+    section:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+
+    /* Animated elements */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 260px;
+      height: 100%;
+      background-color: #feca57;
+      border-right: 2px solid var(--main-color);
+      box-shadow: 4px 0 var(--main-color);
+      overflow-x: hidden;
+      padding: 30px 20px;
+      z-index: 100;
+      transition: all 0.3s ease;
+    }
+    
+    .sidebar:hover {
+      box-shadow: 6px 0 var(--main-color);
+    }
+
+    .sidebar a, .dropdown-btn {
+      padding: 15px 20px;
+      font-size: 16px;
+      color: var(--font-color);
+      transition: all 0.3s ease;
+      border-radius: 10px;
+      margin: 8px 0;
+      text-decoration: none;
+      display: block;
+      border: 2px solid var(--main-color);
+      background-color: white;
+      width: calc(100% - 40px);
+      text-align: left;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: var(--shadow-md);
+      font-weight: 600;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .sidebar a:before, .dropdown-btn:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--accent-color);
+      transition: all 0.4s ease;
+      z-index: -1;
+      opacity: 0.7;
+    }
+    
+    .sidebar a:hover:before, .dropdown-btn:hover:before {
+      left: 0;
+    }
+
+    .sidebar a:hover, .dropdown-btn:hover {
+      color: white;
+      background-color: transparent;
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 6px 6px var(--main-color);
+      border-color: var(--main-color);
+    }
+    
+    .sidebar a:active, .dropdown-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px var(--main-color);
+    }
+
+    .sidebar a.active, .dropdown-btn.active {
+      background-color: var(--accent-color);
+      color: white;
+      box-shadow: var(--shadow-hover);
+      transform: translate(2px, 2px);
+    }
+
+    .dropdown-container {
+      background-color: transparent;
+      padding-left: 20px;
+      max-height: 0;
+        overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+    
+    .dropdown-btn.active + .dropdown-container {
+      max-height: 300px;
+    }
+
+    .dropdown-container a {
+      border-left: 3px solid var(--main-color);
+      border-radius: 0 10px 10px 0;
+      margin-left: 10px;
+      position: relative;
+    }
+    
+    .dropdown-container a:hover {
+      margin-left: 15px;
+    }
+    
+    .dropdown-btn::after {
+      content: '▼';
+      position: absolute;
+      right: 15px;
+      transition: transform 0.3s ease;
+      font-size: 12px;
+    }
+    
+    .dropdown-btn.active::after {
+      transform: rotate(180deg);
+    }
+
+    /* Popup */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+      width: 400px;
+      max-width: 90%;
+    }
+
+    .popup-content {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Responsive Design */
+    @media screen and (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+            padding: 20px;
+        }
+
+      #main-content {
+        margin-left: 0;
+        padding: 20px;
+        }
+
+      .container {
+        margin: 20px;
+            padding: 20px;
+        }
+
+      .form {
+        padding: 25px;
+      }
+
+      .graph-container {
+        padding: 20px;
+        }
+    }
+
+    /* Style for the practice button */
+    .practice-button-container {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+    }
+    
+    .practice-page-btn {
+        background-color: var(--accent-color);
+        color: white;
+        border: 2px solid var(--main-color);
+        border-radius: 10px;
+        padding: 12px 25px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-md);
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .practice-page-btn:hover {
+        background-color: var(--tertiary-color);
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    /* Interactive Quiz Styles */
+    .interactive-quiz {
+        background: linear-gradient(145deg, #f0f8ff, #e6f3ff);
+        border: 2px solid var(--main-color);
+        border-radius: 15px;
+        padding: 25px;
+        margin: 30px 0;
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
+    }
+
+    .interactive-quiz:hover {
+        box-shadow: var(--shadow-lg);
+        transform: translateY(-3px);
+    }
+
+    .quiz-question {
+        background: white;
+        border: 2px solid var(--main-color);
+        border-radius: 10px;
+        padding: 20px;
+        margin: 15px 0;
+        box-shadow: var(--shadow-md);
+    }
+
+    .quiz-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 10px;
+        margin: 15px 0;
+    }
+
+    .quiz-option {
+        background: white;
+        border: 2px solid var(--main-color);
+        border-radius: 8px;
+        padding: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .quiz-option:hover {
+        background: var(--secondary-color);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .quiz-option.selected {
+        background: var(--accent-color);
+        color: white;
+    }
+
+    .quiz-option.correct {
+        background: var(--tertiary-color);
+        color: white;
+        animation: correctPulse 0.6s ease-in-out;
+    }
+
+    .quiz-option.incorrect {
+        background: #ff6b6b;
+        color: white;
+        animation: shake 0.5s ease-in-out;
+    }
+
+    .quiz-feedback {
+        margin-top: 15px;
+        padding: 15px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-align: center;
+        display: none;
+    }
+
+    .quiz-feedback.correct {
+        background: rgba(29, 209, 161, 0.1);
+        color: var(--tertiary-color);
+        border: 2px solid var(--tertiary-color);
+    }
+
+    .quiz-feedback.incorrect {
+        background: rgba(255, 107, 107, 0.1);
+        color: var(--accent-color);
+        border: 2px solid var(--accent-color);
+    }
+
+    @keyframes correctPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+
+    /* Check Answer Button */
+    .calc-button {
+        background: var(--accent-color);
+        color: white;
+        border: 2px solid var(--main-color);
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 10px 5px;
+        box-shadow: var(--shadow-md);
+    }
+
+    .calc-button:hover {
+        background: var(--tertiary-color);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+
+
+
+
+    /* Enhanced Responsive Design */
+    @media screen and (max-width: 768px) {
+        .sidebar {
+            width: 100%;
+            height: auto;
+            position: relative;
+            padding: 20px;
+        }
+
+        #main-content {
+            margin-left: 0;
+            padding: 10px;
+        }
+
+        .container, .graph-container, .slider-container {
+            margin: 15px 10px;
+            padding: 15px;
+        }
+
+
+
+        .quiz-options {
+            grid-template-columns: 1fr;
+        }
+
+
+
+        h1 {
+            font-size: 1.8rem;
+            padding: 0 10px;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+        }
+
+        .math-formula {
+            padding: 20px 10px;
+            font-size: 0.9rem;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .container, .graph-container {
+            padding: 10px;
+        }
+
+        .sidebar a, .dropdown-btn {
+            padding: 12px 15px;
+            font-size: 14px;
+        }
+
+        .calc-button {
+            padding: 10px 15px;
+            font-size: 14px;
+            margin: 5px 2px;
+        }
+
+        .quiz-option {
+            padding: 10px;
+            font-size: 14px;
+        }
+    }
+
+    /* Accessibility improvements */
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+
+    /* High contrast mode */
+    @media (prefers-contrast: high) {
+        :root {
+            --main-color: #000000;
+            --bg-color: #ffffff;
+            --font-color: #000000;
+        }
+    }
+  </style>
+</head>
+<body>
+
+
+<div id="sidebar" class="sidebar">
+  <a href="home.html">Home</a>
+  <button class="dropdown-btn">Introduction of Derivatives
+    <i class="fa fa-caret-down"></i>
+  </button>
+  <div class="dropdown-container">
+    <a href="#Introduction">Secant Line</a>
+    <a href="#tangent-line">Tangent line Approximation</a>
+    <a href="#rate-of-change">Instantaneous Rate of Change</a>
+    <a href="#definition-derivative">Definition of Derivative</a>
+  </div>
+</div>
+
+
+
+<div id="main-content" style="margin-left:260px;margin-top:20px;">
+
+<!-- Add practice button at the top -->
+<h1>Introduction to Derivatives</h1>
+
+<div class="practice-button-container">
+    <a href="practice-intro-derivatives.html" class="practice-page-btn">Practice This Topic</a>
+</div>
+
+
+
+
+
+<div class="container">
+  <div class="form">
+<h2>Introduction of derivatives</h2>
+<p>Adjust Δx to see how the secant line changes!</p>
+
+<p> Derivative is all about finding the slope</p>
+<p> The diagram below shows a curve y=f(x), two points A and B on the curve. If the two points are close to each other and connected by a straight line, that line is called a <span class="popup-trigger" data-target="secant-line-info">Secant Line</span>.</p>
+</div>
+</div>
+<!-- Graph 1 -->
+
+ <section id="Introduction">
+<h2>Secant Line on a Curve</h2>
+<div class="graph-container">
+
+  <div id="graph"></div>
+</div>
+<div class="slider-container">
+  <label for="dx-slider">Δx: </label>
+  <input type="range" id="dx-slider" min="0.1" max="2" step="0.05" value="1" oninput="updateGraph1()">
+  <span id="dx-value">1</span>
+</div>
+<p id="slope-text"></p>
+
+
+<div class="container">
+  <div class="form">
+<p>Next, let consider the coordinates of A as (x, f(x)), and the coordinates of B as (x + Δx, f(x + Δx)). Here Δx represents a small change in x, and f(x + Δx) represents the corresponding small change in y.</p>
+
+<h3>Slope Formula</h3>
+<p>The slope of any line connecting two points is given by:</p>
+
+<div class="math-formula">
+\[
+\text{Slope, } m = \frac{y_2 - y_1}{x_2 - x_1}
+\]
+</div>
+
+<p>Therefore, the slope of the secant line connecting points A and B is:</p>
+
+<div class="math-formula">
+\[
+\text{Slope of secant line} = \frac{f(x + \Delta x) - f(x)}{(x + \Delta x) - x} = \frac{f(x + \Delta x) - f(x)}{\Delta x}
+\]
+</div>
+
+<p>This formula gives us the <strong>average rate of change</strong> of the function f(x) over the interval from x to x + Δx.</p>
+</div>
+</div>
+
+<!-- Interactive Quiz for Secant Lines -->
+<div class="interactive-quiz">
+    <h3>🧠 Quick Check: Secant Lines</h3>
+    <div class="quiz-question">
+        <p><strong>Question:</strong> What does a secant line represent?</p>
+        <div class="quiz-options" id="quiz1-options">
+            <div class="quiz-option" onclick="selectQuizOption(1, 'A', false)">A) A line that touches the curve at one point</div>
+            <div class="quiz-option" onclick="selectQuizOption(1, 'B', true)">B) A line that connects two points on the curve</div>
+            <div class="quiz-option" onclick="selectQuizOption(1, 'C', false)">C) A vertical line through the curve</div>
+            <div class="quiz-option" onclick="selectQuizOption(1, 'D', false)">D) A horizontal line below the curve</div>
+        </div>
+        <button class="calc-button" onclick="checkQuizAnswer(1)" id="check-btn-1" style="display: none;">Check Answer</button>
+        <div class="quiz-feedback" id="quiz1-feedback"></div>
+    </div>
+</div>
+
+</section>
+
+
+
+<!-- Graph 2 -->
+ <section id="tangent-line">
+<h2> Tangent Line Approximation</h2>
+<div class="graph-container">
+  <div id="graph2"></div>
+</div>
+<div class="slider-container">
+  <label for="dx-slider2">Δx: </label>
+  <input type="range" id="dx-slider2" min="0.01" max="2" step="0.01" value="1" oninput="updateGraph2()">
+  <span id="dx-value2">1</span>
+</div>
+<p id="slope-text2"></p>
+
+
+<div class="container">
+  <div class="form">
+<p>As point B moves closer to point A (Δx becomes smaller and smaller), the secant line AB approaches a line called the <span class="popup-trigger" data-target="tangent-line-info">Tangent</span> to the curve at A. At the same time, the slope of the secant line AB would approach the slope of the tangent line.</p>
+
+<h3>The Limiting Process</h3>
+<p>As we make Δx smaller and smaller (approaching 0), we observe:</p>
+<ul style="text-align: left; max-width: 600px; margin: 0 auto;">
+  <li>The secant line gets closer to the tangent line</li>
+  <li>The slope of the secant line approaches the slope of the tangent line</li>
+  <li>We get a better approximation of the instantaneous rate of change</li>
+</ul>
+</div>
+</div>
+
+<!-- Interactive Quiz for Tangent Lines -->
+<div class="interactive-quiz">
+    <h3>🎯 Quick Check: Tangent Lines</h3>
+    <div class="quiz-question">
+        <p><strong>Question:</strong> What happens as Δx approaches 0?</p>
+        <div class="quiz-options" id="quiz2-options">
+            <div class="quiz-option" onclick="selectQuizOption(2, 'A', false)">A) The secant line disappears</div>
+            <div class="quiz-option" onclick="selectQuizOption(2, 'B', true)">B) The secant line approaches the tangent line</div>
+            <div class="quiz-option" onclick="selectQuizOption(2, 'C', false)">C) The curve becomes straight</div>
+            <div class="quiz-option" onclick="selectQuizOption(2, 'D', false)">D) Nothing changes</div>
+        </div>
+        <button class="calc-button" onclick="checkQuizAnswer(2)" id="check-btn-2" style="display: none;">Check Answer</button>
+        <div class="quiz-feedback" id="quiz2-feedback"></div>
+    </div>
+</div>
+
+ </section>
+
+<section id="rate-of-change">
+<!-- Graph 3 -->
+<h2> Instantaneous Rate of Change</h2>
+<div class="graph-container">
+  <div id="graph3"></div>
+</div>
+<div class="slider-container">
+  <label for="dx-slider3">x: </label>
+  <input type="range" id="dx-slider3" min="-2" max="3" step="0.01" value="1" oninput="updateGraph3()">
+  <span id="dx-value3">1</span>
+</div>
+<p id="derivative-text"></p>
+
+
+
+<div class="container">
+  <div class="form">
+<p>As Δx approaches 0, the slope of the tangent line is given by</p>
+
+<div class="math-formula">
+\[
+\text{Slope of tangent line} = \lim_{\Delta x \to 0} \frac{f(x + \Delta x) - f(x)}{\Delta x}
+\]
+</div>
+</div>
+</div>
+
+
+
+</section>
+
+<!-- Add new section for Definition of Derivative -->
+<section id="definition-derivative">
+<h2>The Definition of Derivative</h2>
+
+<div class="container">
+  <div class="form">
+    <h3>Definition</h3>
+    <p>The derivative of f(x) with respect to x is the function f'(x) and is defined as</p>
+    
+    <div class="math-formula">
+    \[
+    f'(x) = \lim_{\Delta x \to 0} \frac{f(x + \Delta x) - f(x)}{\Delta x}
+    \]
+    </div>
+    
+    <p>provided this limit exists.</p>
+    
+    <h3>Alternative Notation</h3>
+    <p>The derivative can also be written as:</p>
+    
+    <div class="math-formula">
+    \[
+    \frac{df}{dx} = \lim_{\Delta x \to 0} \frac{f(x + \Delta x) - f(x)}{\Delta x}
+    \]
+    </div>
+    
+    <h3>Interpretation</h3>
+    <p>The derivative f'(x) represents:</p>
+    <ul style="text-align: left; max-width: 600px; margin: 0 auto;">
+      <li><strong>Geometric interpretation:</strong> The slope of the tangent line to the curve y = f(x) at point x</li>
+      <li><strong>Physical interpretation:</strong> The instantaneous rate of change of f(x) with respect to x</li>
+      <li><strong>Analytical interpretation:</strong> The limit of the difference quotient as Δx approaches 0</li>
+    </ul>
+    
+    <h3>Example: Finding the Derivative using the Definition</h3>
+    <p>Let's find the derivative of f(x) = x² using the definition:</p>
+    
+    <div class="math-formula">
+    \[
+    \begin{align}
+    f'(x) &= \lim_{\Delta x \to 0} \frac{f(x + \Delta x) - f(x)}{\Delta x} \\
+    &= \lim_{\Delta x \to 0} \frac{(x + \Delta x)^2 - x^2}{\Delta x} \\
+    &= \lim_{\Delta x \to 0} \frac{x^2 + 2x\Delta x + (\Delta x)^2 - x^2}{\Delta x} \\
+    &= \lim_{\Delta x \to 0} \frac{2x\Delta x + (\Delta x)^2}{\Delta x} \\
+    &= \lim_{\Delta x \to 0} \frac{\Delta x(2x + \Delta x)}{\Delta x} \\
+    &= \lim_{\Delta x \to 0} (2x + \Delta x) \\
+    &= 2x
+    \end{align}
+    \]
+    </div>
+    
+    <p>Therefore, if f(x) = x², then f'(x) = 2x</p>
+    
+    <h3>Key Points to Remember</h3>
+    <div style="background: #f0f8ff; padding: 20px; border-radius: 10px; border: 2px solid #007acc; margin: 20px 0;">
+      <ul style="text-align: left; margin: 0;">
+        <li>The derivative exists only if the limit exists</li>
+        <li>The derivative gives us the slope at any point on the curve</li>
+        <li>As Δx approaches 0, the secant line approaches the tangent line</li>
+        <li>The derivative is the foundation for calculus and rate of change problems</li>
+      </ul>
+    </div>
+    
+
+  </div>
+</div>
+
+<!-- Final Quiz for Definition of Derivative -->
+<div class="interactive-quiz">
+    <h3>🎓 Master Check: Definition of Derivative</h3>
+    <div class="quiz-question">
+        <p><strong>Question:</strong> The derivative f'(x) represents:</p>
+        <div class="quiz-options" id="quiz3-options">
+            <div class="quiz-option" onclick="selectQuizOption(3, 'A', false)">A) The area under the curve</div>
+            <div class="quiz-option" onclick="selectQuizOption(3, 'B', true)">B) The instantaneous rate of change</div>
+            <div class="quiz-option" onclick="selectQuizOption(3, 'C', false)">C) The y-intercept of the function</div>
+            <div class="quiz-option" onclick="selectQuizOption(3, 'D', false)">D) The maximum value of the function</div>
+        </div>
+        <button class="calc-button" onclick="checkQuizAnswer(3)" id="check-btn-3" style="display: none;">Check Answer</button>
+        <div class="quiz-feedback" id="quiz3-feedback"></div>
+    </div>
+</div>
+
+</section>
+
+
+  <div id="secant-line-info" class="popup">
+    <div class="popup-content card">
+      <div class="head">Secant Line</div>
+      <div class="content">
+        <p>A secant line is a straight line that intersects a curve at two points. It helps us approximate the slope of the curve.</p>
+      </div>
+      <button class="button close-popup">Close</button>
+    </div>
+  </div>
+
+  <div id="tangent-line-info" class="popup">
+    <div class="popup-content card">
+      <div class="head">Tangent Line</div>
+      <div class="content">
+        <p>A tangent line is a straight line that touches a curve at a single point without crossing it. It represents the instantaneous rate of change or the slope of the curve at that specific point.</p>
+      </div>
+      <button class="button close-popup">Close</button>
+    </div>
+    </div>
+  </div>
+
+<script>
+  function f(x) {
+    return Math.pow(x, 2);  // Example curve: y = x²
+  }
+
+  function df(x) {
+    return 2 * x;
+  }
+
+  function updateGraph1() {
+    let xA = 1;  // Fixed point A
+    let dx = parseFloat(document.getElementById("dx-slider").value);
+    let xB = xA + dx;
+
+    let yA = f(xA);
+    let yB = f(xB);
+
+    let slope = (yB - yA) / (xB - xA);
+    document.getElementById("dx-value").innerText = dx.toFixed(2);
+    document.getElementById("slope-text").innerHTML = `Slope of Secant Line: <b>${slope.toFixed(3)}</b>`;
+
+    // Add fun animation to the slope text
+    const slopeText = document.getElementById("slope-text");
+    slopeText.style.animation = "none";
+    slopeText.offsetHeight; // Trigger reflow
+    slopeText.style.animation = "float 0.5s ease-in-out";
+
+    let curveX = [];
+    let curveY = [];
+    for (let x = -2; x <= 3; x += 0.1) {
+      curveX.push(x);
+      curveY.push(f(x));
+    }
+
+    let traceCurve = {
+      x: curveX,
+      y: curveY,
+      mode: "lines",
+      name: "y = x²",
+      line: { color: "#1f77b4", width: 3 }  // Blue
+    };
+
+    let tracePoints = {
+      x: [xA, xB],
+      y: [yA, yB],
+      mode: "markers",
+      name: "Points A & B",
+      marker: { size: 12, color: "#d62728", line: { width: 2, color: "#ffffff" } }  // Red with white border
+    };
+
+    let traceSecant = {
+      x: [xA, xB],
+      y: [yA, yB],
+      mode: "lines",
+      name: "Secant Line",
+      line: { color: "#ff7f0e", dash: "dash", width: 3 }  // Orange
+    };
+
+    let layout = {
+      title: "Secant Line on a Curve",
+      xaxis: { 
+        title: "x", 
+        color: "#000000",
+        gridcolor: "rgba(0, 0, 0, 0.1)",
+        zerolinecolor: "#000000",
+        showgrid: true,
+        showline: true,
+        linewidth: 2,
+        linecolor: "#000000",
+        tickcolor: "#000000",
+        tickwidth: 2
+      },
+      yaxis: { 
+        title: "y", 
+        color: "#000000",
+        gridcolor: "rgba(0, 0, 0, 0.1)",
+        zerolinecolor: "#000000",
+        showgrid: true,
+        showline: true,
+        linewidth: 2,
+        linecolor: "#000000",
+        tickcolor: "#000000",
+        tickwidth: 2
+      },
+      showlegend: true,
+      paper_bgcolor: '#ffffff',
+      plot_bgcolor: '#ffffff',
+      font: {
+        family: 'Poppins, sans-serif',
+        color: "#000000",
+        size: 14
+      },
+      legend: {
+        font: {
+          color: "#000000",
+          size: 12
+        }
+      }
+    };
+
+    Plotly.newPlot("graph", [traceCurve, tracePoints, traceSecant], layout);
+  }
+
+  // function for graph 2
+  function updateGraph2() {
+    let xA = parseFloat(document.getElementById("dx-slider2").value);  // Use slider value for xA
+    let dx = 0.1;  // Small fixed value for secant line
+    let xB = xA + dx;  // Move B based on dx
+
+    let yA = f(xA);
+    let yB = f(xB); // Get yB based on f(x)
+
+    // Calculate slopes
+    let slopeTangent = df(xA);  // This is the actual derivative at point A
+    let slopeSecant = (yB - yA) / (xB - xA);  // Secant line slope
+
+    // Update display values
+    document.getElementById("dx-value2").innerText = xA.toFixed(2);
+    document.getElementById("slope-text2").innerHTML = `Tangent Slope: <b>${slopeTangent.toFixed(3)}</b>`;
+    document.getElementById("slope-text").innerHTML = `Slope of Secant Line: <b>${slopeSecant.toFixed(3)}</b>`;
+
+    // Add animation to the slope text
+    const slopeText2 = document.getElementById("slope-text2");
+    slopeText2.style.animation = "none";
+    slopeText2.offsetHeight; // Trigger reflow
+    slopeText2.style.animation = "float 0.5s ease-in-out";
+
+    // Curve data
+    let curveX = [];
+    let curveY = [];
+    for (let x = -2; x <= 3; x += 0.1) {
+      curveX.push(x);
+      curveY.push(f(x));
+    }
+
+    // Calculate tangent line points
+    let tangentX = [xA - 1, xA + 1];
+    let tangentY = [
+      yA + slopeTangent * (tangentX[0] - xA),
+      yA + slopeTangent * (tangentX[1] - xA)
+    ];
+
+    // Calculate secant line points
+    let secantX = [xA, xB];
+    let secantY = [yA, yB];
+
+    let traceCurve = {
+      x: curveX,
+      y: curveY,
+      mode: "lines",
+      name: "y = x²",
+      line: { color: "#1f77b4", width: 3 }  // Blue
+    };
+
+    let traceTangent = {
+      x: tangentX,
+      y: tangentY,
+      mode: "lines",
+      name: "Tangent Line",
+      line: { color: "#2ca02c", dash: "dot", width: 3 }  // Green
+    };
+
+    let traceSecant = {
+      x: secantX,
+      y: secantY,
+      mode: "lines",
+      name: "Secant Line",
+      line: { color: "#ff7f0e", dash: "dash", width: 3 }  // Orange
+    };
+
+    let layout2 = {
+      title: "Tangent Line Approximation",
+      xaxis: { 
+        title: "x", 
+        color: "#000000",
+        gridcolor: "rgba(0, 0, 0, 0.1)",
+        zerolinecolor: "#000000",
+        showgrid: true,
+        showline: true,
+        linewidth: 2,
+        linecolor: "#000000",
+        tickcolor: "#000000",
+        tickwidth: 2
+      },
+      yaxis: { 
+        title: "y", 
+        color: "#000000",
+        gridcolor: "rgba(0, 0, 0, 0.1)",
+        zerolinecolor: "#000000",
+        showgrid: true,
+        showline: true,
+        linewidth: 2,
+        linecolor: "#000000",
+        tickcolor: "#000000",
+        tickwidth: 2
+      },
+      showlegend: true,
+      paper_bgcolor: '#ffffff',
+      plot_bgcolor: '#ffffff',
+      font: {
+        family: 'Poppins, sans-serif',
+        color: "#000000",
+        size: 14
+      },
+      legend: {
+        font: {
+          color: "#000000",
+          size: 12
+        }
+      }
+    };
+
+    // Use Plotly.react() for smoother updates
+    Plotly.react("graph2", [traceCurve, traceTangent, traceSecant], layout2);
+  }
+
+  // Ensure the function runs when the page loads
+  document.addEventListener("DOMContentLoaded", updateGraph2);
+
+// function for graph 3
+  function updateGraph3() {
+    let xA = parseFloat(document.getElementById("dx-slider3").value);
+    let yA = f(xA);
+    let slope = df(xA);
+
+    document.getElementById("dx-value3").innerText = xA.toFixed(2);
+    document.getElementById("derivative-text").innerHTML = `Slope of Tangent Line: <b>${slope.toFixed(3)}</b>`;
+
+    // Add fun animation to the derivative text
+    const derivativeText = document.getElementById("derivative-text");
+    derivativeText.style.animation = "none";
+    derivativeText.offsetHeight; // Trigger reflow
+    derivativeText.style.animation = "float 0.5s ease-in-out";
+
+    let curveX = [];
+    let curveY = [];
+    for (let x = -2; x <= 3; x += 0.1) {
+      curveX.push(x);
+      curveY.push(f(x));
+    }
+
+    let tangentX = [xA - 1, xA + 1];
+    let tangentY = [
+      yA + slope * (tangentX[0] - xA),
+      yA + slope * (tangentX[1] - xA)
+    ];
+
+    let traceCurve = {
+      x: curveX,
+      y: curveY,
+      mode: "lines",
+      name: "y = x²",
+      line: { color: "#1f77b4", width: 3 }  // Blue
+    };
+
+    let tracePoint = {
+      x: [xA],
+      y: [yA],
+      mode: "markers",
+      name: "Point",
+      marker: { size: 14, color: "#d62728", line: { width: 2, color: "#ffffff" } }  // Red with white border
+    };
+
+    let traceTangent = {
+      x: tangentX,
+      y: tangentY,
+      mode: "lines",
+      name: "Tangent Line",
+      line: { color: "#2ca02c", dash: "dot", width: 3 }  // Green
+    };
+
+    let layout3 = {
+      title: "Instantaneous Rate of Change",
+      xaxis: { 
+        title: "x", 
+        color: "#000000",
+        gridcolor: "rgba(0, 0, 0, 0.1)",
+        zerolinecolor: "#000000",
+        showgrid: true,
+        showline: true,
+        linewidth: 2,
+        linecolor: "#000000",
+        tickcolor: "#000000",
+        tickwidth: 2
+      },
+      yaxis: { 
+        title: "y", 
+        color: "#000000",
+        gridcolor: "rgba(0, 0, 0, 0.1)",
+        zerolinecolor: "#000000",
+        showgrid: true,
+        showline: true,
+        linewidth: 2,
+        linecolor: "#000000",
+        tickcolor: "#000000",
+        tickwidth: 2
+      },
+      showlegend: true,
+      paper_bgcolor: '#ffffff',
+      plot_bgcolor: '#ffffff',
+      font: {
+        family: 'Poppins, sans-serif',
+        color: "#000000",
+        size: 14
+      },
+      legend: {
+        font: {
+          color: "#000000",
+          size: 12
+        }
+      }
+    };
+
+    // Use `Plotly.react` instead of `Plotly.newPlot` for smoother updates
+    Plotly.react("graph3", [traceCurve, tracePoint, traceTangent], layout3);
+  }
+
+  // Ensure the function runs when the page loads
+  document.addEventListener("DOMContentLoaded", function () {
+    updateGraph3();
+  });
+
+
+  // Function to handle pop-up
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".popup-trigger").forEach(trigger => {
+      trigger.addEventListener("click", function () {
+        let targetId = this.getAttribute("data-target");
+        document.getElementById(targetId).style.display = "block";
+      });
+    });
+
+      // Select all elements with class "close-popup"
+    document.querySelectorAll(".close-popup").forEach(button => {
+      button.addEventListener("click", function () {
+        this.closest(".popup").style.display = "none";
+      });
+    });
+  });
+
+  updateGraph1();
+  updateGraph2();
+  updateGraph3();
+
+  // Interactive Quiz Functions
+  let userAnswers = {};
+
+  function selectQuizOption(quizId, option, isCorrect) {
+    // Remove previous selections
+    const options = document.querySelectorAll(`#quiz${quizId}-options .quiz-option`);
+    options.forEach(opt => {
+      opt.classList.remove('selected', 'correct', 'incorrect');
+    });
+
+    // Mark selected option
+    event.target.classList.add('selected');
+    
+    // Store the selected answer
+    userAnswers[quizId] = { option, isCorrect, element: event.target };
+    
+    // Show check answer button
+    document.getElementById(`check-btn-${quizId}`).style.display = 'inline-block';
+    
+    // Hide feedback
+    document.getElementById(`quiz${quizId}-feedback`).style.display = 'none';
+  }
+
+  function checkQuizAnswer(quizId) {
+    const answer = userAnswers[quizId];
+    if (!answer) return;
+    
+    const feedback = document.getElementById(`quiz${quizId}-feedback`);
+    
+    if (answer.isCorrect) {
+      answer.element.classList.add('correct');
+      feedback.className = 'quiz-feedback correct';
+      feedback.innerHTML = '🎉 Excellent! That\'s correct!';
+    } else {
+      answer.element.classList.add('incorrect');
+      feedback.className = 'quiz-feedback incorrect';
+      feedback.innerHTML = '❌ Not quite right. Try thinking about the definition again!';
+    }
+    
+    feedback.style.display = 'block';
+    
+    // Hide the check button after checking
+    document.getElementById(`check-btn-${quizId}`).style.display = 'none';
+  }
+
+
+
+
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      const sliders = document.querySelectorAll('input[type="range"]');
+      sliders.forEach(slider => {
+        if (slider === document.activeElement) {
+          // Let the default behavior handle slider movement
+          setTimeout(() => {
+            if (slider.id === 'dx-slider') updateGraph1();
+            if (slider.id === 'dx-slider2') updateGraph2();
+            if (slider.id === 'dx-slider3') updateGraph3();
+          }, 10);
+        }
+      });
+    }
+  });
+
+  // Touch support for mobile devices
+  document.addEventListener('touchstart', function(e) {
+    // Add touch feedback for interactive elements
+    if (e.target.classList.contains('quiz-option') || 
+        e.target.classList.contains('calc-button')) {
+      e.target.style.transform = 'scale(0.98)';
+    }
+  });
+
+  document.addEventListener('touchend', function(e) {
+    // Reset touch feedback
+    if (e.target.classList.contains('quiz-option') || 
+        e.target.classList.contains('calc-button')) {
+      setTimeout(() => {
+        e.target.style.transform = '';
+      }, 150);
+    }
+  });
+
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var dropdown = document.getElementsByClassName("dropdown-btn");
+    for (var i = 0; i < dropdown.length; i++) {
+      dropdown[i].addEventListener("click", function () {
+        this.classList.toggle("active");
+        var dropdownContent = this.nextElementSibling;
+        if (dropdownContent.style.maxHeight) {
+          dropdownContent.style.maxHeight = null;
+        } else {
+          dropdownContent.style.maxHeight = dropdownContent.scrollHeight + "px";
+        }
+      });
+    }
+
+    var sidebarLinks = document.querySelectorAll('.sidebar a');
+    sidebarLinks.forEach(link => {
+      link.addEventListener('click', function (event) {
+        var targetId = this.getAttribute('href');
+        // If the link is for an anchor (starts with #), prevent default and scroll
+        if (targetId && targetId.startsWith('#')) {
+          event.preventDefault();
+          var targetElement = document.getElementById(targetId.substring(1));
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop,
+              behavior: 'smooth'
+            });
+          }
+        } else if (targetId === 'index.html' || targetId === 'home.html') {
+          // For Home or Index, navigate normally
+          window.location.href = 'home.html';
+        }
+        // Otherwise, let the browser handle navigation
+      });
+    });
+  });
+
+  // Function to mark topic as completed and return to profile
+  function completeTopicAndReturn() {
+    const topicName = 'Introduction to derivatives';
+    
+    // Mark topic as completed in session storage
+    const practiceAttempts = JSON.parse(sessionStorage.getItem('practiceAttempts') || '{}');
+    practiceAttempts[topicName] = (practiceAttempts[topicName] || 0) + 1;
+    sessionStorage.setItem('practiceAttempts', JSON.stringify(practiceAttempts));
+    
+    // Update mastery data
+    const masteryData = JSON.parse(sessionStorage.getItem('masteryData') || '[]');
+    masteryData.forEach(item => {
+      if (item.topic === topicName) {
+        // Increase mastery for completing theory
+        item.mastery = Math.min(100, item.mastery + 10);
+        
+        // Update badge if mastery level crossed threshold
+        if (item.mastery >= 80) {
+          item.badge = 'M';  // Master
+        } else if (item.mastery >= 50) {
+          item.badge = 'P';  // Proficient
+        } else if (item.mastery >= 20) {
+          item.badge = 'L';  // Learning
+        }
+      }
+    });
+    sessionStorage.setItem('masteryData', JSON.stringify(masteryData));
+    
+    // Show completion message
+    alert('Congratulations! You have completed the "Introduction to Derivatives" topic. Your progress has been updated!');
+    
+    // Navigate to profile page
+    window.location.href = 'profile.html';
+  }
+</script>
+
+<!-- Back to Profile Button -->
+<div style="margin: 40px auto; text-align: center; display: flex; justify-content: center;">
+  <div style="background: white; border: 2px solid black; border-radius: 10px; padding: 30px; box-shadow: 4px 4px black; max-width: 800px; width: 100%; text-align: center;">
+    <h3 style="color: #323232; margin-bottom: 20px;">Congratulations! You've finished this topic!</h3>
+    <p style="color: #666; margin-bottom: 25px;">Click the button below to mark this topic as completed and return to your profile.</p>
+    <button onclick="completeTopicAndReturn()" style="background: #ff6b6b; color: white; border: 2px solid black; border-radius: 10px; padding: 15px 30px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 4px 4px black;">
+      ✓ Complete Topic & Return to Profile
+    </button>
+  </div>
+</div>
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+

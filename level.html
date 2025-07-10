@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Determine Your Level | Maths Terhensem</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/bootstrap-icons.css" rel="stylesheet">
+  <link href="css/templatemo-topic-listing.css" rel="stylesheet">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #4e8fcc, #4dc7a0);
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+    .container {
+      max-width: 600px;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      border: none;
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 10px;
+      transition: 0.3s;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Enter Name -->
+<div class="container" id="nameContainer">
+  <h2>Enter Your Name</h2>
+  <input type="text" id="username" class="form-control" placeholder="Enter your name" required>
+  <button class="btn-primary w-100 mt-3" onclick="startTest()">Start Test</button>
+</div>
+
+<!-- Differentiation Test -->
+<div id="testContainer" class="container hidden">
+  <h2>Differentiation Test</h2>
+  <p>Answer the following 10 questions:</p>
+  <div id="questions"></div>
+  <button class="btn-primary w-100 mt-3" onclick="submitTest()">Submit Test</button>
+</div>
+
+<script>
+  // Firebase Configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyBUfSOSpmCdWUGTVbSQsMCH-JVmrjpfdPY",
+    authDomain: "fyp-lutfi-naim.firebaseapp.com",
+    projectId: "fyp-lutfi-naim",
+    storageBucket: "fyp-lutfi-naim.appspot.com",
+    messagingSenderId: "231274529807",
+    appId: "1:231274529807:web:c4ea279f9e7581bd674f7a",
+    measurementId: "G-2D96FF3352"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  let userEmail = sessionStorage.getItem("userEmail");
+
+  if (!userEmail) {
+    window.location.href = "index.html";
+  }
+
+  function startTest() {
+    let username = document.getElementById("username").value.trim();
+    if (username === "") {
+      alert("Please enter your name!");
+      return;
+    }
+
+    // Store username in session
+    sessionStorage.setItem("username", username);
+
+    // Show test container
+    document.getElementById("nameContainer").classList.add("hidden");
+    document.getElementById("testContainer").classList.remove("hidden");
+
+    generateTest();
+  }
+
+  const questions = [
+    { question: "What is the derivative of x²?", options: ["x", "2x", "x²"], answer: "2x" },
+    { question: "What is the derivative of sin(x)?", options: ["cos(x)", "-sin(x)", "tan(x)"], answer: "cos(x)" },
+    { question: "What is the derivative of e^x?", options: ["e^x", "x^e", "xe^(x-1)"], answer: "e^x" },
+    { question: "What is the derivative of ln(x)?", options: ["1/x", "ln(x)", "xln(x)"], answer: "1/x" },
+    { question: "What is the derivative of x³?", options: ["3x²", "x²", "x³"], answer: "3x²" },
+    { question: "What is the derivative of cos(x)?", options: ["-sin(x)", "sin(x)", "tan(x)"], answer: "-sin(x)" },
+    { question: "What is the derivative of 5x?", options: ["5", "5x", "x"], answer: "5" },
+    { question: "What is the derivative of x⁴?", options: ["4x³", "3x²", "x³"], answer: "4x³" },
+    { question: "What is the derivative of tan(x)?", options: ["sec²(x)", "csc²(x)", "-sin(x)"], answer: "sec²(x)" },
+    { question: "What is the derivative of x^0?", options: ["0", "1", "x"], answer: "0" },
+  ];
+
+  function generateTest() {
+    let questionContainer = document.getElementById("questions");
+    questionContainer.innerHTML = ""; // Clear any previous content
+
+    if (questions.length === 0) {
+      questionContainer.innerHTML = "<p>Error: No questions found!</p>";
+      return;
+    }
+
+    questions.forEach((q, index) => {
+      let questionHTML = `
+            <p><strong>${index + 1}. ${q.question}</strong></p>
+            <select id="q${index}" class="form-control">
+                ${q.options.map(opt => `<option value="${opt}">${opt}</option>`).join("")}
+            </select>
+            <br>
+        `;
+      questionContainer.innerHTML += questionHTML;
+    });
+
+    console.log("Questions generated successfully!");
+  }
+
+  function submitTest() {
+    let correctAnswers = 0;
+    questions.forEach((q, index) => {
+      if (document.getElementById(`q${index}`).value === q.answer) correctAnswers++;
+    });
+
+    let level = correctAnswers >= 7 ? "high" : correctAnswers >= 5 ? "medium" : "low";
+    let username = sessionStorage.getItem("username") || "Anonymous";
+
+    // Save to Firebase
+    db.collection("users").doc(userEmail).set({
+      username: username,
+      level: level,
+      score: correctAnswers
+    }).then(() => {
+      // ✅ Store in localStorage
+      localStorage.setItem("userLevel", level);
+      localStorage.setItem("username", username);
+      window.location.href = "home.html";
+    });
+  }
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+

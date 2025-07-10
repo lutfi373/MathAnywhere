@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Function Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>Linear Approximations Function Test</h1>
+    <p>This page tests which functions are working in the linear approximations page.</p>
+    
+    <h2>Test Functions</h2>
+    <button class="test-button" onclick="testMathQuill()">Test MathQuill</button>
+    <button class="test-button" onclick="testTextbookExamples()">Test Textbook Examples</button>
+    <button class="test-button" onclick="testInteractiveSolver()">Test Interactive Solver</button>
+    <button class="test-button" onclick="testWalkthrough()">Test Walkthrough</button>
+    <button class="test-button" onclick="testDragDrop()">Test Drag & Drop</button>
+    <button class="test-button" onclick="testAnimation()">Test Animation</button>
+    <button class="test-button" onclick="testAll()">Test All Functions</button>
+    
+    <div id="results"></div>
+    
+    <script>
+        function addResult(message, isSuccess = true) {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `result ${isSuccess ? 'success' : 'error'}`;
+            div.innerHTML = `${new Date().toLocaleTimeString()}: ${message}`;
+            results.appendChild(div);
+        }
+        
+        function testMathQuill() {
+            try {
+                if (typeof MathQuill !== 'undefined') {
+                    addResult('✅ MathQuill library is loaded');
+                } else {
+                    addResult('❌ MathQuill library is not loaded', false);
+                }
+            } catch (error) {
+                addResult(`❌ MathQuill test error: ${error.message}`, false);
+            }
+        }
+        
+        function testTextbookExamples() {
+            try {
+                // Open the actual page and test the function
+                window.open('linear-approx-differentials.html', '_blank');
+                addResult('✅ Opened linear approximations page for manual testing');
+            } catch (error) {
+                addResult(`❌ Error opening page: ${error.message}`, false);
+            }
+        }
+        
+        function testInteractiveSolver() {
+            addResult('🔍 Interactive solver needs manual testing - check the main page');
+        }
+        
+        function testWalkthrough() {
+            addResult('🔍 Walkthrough needs manual testing - check the main page');
+        }
+        
+        function testDragDrop() {
+            addResult('🔍 Drag & Drop needs manual testing - check the main page');
+        }
+        
+        function testAnimation() {
+            addResult('🔍 Animation needs manual testing - check the main page');
+        }
+        
+        function testAll() {
+            addResult('🚀 Running all tests...');
+            testMathQuill();
+            setTimeout(() => {
+                addResult('📋 Manual testing required for interactive features');
+                addResult('💡 Please test the following on the main page:');
+                addResult('   1. Click on textbook examples (21-25)');
+                addResult('   2. Try the interactive solver');
+                addResult('   3. Use the step-by-step walkthrough');
+                addResult('   4. Test the drag & drop game');
+                addResult('   5. Try the animation controls');
+                addResult('   6. Check the performance tracking');
+            }, 1000);
+        }
+        
+        // Auto-run basic tests on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            addResult('🎯 Function test page loaded');
+            addResult('📝 Click the buttons above to test different features');
+        });
+    </script>
+</body>
+</html> 
+
+
+
+
+
+
+

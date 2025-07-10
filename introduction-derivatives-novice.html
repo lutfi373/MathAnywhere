@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Derivatives - Novice Level</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/templatemo-topic-listing.css">
+    
+    <!-- MathJax Configuration -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- MathQuill resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #e8f5e8;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .form {
+            --input-focus: #28a745;
+            --font-color: #155724;
+            --font-color-sub: #6c757d;
+            --bg-color: #e8f5e8;
+            --main-color: #28a745;
+            padding: 30px;
+            background: #d4edda;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 20px;
+            border-radius: 10px;
+            border: 2px solid var(--main-color);
+            box-shadow: 6px 6px var(--main-color);
+        }
+        .title {
+            color: var(--font-color);
+            font-weight: 900;
+            font-size: 24px;
+            margin-bottom: 25px;
+        }
+        .topic-section {
+            width: 100%;
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: #f8fff8;
+            border-radius: 8px;
+            border: 1px solid var(--main-color);
+        }
+        .topic-title {
+            color: var(--font-color);
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-align: center;
+            background-color: var(--main-color);
+            color: white;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        .question-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .question-label {
+            color: var(--font-color);
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+            line-height: 1.6;
+        }
+        .button-confirm {
+            margin: 20px 0;
+            width: 140px;
+            height: 45px;
+            border-radius: 5px;
+            border: 2px solid var(--main-color);
+            background-color: var(--bg-color);
+            box-shadow: 4px 4px var(--main-color);
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--font-color);
+            cursor: pointer;
+        }
+        .button-confirm:hover {
+            background-color: var(--input-focus);
+            color: #fff;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #28a745;
+        }
+        .quiz-description {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #0c5460;
+            text-align: left;
+        }
+        .level-badge {
+            background-color: #28a745;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        
+        /* MathQuill styling */
+        .mathquill-field {
+            width: 100%;
+            margin: 15px 0;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            box-shadow: 4px 4px var(--main-color);
+            padding: 10px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            background: white;
+            min-height: 45px;
+        }
+
+        .mathquill-field:focus-within {
+
+        
+        /* Enhanced Mathematical Toolbar Styling */
+        .math-toolbar {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.95));
+            border: 2px solid var(--main-color);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 15px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .math-toolbar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .math-toolbar:hover::before {
+            left: 100%;
+        }
+
+        .math-btn {
+            background: linear-gradient(145deg, #ffffff, #f1f5f9);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #334155;
+            min-width: 45px;
+            text-align: center;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 
+                0 2px 8px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            overflow: hidden;
+        }
+
+        /* Variable button styling */
+        .math-btn[onclick*="'x'"], .math-btn[onclick*="'y'"], .math-btn[onclick*="'h'"] {
+            background: linear-gradient(145deg, #3b82f6, #1d4ed8);
+            color: white;
+            border-color: #1e40af;
+        }
+
+        /* Operator button styling */
+        .math-btn[onclick*="'+'"], .math-btn[onclick*="'-'"], .math-btn[onclick*="'*'"], .math-btn[onclick*="'/'"], .math-btn[onclick*="'='"], .math-btn[onclick*="'^'"] {
+            background: linear-gradient(145deg, #10b981, #047857);
+            color: white;
+            border-color: #065f46;
+        }
+
+        /* Function button styling */
+        .math-btn.function-btn {
+            background: linear-gradient(145deg, #8b5cf6, #7c3aed);
+            color: white;
+            border-color: #6d28d9;
+            font-size: 14px;
+            padding: 8px 12px;
+            min-width: 55px;
+            font-weight: 600;
+        }
+
+        /* Parentheses and brackets styling */
+        .math-btn[onclick*="'('"], .math-btn[onclick*="')'"] {
+            background: linear-gradient(145deg, #f59e0b, #d97706);
+            color: white;
+            border-color: #b45309;
+        }
+
+        /* Special symbols styling */
+        .math-btn[onclick*="'\to'"], .math-btn[onclick*="'\infty'"], .math-btn[onclick*="'\Delta'"], .math-btn[onclick*="'\partial'"] {
+            background: linear-gradient(145deg, #ef4444, #dc2626);
+            color: white;
+            border-color: #b91c1c;
+        }
+
+        .math-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.2),
+                0 0 20px rgba(59, 130, 246, 0.3);
+            border-color: #3b82f6;
+        }
+
+        .math-btn:active {
+            transform: translateY(-1px) scale(1.02);
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.2),
+                inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .math-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.4s ease;
+        }
+
+        .math-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Pulse animation for important buttons */
+        .math-btn.function-btn:hover {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(139, 92, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); }
+        }
+
+        /* Responsive design for smaller screens */
+        @media (max-width: 768px) {
+            .math-toolbar {
+                padding: 12px;
+                gap: 6px;
+            }
+
+            .math-btn {
+                padding: 8px 10px;
+                font-size: 14px;
+                min-width: 35px;
+            }
+
+            .math-btn.function-btn {
+                font-size: 12px;
+                padding: 6px 8px;
+                min-width: 45px;
+            }
+        }
+
+        .mathquill-field:focus-within {
+            box-shadow: 6px 6px var(--main-color);
+            transform: translateY(-3px);
+            border-color: var(--input-focus);
+        }
+
+        .mathquill-rendered {
+            margin: 15px 0;
+            font-size: 20px;
+            padding: 10px;
+            color: var(--font-color);
+            min-height: 40px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="level-badge">NOVICE LEVEL</div>
+    <h1>Introduction to Derivatives - Novice</h1>
+    
+    <div class="quiz-description">
+        <strong>Welcome to Introduction to Derivatives - Novice Level!</strong><br>
+        This module introduces the fundamental concept of derivatives. You'll learn:
+        <ul>
+            <li>What a derivative represents</li>
+            <li>Basic interpretation of derivatives</li>
+            <li>Rate of change concepts</li>
+            <li>Simple slope calculations</li>
+        </ul>
+        <em>Complete at least 4 out of 6 questions correctly to pass this module.</em>
+    </div>
+
+    <div class="form">
+        <div class="title">Introduction to Derivatives - Novice Module</div>
+        <form id="quizForm">
+            
+            <!-- Basic Concepts -->
+            <div class="topic-section">
+                <div class="topic-title">Basic Concepts</div>
+                
+                <div class="question-group">
+                    <label class="question-label">1. What does a derivative measure?</label>
+                    
+                        <!-- Mathematical Toolbar -->
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(0, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(0, 'y')">y</button>
+                            <button class="math-btn" onclick="insertMath(0, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(0, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(0, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(0, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(0, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(0, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(0, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(0, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(0, '\\lim')">lim</button>
+                            <button class="math-btn" onclick="insertMath(0, '\\to')">→</button>
+                            <button class="math-btn" onclick="insertMath(0, '\\infty')">∞</button>
+                            <button class="math-btn" onclick="insertMath(0, 'h')">h</button>
+                            <button class="math-btn function-btn" onclick="insertMath(0, 'f(x)')">f(x)</button>
+                            <button class="math-btn" onclick="insertMath(0, '\\Delta x')">Δx</button>
+                            <button class="math-btn" onclick="insertMath(0, '\\Delta')">Δ</button>
+                            <button class="math-btn" onclick="insertMath(0, '\\partial')">∂</button>
+                            <button class="math-btn function-btn" onclick="insertMath(0, '\\frac{}{}')">÷</button>
+                            <button class="math-btn function-btn" onclick="insertMath(0, '\\sqrt{}')">√</button>
+                            <button class="math-btn function-btn" onclick="insertMath(0, '\\ln')">[ln]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(0, '\\log')">[log]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(0, '\\sin')">[sin]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(0, '\\cos')">[cos]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(0, '\\tan')">[tan]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(0, 'e^{}')">[e^]</button>
+                        </div>
+                        
+                        <div class="mathquill-field" id="question0"></div>
+                </div>
+                
+                <div class="question-group">
+                    <label class="question-label">2. If $f(x)$ represents position, what does $f'(x)$ represent?</label>
+                    
+                        <!-- Mathematical Toolbar -->
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(1, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(1, 'y')">y</button>
+                            <button class="math-btn" onclick="insertMath(1, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(1, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(1, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(1, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(1, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(1, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(1, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(1, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(1, '\\lim')">lim</button>
+                            <button class="math-btn" onclick="insertMath(1, '\\to')">→</button>
+                            <button class="math-btn" onclick="insertMath(1, '\\infty')">∞</button>
+                            <button class="math-btn" onclick="insertMath(1, 'h')">h</button>
+                            <button class="math-btn function-btn" onclick="insertMath(1, 'f(x)')">f(x)</button>
+                            <button class="math-btn" onclick="insertMath(1, '\\Delta x')">Δx</button>
+                            <button class="math-btn" onclick="insertMath(1, '\\Delta')">Δ</button>
+                            <button class="math-btn" onclick="insertMath(1, '\\partial')">∂</button>
+                            <button class="math-btn function-btn" onclick="insertMath(1, '\\frac{}{}')">÷</button>
+                            <button class="math-btn function-btn" onclick="insertMath(1, '\\sqrt{}')">√</button>
+                            <button class="math-btn function-btn" onclick="insertMath(1, '\\ln')">[ln]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(1, '\\log')">[log]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(1, '\\sin')">[sin]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(1, '\\cos')">[cos]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(1, '\\tan')">[tan]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(1, 'e^{}')">[e^]</button>
+                        </div>
+                        
+                        <div class="mathquill-field" id="question1"></div>
+                </div>
+            </div>
+
+            <!-- Rate of Change -->
+            <div class="topic-section">
+                <div class="topic-title">Rate of Change</div>
+                
+                <div class="question-group">
+                    <label class="question-label">3. If a car travels $100$ miles in $2$ hours, what is its average rate of change of distance?</label>
+                    
+                        <!-- Mathematical Toolbar -->
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(2, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(2, 'y')">y</button>
+                            <button class="math-btn" onclick="insertMath(2, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(2, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(2, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(2, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(2, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(2, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(2, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(2, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(2, '\\lim')">lim</button>
+                            <button class="math-btn" onclick="insertMath(2, '\\to')">→</button>
+                            <button class="math-btn" onclick="insertMath(2, '\\infty')">∞</button>
+                            <button class="math-btn" onclick="insertMath(2, 'h')">h</button>
+                            <button class="math-btn function-btn" onclick="insertMath(2, 'f(x)')">f(x)</button>
+                            <button class="math-btn" onclick="insertMath(2, '\\Delta x')">Δx</button>
+                            <button class="math-btn" onclick="insertMath(2, '\\Delta')">Δ</button>
+                            <button class="math-btn" onclick="insertMath(2, '\\partial')">∂</button>
+                            <button class="math-btn function-btn" onclick="insertMath(2, '\\frac{}{}')">÷</button>
+                            <button class="math-btn function-btn" onclick="insertMath(2, '\\sqrt{}')">√</button>
+                            <button class="math-btn function-btn" onclick="insertMath(2, '\\ln')">[ln]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(2, '\\log')">[log]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(2, '\\sin')">[sin]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(2, '\\cos')">[cos]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(2, '\\tan')">[tan]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(2, 'e^{}')">[e^]</button>
+                        </div>
+                        
+                        <div class="mathquill-field" id="question2"></div>
+                </div>
+                
+                <div class="question-group">
+                    <label class="question-label">4. What is the slope of the line $y = 3x + 2$?</label>
+                    
+                        <!-- Mathematical Toolbar -->
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(3, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(3, 'y')">y</button>
+                            <button class="math-btn" onclick="insertMath(3, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(3, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(3, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(3, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(3, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(3, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(3, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(3, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(3, '\\lim')">lim</button>
+                            <button class="math-btn" onclick="insertMath(3, '\\to')">→</button>
+                            <button class="math-btn" onclick="insertMath(3, '\\infty')">∞</button>
+                            <button class="math-btn" onclick="insertMath(3, 'h')">h</button>
+                            <button class="math-btn function-btn" onclick="insertMath(3, 'f(x)')">f(x)</button>
+                            <button class="math-btn" onclick="insertMath(3, '\\Delta x')">Δx</button>
+                            <button class="math-btn" onclick="insertMath(3, '\\Delta')">Δ</button>
+                            <button class="math-btn" onclick="insertMath(3, '\\partial')">∂</button>
+                            <button class="math-btn function-btn" onclick="insertMath(3, '\\frac{}{}')">÷</button>
+                            <button class="math-btn function-btn" onclick="insertMath(3, '\\sqrt{}')">√</button>
+                            <button class="math-btn function-btn" onclick="insertMath(3, '\\ln')">[ln]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(3, '\\log')">[log]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(3, '\\sin')">[sin]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(3, '\\cos')">[cos]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(3, '\\tan')">[tan]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(3, 'e^{}')">[e^]</button>
+                        </div>
+                        
+                        <div class="mathquill-field" id="question3"></div>
+                </div>
+            </div>
+
+            <!-- Basic Interpretation -->
+            <div class="topic-section">
+                <div class="topic-title">Basic Interpretation</div>
+                
+                <div class="question-group">
+                    <label class="question-label">5. If the derivative of a function at a point is positive, what does this tell us about the function?</label>
+                    
+                        <!-- Mathematical Toolbar -->
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(4, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(4, 'y')">y</button>
+                            <button class="math-btn" onclick="insertMath(4, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(4, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(4, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(4, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(4, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(4, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(4, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(4, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(4, '\\lim')">lim</button>
+                            <button class="math-btn" onclick="insertMath(4, '\\to')">→</button>
+                            <button class="math-btn" onclick="insertMath(4, '\\infty')">∞</button>
+                            <button class="math-btn" onclick="insertMath(4, 'h')">h</button>
+                            <button class="math-btn function-btn" onclick="insertMath(4, 'f(x)')">f(x)</button>
+                            <button class="math-btn" onclick="insertMath(4, '\\Delta x')">Δx</button>
+                            <button class="math-btn" onclick="insertMath(4, '\\Delta')">Δ</button>
+                            <button class="math-btn" onclick="insertMath(4, '\\partial')">∂</button>
+                            <button class="math-btn function-btn" onclick="insertMath(4, '\\frac{}{}')">÷</button>
+                            <button class="math-btn function-btn" onclick="insertMath(4, '\\sqrt{}')">√</button>
+                            <button class="math-btn function-btn" onclick="insertMath(4, '\\ln')">[ln]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(4, '\\log')">[log]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(4, '\\sin')">[sin]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(4, '\\cos')">[cos]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(4, '\\tan')">[tan]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(4, 'e^{}')">[e^]</button>
+                        </div>
+                        
+                        <div class="mathquill-field" id="question4"></div>
+                </div>
+                
+                <div class="question-group">
+                    <label class="question-label">6. What is the derivative of a constant function like $f(x) = 5$?</label>
+                    
+                        <!-- Mathematical Toolbar -->
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(5, 'x')">x</button>
+                            <button class="math-btn" onclick="insertMath(5, 'y')">y</button>
+                            <button class="math-btn" onclick="insertMath(5, '^')">^</button>
+                            <button class="math-btn" onclick="insertMath(5, '(')">(</button>
+                            <button class="math-btn" onclick="insertMath(5, ')')">)</button>
+                            <button class="math-btn" onclick="insertMath(5, '+')">+</button>
+                            <button class="math-btn" onclick="insertMath(5, '-')">-</button>
+                            <button class="math-btn" onclick="insertMath(5, '/')">/</button>
+                            <button class="math-btn" onclick="insertMath(5, '*')">×</button>
+                            <button class="math-btn" onclick="insertMath(5, '=')">=</button>
+                            <button class="math-btn function-btn" onclick="insertMath(5, '\\lim')">lim</button>
+                            <button class="math-btn" onclick="insertMath(5, '\\to')">→</button>
+                            <button class="math-btn" onclick="insertMath(5, '\\infty')">∞</button>
+                            <button class="math-btn" onclick="insertMath(5, 'h')">h</button>
+                            <button class="math-btn function-btn" onclick="insertMath(5, 'f(x)')">f(x)</button>
+                            <button class="math-btn" onclick="insertMath(5, '\\Delta x')">Δx</button>
+                            <button class="math-btn" onclick="insertMath(5, '\\Delta')">Δ</button>
+                            <button class="math-btn" onclick="insertMath(5, '\\partial')">∂</button>
+                            <button class="math-btn function-btn" onclick="insertMath(5, '\\frac{}{}')">[/]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(5, '\\sqrt{}')">[√]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(5, '\\ln')">[ln]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(5, '\\log')">[log]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(5, '\\sin')">[sin]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(5, '\\cos')">[cos]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(5, '\\tan')">[tan]</button>
+                            <button class="math-btn function-btn" onclick="insertMath(5, 'e^{}')">[e^]</button>
+                        </div>
+                        
+                        <div class="mathquill-field" id="question5"></div>
+                </div>
+            </div>
+            
+        </form>
+        <button class="button-confirm" type="button" onclick="submitQuiz()">Submit</button>
+        <div id="result"></div>
+    </div>
+</div>
+
+<script>
+    window.questions = [
+        { question: "What does a derivative measure?", answer: "rate of change", topic: "Introduction to Derivatives" },
+        { question: "If f(x) represents position, what does f'(x) represent?", answer: "velocity", topic: "Introduction to Derivatives" },
+        { question: "If a car travels 100 miles in 2 hours, what is its average rate of change of distance?", answer: "50", topic: "Introduction to Derivatives" },
+        { question: "What is the slope of the line y = 3x + 2?", answer: "3", topic: "Introduction to Derivatives" },
+        { question: "If the derivative of a function at a point is positive, what does this tell us about the function?", answer: "increasing", topic: "Introduction to Derivatives" },
+        { question: "What is the derivative of a constant function like f(x) = 5?", answer: "0", topic: "Introduction to Derivatives" }
+    ];
+
+    // MathQuill initialization
+    document.addEventListener('DOMContentLoaded', function() {
+        var MQ = MathQuill.getInterface(2);
+        
+        // Initialize all MathQuill fields
+        window.mathFields = {};
+
+        // Enhanced Mathematical toolbar function
+        window.insertMath = function(questionNum, symbol) {
+            try {
+                if (!window.mathFields || !window.mathFields[questionNum]) {
+                    console.warn('MathField not initialized for question', questionNum);
+                    return;
+                }
+                
+                const field = window.mathFields[questionNum];
+                
+                switch(symbol) {
+                    case '\\frac{}{}':
+                        field.write('\\frac{}{}');
+                        field.keystroke('Left Left Left');
+                        break;
+                    case '\\sqrt{}':
+                        field.write('\\sqrt{}');
+                        field.keystroke('Left');
+                        break;
+                    case 'e^{}':
+                        field.write('e^{}');
+                        field.keystroke('Left');
+                        break;
+                    case 'f(x)':
+                        field.write('f(x)');
+                        break;
+                    case '\\lim':
+                        field.write('\\lim_{x \\to }');
+                        field.keystroke('Right');
+                        break;
+                    case '\\ln':
+                        field.write('\\ln\\left(\\right)');
+                        field.keystroke('Left Left Left Left Left Left Left');
+                        break;
+                    case '\\log':
+                        field.write('\\log\\left(\\right)');
+                        field.keystroke('Left Left Left Left Left Left Left Left');
+                        break;
+                    case '\\sin':
+                        field.write('\\sin\\left(\\right)');
+                        field.keystroke('Left Left Left Left Left Left Left Left');
+                        break;
+                    case '\\cos':
+                        field.write('\\cos\\left(\\right)');
+                        field.keystroke('Left Left Left Left Left Left Left Left');
+                        break;
+                    case '\\tan':
+                        field.write('\\tan\\left(\\right)');
+                        field.keystroke('Left Left Left Left Left Left Left Left');
+                        break;
+                    case '\\Delta x':
+                        field.write('\\Delta x');
+                        break;
+                    case '\\Delta':
+                        field.write('\\Delta ');
+                        break;
+                    case '\\partial':
+                        field.write('\\partial ');
+                        break;
+                    case '\\to':
+                        field.write('\\to ');
+                        break;
+                    case '\\infty':
+                        field.write('\\infty');
+                        break;
+                    case '*':
+                        field.write('\\cdot ');
+                        break;
+                    case '^':
+                        field.write('^{}');
+                        field.keystroke('Left');
+                        break;
+                    case '(':
+                        field.write('\\left(\\right)');
+                        field.keystroke('Left Left Left Left Left Left Left');
+                        break;
+                    case ')':
+                        field.write('\\right)');
+                        break;
+                    case '/':
+                        field.write('\\frac{}{}');
+                        field.keystroke('Left Left Left');
+                        break;
+                    default:
+                        field.write(symbol + ' ');
+                        break;
+                }
+                
+                field.focus();
+                
+            } catch (error) {
+                console.error('Error in insertMath function:', error);
+            }
+        };
+
+        
+        for (let i = 0; i < 6; i++) {
+            const fieldId = `question${i}`;
+            const element = document.getElementById(fieldId);
+            if (element) {
+                window.mathFields[fieldId] = MQ.MathField(element, {
+                    spaceBehavesLikeTab: true,
+                    handlers: {
+                        edit: function() {
+                            // Handle input changes if needed
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    // Enhanced answer validation function
+    function normalizeAnswer(answer) {
+        return answer.toLowerCase()
+            .replace(/\s+/g, '') // Remove all spaces
+            .replace(/\$+/g, '') // Remove $ symbols
+            .replace(/\\cdot/g, '*') // Replace LaTeX multiplication
+            .replace(/\\times/g, '*') // Replace LaTeX multiplication
+            .replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, '($1)/($2)') // Convert fractions
+            .replace(/\{([^}]*)\}/g, '$1') // Remove braces
+            .replace(/\^(\d+)/g, '^$1') // Normalize exponents
+            .replace(/²/g, '^2') // Convert superscript 2
+            .replace(/³/g, '^3') // Convert superscript 3
+            .replace(/√/g, 'sqrt') // Convert square root symbol
+            .replace(/π/g, 'pi') // Convert pi symbol
+            .replace(/∞/g, 'infinity') // Convert infinity symbol
+            .replace(/±/g, '+-') // Convert plus-minus
+            .replace(/≈/g, '=') // Convert approximately equal
+            .replace(/≠/g, '!=') // Convert not equal
+            .replace(/≤/g, '<=') // Convert less than or equal
+            .replace(/≥/g, '>=') // Convert greater than or equal
+            .replace(/∂/g, 'd') // Convert partial derivative symbol
+            .replace(/∫/g, 'integral') // Convert integral symbol
+            .replace(/∑/g, 'sum') // Convert summation symbol
+            .replace(/∏/g, 'product') // Convert product symbol
+            .replace(/∆/g, 'delta') // Convert delta symbol
+            .replace(/α/g, 'alpha') // Convert alpha
+            .replace(/β/g, 'beta') // Convert beta
+            .replace(/γ/g, 'gamma') // Convert gamma
+            .replace(/θ/g, 'theta') // Convert theta
+            .replace(/λ/g, 'lambda') // Convert lambda
+            .replace(/μ/g, 'mu') // Convert mu
+            .replace(/σ/g, 'sigma') // Convert sigma
+            .replace(/φ/g, 'phi') // Convert phi
+            .replace(/ω/g, 'omega'); // Convert omega
+    }
+
+    // Check if two mathematical expressions are equivalent
+    function areEquivalent(userAnswer, correctAnswer) {
+        const normalizedUser = normalizeAnswer(userAnswer);
+        const normalizedCorrect = normalizeAnswer(correctAnswer);
+        
+        // Direct match
+        if (normalizedUser === normalizedCorrect) return true;
+        
+        // Check if user answer contains correct answer or vice versa
+        if (normalizedUser.includes(normalizedCorrect) || normalizedCorrect.includes(normalizedUser)) return true;
+        
+        // Check for common mathematical equivalencies
+        const equivalencies = [
+            [normalizedUser, normalizedCorrect],
+            [normalizedUser.replace(/\*/g, ''), normalizedCorrect.replace(/\*/g, '')], // Remove multiplication signs
+            [normalizedUser.replace(/\(/g, '').replace(/\)/g, ''), normalizedCorrect.replace(/\(/g, '').replace(/\)/g, '')], // Remove parentheses
+        ];
+        
+        return equivalencies.some(([a, b]) => a === b);
+    }
+</script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBUfSOSpmCdWUGTVbSQsMCH-JVmrjpfdPY",
+        authDomain: "fyp-lutfi-naim.firebaseapp.com",
+        projectId: "fyp-lutfi-naim",
+        storageBucket: "fyp-lutfi-naim.firebasestorage.app",
+        messagingSenderId: "231274529807",
+        appId: "1:231274529807:web:c4ea279f9e7581bd674f7a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    document.addEventListener('DOMContentLoaded', function() {
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                console.log("No authenticated user found");
+                alert("Please log in to take the module");
+                window.location.href = "index.html";
+                return;
+            }
+            console.log("User authenticated:", user.uid);
+        });
+    });
+
+    window.updateUserLevel = async function(progress) {
+        try {
+            const user = auth.currentUser;
+            if (user) {
+                const userDocRef = doc(db, 'users', user.uid);
+                const userDocSnap = await getDoc(userDocRef);
+
+                let moduleProgress = {};
+                if (userDocSnap.exists()) {
+                    moduleProgress = userDocSnap.data().moduleProgress || {};
+                }
+
+                moduleProgress['Introduction to Derivatives - Novice'] = progress;
+
+                await setDoc(userDocRef, {
+                    moduleProgress: moduleProgress
+                }, { merge: true });
+
+                sessionStorage.setItem('moduleProgress', JSON.stringify(moduleProgress));
+
+                console.log("Module progress updated successfully");
+
+                setTimeout(() => {
+                    window.location.href = "profile.html";
+                }, 1500);
+            } else {
+                console.error("No user is signed in");
+                alert("Please sign in to save your results");
+                window.location.href = "index.html";
+            }
+        } catch (error) {
+            console.error("Error updating module progress:", error);
+            alert("Error updating your progress. Please try again.");
+        }
+    };
+
+    window.submitQuiz = async function() {
+        if (!auth.currentUser) {
+            alert("Please sign in to submit your module");
+            window.location.href = "index.html";
+            return;
+        }
+
+        let score = 0;
+
+        window.questions.forEach((q, index) => {
+            const fieldId = `question${index}`;
+            const mathField = window.mathFields[fieldId];
+            const userAnswer = mathField ? mathField.latex() : '';
+            
+            // Use enhanced mathematical validation
+            if (areEquivalent(userAnswer, q.answer)) {
+                score++;
+            }
+        });
+
+        const progress = Math.round((score / 6) * 100);
+        let status = score >= 4 ? "PASSED" : "NEEDS IMPROVEMENT";
+
+        document.getElementById('result').innerHTML = `
+            <strong>Score: ${score}/6 (${progress}%)</strong><br>
+            <strong>Status: ${status}</strong><br>
+            ${score >= 4 ? "Great job! You can now proceed to Intermediate level." : "Keep practicing! You need at least 4 correct answers to pass."}
+        `;
+
+        await updateUserLevel(progress);
+    };
+</script>
+</body>
+</html> 
+
+
+
+
+
+
+

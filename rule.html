@@ -1,0 +1,4290 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculus Rules</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        renderActions: {
+          addMenu: [0, '', '']
+        }
+      },
+      startup: {
+        ready: () => {
+          console.log('MathJax is loaded, but not yet initialized');
+          MathJax.startup.defaultReady();
+          console.log('MathJax is initialized, and the initial typeset is queued');
+        }
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.0.0/math.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- MathQuill resources -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+  <style>
+    :root {
+      /* Color Variables */
+      --main-color: #323232;
+      --accent-color: #ff6b6b;
+      --secondary-color: #feca57;
+      --tertiary-color: #1dd1a1;
+      --bg-color: #f7f9fc;
+      --font-color: #323232;
+      --input-focus: #2d8cf0;
+      --shadow-md: 4px 4px var(--main-color);
+      --shadow-hover: 2px 2px var(--main-color);
+      --success-color: #2ecc71; /* Added missing success color */
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background: var(--bg-color);
+      color: var(--font-color);
+      min-height: 100vh;
+      line-height: 1.6;
+      letter-spacing: 0.5px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 40px;
+      border-radius: 10px;
+      background-color: white;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      transition: all 0.3s ease;
+      border: 2px solid var(--main-color);
+    }
+
+    .container:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translate(3px, 3px);
+    }
+
+    .form {
+      padding: 40px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: var(--shadow-md);
+      margin: 40px 0;
+      transition: all 0.3s ease;
+      color: var(--font-color);
+      border: 2px solid var(--main-color);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    .form:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translate(3px, 3px);
+    }
+
+    h2 {
+      color: var(--font-color);
+      font-size: 2.2rem;
+      margin: 30px 0;
+      font-weight: 700;
+      text-align: center;
+      width: 100%;
+      position: relative;
+      display: inline-block;
+    }
+
+    h2:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 25%;
+      width: 50%;
+      height: 4px;
+      background-color: var(--accent-color);
+      transition: width 0.3s ease, left 0.3s ease;
+    }
+
+    h2:hover:after {
+      width: 80%;
+      left: 10%;
+    }
+
+    p {
+      margin: 20px 0;
+      font-size: 1.1rem;
+      color: var(--font-color);
+      line-height: 1.8;
+      text-align: left;
+    }
+
+
+    .button {
+      padding: 10px 20px;
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .button:hover {
+      background-color: var(--tertiary-color);
+      transform: translateY(-3px);
+    }
+
+    .button:active {
+      transform: translateY(1px);
+    }
+
+    .rule-tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      padding: 10px 15px;
+      margin: 0 5px;
+      background-color: var(--bg-color);
+      border: 2px solid var(--main-color);
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background-color: var(--accent-color);
+      color: white;
+    }
+
+    .tab-btn:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-3px);
+    }
+
+    input[type=range] {
+      width: 100%;
+      max-width: 500px;
+      margin: 20px auto;
+      background: var(--bg-color);
+      border: 2px solid var(--main-color);
+      border-radius: 5px;
+      height: 8px;
+      box-shadow: var(--shadow-md);
+      display: block;
+      -webkit-appearance: none;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      background: var(--accent-color);
+      border: 2px solid var(--main-color);
+      box-shadow: var(--shadow-md);
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    input[type=range]::-webkit-slider-thumb:hover {
+      background: var(--tertiary-color);
+      transform: scale(1.2);
+    }
+
+    #slope-text, #slope-text2, #derivative-text {
+      padding: 15px;
+      background-color: white;
+      border-radius: 10px;
+      border: 2px solid var(--main-color);
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+      display: inline-block;
+      margin: 20px auto;
+      font-weight: 600;
+    }
+
+    #slope-text:hover, #slope-text2:hover, #derivative-text:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+
+    section {
+      margin: 60px auto;
+      padding: 20px;
+      background-color: white;
+      border: 2px solid var(--main-color);
+      border-radius: 10px;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+      max-width: 1200px;
+    }
+
+    section:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+
+    /* Animated elements */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 260px;
+      height: 100%;
+      background-color: #feca57;
+      border-right: 2px solid var(--main-color);
+      box-shadow: 4px 0 var(--main-color);
+      overflow-x: hidden;
+      padding: 30px 20px;
+      z-index: 100;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar:hover {
+      box-shadow: 6px 0 var(--main-color);
+    }
+
+    .sidebar a, .dropdown-btn {
+      padding: 15px 20px;
+      font-size: 16px;
+      color: var(--font-color);
+      transition: all 0.3s ease;
+      border-radius: 10px;
+      margin: 8px 0;
+      text-decoration: none;
+      display: block;
+      border: 2px solid var(--main-color);
+      background-color: white;
+      width: calc(100% - 40px);
+      text-align: left;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: var(--shadow-md);
+      font-weight: 600;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .sidebar a:before, .dropdown-btn:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--accent-color);
+      transition: all 0.4s ease;
+      z-index: -1;
+      opacity: 0.7;
+    }
+
+    .sidebar a:hover:before, .dropdown-btn:hover:before {
+      left: 0;
+    }
+
+    .sidebar a:hover, .dropdown-btn:hover {
+      color: white;
+      background-color: transparent;
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 6px 6px var(--main-color);
+      border-color: var(--main-color);
+    }
+
+    .sidebar a:active, .dropdown-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px var(--main-color);
+    }
+
+    .sidebar a.active, .dropdown-btn.active {
+      background-color: var(--accent-color);
+      color: white;
+      box-shadow: var(--shadow-hover);
+      transform: translate(2px, 2px);
+    }
+
+    .dropdown-container {
+      background-color: transparent;
+      padding-left: 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .dropdown-btn.active + .dropdown-container {
+      max-height: 300px;
+    }
+
+    .dropdown-container a {
+      border-left: 3px solid var(--main-color);
+      border-radius: 0 10px 10px 0;
+      margin-left: 10px;
+      position: relative;
+    }
+
+    .dropdown-container a:hover {
+      margin-left: 15px;
+    }
+
+    .dropdown-btn::after {
+      content: '▼';
+      position: absolute;
+      right: 15px;
+      transition: transform 0.3s ease;
+      font-size: 12px;
+    }
+
+    .dropdown-btn.active::after {
+      transform: rotate(180deg);
+    }
+
+    /* Popup */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+      width: 400px;
+      max-width: 90%;
+    }
+
+    .popup-content {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Additional styles for practice problems */
+    .practice-list {
+      list-style-type: none;
+      padding: 0;
+      text-align: left;
+    }
+
+    .practice-list li {
+      margin-bottom: 30px;
+      padding: 20px;
+      border: 2px solid var(--main-color);
+      border-radius: 10px;
+      background: white;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+    }
+
+    .practice-list li:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+
+    .input-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+      align-items: center;
+    }
+
+    .input {
+      padding: 10px;
+      border: 2px solid var(--main-color);
+      border-radius: 5px;
+      width: 100%;
+      max-width: 400px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .input:focus {
+      border-color: var(--input-focus);
+      box-shadow: 0 0 5px var(--input-focus);
+      outline: none;
+    }
+
+    .hint, .steps {
+      background-color: var(--bg-color);
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      border-left: 4px solid var(--accent-color);
+    }
+
+    .indicator {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .correct {
+      color: var(--tertiary-color);
+    }
+
+    .incorrect {
+      color: var(--accent-color);
+    }
+
+    .definition-box {
+      background: white;
+      border: 2px solid var(--main-color);
+      border-radius: 10px;
+      padding: 25px;
+      margin: 30px 0;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+    }
+
+    .definition-box:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+
+    .formula {
+      background: var(--bg-color);
+      padding: 15px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .example {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px dashed var(--main-color);
+    }
+
+    .step {
+      background: var(--bg-color);
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+
+    /* Table styling */
+    .styled-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 25px 0;
+      font-size: 18px;
+      border: 2px solid var(--main-color);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+
+    .styled-table thead tr {
+      background-color: var(--accent-color);
+      color: white;
+      text-align: left;
+    }
+
+    .styled-table th,
+    .styled-table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid var(--main-color);
+    }
+
+    .styled-table tbody tr {
+      border-bottom: 1px solid var(--main-color);
+      background-color: white;
+      transition: all 0.3s ease;
+    }
+
+    .styled-table tbody tr:nth-of-type(even) {
+      background-color: var(--bg-color);
+    }
+
+    .styled-table tbody tr:last-of-type {
+      border-bottom: 2px solid var(--main-color);
+    }
+
+    .styled-table tbody tr:hover {
+      background-color: rgba(254, 202, 87, 0.1);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Responsive Design */
+    @media screen and (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 20px;
+      }
+
+      #main-content {
+        margin-left: 0;
+        padding: 20px;
+      }
+
+      .container {
+        margin: 20px;
+        padding: 20px;
+      }
+
+      .form {
+        padding: 25px;
+      }
+
+      .graph-container {
+        padding: 20px;
+      }
+
+      .input-container {
+        flex-direction: column;
+      }
+
+      .input {
+        width: 100%;
+      }
+
+      .button {
+        width: 100%;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      h2 {
+        font-size: 1.8rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+
+      .styled-table {
+        font-size: 14px;
+      }
+
+      .styled-table th,
+      .styled-table td {
+        padding: 8px 10px;
+      }
+    }
+
+
+
+    .step-item {
+      background-color: white;
+      padding: 20px;
+      margin: 15px 0;
+      border-radius: 10px;
+      border: 2px solid var(--main-color);
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+      display: none;
+    }
+
+    .step-item:first-of-type {
+      display: block;
+    }
+
+    .step-item:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+
+    .step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      color: var(--font-color);
+    }
+
+    .step-content {
+      margin-top: 15px;
+    }
+
+    .step-input {
+      width: 100%;
+      padding: 10px 15px;
+      border: 2px solid var(--main-color);
+      border-radius: 10px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      margin: 10px 0;
+    }
+
+    .step-input:focus {
+      outline: none;
+      border-color: var(--input-focus);
+      box-shadow: var(--shadow-md);
+    }
+
+    .checkmark {
+      color: var(--tertiary-color);
+      margin-left: 10px;
+      font-size: 1.4rem;
+    }
+
+    /* Buttons */
+    .step-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    .step-button {
+      padding: 8px 15px;
+      border: 2px solid var(--main-color);
+      border-radius: 10px;
+      background-color: white;
+      color: var(--font-color);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      box-shadow: var(--shadow-md);
+    }
+
+    .step-button:hover {
+      background-color: var(--accent-color);
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .step-button:active {
+      transform: translateY(0);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Hint system */
+    .hint-container {
+      margin-top: 15px;
+    }
+
+    .hint-level {
+      background-color: var(--bg-color);
+      padding: 15px;
+      border-radius: 5px;
+      border-left: 4px solid var(--accent-color);
+      margin-top: 10px;
+      display: none;
+    }
+
+    /* Success and error messages */
+    .success-message, .error-message {
+      padding: 10px 15px;
+      border-radius: 10px;
+      margin: 10px 0;
+      font-weight: 600;
+      animation: fade-in 0.3s ease-in-out;
+    }
+
+    .success-message {
+      background-color: rgba(46, 204, 113, 0.1);
+      color: var(--tertiary-color);
+      border-left: 4px solid var(--tertiary-color);
+    }
+
+    .error-message {
+      background-color: rgba(255, 107, 107, 0.1);
+      color: var(--accent-color);
+      border-left: 4px solid var(--accent-color);
+    }
+
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Input animations */
+    .shake {
+      animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-10px); }
+      40%, 80% { transform: translateX(10px); }
+    }
+
+    .correct-answer {
+      background-color: rgba(46, 204, 113, 0.1);
+      border-color: var(--tertiary-color);
+    }
+
+    /* Visualization container */
+    .visualization-container {
+      height: 350px;
+      margin: 20px 0;
+      border: 2px solid var(--main-color);
+      border-radius: 10px;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      background-color: white;
+      transition: all 0.3s ease;
+    }
+
+    .visualization-container:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+
+    /* For completed steps */
+    .step-item.completed {
+      border-left: 4px solid var(--success-color);
+      background-color: rgba(46, 204, 113, 0.1);
+    }
+
+    /* Completion message */
+    .completion-message {
+      background-color: rgba(46, 204, 113, 0.1);
+      border: 2px solid var(--tertiary-color);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 30px 0;
+      text-align: center;
+      display: none;
+      animation: bounce 1s ease;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-20px); }
+      60% { transform: translateY(-10px); }
+    }
+
+    /* Rule display */
+    .rule-display {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      border: 2px solid var(--secondary-color);
+      margin: 20px 0;
+      display: none;
+      animation: slide-down 0.5s ease;
+      text-align: center;
+      box-shadow: var(--shadow-md);
+    }
+
+    @keyframes slide-down {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .feedback-positive {
+      color: var(--tertiary-color);
+      font-weight: bold;
+    }
+
+    .feedback-negative {
+      color: var(--accent-color);
+      font-weight: bold;
+    }
+
+    .rule-card {
+      background-color: white;
+      border: 2px solid var(--main-color);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 10px 0;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .rule-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    @media screen and (max-width: 768px) {
+      .rule-tabs {
+        flex-wrap: wrap;
+      }
+
+      .tab-btn {
+        margin: 5px 0;
+        width: 100%;
+      }
+    }
+
+    /* Style for the practice button */
+    .practice-button-container {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+    }
+    
+    .practice-page-btn {
+        background-color: var(--accent-color);
+        color: white;
+        border: 2px solid var(--main-color);
+        border-radius: 10px;
+        padding: 12px 25px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-md);
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .practice-page-btn:hover {
+        background-color: var(--tertiary-color);
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    /* MathQuill Styles */
+    .mathquill-field {
+        border: 3px solid var(--main-color);
+        border-radius: 12px;
+        padding: 20px 25px;
+        margin: 15px 0;
+        background: white;
+        min-height: 80px;
+        font-size: 24px;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-md);
+        width: 100%;
+        max-width: 600px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        position: relative;
+        cursor: text;
+    }
+
+    .mathquill-field:focus-within {
+        border-color: var(--input-focus);
+        box-shadow: 0 0 12px rgba(45, 140, 240, 0.4);
+        transform: translateY(-3px);
+        background: linear-gradient(145deg, #ffffff, #f8fafc);
+    }
+
+    .mathquill-field:hover {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 8px rgba(255, 107, 107, 0.2);
+        transform: translateY(-1px);
+    }
+
+    /* MathQuill internal styling overrides */
+    .mathquill-field .mq-editable-field {
+        font-size: 24px !important;
+        min-height: 40px !important;
+        padding: 10px !important;
+        width: 100% !important;
+    }
+
+    .mathquill-field .mq-root-block {
+        font-size: 24px !important;
+        line-height: 1.4 !important;
+    }
+
+    .mathquill-field .mq-cursor {
+        border-left: 3px solid var(--input-focus) !important;
+        height: 30px !important;
+        animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0; }
+    }
+
+    /* Add placeholder-like styling when empty */
+    .mathquill-field:empty::before {
+        content: "Enter your mathematical expression here...";
+        color: #9ca3af;
+        font-style: italic;
+        font-size: 18px;
+        opacity: 0.7;
+    }
+
+    /* Improve selection highlighting */
+    .mathquill-field .mq-selection {
+        background: rgba(45, 140, 240, 0.2) !important;
+        border-radius: 3px !important;
+    }
+
+    /* Add subtle animation when field becomes active */
+    .mathquill-field.mq-focused {
+        animation: focusGlow 0.3s ease-in-out;
+    }
+
+    @keyframes focusGlow {
+        0% { box-shadow: var(--shadow-md); }
+        50% { box-shadow: 0 0 20px rgba(45, 140, 240, 0.3); }
+        100% { box-shadow: 0 0 12px rgba(45, 140, 240, 0.4); }
+    }
+
+    /* Mathematical Toolbar */
+    .math-toolbar {
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.95));
+        border: 2px solid var(--main-color);
+        border-radius: 15px;
+        padding: 15px;
+        margin: 15px 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        box-shadow: var(--shadow-md);
+        position: relative;
+        z-index: 10;
+    }
+
+    .math-btn {
+        background: linear-gradient(145deg, #ffffff, #f1f5f9);
+        border: 2px solid var(--main-color);
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: var(--font-color);
+        min-width: 40px;
+        text-align: center;
+        user-select: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .math-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .math-btn:hover::before {
+        left: 100%;
+    }
+
+    .math-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        border-color: var(--accent-color);
+        background: var(--accent-color);
+        color: white;
+    }
+
+    .math-btn:active {
+        transform: translateY(0);
+    }
+
+    .toolbar-label {
+        font-weight: bold;
+        width: 100%;
+        margin-bottom: 8px;
+        color: var(--input-focus);
+        text-align: center;
+        font-size: 14px;
+    }
+
+    /* Enhanced input container for MathQuill */
+    .enhanced-input-container {
+        background: linear-gradient(145deg, #ffffff, #f8fafc);
+        border: 3px solid var(--main-color);
+        border-radius: 15px;
+        padding: 25px;
+        margin: 20px 0;
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .enhanced-input-container:hover {
+        box-shadow: var(--shadow-lg);
+        transform: translateY(-2px);
+        border-color: var(--accent-color);
+    }
+
+    .input-label {
+        font-weight: 700;
+        color: var(--font-color);
+        margin-bottom: 15px;
+        display: block;
+        font-size: 18px;
+        text-align: center;
+        width: 100%;
+        padding: 10px;
+        background: linear-gradient(145deg, var(--bg-color), #e2e8f0);
+        border-radius: 8px;
+        border: 2px solid var(--main-color);
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Real-time feedback for MathQuill */
+    .real-time-feedback {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+        z-index: 10;
+        transition: all 0.3s ease;
+    }
+
+    .feedback-correct {
+        background: var(--tertiary-color);
+        color: white;
+    }
+
+    .feedback-incorrect {
+        background: var(--accent-color);
+        color: white;
+    }
+
+    .feedback-typing {
+        background: var(--secondary-color);
+        color: var(--font-color);
+    }
+
+    /* Responsive adjustments for math toolbar */
+    @media screen and (max-width: 768px) {
+        .math-toolbar {
+            gap: 5px;
+            padding: 15px;
+        }
+
+        .math-btn {
+            padding: 8px 10px;
+            font-size: 16px;
+            min-width: 40px;
+        }
+
+        .mathquill-field {
+            min-height: 70px;
+            font-size: 20px;
+            padding: 15px 20px;
+            max-width: 100%;
+        }
+
+        .mathquill-field .mq-editable-field {
+            font-size: 20px !important;
+        }
+
+        .mathquill-field .mq-root-block {
+            font-size: 20px !important;
+        }
+
+        .enhanced-input-container {
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .input-label {
+            font-size: 16px;
+            padding: 8px;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .math-toolbar {
+            gap: 3px;
+            padding: 10px;
+        }
+
+        .math-btn {
+            padding: 6px 8px;
+            font-size: 14px;
+            min-width: 35px;
+        }
+
+        .mathquill-field {
+            min-height: 60px;
+            font-size: 18px;
+            padding: 12px 15px;
+        }
+
+        .mathquill-field .mq-editable-field {
+            font-size: 18px !important;
+        }
+
+        .mathquill-field .mq-root-block {
+            font-size: 18px !important;
+        }
+
+        .enhanced-input-container {
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .input-label {
+            font-size: 14px;
+            padding: 6px;
+        }
+    }
+
+    /* Drag and Drop Styles */
+    .drag-drop-container {
+        background: linear-gradient(145deg, #ffffff, #f8fafc);
+        border: 3px solid var(--main-color);
+        border-radius: 15px;
+        padding: 25px;
+        margin: 20px 0;
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
+    }
+
+    .drag-drop-container:hover {
+        box-shadow: var(--shadow-lg);
+        transform: translateY(-2px);
+        border-color: var(--accent-color);
+    }
+
+    .drag-items-bank {
+        background: linear-gradient(145deg, #f1f5f9, #e2e8f0);
+        border: 2px solid var(--main-color);
+        border-radius: 12px;
+        padding: 20px;
+        margin: 15px 0;
+        min-height: 120px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+    .drag-item {
+        background: linear-gradient(145deg, #ffffff, #f8fafc);
+        border: 2px solid var(--main-color);
+        border-radius: 8px;
+        padding: 12px 16px;
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--font-color);
+        cursor: grab;
+        user-select: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: relative;
+        min-width: 60px;
+        text-align: center;
+    }
+
+    .drag-item:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        border-color: var(--accent-color);
+        background: var(--accent-color);
+        color: white;
+    }
+
+    .drag-item:active {
+        cursor: grabbing;
+        transform: scale(0.95);
+    }
+
+    .drag-item.dragging {
+        opacity: 0.5;
+        transform: rotate(5deg);
+        z-index: 1000;
+    }
+
+    .drop-zone {
+        background: linear-gradient(145deg, #ffffff, #f8fafc);
+        border: 3px dashed var(--main-color);
+        border-radius: 10px;
+        padding: 20px;
+        margin: 10px 5px;
+        min-height: 60px;
+        min-width: 80px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        color: #666;
+        transition: all 0.3s ease;
+        position: relative;
+        vertical-align: middle;
+    }
+
+    .drop-zone:hover {
+        border-color: var(--accent-color);
+        background: rgba(255, 107, 107, 0.1);
+        transform: scale(1.02);
+    }
+
+    .drop-zone.drag-over {
+        border-color: var(--tertiary-color);
+        background: rgba(29, 209, 161, 0.2);
+        border-style: solid;
+        animation: pulse 0.5s ease-in-out infinite alternate;
+    }
+
+    .drop-zone.filled {
+        background: linear-gradient(145deg, var(--tertiary-color), #16a085);
+        border-color: var(--tertiary-color);
+        border-style: solid;
+        color: white;
+        font-weight: 600;
+    }
+
+    .drop-zone.correct {
+        background: linear-gradient(145deg, var(--tertiary-color), #16a085);
+        border-color: var(--tertiary-color);
+        animation: correctPulse 0.6s ease-in-out;
+    }
+
+    .drop-zone.incorrect {
+        background: linear-gradient(145deg, var(--accent-color), #e74c3c);
+        border-color: var(--accent-color);
+        animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        100% { transform: scale(1.05); }
+    }
+
+    @keyframes correctPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+
+    .formula-template {
+        background: white;
+        border: 2px solid var(--main-color);
+        border-radius: 12px;
+        padding: 25px;
+        margin: 20px 0;
+        font-size: 24px;
+        text-align: center;
+        line-height: 1.8;
+        box-shadow: var(--shadow-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .formula-template .static-text {
+        font-weight: 600;
+        color: var(--font-color);
+        margin: 0 5px;
+        display: inline-flex;
+        align-items: center;
+    }
+    
+    .formula-template .drop-zone {
+        vertical-align: middle;
+    }
+
+    .drag-feedback {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 10px;
+        font-weight: 600;
+        text-align: center;
+        display: none;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .drag-feedback.success {
+        background: rgba(46, 204, 113, 0.1);
+        color: var(--tertiary-color);
+        border: 2px solid var(--tertiary-color);
+    }
+
+    .drag-feedback.error {
+        background: rgba(255, 107, 107, 0.1);
+        color: var(--accent-color);
+        border: 2px solid var(--accent-color);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Interactive element hover effects */
+    .interactive-rule-card:hover > div {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        border-color: var(--accent-color);
+    }
+
+    .interactive-problem-card:hover > div {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        border-color: var(--secondary-color);
+    }
+
+    /* Solution reveal animation */
+    .solution-reveal {
+        animation: slideDown 0.4s ease;
+    }
+
+    /* Button hover effects for interactive elements */
+    button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Enhanced MathJax visibility */
+    .MathJax {
+        font-size: 1.2em !important;
+    }
+
+    .styled-table .MathJax {
+        font-size: 1.4em !important;
+        color: #333 !important;
+    }
+
+    /* Ensure table cells have proper height for math expressions */
+    .styled-table td div, .styled-table th div {
+        min-height: 60px;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    /* Additional spacing for mathematical expressions */
+    .mjx-chtml {
+        margin: 10px 0 !important;
+    }
+
+    .reset-button {
+        background: var(--secondary-color);
+        color: var(--font-color);
+        border: 2px solid var(--main-color);
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 10px 5px;
+    }
+
+    .reset-button:hover {
+        background: var(--accent-color);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .check-button-drag {
+        background: var(--tertiary-color);
+        color: white;
+        border: 2px solid var(--main-color);
+        border-radius: 8px;
+        padding: 12px 25px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 10px 5px;
+        font-size: 16px;
+    }
+
+    .check-button-drag:hover {
+        background: #16a085;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .check-button-drag:disabled {
+        background: #bdc3c7;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* Responsive drag and drop */
+    @media screen and (max-width: 768px) {
+        .drag-items-bank {
+            padding: 15px;
+            gap: 8px;
+        }
+
+        .drag-item {
+            padding: 10px 12px;
+            font-size: 16px;
+            min-width: 50px;
+        }
+
+        .drop-zone {
+            padding: 15px;
+            min-height: 50px;
+            min-width: 60px;
+            font-size: 14px;
+        }
+
+        .formula-template {
+            font-size: 20px;
+            padding: 20px;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .drag-items-bank {
+            padding: 10px;
+            gap: 5px;
+        }
+
+        .drag-item {
+            padding: 8px 10px;
+            font-size: 14px;
+            min-width: 40px;
+        }
+
+        .drop-zone {
+            padding: 12px;
+            min-height: 40px;
+            min-width: 50px;
+            font-size: 12px;
+        }
+
+        .formula-template {
+            font-size: 18px;
+            padding: 15px;
+        }
+    }
+  </style>
+</head>
+<body>
+
+<div id="sidebar" class="sidebar">
+  <a href="home.html">Home</a>
+  <button class="dropdown-btn">Differentiation Rules
+    <i class="fa fa-caret-down"></i>
+  </button>
+  <div class="dropdown-container">
+    <a href="#" onclick="openRuleTab(event, 'common-derivatives')">Common Derivatives</a>
+    <a href="#" onclick="openRuleTab(event, 'product-rule')">Product Rule</a>
+    <a href="#" onclick="openRuleTab(event, 'quotient-rule')">Quotient Rule</a>
+    <a href="#" onclick="openRuleTab(event, 'chain-rule')">Chain Rule</a>
+  </div>
+  
+  <button class="dropdown-btn">Practice Problems
+    <i class="fa fa-caret-down"></i>
+  </button>
+  <div class="dropdown-container">
+    <a href="#" onclick="scrollToPractice('common-derivatives')">Practice with Common Derivatives</a>
+    <a href="#" onclick="scrollToPractice('product-rule')">Practice with Product Rule</a>
+    <a href="#" onclick="scrollToPractice('quotient-rule')">Practice with Quotient Rule</a>
+    <a href="#" onclick="scrollToPractice('chain-rule')">Practice with Chain Rule</a>
+  </div>
+  
+  <a href="#differentiation-rules">Your Learning Progress</a>
+</div>
+
+<script>
+// Add this function to scroll to the practice sections
+function scrollToPractice(ruleId) {
+  // First open the appropriate tab
+  const tabEvent = { currentTarget: document.querySelector(`.tab-btn[onclick*="${ruleId}"]`) };
+  openRuleTab(tabEvent, ruleId);
+  
+  // Then scroll to the practice section within that tab
+  setTimeout(() => {
+    const practiceSection = document.querySelector(`#${ruleId} .practice-section`);
+    if (practiceSection) {
+      practiceSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, 100);
+}
+</script>
+
+<div id="main-content" style="margin-left:260px;margin-top:20px;">
+
+  <section id="differentiation-rules">
+    <div class="container">
+      <!-- Add after the title -->
+      <h1>Rules of Differentiation</h1>
+      
+      <div class="practice-button-container">
+          <a href="practice-rules-differentiation.html" class="practice-page-btn">Practice This Topic</a>
+      </div>
+
+
+
+      <!-- Interactive rule navigation tabs -->
+      <div class="rule-tabs">
+        <button class="tab-btn active" onclick="openRuleTab(event, 'common-derivatives')">Common Derivatives</button>
+        <button class="tab-btn" onclick="openRuleTab(event, 'product-rule')">Product Rule</button>
+        <button class="tab-btn" onclick="openRuleTab(event, 'quotient-rule')">Quotient Rule</button>
+        <button class="tab-btn" onclick="openRuleTab(event, 'chain-rule')">Chain Rule</button>
+      </div>
+
+      <!-- Common Derivatives Content -->
+      <div id="common-derivatives" class="rule-content active">
+        <div class="definition-box">
+          <h3>2.3 Techniques of Differentiation</h3>
+          
+          <!-- 2.3.1 Derivatives of Constant, Linear & Power Functions -->
+          <div class="definition-box">
+            <h4>2.3.1 Derivatives of Constant, Linear & Power Functions</h4>
+            
+            <!-- Interactive Rule Discovery -->
+            <div style="background: linear-gradient(145deg, #f8fafc, #e2e8f0); border: 2px solid var(--main-color); border-radius: 15px; padding: 25px; margin: 20px 0;">
+              <p style="font-weight: 600; color: var(--font-color); margin-bottom: 15px;">🧠 <strong>Interactive Rule Discovery:</strong> Click on each rule type to reveal the pattern!</p>
+              
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                <!-- Constant Rule Card -->
+                <div class="interactive-rule-card" onclick="revealRule('constant')" style="cursor: pointer;">
+                  <div style="background: white; border: 2px solid var(--main-color); border-radius: 12px; padding: 20px; box-shadow: var(--shadow-md); transition: all 0.3s ease;">
+                    <h5 style="color: var(--accent-color); margin: 0 0 15px 0;">📊 Constant Functions</h5>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0;">
+                      <span style="font-weight: 600;">$$f(x) = c$$</span>
+                      <span style="font-size: 24px;">→</span>
+                      <span id="constant-result" style="font-weight: 600; color: var(--tertiary-color);">❓</span>
+                    </div>
+                    <div id="constant-explanation" style="display: none; background: var(--bg-color); padding: 10px; border-radius: 8px; margin-top: 10px;">
+                      <p style="margin: 0; font-size: 14px;"><strong>Rule:</strong> The derivative of any constant is always 0, because constants don't change!</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Linear Rule Card -->
+                <div class="interactive-rule-card" onclick="revealRule('linear')" style="cursor: pointer;">
+                  <div style="background: white; border: 2px solid var(--main-color); border-radius: 12px; padding: 20px; box-shadow: var(--shadow-md); transition: all 0.3s ease;">
+                    <h5 style="color: var(--secondary-color); margin: 0 0 15px 0;">📈 Linear Functions</h5>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0;">
+                      <span style="font-weight: 600;">$$f(x) = ax + b$$</span>
+                      <span style="font-size: 24px;">→</span>
+                      <span id="linear-result" style="font-weight: 600; color: var(--tertiary-color);">❓</span>
+                    </div>
+                    <div id="linear-explanation" style="display: none; background: var(--bg-color); padding: 10px; border-radius: 8px; margin-top: 10px;">
+                      <p style="margin: 0; font-size: 14px;"><strong>Rule:</strong> The derivative is the coefficient 'a' (the slope). The constant 'b' disappears!</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Power Rule Card -->
+                <div class="interactive-rule-card" onclick="revealRule('power')" style="cursor: pointer;">
+                  <div style="background: white; border: 2px solid var(--main-color); border-radius: 12px; padding: 20px; box-shadow: var(--shadow-md); transition: all 0.3s ease;">
+                    <h5 style="color: var(--input-focus); margin: 0 0 15px 0;">⚡ Power Functions</h5>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0;">
+                      <span style="font-weight: 600;">$$f(x) = x^n$$</span>
+                      <span style="font-size: 24px;">→</span>
+                      <span id="power-result" style="font-weight: 600; color: var(--tertiary-color);">❓</span>
+                    </div>
+                    <div id="power-explanation" style="display: none; background: var(--bg-color); padding: 10px; border-radius: 8px; margin-top: 10px;">
+                      <p style="margin: 0; font-size: 14px;"><strong>Rule:</strong> Bring down the exponent as a coefficient, then subtract 1 from the exponent!</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Interactive Table Reveal -->
+              <div style="text-align: center; margin: 20px 0;">
+                <button id="reveal-table-btn" onclick="revealTable()" style="background: var(--accent-color); color: white; border: 2px solid var(--main-color); border-radius: 10px; padding: 12px 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                  📋 Show Complete Rules Table
+                </button>
+              </div>
+            </div>
+            
+            <div id="rules-table" style="display: none; animation: slideDown 0.5s ease;">
+              <table class="styled-table" style="font-size: 18px;">
+                <thead>
+                  <tr style="background-color: #ff6b6b; color: white;">
+                    <th style="padding: 20px; text-align: center; font-size: 20px; font-weight: bold;">
+                      <div style="display: flex; align-items: center; justify-content: center; min-height: 40px;">
+                        $$f(x) \text{ or } y$$
+                      </div>
+                    </th>
+                    <th style="padding: 20px; text-align: center; font-size: 20px; font-weight: bold;">
+                      <div style="display: flex; align-items: center; justify-content: center; min-height: 40px;">
+                        $$f'(x) \text{ or } \frac{dy}{dx}$$
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="background: rgba(255, 107, 107, 0.15); border: 2px solid rgba(255, 107, 107, 0.3);">
+                    <td style="padding: 15px; text-align: center; font-weight: bold; font-size: 18px; color: #333;">
+                      <strong>Constant</strong>
+                    </td>
+                    <td style="padding: 15px; text-align: center; color: #666;">
+                      <!-- Empty cell for header row -->
+                    </td>
+                  </tr>
+                  <tr style="background: rgba(255, 107, 107, 0.05); border: 1px solid rgba(255, 107, 107, 0.2);">
+                    <td style="padding: 20px; text-align: center; font-size: 24px;">
+                      <div style="display: flex; align-items: center; justify-content: center; min-height: 50px;">
+                        $$c$$
+                      </div>
+                    </td>
+                    <td style="padding: 20px; text-align: center; font-size: 24px; color: var(--accent-color); font-weight: bold;">
+                      <div style="display: flex; align-items: center; justify-content: center; min-height: 50px;">
+                        $$0$$
+                      </div>
+                    </td>
+                  </tr>
+                  <tr style="background: rgba(254, 202, 87, 0.15); border: 2px solid rgba(254, 202, 87, 0.3);">
+                    <td style="padding: 15px; text-align: center; font-weight: bold; font-size: 18px; color: #333;">
+                      <strong>Linear</strong>
+                    </td>
+                    <td style="padding: 15px; text-align: center; color: #666;">
+                      <!-- Empty cell for header row -->
+                    </td>
+                  </tr>
+                  <tr style="background: rgba(254, 202, 87, 0.05); border: 1px solid rgba(254, 202, 87, 0.2);">
+                    <td style="padding: 20px; text-align: center; font-size: 24px;">
+                      <div style="display: flex; align-items: center; justify-content: center; min-height: 50px;">
+                        $$ax + b$$
+                      </div>
+                    </td>
+                    <td style="padding: 20px; text-align: center; font-size: 24px; color: var(--secondary-color); font-weight: bold;">
+                      <div style="display: flex; align-items: center; justify-content: center; min-height: 50px;">
+                        $$a$$
+                      </div>
+                    </td>
+                  </tr>
+                  <tr style="background: rgba(45, 140, 240, 0.15); border: 2px solid rgba(45, 140, 240, 0.3);">
+                    <td style="padding: 15px; text-align: center; font-weight: bold; font-size: 18px; color: #333;">
+                      <strong>Power</strong>
+                    </td>
+                    <td style="padding: 15px; text-align: center; color: #666;">
+                      <!-- Empty cell for header row -->
+                    </td>
+                  </tr>
+                  <tr style="background: rgba(45, 140, 240, 0.05); border: 1px solid rgba(45, 140, 240, 0.2);">
+                    <td style="padding: 20px; text-align: center; font-size: 24px;">
+                      <div style="display: flex; align-items: center; justify-content: center; min-height: 50px;">
+                        $$x^n$$
+                      </div>
+                    </td>
+                    <td style="padding: 20px; text-align: center; font-size: 24px; color: var(--input-focus); font-weight: bold;">
+                      <div style="display: flex; align-items: center; justify-content: center; min-height: 50px;">
+                        $$nx^{n-1}$$
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Interactive Example 4 from the textbook -->
+            <div class="example" style="background: linear-gradient(145deg, #ffffff, #f8fafc); border: 2px solid var(--main-color); border-radius: 15px; padding: 25px; margin: 20px 0;">
+              <h4 style="color: var(--input-focus); text-align: center; margin-bottom: 20px;">🎯 Example 4: Interactive Step-by-Step Solutions</h4>
+              <p style="text-align: center; font-weight: 600; color: var(--font-color);"><strong>Differentiate each of the following with respect to x. Click on each problem to reveal the solution!</strong></p>
+              
+              <!-- Interactive Problem Cards -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; margin: 25px 0;">
+                
+                <!-- Problem A -->
+                <div class="interactive-problem-card" onclick="toggleSolution('problem-a')" style="cursor: pointer;">
+                  <div style="background: white; border: 2px solid var(--main-color); border-radius: 12px; padding: 20px; box-shadow: var(--shadow-md); transition: all 0.3s ease;">
+                                         <div style="display: flex; justify-content: space-between; align-items: center;">
+                       <h5 style="color: var(--accent-color); margin: 0;">Problem A)</h5>
+                       <span id="toggle-a" style="font-size: 20px; color: var(--accent-color);">▶</span>
+                     </div>
+                    <p style="font-size: 18px; font-weight: 600; margin: 15px 0;">$$f(x) = 10$$</p>
+                    <div id="problem-a" style="display: none;">
+                      <div style="background: rgba(255, 107, 107, 0.1); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <p style="margin: 0; font-weight: 600; color: var(--accent-color);">$$f'(x) = 0$$</p>
+                      </div>
+                      <div style="background: var(--bg-color); padding: 10px; border-radius: 8px;">
+                        <p style="margin: 0; font-size: 14px;"><strong>🔍 Explanation:</strong> Since $$f(x) = 10$$ is a constant, its derivative is 0. Constants don't change, so their rate of change is zero!</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Problem B -->
+                <div class="interactive-problem-card" onclick="toggleSolution('problem-b')" style="cursor: pointer;">
+                  <div style="background: white; border: 2px solid var(--main-color); border-radius: 12px; padding: 20px; box-shadow: var(--shadow-md); transition: all 0.3s ease;">
+                                         <div style="display: flex; justify-content: space-between; align-items: center;">
+                       <h5 style="color: var(--secondary-color); margin: 0;">Problem B)</h5>
+                       <span id="toggle-b" style="font-size: 20px; color: var(--secondary-color);">▶</span>
+                     </div>
+                    <p style="font-size: 18px; font-weight: 600; margin: 15px 0;">$$y = x$$</p>
+                    <div id="problem-b" style="display: none;">
+                      <div style="background: rgba(254, 202, 87, 0.1); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <p style="margin: 0; font-weight: 600; color: var(--secondary-color);">$$\frac{dy}{dx} = 1$$</p>
+                      </div>
+                      <div style="background: var(--bg-color); padding: 10px; border-radius: 8px;">
+                        <p style="margin: 0; font-size: 14px;"><strong>🔍 Step-by-step:</strong></p>
+                        <p style="margin: 5px 0; font-size: 14px;">1. Rewrite: $$y = x = x^1$$</p>
+                        <p style="margin: 5px 0; font-size: 14px;">2. Apply power rule: $$\frac{d}{dx}[x^1] = 1 \cdot x^{1-1} = 1 \cdot x^0 = 1$$</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Problem C -->
+                <div class="interactive-problem-card" onclick="toggleSolution('problem-c')" style="cursor: pointer;">
+                  <div style="background: white; border: 2px solid var(--main-color); border-radius: 12px; padding: 20px; box-shadow: var(--shadow-md); transition: all 0.3s ease;">
+                                         <div style="display: flex; justify-content: space-between; align-items: center;">
+                       <h5 style="color: var(--input-focus); margin: 0;">Problem C)</h5>
+                       <span id="toggle-c" style="font-size: 20px; color: var(--input-focus);">▶</span>
+                     </div>
+                    <p style="font-size: 18px; font-weight: 600; margin: 15px 0;">$$f(x) = x^2$$</p>
+                    <div id="problem-c" style="display: none;">
+                      <div style="background: rgba(45, 140, 240, 0.1); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <p style="margin: 0; font-weight: 600; color: var(--input-focus);">$$f'(x) = 2x$$</p>
+                      </div>
+                      <div style="background: var(--bg-color); padding: 10px; border-radius: 8px;">
+                        <p style="margin: 0; font-size: 14px;"><strong>🔍 Step-by-step:</strong></p>
+                        <p style="margin: 5px 0; font-size: 14px;">1. Apply power rule: $$\frac{d}{dx}[x^2] = 2x^{2-1}$$</p>
+                        <p style="margin: 5px 0; font-size: 14px;">2. Simplify: $$2x^1 = 2x$$</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Problem D -->
+                <div class="interactive-problem-card" onclick="toggleSolution('problem-d')" style="cursor: pointer;">
+                  <div style="background: white; border: 2px solid var(--main-color); border-radius: 12px; padding: 20px; box-shadow: var(--shadow-md); transition: all 0.3s ease;">
+                                         <div style="display: flex; justify-content: space-between; align-items: center;">
+                       <h5 style="color: var(--tertiary-color); margin: 0;">Problem D)</h5>
+                       <span id="toggle-d" style="font-size: 20px; color: var(--tertiary-color);">▶</span>
+                     </div>
+                    <p style="font-size: 18px; font-weight: 600; margin: 15px 0;">$$y = \sqrt{x}$$</p>
+                    <div id="problem-d" style="display: none;">
+                      <div style="background: rgba(29, 209, 161, 0.1); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <p style="margin: 0; font-weight: 600; color: var(--tertiary-color);">$$\frac{dy}{dx} = \frac{1}{2\sqrt{x}}$$</p>
+                      </div>
+                      <div style="background: var(--bg-color); padding: 10px; border-radius: 8px;">
+                        <p style="margin: 0; font-size: 14px;"><strong>🔍 Step-by-step:</strong></p>
+                        <p style="margin: 5px 0; font-size: 14px;">1. Rewrite: $$y = \sqrt{x} = x^{1/2}$$</p>
+                        <p style="margin: 5px 0; font-size: 14px;">2. Apply power rule: $$\frac{d}{dx}[x^{1/2}] = \frac{1}{2}x^{1/2-1} = \frac{1}{2}x^{-1/2}$$</p>
+                        <p style="margin: 5px 0; font-size: 14px;">3. Simplify: $$\frac{1}{2}x^{-1/2} = \frac{1}{2x^{1/2}} = \frac{1}{2\sqrt{x}}$$</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Problem E -->
+                <div class="interactive-problem-card" onclick="toggleSolution('problem-e')" style="cursor: pointer;">
+                  <div style="background: white; border: 2px solid var(--main-color); border-radius: 12px; padding: 20px; box-shadow: var(--shadow-md); transition: all 0.3s ease;">
+                                         <div style="display: flex; justify-content: space-between; align-items: center;">
+                       <h5 style="color: #8e44ad; margin: 0;">Problem E)</h5>
+                       <span id="toggle-e" style="font-size: 20px; color: #8e44ad;">▶</span>
+                     </div>
+                    <p style="font-size: 18px; font-weight: 600; margin: 15px 0;">$$f(x) = \frac{1}{x}$$</p>
+                    <div id="problem-e" style="display: none;">
+                      <div style="background: rgba(142, 68, 173, 0.1); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <p style="margin: 0; font-weight: 600; color: #8e44ad;">$$f'(x) = -\frac{1}{x^2}$$</p>
+                      </div>
+                      <div style="background: var(--bg-color); padding: 10px; border-radius: 8px;">
+                        <p style="margin: 0; font-size: 14px;"><strong>🔍 Step-by-step:</strong></p>
+                        <p style="margin: 5px 0; font-size: 14px;">1. Rewrite: $$f(x) = \frac{1}{x} = x^{-1}$$</p>
+                        <p style="margin: 5px 0; font-size: 14px;">2. Apply power rule: $$\frac{d}{dx}[x^{-1}] = (-1) \cdot x^{-1-1} = -1 \cdot x^{-2}$$</p>
+                        <p style="margin: 5px 0; font-size: 14px;">3. Simplify: $$-x^{-2} = -\frac{1}{x^2}$$</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Practice Button -->
+                             <div style="text-align: center; margin: 25px 0;">
+                 <button onclick="revealAllSolutions()" style="background: var(--tertiary-color); color: white; border: 2px solid var(--main-color); border-radius: 10px; padding: 12px 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin: 0 10px;">
+                   ▼ Reveal All Solutions
+                 </button>
+                 <button onclick="hideAllSolutions()" style="background: var(--accent-color); color: white; border: 2px solid var(--main-color); border-radius: 10px; padding: 12px 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin: 0 10px;">
+                   ▲ Hide All Solutions
+                 </button>
+               </div>
+            </div>
+          </div>
+
+          <h3>Basic Differentiation Rules</h3>
+          <p>These are the fundamental differentiation rules that you should memorize:</p>
+
+          <!-- Interactive Rule Cards -->
+          <div class="rule-cards">
+            <div class="rule-card" onclick="toggleRuleCard(this)">
+              <div class="rule-card-header">Power Rule</div>
+              <div class="rule-card-content">
+                <p class="formula">\(\frac{d}{dx}[x^n] = nx^{n-1}\)</p>
+                <div class="example">
+                  <p>Example: \(\frac{d}{dx}[x^3] = 3x^2\)</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="rule-card" onclick="toggleRuleCard(this)">
+              <div class="rule-card-header">Exponential Rule</div>
+              <div class="rule-card-content">
+                <p class="formula">\(\frac{d}{dx}[e^x] = e^x\)</p>
+                <div class="example">
+                  <p>Example: The derivative of \(e^x\) is itself!</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="rule-card" onclick="toggleRuleCard(this)">
+              <div class="rule-card-header">Trigonometric Rules</div>
+              <div class="rule-card-content">
+                <p class="formula">\(\frac{d}{dx}[\sin(x)] = \cos(x)\)</p>
+                <p class="formula">\(\frac{d}{dx}[\cos(x)] = -\sin(x)\)</p>
+                <div class="example">
+                  <p>Example: \(\frac{d}{dx}[\sin(x^2)] = 2x\cos(x^2)\) (using chain rule)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Drag and Drop Practice -->
+          <div class="practice-section">
+            <h3>🎯 Interactive Practice with Common Derivatives</h3>
+            
+            <!-- Problem 1: Power Rule -->
+            <div class="drag-drop-container">
+              <h4>Problem 1: Complete the Power Rule Formula</h4>
+              <p>Drag the correct terms to complete the power rule formula:</p>
+              
+              <div class="formula-template">
+                <div style="background: white; border: 2px solid var(--main-color); border-radius: 15px; padding: 25px; margin: 20px 0; box-shadow: var(--shadow-md);">
+                  <p style="margin: 15px 0; font-size: 24px; text-align: center; font-weight: 600;">
+                    <span id="formula-1">\(\frac{d}{dx}[x^n] = \square \cdot x^{\square}\)
+                  </p>
+                  <div style="display: flex; justify-content: center; gap: 40px; margin: 25px 0; flex-wrap: wrap;">
+                    <div style="text-align: center;">
+                      <label style="display: block; font-weight: 600; margin-bottom: 10px; color: var(--font-color); font-size: 16px;">First coefficient:</label>
+                      <div class="drop-zone" data-correct="n" data-problem="1" data-position="1" style="min-width: 100px; min-height: 60px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600;">Drop here</div>
+                    </div>
+                    <div style="text-align: center;">
+                      <label style="display: block; font-weight: 600; margin-bottom: 10px; color: var(--font-color); font-size: 16px;">Exponent:</label>
+                      <div class="drop-zone" data-correct="n-1" data-problem="1" data-position="2" style="min-width: 100px; min-height: 60px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600;">Drop here</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="drag-items-bank" id="bank-1">
+                <div class="drag-item" draggable="true" data-value="n">n</div>
+                <div class="drag-item" draggable="true" data-value="n-1">n-1</div>
+                <div class="drag-item" draggable="true" data-value="n+1">n+1</div>
+                <div class="drag-item" draggable="true" data-value="x">x</div>
+                <div class="drag-item" draggable="true" data-value="1">1</div>
+                <div class="drag-item" draggable="true" data-value="0">0</div>
+              </div>
+              
+              <div class="button-group">
+                <button class="check-button-drag" onclick="checkDragAnswer(1)">Check Answer</button>
+                <button class="reset-button" onclick="resetDragProblem(1)">Reset</button>
+              </div>
+              
+              <div class="drag-feedback" id="feedback-1"></div>
+            </div>
+
+            <!-- Problem 2: Apply Power Rule -->
+            <div class="drag-drop-container">
+              <h4>Problem 2: Find the derivative of \(f(x) = 3x^2 - x + 5\)</h4>
+              <p>Drag the correct terms to build the derivative:</p>
+              
+              <div class="formula-template">
+                <span class="static-text">\(f'(x) = \)</span>
+                <div class="drop-zone" data-correct="6x" data-problem="2" data-position="1">Drop here</div>
+                <div class="drop-zone" data-correct="-" data-problem="2" data-position="2">+/-</div>
+                <div class="drop-zone" data-correct="1" data-problem="2" data-position="3">Drop here</div>
+                <div class="drop-zone" data-correct="+" data-problem="2" data-position="4">+/-</div>
+                <div class="drop-zone" data-correct="0" data-problem="2" data-position="5">Drop here</div>
+              </div>
+              
+              <div class="drag-items-bank" id="bank-2">
+                <div class="drag-item" draggable="true" data-value="6x">6x</div>
+                <div class="drag-item" draggable="true" data-value="3x">3x</div>
+                <div class="drag-item" draggable="true" data-value="2x">2x</div>
+                <div class="drag-item" draggable="true" data-value="1">1</div>
+                <div class="drag-item" draggable="true" data-value="0">0</div>
+                <div class="drag-item" draggable="true" data-value="5">5</div>
+                <div class="drag-item" draggable="true" data-value="+">+</div>
+                <div class="drag-item" draggable="true" data-value="-">-</div>
+              </div>
+              
+              <div class="button-group">
+                <button class="check-button-drag" onclick="checkDragAnswer(2)">Check Answer</button>
+                <button class="reset-button" onclick="resetDragProblem(2)">Reset</button>
+              </div>
+              
+              <div class="drag-feedback" id="feedback-2"></div>
+            </div>
+
+            <!-- Problem 3: Trigonometric Derivatives -->
+            <div class="drag-drop-container">
+              <h4>Problem 3: Match Trigonometric Functions with their Derivatives</h4>
+              <p>Drag the correct derivatives to match each function:</p>
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+                <div style="text-align: center;">
+                  <p><strong>Functions</strong></p>
+                  <div style="margin: 15px 0; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <span style="min-width: 80px;">\(\sin(x) \rightarrow\)</span> 
+                    <div class="drop-zone" data-correct="cos(x)" data-problem="3" data-position="1">Drop here</div>
+                  </div>
+                  <div style="margin: 15px 0; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <span style="min-width: 80px;">\(\cos(x) \rightarrow\)</span> 
+                    <div class="drop-zone" data-correct="-sin(x)" data-problem="3" data-position="2">Drop here</div>
+                  </div>
+                  <div style="margin: 15px 0; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <span style="min-width: 80px;">\(\tan(x) \rightarrow\)</span> 
+                    <div class="drop-zone" data-correct="sec^2(x)" data-problem="3" data-position="3">Drop here</div>
+                  </div>
+                </div>
+                
+                <div class="drag-items-bank" id="bank-3" style="min-height: 200px;">
+                  <div class="drag-item" draggable="true" data-value="cos(x)">cos(x)</div>
+                  <div class="drag-item" draggable="true" data-value="-sin(x)">-sin(x)</div>
+                  <div class="drag-item" draggable="true" data-value="sec^2(x)">sec²(x)</div>
+                  <div class="drag-item" draggable="true" data-value="sin(x)">sin(x)</div>
+                  <div class="drag-item" draggable="true" data-value="-cos(x)">-cos(x)</div>
+                  <div class="drag-item" draggable="true" data-value="tan(x)">tan(x)</div>
+                </div>
+              </div>
+              
+              <div class="button-group">
+                <button class="check-button-drag" onclick="checkDragAnswer(3)">Check Answer</button>
+                <button class="reset-button" onclick="resetDragProblem(3)">Reset</button>
+              </div>
+              
+              <div class="drag-feedback" id="feedback-3"></div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Rule Content -->
+      <div id="product-rule" class="rule-content">
+        <div class="definition-box">
+          <h3>Product Rule</h3>
+          <p>The Product Rule helps us differentiate the product of two functions.</p>
+
+          <!-- Interactive formula display with "Show explanation" button -->
+          <div class="formula-container">
+            <p class="formula">\(\frac{d}{dx}[f(x) \cdot g(x)] = f'(x) \cdot g(x) + f(x) \cdot g'(x)\)</p>
+            <button onclick="toggleExplanation('product-explanation')" class="step-button">Show Explanation</button>
+          </div>
+
+          <div id="product-explanation" class="explanation" style="display: none;">
+            <p>The Product Rule states that the derivative of a product of two functions equals:</p>
+            <ul>
+              <li>The derivative of the first function times the second function, plus</li>
+              <li>The first function times the derivative of the second function</li>
+            </ul>
+            <p>Think of it as "the derivative of the first times the second, plus the first times the derivative of the second."</p>
+          </div>
+
+          <!-- Interactive visualization -->
+          <div class="visualization-container">
+            <div id="product-rule-graph" style="width: 100%; height: 100%;"></div>
+          </div>
+
+          <!-- Drag and Drop Practice for Product Rule -->
+          <div class="practice-section">
+            <h3>🎯 Interactive Practice with Product Rule</h3>
+            
+            <!-- Problem 4: Product Rule Formula -->
+            <div class="drag-drop-container">
+              <h4>Problem 4: Complete the Product Rule Formula</h4>
+              <p>Drag the correct terms to complete the product rule formula:</p>
+              
+              <div class="formula-template">
+                <span class="static-text">\(\frac{d}{dx}[f(x) \cdot g(x)] = \)</span>
+                <div class="drop-zone" data-correct="f'(x)" data-problem="4" data-position="1">Drop here</div>
+                <span class="static-text">\(\cdot\)</span>
+                <div class="drop-zone" data-correct="g(x)" data-problem="4" data-position="2">Drop here</div>
+                <span class="static-text">+</span>
+                <div class="drop-zone" data-correct="f(x)" data-problem="4" data-position="3">Drop here</div>
+                <span class="static-text">\(\cdot\)</span>
+                <div class="drop-zone" data-correct="g'(x)" data-problem="4" data-position="4">Drop here</div>
+              </div>
+              
+              <div class="drag-items-bank" id="bank-4">
+                <div class="drag-item" draggable="true" data-value="f'(x)">f'(x)</div>
+                <div class="drag-item" draggable="true" data-value="g'(x)">g'(x)</div>
+                <div class="drag-item" draggable="true" data-value="f(x)">f(x)</div>
+                <div class="drag-item" draggable="true" data-value="g(x)">g(x)</div>
+                <div class="drag-item" draggable="true" data-value="f''(x)">f''(x)</div>
+                <div class="drag-item" draggable="true" data-value="g''(x)">g''(x)</div>
+              </div>
+              
+              <div class="button-group">
+                <button class="check-button-drag" onclick="checkDragAnswer(4)">Check Answer</button>
+                <button class="reset-button" onclick="resetDragProblem(4)">Reset</button>
+              </div>
+              
+              <div class="drag-feedback" id="feedback-4"></div>
+            </div>
+
+            <!-- Problem 5: Apply Product Rule -->
+            <div class="drag-drop-container">
+              <h4>Problem 5: Find the derivative of \(f(x) = x^2 \cdot \sin(x)\)</h4>
+              <p>First identify the functions, then drag the correct derivatives:</p>
+              
+              <div style="margin: 20px 0;">
+                <p><strong>Step 1:</strong> \(f(x) = x^2\), so \(f'(x) = \) <span class="drop-zone" data-correct="2x" data-problem="5" data-position="1" style="display: inline-flex; margin: 0 5px;">Drop here</span></p>
+                <p><strong>Step 2:</strong> \(g(x) = \sin(x)\), so \(g'(x) = \) <span class="drop-zone" data-correct="cos(x)" data-problem="5" data-position="2" style="display: inline-flex; margin: 0 5px;">Drop here</span></p>
+              </div>
+              
+              <div class="formula-template">
+                <span class="static-text">\(f'(x) = \)</span>
+                <div class="drop-zone" data-correct="2x" data-problem="5" data-position="3">Drop here</div>
+                <span class="static-text">\(\cdot \sin(x) + x^2 \cdot\)</span>
+                <div class="drop-zone" data-correct="cos(x)" data-problem="5" data-position="4">Drop here</div>
+              </div>
+              
+              <div class="drag-items-bank" id="bank-5">
+                <div class="drag-item" draggable="true" data-value="2x">2x</div>
+                <div class="drag-item" draggable="true" data-value="cos(x)">cos(x)</div>
+                <div class="drag-item" draggable="true" data-value="x">x</div>
+                <div class="drag-item" draggable="true" data-value="sin(x)">sin(x)</div>
+                <div class="drag-item" draggable="true" data-value="x^2">x²</div>
+                <div class="drag-item" draggable="true" data-value="-sin(x)">-sin(x)</div>
+                <div class="drag-item" draggable="true" data-value="2x">2x</div>
+                <div class="drag-item" draggable="true" data-value="cos(x)">cos(x)</div>
+              </div>
+              
+              <div class="button-group">
+                <button class="check-button-drag" onclick="checkDragAnswer(5)">Check Answer</button>
+                <button class="reset-button" onclick="resetDragProblem(5)">Reset</button>
+              </div>
+              
+              <div class="drag-feedback" id="feedback-5"></div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Quotient Rule Content -->
+      <div id="quotient-rule" class="rule-content">
+        <div class="definition-box">
+          <h3>Quotient Rule</h3>
+          <p>The Quotient Rule helps us differentiate the quotient (division) of two functions.</p>
+
+          <div class="formula-container">
+            <p class="formula">\(\frac{d}{dx}\left[\frac{f(x)}{g(x)}\right] = \frac{f'(x) \cdot g(x) - f(x) \cdot g'(x)}{[g(x)]^2}\)</p>
+            <button onclick="toggleExplanation('quotient-explanation')" class="step-button">Show Explanation</button>
+          </div>
+
+          <div id="quotient-explanation" class="explanation" style="display: none;">
+            <p>The Quotient Rule states that the derivative of a quotient equals:</p>
+            <p>"The bottom times the derivative of the top, minus the top times the derivative of the bottom, all over the bottom squared."</p>
+            <p>This can be remembered with the mnemonic: "Low d-high minus high d-low, all over low squared."</p>
+          </div>
+
+          <!-- Interactive visualization -->
+          <div class="visualization-container">
+            <div id="quotient-rule-graph" style="width: 100%; height: 100%;"></div>
+          </div>
+
+          <!-- Drag and Drop Practice for Quotient Rule -->
+          <div class="practice-section">
+            <h3>🎯 Interactive Practice with Quotient Rule</h3>
+            
+            <!-- Problem 10: Quotient Rule Formula -->
+            <div class="drag-drop-container">
+              <h4>Problem 10: Complete the Quotient Rule Formula</h4>
+              <p>Drag the correct terms to complete the quotient rule formula:</p>
+              
+              <div class="formula-template">
+                <div style="background: white; border: 2px solid var(--main-color); border-radius: 15px; padding: 25px; margin: 20px 0; box-shadow: var(--shadow-md);">
+                  <p style="margin: 15px 0; font-size: 24px; text-align: center; font-weight: 600;">
+                    <span id="formula-10">\(\frac{d}{dx}\left[\frac{f(x)}{g(x)}\right] = \frac{\square - \square}{[g(x)]^2}\)</span>
+                  </p>
+                  <div style="display: flex; justify-content: center; gap: 40px; margin: 25px 0; flex-wrap: wrap;">
+                    <div style="text-align: center;">
+                      <label style="display: block; font-weight: 600; margin-bottom: 10px; color: var(--font-color); font-size: 16px;">Numerator first term:</label>
+                      <div class="drop-zone" data-correct="f'(x)*g(x)" data-problem="10" data-position="1" style="min-width: 120px; min-height: 60px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600;">Drop here</div>
+                    </div>
+                    <div style="text-align: center;">
+                      <label style="display: block; font-weight: 600; margin-bottom: 10px; color: var(--font-color); font-size: 16px;">Numerator second term:</label>
+                      <div class="drop-zone" data-correct="f(x)*g'(x)" data-problem="10" data-position="2" style="min-width: 120px; min-height: 60px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600;">Drop here</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="drag-items-bank" id="bank-10">
+                <div class="drag-item" draggable="true" data-value="f'(x)*g(x)">f'(x)·g(x)</div>
+                <div class="drag-item" draggable="true" data-value="f(x)*g'(x)">f(x)·g'(x)</div>
+                <div class="drag-item" draggable="true" data-value="f(x)*g(x)">f(x)·g(x)</div>
+                <div class="drag-item" draggable="true" data-value="f'(x)*g'(x)">f'(x)·g'(x)</div>
+                <div class="drag-item" draggable="true" data-value="g(x)*f'(x)">g(x)·f'(x)</div>
+                <div class="drag-item" draggable="true" data-value="g'(x)*f(x)">g'(x)·f(x)</div>
+              </div>
+              
+              <div class="button-group">
+                <button class="check-button-drag" onclick="checkDragAnswer(10)">Check Answer</button>
+                <button class="reset-button" onclick="resetDragProblem(10)">Reset</button>
+              </div>
+              
+              <div class="drag-feedback" id="feedback-10"></div>
+            </div>
+
+            <!-- Problem 11: Apply Quotient Rule -->
+            <div class="drag-drop-container">
+              <h4>Problem 11: Find the derivative of \(f(x) = \frac{x^2}{x+1}\)</h4>
+              <p>Use the quotient rule step by step:</p>
+              
+              <div style="margin: 20px 0;">
+                <p><strong>Step 1:</strong> \(f(x) = x^2\), so \(f'(x) = \) <span class="drop-zone" data-correct="2x" data-problem="11" data-position="1" style="display: inline-flex; margin: 0 5px;">Drop here</span></p>
+                <p><strong>Step 2:</strong> \(g(x) = x+1\), so \(g'(x) = \) <span class="drop-zone" data-correct="1" data-problem="11" data-position="2" style="display: inline-flex; margin: 0 5px;">Drop here</span></p>
+              </div>
+              
+              <div class="formula-template">
+                <span class="static-text">\(f'(x) = \)</span>
+                <div style="display: inline-block; text-align: center; vertical-align: middle; margin: 0 10px;">
+                  <div style="border-bottom: 2px solid black; padding: 5px 10px;">
+                    <span>(</span>
+                    <div class="drop-zone" data-correct="2x" data-problem="11" data-position="3" style="display: inline-block; margin: 0 5px;">Drop here</div>
+                    <span>) \(\cdot\) (x+1) - x² \(\cdot\) (</span>
+                    <div class="drop-zone" data-correct="1" data-problem="11" data-position="4" style="display: inline-block; margin: 0 5px;">Drop here</div>
+                    <span>)</span>
+                  </div>
+                  <div style="padding: 5px 10px;">
+                    <span>\((x+1)^2\)</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="drag-items-bank" id="bank-11">
+                <div class="drag-item" draggable="true" data-value="2x">2x</div>
+                <div class="drag-item" draggable="true" data-value="1">1</div>
+                <div class="drag-item" draggable="true" data-value="x">x</div>
+                <div class="drag-item" draggable="true" data-value="x^2">x²</div>
+                <div class="drag-item" draggable="true" data-value="0">0</div>
+                <div class="drag-item" draggable="true" data-value="2">2</div>
+              </div>
+              
+              <div class="button-group">
+                <button class="check-button-drag" onclick="checkDragAnswer(11)">Check Answer</button>
+                <button class="reset-button" onclick="resetDragProblem(11)">Reset</button>
+              </div>
+              
+              <div class="drag-feedback" id="feedback-11"></div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Chain Rule Content -->
+      <div id="chain-rule" class="rule-content">
+        <div class="definition-box">
+          <h3>Chain Rule</h3>
+          <p>The Chain Rule helps us differentiate composite functions (functions within functions).</p>
+
+          <!-- Interactive formula display with "Show explanation" button -->
+          <div class="formula-container">
+            <p class="formula">\(\frac{d}{dx}[f(g(x))] = f'(g(x)) \cdot g'(x)\)</p>
+            <button onclick="toggleExplanation('chain-explanation')" class="step-button">Show Explanation</button>
+          </div>
+
+          <div id="chain-explanation" class="explanation" style="display: none;">
+            <p>The Chain Rule states that the derivative of a composite function equals:</p>
+            <p>The derivative of the outer function (evaluated at the inner function) times the derivative of the inner function.</p>
+            <p>In other words, if \(y = f(u)\) and \(u = g(x)\), then \(\frac{dy}{dx} = \frac{dy}{du} \cdot \frac{du}{dx}\)</p>
+          </div>
+
+          <!-- Interactive visualization -->
+          <div class="visualization-container">
+            <div id="chain-rule-graph" style="width: 100%; height: 100%;"></div>
+          </div>
+
+          <!-- Drag and Drop Practice for Chain Rule -->
+          <div class="practice-section">
+            <h3>🎯 Interactive Practice with Chain Rule</h3>
+            
+            <!-- Problem 6: Chain Rule Formula -->
+            <div class="drag-drop-container">
+              <h4>Problem 6: Complete the Chain Rule Formula</h4>
+              <p>Drag the correct terms to complete the chain rule formula:</p>
+              
+              <div class="formula-template">
+                <span class="static-text">\(\frac{d}{dx}[f(g(x))] = \)</span>
+                <div class="drop-zone" data-correct="f'(g(x))" data-problem="6" data-position="1">Drop here</div>
+                <span class="static-text">\(\cdot\)</span>
+                <div class="drop-zone" data-correct="g'(x)" data-problem="6" data-position="2">Drop here</div>
+              </div>
+              
+              <div class="drag-items-bank" id="bank-6">
+                <div class="drag-item" draggable="true" data-value="f'(g(x))">f'(g(x))</div>
+                <div class="drag-item" draggable="true" data-value="g'(x)">g'(x)</div>
+                <div class="drag-item" draggable="true" data-value="f'(x)">f'(x)</div>
+                <div class="drag-item" draggable="true" data-value="g(x)">g(x)</div>
+                <div class="drag-item" draggable="true" data-value="f(x)">f(x)</div>
+                <div class="drag-item" draggable="true" data-value="f(g'(x))">f(g'(x))</div>
+              </div>
+              
+              <div class="button-group">
+                <button class="check-button-drag" onclick="checkDragAnswer(6)">Check Answer</button>
+                <button class="reset-button" onclick="resetDragProblem(6)">Reset</button>
+              </div>
+              
+              <div class="drag-feedback" id="feedback-6"></div>
+            </div>
+
+            <!-- Problem 7: Identify Composite Functions -->
+            <div class="drag-drop-container">
+              <h4>Problem 7: Identify the Outer and Inner Functions</h4>
+              <p>For \(f(x) = \sin(x^2)\), drag the correct functions to their positions:</p>
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 20px 0;">
+                <div style="text-align: center;">
+                  <p><strong>Outer Function:</strong></p>
+                  <div class="drop-zone" data-correct="sin(u)" data-problem="7" data-position="1" style="margin: 10px auto; width: 120px;">Drop here</div>
+                  <p style="margin-top: 15px;"><strong>Inner Function:</strong></p>
+                  <div class="drop-zone" data-correct="x^2" data-problem="7" data-position="2" style="margin: 10px auto; width: 120px;">Drop here</div>
+                </div>
+                
+                <div class="drag-items-bank" id="bank-7" style="min-height: 200px;">
+                  <div class="drag-item" draggable="true" data-value="sin(u)">sin(u)</div>
+                  <div class="drag-item" draggable="true" data-value="x^2">x^2</div>
+                  <div class="drag-item" draggable="true" data-value="cos(u)">cos(u)</div>
+                  <div class="drag-item" draggable="true" data-value="sin(x)">sin(x)</div>
+                  <div class="drag-item" draggable="true" data-value="x">x</div>
+                  <div class="drag-item" draggable="true" data-value="u^2">u^2</div>
+                </div>
+              </div>
+              
+              <div class="button-group">
+                <button class="check-button-drag" onclick="checkDragAnswer(7)">Check Answer</button>
+                <button class="reset-button" onclick="resetDragProblem(7)">Reset</button>
+              </div>
+              
+              <div class="drag-feedback" id="feedback-7"></div>
+            </div>
+
+            <!-- Problem 8: Apply Chain Rule Step by Step -->
+            <div class="drag-drop-container">
+              <h4>Problem 8: Apply the Chain Rule to \(f(x) = \sin(x^2)\)</h4>
+              <p>Complete each step by dragging the correct derivatives:</p>
+              
+              <div style="margin: 20px 0;">
+                <p><strong>Step 1:</strong> Outer function: \(f(u) = \sin(u)\), so \(f'(u) = \) <span class="drop-zone" data-correct="cos(u)" data-problem="8" data-position="1" style="display: inline-flex; margin: 0 5px;">Drop here</span></p>
+                <p><strong>Step 2:</strong> Inner function: \(g(x) = x^2\), so \(g'(x) = \) <span class="drop-zone" data-correct="2x" data-problem="8" data-position="2" style="display: inline-flex; margin: 0 5px;">Drop here</span></p>
+                <p><strong>Step 3:</strong> Substitute back: \(f'(g(x)) = \) <span class="drop-zone" data-correct="cos(x^2)" data-problem="8" data-position="3" style="display: inline-flex; margin: 0 5px;">Drop here</span></p>
+              </div>
+              
+              <div class="formula-template">
+                <span class="static-text">\(f'(x) = \)</span>
+                <div class="drop-zone" data-correct="cos(x^2)" data-problem="8" data-position="4">Drop here</div>
+                <span class="static-text">\(\cdot\)</span>
+                <div class="drop-zone" data-correct="2x" data-problem="8" data-position="5">Drop here</div>
+              </div>
+              
+              <div class="drag-items-bank" id="bank-8">
+                <div class="drag-item" draggable="true" data-value="cos(u)">cos(u)</div>
+                <div class="drag-item" draggable="true" data-value="2x">2x</div>
+                <div class="drag-item" draggable="true" data-value="cos(x^2)">cos(x^2)</div>
+                <div class="drag-item" draggable="true" data-value="sin(u)">sin(u)</div>
+                <div class="drag-item" draggable="true" data-value="x">x</div>
+                <div class="drag-item" draggable="true" data-value="sin(x^2)">sin(x^2)</div>
+                <div class="drag-item" draggable="true" data-value="x^2">x^2</div>
+                <div class="drag-item" draggable="true" data-value="2">2</div>
+              </div>
+              
+              <div class="button-group">
+                <button class="check-button-drag" onclick="checkDragAnswer(8)">Check Answer</button>
+                <button class="reset-button" onclick="resetDragProblem(8)">Reset</button>
+              </div>
+              
+              <div class="drag-feedback" id="feedback-8"></div>
+            </div>
+
+            <!-- Problem 9: More Complex Chain Rule -->
+            <div class="drag-drop-container">
+              <h4>Problem 9: Find the derivative of \(f(x) = (3x + 1)^5\)</h4>
+              <p>Use the chain rule to build the derivative:</p>
+              
+              <div style="margin: 20px 0;">
+                <p><strong>Identify:</strong> Outer function: \(u^5\), Inner function: \(3x + 1\)</p>
+              </div>
+              
+              <div class="formula-template">
+                <div style="background: white; border: 2px solid var(--main-color); border-radius: 15px; padding: 25px; margin: 20px 0; box-shadow: var(--shadow-md);">
+                  <p style="margin: 15px 0; font-size: 24px; text-align: center; font-weight: 600;">
+                    <span id="formula-9">\(f'(x) = \square \cdot (3x + 1)^{\square} \cdot \square\)</span>
+                  </p>
+                  <div style="display: flex; justify-content: center; gap: 30px; margin: 25px 0; flex-wrap: wrap;">
+                    <div style="text-align: center;">
+                      <label style="display: block; font-weight: 600; margin-bottom: 10px; color: var(--font-color); font-size: 16px;">Power coefficient:</label>
+                      <div class="drop-zone" data-correct="5" data-problem="9" data-position="1" style="min-width: 80px; min-height: 60px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600;">Drop here</div>
+                    </div>
+                    <div style="text-align: center;">
+                      <label style="display: block; font-weight: 600; margin-bottom: 10px; color: var(--font-color); font-size: 16px;">New exponent:</label>
+                      <div class="drop-zone" data-correct="4" data-problem="9" data-position="2" style="min-width: 80px; min-height: 60px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600;">Drop here</div>
+                    </div>
+                    <div style="text-align: center;">
+                      <label style="display: block; font-weight: 600; margin-bottom: 10px; color: var(--font-color); font-size: 16px;">Inner derivative:</label>
+                      <div class="drop-zone" data-correct="3" data-problem="9" data-position="3" style="min-width: 80px; min-height: 60px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600;">Drop here</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="drag-items-bank" id="bank-9">
+                <div class="drag-item" draggable="true" data-value="5">5</div>
+                <div class="drag-item" draggable="true" data-value="4">4</div>
+                <div class="drag-item" draggable="true" data-value="3">3</div>
+                <div class="drag-item" draggable="true" data-value="1">1</div>
+                <div class="drag-item" draggable="true" data-value="6">6</div>
+                <div class="drag-item" draggable="true" data-value="2">2</div>
+                <div class="drag-item" draggable="true" data-value="0">0</div>
+              </div>
+              
+              <div class="button-group">
+                <button class="check-button-drag" onclick="checkDragAnswer(9)">Check Answer</button>
+                <button class="reset-button" onclick="resetDragProblem(9)">Reset</button>
+              </div>
+              
+              <div class="drag-feedback" id="feedback-9"></div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+  </div>
+</section>
+<script>
+
+  function toggleExplanation(id) {
+    const explanation = document.getElementById(id);
+    if (explanation.style.display === 'none') {
+      explanation.style.display = 'block';
+    } else {
+      explanation.style.display = 'none';
+    }
+  }
+
+  function showHint(hintId) {
+    const hint = document.getElementById(hintId);
+    if (!hint) {
+      console.error(`Hint element with ID ${hintId} not found`);
+      return;
+    }
+
+    if (hint.style.display === 'none' || hint.style.display === '') {
+      hint.style.display = 'block';
+    } else {
+      hint.style.display = 'none';
+    }
+  }
+
+
+  function openRuleTab(evt, ruleName) {
+    // Hide all rule content
+    const ruleContent = document.getElementsByClassName("rule-content");
+    for (let i = 0; i < ruleContent.length; i++) {
+      ruleContent[i].style.display = "none";
+    }
+
+    // Remove active class from all tab buttons
+    const tabBtns = document.getElementsByClassName("tab-btn");
+    for (let i = 0; i < tabBtns.length; i++) {
+      tabBtns[i].className = tabBtns[i].className.replace(" active", "");
+    }
+
+    // Show the selected rule content and mark the button as active
+    document.getElementById(ruleName).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
+
+  function toggleRuleCard(card) {
+    const content = card.querySelector('.rule-card-content');
+    if (content.style.display === 'none' || content.style.display === '') {
+      content.style.display = 'block';
+    } else {
+      content.style.display = 'none';
+    }
+  }
+
+
+
+  // Fix the check answer functionality
+  function checkSubStep(inputId, correctAnswer, hintId, nextStepId) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+
+    const hint = document.getElementById(hintId);
+    const userAnswer = input.value.trim();
+
+    // Normalize answers for comparison
+    const normalizedUserAnswer = userAnswer.toLowerCase().replace(/\s+/g, '').replace(/\*/g, '');
+    const normalizedCorrectAnswer = correctAnswer.toLowerCase().replace(/\s+/g, '').replace(/\*/g, '');
+
+    if (normalizedUserAnswer === normalizedCorrectAnswer) {
+      // Mark as correct
+      input.classList.add('correct-answer');
+      input.disabled = true;
+
+      // Hide hint if visible
+      if (hint) hint.style.display = 'none';
+
+      // Mark step as completed - THIS IS CRITICAL FOR PROGRESS TRACKING
+      const stepItem = input.closest('.step-item');
+      if (stepItem) {
+        stepItem.classList.add('completed');
+
+        // Add checkmark
+        const header = stepItem.querySelector('.step-header');
+        if (header && !header.querySelector('.checkmark')) {
+          const checkmark = document.createElement('span');
+          checkmark.className = 'checkmark';
+          checkmark.innerHTML = '✓';
+          header.appendChild(checkmark);
+        }
+      }
+
+      // Show next step
+      if (nextStepId) {
+        const nextStep = document.getElementById(nextStepId);
+        if (nextStep) nextStep.style.display = 'block';
+      }
+
+
+    } else {
+      // Show hint for incorrect answer
+      if (hint) hint.style.display = 'block';
+
+      // Add shake animation
+      input.classList.add('shake');
+      setTimeout(() => input.classList.remove('shake'), 500);
+    }
+  }
+
+  // Fix hint display functionality
+  function showHint(hintId) {
+    const hintElement = document.getElementById(hintId);
+    if (hintElement) {
+      hintElement.style.display = hintElement.style.display === 'none' || hintElement.style.display === '' ? 'block' : 'none';
+    }
+  }
+
+  // Function to handle checking answers
+  function checkSubStep(inputId, correctAnswer, hintId, nextStepId) {
+    const input = document.getElementById(inputId);
+    if (!input) {
+      console.error(`Input element with ID ${inputId} not found`);
+      return;
+    }
+
+    const hint = document.getElementById(hintId);
+    const userAnswer = input.value.trim();
+
+    // Normalize answers for comparison
+    const normalizedUserAnswer = userAnswer.toLowerCase().replace(/\s+/g, '').replace(/\*/g, '');
+    const normalizedCorrectAnswer = correctAnswer.toLowerCase().replace(/\s+/g, '').replace(/\*/g, '');
+
+    if (normalizedUserAnswer === normalizedCorrectAnswer) {
+      // Mark as correct
+      input.classList.add('correct-answer');
+      input.disabled = true;
+
+      // Hide hint if visible
+      if (hint) hint.style.display = 'none';
+
+      // Mark step as completed
+      const stepItem = input.closest('.step-item');
+      if (stepItem) {
+        stepItem.classList.add('completed');
+
+        // Add checkmark
+        const header = stepItem.querySelector('.step-header');
+        if (header && !header.querySelector('.checkmark')) {
+          const checkmark = document.createElement('span');
+          checkmark.className = 'checkmark';
+          checkmark.innerHTML = '✓';
+          header.appendChild(checkmark);
+        }
+      }
+
+      // Show next step
+      if (nextStepId) {
+        const nextStep = document.getElementById(nextStepId);
+        if (nextStep) {
+          nextStep.style.display = 'block';
+          nextStep.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+      }
+    } else {
+      // Show hint for incorrect answer
+      if (hint) hint.style.display = 'block';
+
+      // Add shake animation
+      input.classList.add('shake');
+      setTimeout(() => input.classList.remove('shake'), 500);
+    }
+  }
+
+  // Function to handle showing hints
+  function showHint(hintId) {
+    const hintElement = document.getElementById(hintId);
+    if (!hintElement) {
+      console.error(`Hint element with ID ${hintId} not found`);
+      return;
+    }
+
+    // Toggle hint visibility
+    hintElement.style.display = hintElement.style.display === 'none' || hintElement.style.display === '' ? 'block' : 'none';
+  }
+
+
+
+  function checkFinalAnswer(problemNumber) {
+    // Get the input element and feedback container
+    const input = document.getElementById(`answer${problemNumber}`);
+    const feedback = document.getElementById(`p${problemNumber}-feedback`);
+
+    if (!input || !feedback) {
+      console.error(`Elements for problem ${problemNumber} not found`);
+      return;
+    }
+
+    // Get the button that was clicked to access data attributes
+    const button = document.querySelector(`button[onclick="checkFinalAnswer(${problemNumber})"]`);
+    const correctAnswer = button.getAttribute('data-correct');
+
+    if (!correctAnswer) {
+      console.error(`No correct answer defined for problem ${problemNumber}`);
+      return;
+    }
+
+    // Get user's answer and normalize for comparison
+    const userAnswer = input.value.trim();
+    const normalizedUserAnswer = userAnswer.toLowerCase().replace(/\s+/g, '').replace(/\*/g, '');
+    const normalizedCorrectAnswer = correctAnswer.toLowerCase().replace(/\s+/g, '').replace(/\*/g, '');
+
+    // Check if answer is correct
+    if (normalizedUserAnswer === normalizedCorrectAnswer) {
+      // Mark as correct
+      input.classList.add('correct-answer');
+      feedback.innerHTML = '<span class="feedback-positive">Correct! Well done!</span>';
+      feedback.style.display = 'block';
+
+      // Mark the step as complete
+      const stepItem = input.closest('.step-item');
+      if (stepItem) {
+        stepItem.classList.add('completed');
+
+        // Add a checkmark to the header
+        const header = stepItem.querySelector('.step-header');
+        if (header && !header.querySelector('.checkmark')) {
+          const checkmark = document.createElement('span');
+          checkmark.className = 'checkmark';
+          checkmark.innerHTML = '✓';
+          header.appendChild(checkmark);
+        }
+      }
+      
+      // Mark the entire problem as complete
+      const problemContainer = document.querySelector(`.problem-${problemNumber}`);
+      if (problemContainer) {
+        problemContainer.classList.add('completed');
+      }
+    } else {
+      // Show error and shake the input
+      input.classList.remove('correct-answer');
+      input.classList.add('shake');
+      feedback.innerHTML = '<span class="feedback-negative">Try again. Check your answer carefully.</span>';
+      feedback.style.display = 'block';
+
+      // Remove shake animation after it completes
+      setTimeout(() => {
+        input.classList.remove('shake');
+      }, 500);
+
+      // Check for common mistakes
+      detectCommonMistake(userAnswer, correctAnswer, problemNumber);
+    }
+  }
+
+  function detectCommonMistake(userAnswer, correctAnswer, problemNumber) {
+    const feedback = document.getElementById(`p${problemNumber}-feedback`);
+    if (!feedback) return false;
+
+    const normalizedUser = userAnswer.toLowerCase().replace(/\s+/g, '');
+
+    // Problem-specific mistake detection
+    switch(problemNumber) {
+      case 1: // Power rule problem
+        if (normalizedUser.includes("x^1")) {
+          feedback.innerHTML += '<div class="hint-container">Looks like you didn\'t apply the power rule correctly. Remember: d/dx(x^n) = n·x^(n-1)</div>';
+          return true;
+        }
+        break;
+
+      case 2: // Product rule problem
+        if (normalizedUser.includes("sin(x)*2x") && !normalizedUser.includes("+")) {
+          feedback.innerHTML += '<div class="hint-container">You might be forgetting the product rule. Remember: d/dx(f·g) = f\'·g + f·g\'</div>';
+          return true;
+        }
+        break;
+
+      case 3: // Quotient rule problem
+        if (normalizedUser.includes("e^x/(x+1)")) {
+          feedback.innerHTML += '<div class="hint-container">You need to apply the quotient rule: (f\'g - fg\')/g²</div>';
+          return true;
+        }
+        break;
+
+      case 4: // Chain rule problem
+        if (normalizedUser.includes("3x^2*sin(x)")) {
+          feedback.innerHTML += '<div class="hint-container">Don\'t forget to apply both the product rule and chain rule properly</div>';
+          return true;
+        }
+        break;
+    }
+
+    return false;
+  }
+
+
+
+  function markStepComplete(currentStepId, nextStepId) {
+    const currentStep = document.getElementById(currentStepId);
+    if (currentStep) {
+      currentStep.classList.add('completed');
+
+      // Add checkmark
+      const header = currentStep.querySelector('.step-header');
+      if (header && !header.querySelector('.checkmark')) {
+        const checkmark = document.createElement('span');
+        checkmark.className = 'checkmark';
+        checkmark.innerHTML = '✓';
+        header.appendChild(checkmark);
+      }
+
+      // Show next step
+      if (nextStepId) {
+        const nextStep = document.getElementById(nextStepId);
+        if (nextStep) {
+          nextStep.style.display = 'block';
+          nextStep.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+      }
+
+
+
+      // Also update the problem container if this is the last step
+      const problemNumber = currentStepId.match(/step(\\d+)-/);
+      if (problemNumber && problemNumber[1]) {
+        const allSteps = document.querySelectorAll(`[id^="step${problemNumber[1]}-"]`);
+        const completedSteps = document.querySelectorAll(`[id^="step${problemNumber[1]}-"].completed`);
+
+        if (allSteps.length === completedSteps.length) {
+          const problemContainer = document.querySelector(`.problem-${problemNumber[1]}`);
+          if (problemContainer) {
+            problemContainer.classList.add('completed');
+          }
+        }
+      }
+    }
+  }
+
+
+  function createVisualization(problemNumber, functionExpr, derivativeExpr) {
+    const container = document.getElementById(`problem-${problemNumber}-visualization`);
+    if (!container) return;
+
+    try {
+      // Parse functions
+      const f = math.parse(functionExpr);
+      const fPrime = math.parse(derivativeExpr);
+
+      // Compile functions for faster evaluation
+      const fCompiled = f.compile();
+      const fPrimeCompiled = fPrime.compile();
+
+      // Generate data points
+      const xValues = math.range(-5, 5, 0.1).toArray();
+      const fValues = xValues.map(x => fCompiled.evaluate({x: x}));
+      const fPrimeValues = xValues.map(x => fPrimeCompiled.evaluate({x: x}));
+
+      // Create Plotly trace for original function
+      const fTrace = {
+        x: xValues,
+        y: fValues,
+        type: 'scatter',
+        mode: 'lines',
+        name: 'f(x)',
+        line: {
+          color: 'var(--secondary-color)',
+          width: 3
+        }
+      };
+
+      // Create Plotly trace for derivative
+      const fPrimeTrace = {
+        x: xValues,
+        y: fPrimeValues,
+        type: 'scatter',
+        mode: 'lines',
+        name: 'f\'(x)',
+        line: {
+          color: 'var(--accent-color)',
+          width: 3,
+          dash: 'dash'
+        }
+      };
+
+      // Layout configuration
+      const layout = {
+        title: 'Function and its Derivative',
+        xaxis: {
+          title: 'x',
+          zeroline: true,
+          gridcolor: '#ddd'
+        },
+        yaxis: {
+          title: 'y',
+          zeroline: true,
+          gridcolor: '#ddd'
+        },
+        margin: {
+          l: 50,
+          r: 50,
+          b: 50,
+          t: 50,
+          pad: 4
+        },
+        legend: {
+          x: 0,
+          y: 1
+        },
+        dragmode: 'pan',
+        hovermode: 'closest',
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        autosize: true
+      };
+
+      // Create the plot
+      Plotly.newPlot(container, [fTrace, fPrimeTrace], layout, {responsive: true});
+
+      // Add hover functionality to show tangent lines
+      container.on('plotly_hover', function(data) {
+        const pointIndex = data.points[0].pointIndex;
+        const xValue = xValues[pointIndex];
+        const yValue = fValues[pointIndex];
+        const slope = fPrimeValues[pointIndex];
+
+        // Generate tangent line
+        const tangentX = [xValue - 2, xValue + 2];
+        const tangentY = [
+          yValue - slope * 2,
+          yValue + slope * 2
+        ];
+
+        // Update the plot to include the tangent line
+        Plotly.update(container, {
+          x: [null, null, tangentX],
+          y: [null, null, tangentY]
+        }, {}, [2]);
+      });
+
+      // Remove tangent line when not hovering
+      container.on('plotly_unhover', function() {
+        Plotly.update(container, {
+          x: [null, null, []],
+          y: [null, null, []]
+        }, {}, [2]);
+      });
+    } catch (error) {
+      console.error('Error creating visualization:', error);
+      container.innerHTML = '<p>Error creating visualization</p>';
+    }
+  }
+
+  // Initialize the page when loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    // Set up dropdown functionality
+    const dropdownBtns = document.querySelectorAll('.dropdown-btn');
+    dropdownBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        this.classList.toggle('active');
+        const container = this.nextElementSibling;
+
+        if (container.style.maxHeight) {
+          container.style.maxHeight = null;
+        } else {
+          container.style.maxHeight = container.scrollHeight + 'px';
+        }
+      });
+    });
+
+    // Create visualizations for each problem
+    createVisualization(1, 'x^5', '5*x^4');
+    createVisualization(2, 'x^2 * sin(x)', '2*x*sin(x) + x^2*cos(x)');
+    createVisualization(3, 'sin(x^2)', '2*x*cos(x^2)');
+
+    // Add active state to the current page in sidebar
+    const currentPage = window.location.pathname.split('/').pop();
+    const sidebarLinks = document.querySelectorAll('.sidebar a');
+
+    sidebarLinks.forEach(link => {
+      const linkPage = link.getAttribute('href');
+      if (linkPage === currentPage) {
+        link.classList.add('active');
+
+        // If it's in a dropdown, open the dropdown
+        const parentDropdown = link.closest('.dropdown-container');
+        if (parentDropdown) {
+          const dropdownBtn = parentDropdown.previousElementSibling;
+          dropdownBtn.classList.add('active');
+          parentDropdown.style.maxHeight = parentDropdown.scrollHeight + 'px';
+        }
+      }
+    });
+
+    // Add event listeners for practice problem inputs
+    document.querySelectorAll('.practice-input').forEach(input => {
+      input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          const problemId = this.getAttribute('data-problem');
+          checkFinalAnswer(problemId);
+        }
+      });
+    });
+  });
+
+
+  // Initialize MathJax rendering
+  document.addEventListener("DOMContentLoaded", function() {
+    // Popup functionality
+    document.querySelectorAll(".popup-trigger").forEach(trigger => {
+      trigger.addEventListener("click", function() {
+        let targetId = this.getAttribute("data-target");
+        document.getElementById(targetId).style.display = "block";
+      });
+    });
+
+    document.querySelectorAll(".close-popup").forEach(button => {
+      button.addEventListener("click", function() {
+        this.closest(".popup").style.display = "none";
+      });
+    });
+
+    // Check answer functionality
+    document.querySelectorAll(".check-answer").forEach(button => {
+      button.addEventListener("click", function() {
+        const inputId = this.previousElementSibling.id;
+        const userAnswer = document.getElementById(inputId).value.replace(/\s+/g, '');
+        const correctAnswer = this.getAttribute("data-answer").replace(/\s+/g, '');
+        const feedbackId = this.getAttribute("data-target");
+
+        if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+          document.getElementById(feedbackId).innerHTML =
+                  '<div class="indicator correct">✓ Correct!</div>';
+        } else {
+          document.getElementById(feedbackId).innerHTML =
+                  '<div class="indicator incorrect">✗ Try again</div>';
+        }
+      });
+    });
+
+    // Power rule visualization
+    const exponentSlider = document.getElementById("exponent-slider");
+    exponentSlider.addEventListener("input", updatePowerRuleGraph);
+
+    function updatePowerRuleGraph() {
+      const n = parseInt(exponentSlider.value);
+      document.getElementById("exponent-value").textContent = n;
+
+      // Generate data points
+      const xValues = [];
+      const fValues = [];
+      const fPrimeValues = [];
+
+      for (let x = -3; x <= 3; x += 0.1) {
+        xValues.push(x);
+        fValues.push(Math.pow(x, n));
+        fPrimeValues.push(n * Math.pow(x, n-1));
+      }
+
+      // Create the plot
+      const data = [
+        {
+          x: xValues,
+          y: fValues,
+          mode: 'lines',
+          name: `f(x) = x^${n}`,
+          line: { color: 'var(--secondary-color)', width: 3 }
+        },
+        {
+          x: xValues,
+          y: fPrimeValues,
+          mode: 'lines',
+          name: `f'(x) = ${n}x^${n-1}`,
+          line: { color: 'var(--accent-color)', width: 3, dash: 'dot' }
+        }
+      ];
+
+      const layout = {
+        title: `Power Rule: Derivatives of x^${n}`,
+        xaxis: { title: 'x' },
+        yaxis: { title: 'y' },
+        legend: { x: 0.1, y: 1 },
+        hovermode: 'closest'
+      };
+
+      Plotly.newPlot('power-rule-graph', data, layout);
+
+      // Update derivative display
+      document.getElementById("derivative-display").innerHTML =
+              `<p>When n = ${n}, the derivative of x<sup>${n}</sup> is ${n}x<sup>${n-1}</sup></p>`;
+    }
+
+    // Initialize the graphx
+    updatePowerRuleGraph();
+
+    // Dropdown functionality
+    var dropdown = document.getElementsByClassName("dropdown-btn");
+    for (var i = 0; i < dropdown.length; i++) {
+      dropdown[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var dropdownContent = this.nextElementSibling;
+        if (dropdownContent.style.maxHeight) {
+          dropdownContent.style.maxHeight = null;
+        } else {
+          dropdownContent.style.maxHeight = dropdownContent.scrollHeight + "px";
+        }
+      });
+    }
+  });
+
+
+
+  function handleFinalAnswerClick(e) {
+    // Extract the problem number from the onclick attribute
+    const onclickAttr = e.currentTarget.getAttribute('onclick');
+    const match = onclickAttr.match(/checkFinalAnswer\\((\\d+)\\)/);
+    if (match && match[1]) {
+      const problemNumber = parseInt(match[1]);
+      checkFinalAnswer(problemNumber);
+    }
+  }
+
+  function checkAnswer(questionNumber) {
+    const answers = {
+      1: "6x*sin(x) + 3x^2*cos(x)",
+      2: "(e^x * x^2 - e^x * 2x) / x^4",
+      3: "2x*cos(x^2)",
+      4: "0",
+      5: "1",
+      6: "2x",
+      7: "1/(2*sqrt(x))",
+      8: "-1/(x^2)",
+      9: "15x^4 - 2",
+      10: "3x^2 + 1/3*x^(-2/3) + 10*x^(-3) + 8",
+      11: "-20 + 50x",
+      12: "(x^2 - 3)/(2*sqrt(x)) + 2*x^(3/2)",
+      13: "4x + 10/x^3"
+    };
+
+    const userAnswer = document.getElementById(`answer${questionNumber}`).value.trim();
+    const correctAnswer = answers[questionNumber];
+    const hintElement = document.getElementById(`hint${questionNumber}`);
+    const stepsElement = document.getElementById(`steps${questionNumber}`);
+    const indicatorElement = document.getElementById(`indicator${questionNumber}`);
+
+    if (userAnswer === correctAnswer) {
+      alert("Correct!");
+      hintElement.style.display = "none";
+      stepsElement.style.display = "none";
+      indicatorElement.textContent = "✔";
+      indicatorElement.className = "indicator correct";
+    } else {
+      alert("Incorrect. Try again.");
+      hintElement.style.display = "block";
+      stepsElement.style.display = "block";
+      indicatorElement.textContent = "✘";
+      indicatorElement.className = "indicator incorrect";
+    }
+  }
+
+  function showSteps(rule) {
+    const stepsElement = document.getElementById(`${rule}-steps`);
+    stepsElement.style.display = stepsElement.style.display === 'block' ? 'none' : 'block';
+  }
+
+  function showNextStep(questionNumber) {
+    const stepsContainer = document.getElementById(`steps${questionNumber}`);
+    const steps = stepsContainer.querySelectorAll('.step');
+    let currentStepIndex = Array.from(steps).findIndex(step => step.style.display === 'none');
+
+    if (currentStepIndex !== -1) {
+      steps[currentStepIndex].style.display = 'block';
+    } else {
+      alert("All steps are already shown!");
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var dropdown = document.getElementsByClassName("dropdown-btn");
+    for (var i = 0; i < dropdown.length; i++) {
+      dropdown[i].addEventListener("click", function () {
+        this.classList.toggle("active");
+        var dropdownContent = this.nextElementSibling;
+        if (dropdownContent.style.maxHeight) {
+          dropdownContent.style.maxHeight = null;
+        } else {
+          dropdownContent.style.maxHeight = dropdownContent.scrollHeight + "px";
+        }
+      });
+    }
+
+    var sidebarLinks = document.querySelectorAll('.sidebar a');
+    sidebarLinks.forEach(link => {
+      link.addEventListener('click', function (event) {
+        var targetId = this.getAttribute('href');
+        // Only prevent default for anchor links
+        if (targetId && targetId.startsWith('#')) {
+          event.preventDefault();
+          var targetElement = document.getElementById(targetId.substring(1));
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop,
+              behavior: 'smooth'
+            });
+          }
+        } else if (targetId === 'index.html' || targetId === 'home.html') {
+          // For Home or Index, navigate to home.html
+          window.location.href = 'home.html';
+        }
+        // Otherwise, let the browser handle navigation
+      });
+    });
+  });
+
+  function submitAnswer(problemId, correctAnswer) {
+    // Get the user's input and the feedback element
+    const inputElement = document.getElementById(`problem-${problemId}-answer`);
+    const feedbackElement = document.getElementById(`problem-${problemId}-feedback`);
+
+    if (!inputElement || !feedbackElement) {
+      console.error(`Elements for problem ${problemId} not found`);
+      return;
+    }
+
+    // Get the user's answer and normalize it
+    const userAnswer = inputElement.value.trim();
+    const normalizedUserAnswer = userAnswer.toLowerCase().replace(/\s+/g, '').replace(/\*/g, '');
+    const normalizedCorrectAnswer = correctAnswer.toLowerCase().replace(/\s+/g, '').replace(/\*/g, '');
+
+    // Check if the answer is correct
+    if (normalizedUserAnswer === normalizedCorrectAnswer) {
+      // Mark as correct
+      inputElement.classList.add('correct-answer');
+      feedbackElement.innerHTML = '<span class="feedback-positive">Correct! Well done!</span>';
+      feedbackElement.style.display = 'block';
+
+      // Mark the step as complete
+      const stepItem = inputElement.closest('.step-item');
+      if (stepItem) {
+        stepItem.classList.add('completed');
+
+        // Add a checkmark to the header
+        const header = stepItem.querySelector('.step-header');
+        if (header && !header.querySelector('.checkmark')) {
+          const checkmark = document.createElement('span');
+          checkmark.className = 'checkmark';
+          checkmark.innerHTML = '✓';
+          header.appendChild(checkmark);
+        }
+      }
+    } else {
+      // Show error and shake the input
+      inputElement.classList.remove('correct-answer');
+      inputElement.classList.add('shake');
+      feedbackElement.innerHTML = '<span class="feedback-negative">Try again. Check your answer carefully.</span>';
+      feedbackElement.style.display = 'block';
+
+      // Remove shake animation after it completes
+      setTimeout(() => {
+        inputElement.classList.remove('shake');
+      }, 500);
+
+      // Check for common mistakes
+      detectCommonMistake(userAnswer, correctAnswer, problemId);
+    }
+  }
+
+  // Add event listeners to all submit buttons
+  document.addEventListener('DOMContentLoaded', function() {
+    // Find all submit buttons
+    const submitButtons = document.querySelectorAll('.submit-btn');
+
+    submitButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Extract problem ID and correct answer from data attributes
+        const problemId = this.getAttribute('data-problem-id');
+        const correctAnswer = this.getAttribute('data-correct');
+
+        if (problemId && correctAnswer) {
+          submitAnswer(problemId, correctAnswer);
+        } else {
+          console.error('Missing problem ID or correct answer data attributes');
+        }
+      });
+    });
+
+    // Also add enter key functionality for inputs
+    const answerInputs = document.querySelectorAll('.step-input');
+    answerInputs.forEach(input => {
+      input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          const submitBtn = this.nextElementSibling;
+          if (submitBtn && submitBtn.classList.contains('submit-btn')) {
+            submitBtn.click();
+          }
+        }
+      });
+    });
+  });
+
+  function initVisualizations() {
+    try {
+      // Product rule visualization
+      const productRuleGraph = document.getElementById('product-rule-graph');
+      if (productRuleGraph) {
+        const xValues = Array.from({length: 100}, (_, i) => -5 + i * 0.1);
+
+        const f = x => x**2;
+        const g = x => Math.sin(x);
+        const fPrime = x => 2*x;
+        const gPrime = x => Math.cos(x);
+
+        const product = x => f(x) * g(x);
+        const productDerivative = x => fPrime(x) * g(x) + f(x) * gPrime(x);
+
+        const data = [
+          {
+            x: xValues,
+            y: xValues.map(product),
+            type: 'scatter',
+            mode: 'lines',
+            name: 'f(x)·g(x)',
+            line: {color: '#3498db', width: 3}
+          },
+          {
+            x: xValues,
+            y: xValues.map(productDerivative),
+            type: 'scatter',
+            mode: 'lines',
+            name: 'd/dx[f(x)·g(x)]',
+            line: {color: '#e74c3c', width: 3, dash: 'dash'}
+          }
+        ];
+
+        const layout = {
+          title: 'Product Rule Visualization',
+          xaxis: {title: 'x'},
+          yaxis: {title: 'y'},
+          margin: {l: 40, r: 40, t: 40, b: 40},
+          legend: {x: 0, y: 1},
+          font: {family: 'Poppins, sans-serif'}
+        };
+
+        Plotly.newPlot('product-rule-graph', data, layout, {responsive: true});
+      }
+
+      // Quotient rule visualization
+      const quotientRuleGraph = document.getElementById('quotient-rule-graph');
+      if (quotientRuleGraph) {
+        const xValues = Array.from({length: 100}, (_, i) => -5 + i * 0.1);
+
+        const f = x => Math.exp(x);
+        const g = x => x + 1;
+        const fPrime = x => Math.exp(x);
+        const gPrime = x => 1;
+
+        const quotient = x => f(x) / g(x);
+        const quotientDerivative = x => (fPrime(x) * g(x) - f(x) * gPrime(x)) / (g(x) ** 2);
+
+        const data = [
+          {
+            x: xValues,
+            y: xValues.map(quotient),
+            type: 'scatter',
+            mode: 'lines',
+            name: 'f(x)/g(x)',
+            line: {color: '#3498db', width: 3}
+          },
+          {
+            x: xValues,
+            y: xValues.map(quotientDerivative),
+            type: 'scatter',
+            mode: 'lines',
+            name: 'd/dx[f(x)/g(x)]',
+            line: {color: '#e74c3c', width: 3, dash: 'dash'}
+          }
+        ];
+
+        const layout = {
+          title: 'Quotient Rule Visualization',
+          xaxis: {title: 'x'},
+          yaxis: {title: 'y'},
+          margin: {l: 40, r: 40, t: 40, b: 40},
+          legend: {x: 0, y: 1},
+          font: {family: 'Poppins, sans-serif'}
+        };
+
+        Plotly.newPlot('quotient-rule-graph', data, layout, {responsive: true});
+      }
+
+      // Chain rule visualization
+      const chainRuleGraph = document.getElementById('chain-rule-graph');
+      if (chainRuleGraph) {
+        const xValues = Array.from({length: 100}, (_, i) => -5 + i * 0.1);
+
+        const innerFunc = x => x**2;
+        const outerFunc = x => Math.sin(x);
+
+        const composite = x => outerFunc(innerFunc(x));
+        const derivativeByChain = x => Math.cos(x**2) * 2*x;
+
+        const data = [
+          {
+            x: xValues,
+            y: xValues.map(composite),
+            type: 'scatter',
+            mode: 'lines',
+            name: 'f(g(x))',
+            line: {color: '#3498db', width: 3}
+          },
+          {
+            x: xValues,
+            y: xValues.map(derivativeByChain),
+            type: 'scatter',
+            mode: 'lines',
+            name: 'd/dx[f(g(x))]',
+            line: {color: '#e74c3c', width: 3, dash: 'dash'}
+          }
+        ];
+
+        const layout = {
+          title: 'Chain Rule Visualization',
+          xaxis: {title: 'x'},
+          yaxis: {title: 'y'},
+          margin: {l: 40, r: 40, t: 40, b: 40},
+          legend: {x: 0, y: 1},
+          font: {family: 'Poppins, sans-serif'}
+        };
+
+        Plotly.newPlot('chain-rule-graph', data, layout, {responsive: true});
+      }
+    } catch (error) {
+      console.error('Error initializing visualizations:', error);
+    }
+  }
+
+  // Initialize the page when loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize MathQuill first
+    if (typeof MathQuill !== 'undefined') {
+      setTimeout(() => {
+        initializeMathQuill();
+      }, 100);
+    }
+
+    // Set up dropdown functionality
+    const dropdownBtns = document.querySelectorAll('.dropdown-btn');
+    dropdownBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        this.classList.toggle('active');
+        const container = this.nextElementSibling;
+
+        if (container.style.maxHeight) {
+          container.style.maxHeight = null;
+        } else {
+          container.style.maxHeight = container.scrollHeight + 'px';
+        }
+      });
+    });
+
+    // Initialize drag and drop functionality with slight delay
+    setTimeout(() => {
+      initializeDragAndDrop();
+    }, 500);
+
+    // Initialize visualizations if Plotly is available
+    if (typeof Plotly !== 'undefined') {
+      initVisualizations();
+    }
+
+
+
+    // Add active state to the current page in sidebar
+    const currentPage = window.location.pathname.split('/').pop();
+    const sidebarLinks = document.querySelectorAll('.sidebar a');
+
+    sidebarLinks.forEach(link => {
+      const linkPage = link.getAttribute('href');
+      if (linkPage === currentPage) {
+        link.classList.add('active');
+
+        // If it's in a dropdown, open the dropdown
+        const parentDropdown = link.closest('.dropdown-container');
+        if (parentDropdown) {
+          const dropdownBtn = parentDropdown.previousElementSibling;
+          dropdownBtn.classList.add('active');
+          parentDropdown.style.maxHeight = parentDropdown.scrollHeight + 'px';
+        }
+      }
+    });
+
+    // Setup tab functionality
+    const firstTab = document.querySelector('.tab-btn');
+    if (firstTab) {
+      firstTab.click(); // Activate the first tab by default
+    }
+
+    // Update button handlers to use MathQuill versions
+    setTimeout(() => {
+      // Update checkSubStep buttons to use MathQuill version
+      document.querySelectorAll('button[onclick*="checkSubStep"]').forEach(button => {
+        const onclickValue = button.getAttribute('onclick');
+        const newOnclick = onclickValue.replace('checkSubStep', 'checkSubStepMathQuill');
+        button.setAttribute('onclick', newOnclick);
+      });
+
+      // Update checkFinalAnswer buttons to use MathQuill version
+      document.querySelectorAll('button[onclick*="checkFinalAnswer"]').forEach(button => {
+        const onclickValue = button.getAttribute('onclick');
+        const newOnclick = onclickValue.replace('checkFinalAnswer', 'checkFinalAnswerMathQuill');
+        button.setAttribute('onclick', newOnclick);
+      });
+    }, 200);
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize event listeners for all check and hint buttons
+    document.querySelectorAll('.step-button').forEach(button => {
+      const onclickValue = button.getAttribute('onclick');
+      if (!onclickValue) return;
+
+      // For check buttons
+      if (onclickValue.includes('checkSubStep')) {
+        button.addEventListener('click', function() {
+          const match = onclickValue.match(/checkSubStep\(['"]([^'"]+)['"],\s*['"]([^'"]+)['"],\s*['"]([^'"]+)['"],\s*([^)]*)\)/);
+          if (match) {
+            const inputId = match[1];
+            const correctAnswer = match[2];
+            const hintId = match[3];
+            const nextStepId = match[4] === 'null' ? null : match[4].replace(/['"]/g, '');
+            checkSubStep(inputId, correctAnswer, hintId, nextStepId);
+          }
+        });
+        // Remove the inline onclick to prevent double execution
+        button.removeAttribute('onclick');
+      }
+
+      // For hint buttons
+      else if (onclickValue.includes('showHint')) {
+        button.addEventListener('click', function() {
+          const match = onclickValue.match(/showHint\(['"]([^'"]+)['"]\)/);
+          if (match) {
+            showHint(match[1]);
+          }
+        });
+        // Remove the inline onclick to prevent double execution
+        button.removeAttribute('onclick');
+      }
+
+      // For explanation toggles
+      else if (onclickValue.includes('toggleExplanation')) {
+        button.addEventListener('click', function() {
+          const match = onclickValue.match(/toggleExplanation\(['"]([^'"]+)['"]\)/);
+          if (match) {
+            const explanationId = match[1];
+            toggleExplanation(explanationId);
+          }
+        });
+        // Remove the inline onclick to prevent double execution
+        button.removeAttribute('onclick');
+      }
+    });
+
+    // Handle Enter key in inputs
+    document.querySelectorAll('.step-input').forEach(input => {
+      input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          const stepItem = this.closest('.step-item');
+          if (stepItem) {
+            const checkButton = stepItem.querySelector('.step-button');
+            if (checkButton) checkButton.click();
+          }
+        }
+      });
+    });
+
+    // Initialize the first tab
+    const firstTab = document.querySelector('.tab-btn');
+    if (firstTab) firstTab.click();
+  });
+
+  // Global variables for MathQuill
+  let mathFields = {};
+
+  // Initialize MathQuill
+  function initializeMathQuill() {
+    const MQ = MathQuill.getInterface(2);
+    
+    // Initialize all MathQuill fields
+    const fieldIds = [
+      'step1-1-input', 'step1-2-input', 'step1-3-input', 'answer1',
+      'step2-2-input', 'step2-3-input', 'answer2',
+      'step3-2-input', 'step3-3-input', 'answer3',
+      'step4-2-input', 'step4-3-input', 'answer4'
+    ];
+    
+    fieldIds.forEach(id => {
+      const element = document.getElementById(id);
+      if (element) {
+        mathFields[id] = MQ.MathField(element, {
+          spaceBehavesLikeTab: true,
+          handlers: {
+            edit: function() {
+              // Provide real-time feedback
+              provideRealTimeFeedback(id, this.latex());
+            }
+          }
+        });
+      }
+    });
+  }
+
+  // Insert math symbols into MathQuill fields
+  function insertMath(fieldId, symbol) {
+    if (mathFields[fieldId]) {
+      mathFields[fieldId].write(symbol);
+      mathFields[fieldId].focus();
+    }
+  }
+
+  // Provide real-time feedback for MathQuill inputs
+  function provideRealTimeFeedback(fieldId, latex) {
+    const feedbackElement = document.getElementById(fieldId.replace('-input', '-realtime') || fieldId + '-realtime');
+    if (!feedbackElement) return;
+    
+    let feedbackClass = 'feedback-typing';
+    let feedbackText = '✏️';
+    
+    // Simple validation based on field
+    if (latex.length > 2) {
+      const isCorrect = checkAnswerQuickly(fieldId, latex);
+      
+      if (isCorrect) {
+        feedbackClass = 'feedback-correct';
+        feedbackText = '✓';
+      } else if (latex.length > 8) {
+        feedbackClass = 'feedback-incorrect';
+        feedbackText = '?';
+      }
+    }
+    
+    feedbackElement.className = `real-time-feedback ${feedbackClass}`;
+    feedbackElement.textContent = feedbackText;
+  }
+
+  // Quick answer checking for real-time feedback
+  function checkAnswerQuickly(fieldId, latex) {
+    const patterns = {
+      'step1-1-input': ['6x', '6*x'],
+      'step1-2-input': ['-1'],
+      'step1-3-input': ['0'],
+      'answer1': ['6x-1', '6*x-1', '6x - 1'],
+      'step2-2-input': ['2x', '2*x'],
+      'step2-3-input': ['\\cos(x)', 'cos(x)'],
+      'answer2': ['2x\\sin(x)+x^2\\cos(x)', '2*x*sin(x)+x^2*cos(x)'],
+      'step3-2-input': ['e^x', 'e^{x}'],
+      'step3-3-input': ['1'],
+      'answer3': ['\\frac{e^x*x}{(x+1)^2}', 'e^x*x/(x+1)^2'],
+      'step4-2-input': ['\\cos(u)', 'cos(u)'],
+      'step4-3-input': ['2x', '2*x'],
+      'answer4': ['2x\\cos(x^2)', '2*x*cos(x^2)']
+    };
+    
+    if (!patterns[fieldId]) return false;
+    
+    return patterns[fieldId].some(pattern => 
+      latex.includes(pattern.replace(/\s/g, '')) || 
+      latex.replace(/\s/g, '').includes(pattern.replace(/\s/g, ''))
+    );
+  }
+
+  // Enhanced checkSubStep function to work with MathQuill
+  function checkSubStepMathQuill(inputId, correctAnswer, hintId, nextStepId) {
+    const mathField = mathFields[inputId];
+    if (!mathField) {
+      // Fallback to regular checkSubStep if MathQuill field not found
+      return checkSubStep(inputId, correctAnswer, hintId, nextStepId);
+    }
+
+    const hint = document.getElementById(hintId);
+    const userAnswer = mathField.latex().trim();
+
+    // Normalize answers for comparison
+    const normalizedUserAnswer = userAnswer.toLowerCase().replace(/\s+/g, '').replace(/\*/g, '');
+    const normalizedCorrectAnswer = correctAnswer.toLowerCase().replace(/\s+/g, '').replace(/\*/g, '');
+
+    if (normalizedUserAnswer === normalizedCorrectAnswer || 
+        normalizedUserAnswer.includes(normalizedCorrectAnswer) ||
+        normalizedCorrectAnswer.includes(normalizedUserAnswer)) {
+      
+      // Mark as correct
+      const element = document.getElementById(inputId);
+      if (element) {
+        element.classList.add('correct-answer');
+      }
+
+      // Hide hint if visible
+      if (hint) hint.style.display = 'none';
+
+      // Mark step as completed
+      const stepItem = element.closest('.step-item');
+      if (stepItem) {
+        stepItem.classList.add('completed');
+
+        // Add checkmark
+        const header = stepItem.querySelector('.step-header');
+        if (header && !header.querySelector('.checkmark')) {
+          const checkmark = document.createElement('span');
+          checkmark.className = 'checkmark';
+          checkmark.innerHTML = '✓';
+          header.appendChild(checkmark);
+        }
+      }
+
+      // Show next step
+      if (nextStepId) {
+        const nextStep = document.getElementById(nextStepId);
+        if (nextStep) {
+          nextStep.style.display = 'block';
+          nextStep.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+      }
+    } else {
+      // Show hint for incorrect answer
+      if (hint) hint.style.display = 'block';
+
+      // Add shake animation
+      const element = document.getElementById(inputId);
+      if (element) {
+        element.classList.add('shake');
+        setTimeout(() => element.classList.remove('shake'), 500);
+      }
+    }
+  }
+
+  // Enhanced checkFinalAnswer function to work with MathQuill
+  function checkFinalAnswerMathQuill(problemNumber) {
+    const inputId = `answer${problemNumber}`;
+    const mathField = mathFields[inputId];
+    const feedback = document.getElementById(`p${problemNumber}-feedback`);
+
+    if (!mathField || !feedback) {
+      // Fallback to regular checkFinalAnswer
+      return checkFinalAnswer(problemNumber);
+    }
+
+    // Get the button that was clicked to access data attributes
+    const button = document.querySelector(`button[onclick="checkFinalAnswer(${problemNumber})"]`);
+    const correctAnswer = button.getAttribute('data-correct');
+
+    if (!correctAnswer) {
+      console.error(`No correct answer defined for problem ${problemNumber}`);
+      return;
+    }
+
+    // Get user's answer from MathQuill
+    const userAnswer = mathField.latex().trim();
+    const normalizedUserAnswer = userAnswer.toLowerCase().replace(/\s+/g, '').replace(/\*/g, '');
+    const normalizedCorrectAnswer = correctAnswer.toLowerCase().replace(/\s+/g, '').replace(/\*/g, '');
+
+    // Check if answer is correct (more flexible matching for MathQuill)
+    const isCorrect = normalizedUserAnswer === normalizedCorrectAnswer ||
+                     normalizedUserAnswer.includes(normalizedCorrectAnswer) ||
+                     normalizedCorrectAnswer.includes(normalizedUserAnswer);
+
+    if (isCorrect) {
+      // Mark as correct
+      const element = document.getElementById(inputId);
+      if (element) {
+        element.classList.add('correct-answer');
+      }
+      feedback.innerHTML = '<span class="feedback-positive">Correct! Well done!</span>';
+      feedback.style.display = 'block';
+
+      // Mark the step as complete
+      const stepItem = element.closest('.step-item');
+      if (stepItem) {
+        stepItem.classList.add('completed');
+
+        // Add a checkmark to the header
+        const header = stepItem.querySelector('.step-header');
+        if (header && !header.querySelector('.checkmark')) {
+          const checkmark = document.createElement('span');
+          checkmark.className = 'checkmark';
+          checkmark.innerHTML = '✓';
+          header.appendChild(checkmark);
+        }
+      }
+      
+      // Mark the entire problem as complete
+      const problemContainer = document.querySelector(`.problem-${problemNumber}`);
+      if (problemContainer) {
+        problemContainer.classList.add('completed');
+      }
+
+
+    } else {
+      // Show error and shake the input
+      const element = document.getElementById(inputId);
+      if (element) {
+        element.classList.remove('correct-answer');
+        element.classList.add('shake');
+        setTimeout(() => element.classList.remove('shake'), 500);
+      }
+      
+      feedback.innerHTML = '<span class="feedback-negative">Try again. Check your answer carefully.</span>';
+      feedback.style.display = 'block';
+
+      // Check for common mistakes
+      detectCommonMistake(userAnswer, correctAnswer, problemNumber);
+    }
+  }
+
+  // Make functions globally available
+  window.insertMath = insertMath;
+  window.checkSubStepMathQuill = checkSubStepMathQuill;
+  window.checkFinalAnswerMathQuill = checkFinalAnswerMathQuill;
+
+  // Drag and Drop Functionality
+  let draggedElement = null;
+  let problemStates = {
+    1: { completed: false, attempts: 0 },
+    2: { completed: false, attempts: 0 },
+    3: { completed: false, attempts: 0 },
+    4: { completed: false, attempts: 0 },
+    5: { completed: false, attempts: 0 },
+    6: { completed: false, attempts: 0 },
+    7: { completed: false, attempts: 0 },
+    8: { completed: false, attempts: 0 },
+    9: { completed: false, attempts: 0 },
+    10: { completed: false, attempts: 0 },
+    11: { completed: false, attempts: 0 }
+  };
+
+  function initializeDragAndDrop() {
+    console.log('Initializing drag and drop functionality...');
+    
+    // Add event listeners to all drag items
+    const dragItems = document.querySelectorAll('.drag-item');
+    console.log(`Found ${dragItems.length} drag items`);
+    
+    dragItems.forEach((item, index) => {
+      console.log(`Initializing drag item ${index + 1}: ${item.dataset.value}`);
+      
+      // Remove existing listeners to prevent duplicates
+      item.removeEventListener('dragstart', handleDragStart);
+      item.removeEventListener('dragend', handleDragEnd);
+      
+      // Add new listeners
+      item.addEventListener('dragstart', handleDragStart);
+      item.addEventListener('dragend', handleDragEnd);
+      
+      // Ensure draggable attribute is set
+      item.setAttribute('draggable', 'true');
+    });
+
+    // Add event listeners to all drop zones
+    const dropZones = document.querySelectorAll('.drop-zone');
+    console.log(`Found ${dropZones.length} drop zones`);
+    
+    dropZones.forEach((zone, index) => {
+      console.log(`Initializing drop zone ${index + 1}: problem ${zone.dataset.problem}, position ${zone.dataset.position}`);
+      
+      // Remove existing listeners to prevent duplicates
+      zone.removeEventListener('dragover', handleDragOver);
+      zone.removeEventListener('dragenter', handleDragEnter);
+      zone.removeEventListener('dragleave', handleDragLeave);
+      zone.removeEventListener('drop', handleDrop);
+      
+      // Add new listeners
+      zone.addEventListener('dragover', handleDragOver);
+      zone.addEventListener('dragenter', handleDragEnter);
+      zone.addEventListener('dragleave', handleDragLeave);
+      zone.addEventListener('drop', handleDrop);
+    });
+
+    console.log('Drag and drop initialized successfully');
+  }
+
+  function handleDragStart(e) {
+    draggedElement = this;
+    this.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', this.outerHTML);
+    console.log('Drag started:', this.dataset.value);
+  }
+
+  function handleDragEnd(e) {
+    this.classList.remove('dragging');
+    draggedElement = null;
+  }
+
+  function handleDragOver(e) {
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+    e.dataTransfer.dropEffect = 'move';
+    return false;
+  }
+
+  function handleDragEnter(e) {
+    this.classList.add('drag-over');
+  }
+
+  function handleDragLeave(e) {
+    this.classList.remove('drag-over');
+  }
+
+  function handleDrop(e) {
+    if (e.stopPropagation) {
+      e.stopPropagation();
+    }
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+
+    this.classList.remove('drag-over');
+
+    console.log('Drop event triggered');
+    console.log('Dragged element:', draggedElement);
+    console.log('Drop zone problem:', this.dataset.problem, 'position:', this.dataset.position);
+
+    if (draggedElement) {
+      // Store the dropped value
+      const droppedValue = draggedElement.dataset.value;
+      const expectedValue = this.dataset.correct;
+      
+      console.log(`Dropping "${droppedValue}" into zone expecting "${expectedValue}"`);
+      
+      // Clear any existing content in the drop zone
+      this.textContent = droppedValue;
+      this.classList.add('filled');
+      this.dataset.droppedValue = droppedValue;
+
+      // Remove the dragged item from the bank
+      draggedElement.style.display = 'none';
+
+      // Update formula display for problems 1, 9, and 10
+      updateFormulaDisplay(this.dataset.problem);
+
+      console.log('Successfully dropped:', droppedValue, 'into zone expecting:', expectedValue);
+    } else {
+      console.error('No dragged element found during drop');
+    }
+
+    return false;
+  }
+
+  function updateFormulaDisplay(problemNumber) {
+    if (problemNumber === '1') {
+      const zone1 = document.querySelector('[data-problem="1"][data-position="1"]');
+      const zone2 = document.querySelector('[data-problem="1"][data-position="2"]');
+      const formula = document.getElementById('formula-1');
+      
+      if (formula) {
+        let coeff = zone1.dataset.droppedValue || '\\square';
+        let exp = zone2.dataset.droppedValue || '\\square';
+        formula.innerHTML = `\\(\\frac{d}{dx}[x^n] = ${coeff} \\cdot x^{${exp}}\\)`;
+        MathJax.typesetPromise([formula]);
+      }
+    } else if (problemNumber === '9') {
+      const zone1 = document.querySelector('[data-problem="9"][data-position="1"]');
+      const zone2 = document.querySelector('[data-problem="9"][data-position="2"]');
+      const zone3 = document.querySelector('[data-problem="9"][data-position="3"]');
+      const formula = document.getElementById('formula-9');
+      
+      if (formula) {
+        let coeff = zone1.dataset.droppedValue || '\\square';
+        let exp = zone2.dataset.droppedValue || '\\square';
+        let inner = zone3.dataset.droppedValue || '\\square';
+        formula.innerHTML = `\\(f'(x) = ${coeff} \\cdot (3x + 1)^{${exp}} \\cdot ${inner}\\)`;
+        MathJax.typesetPromise([formula]);
+      }
+    } else if (problemNumber === '10') {
+      const zone1 = document.querySelector('[data-problem="10"][data-position="1"]');
+      const zone2 = document.querySelector('[data-problem="10"][data-position="2"]');
+      const formula = document.getElementById('formula-10');
+      
+      if (formula) {
+        let term1 = zone1.dataset.droppedValue || '\\square';
+        let term2 = zone2.dataset.droppedValue || '\\square';
+        formula.innerHTML = `\\(\\frac{d}{dx}\\left[\\frac{f(x)}{g(x)}\\right] = \\frac{${term1} - ${term2}}{[g(x)]^2}\\)`;
+        MathJax.typesetPromise([formula]);
+      }
+    }
+  }
+
+  function checkDragAnswer(problemNumber) {
+    console.log('Checking drag answer for problem:', problemNumber);
+    
+    const dropZones = document.querySelectorAll(`[data-problem="${problemNumber}"].drop-zone`);
+    const feedback = document.getElementById(`feedback-${problemNumber}`);
+    let allCorrect = true;
+    let allFilled = true;
+
+    // Check each drop zone
+    dropZones.forEach(zone => {
+      const droppedValue = zone.dataset.droppedValue;
+      const correctValue = zone.dataset.correct;
+
+      if (!droppedValue) {
+        allFilled = false;
+        return;
+      }
+
+      // Normalize values for comparison (handle Unicode characters and variations)
+      const normalizedDropped = normalizeValue(droppedValue);
+      const normalizedCorrect = normalizeValue(correctValue);
+
+      console.log(`Zone ${zone.dataset.position}: dropped="${droppedValue}" (normalized: "${normalizedDropped}"), correct="${correctValue}" (normalized: "${normalizedCorrect}")`);
+
+      if (normalizedDropped !== normalizedCorrect) {
+        allCorrect = false;
+        zone.classList.add('incorrect');
+        setTimeout(() => zone.classList.remove('incorrect'), 1000);
+      } else {
+        zone.classList.add('correct');
+      }
+    });
+
+    // Update attempts
+    problemStates[problemNumber].attempts++;
+
+    // Show feedback
+    if (!allFilled) {
+      showFeedback(problemNumber, 'Please fill all drop zones before checking!', 'error');
+    } else if (allCorrect) {
+      problemStates[problemNumber].completed = true;
+      showFeedback(problemNumber, `🎉 Excellent! You got it right on attempt ${problemStates[problemNumber].attempts}!`, 'success');
+      updateDragProgress();
+    } else {
+      showFeedback(problemNumber, `❌ Not quite right. Try again! (Attempt ${problemStates[problemNumber].attempts})`, 'error');
+    }
+  }
+
+  function normalizeValue(value) {
+    if (!value) return '';
+    
+    // Normalize common mathematical notation
+    return value
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, '')           // Remove all spaces
+      .replace(/²/g, '^2')           // Convert Unicode superscript to ^2
+      .replace(/³/g, '^3')           // Convert Unicode superscript to ^3
+      .replace(/\*+/g, '')           // Remove multiplication symbols
+      .replace(/sec\^2/g, 'sec^2')   // Standardize sec^2
+      .replace(/csc\^2/g, 'csc^2')   // Standardize csc^2
+      .replace(/tan\^2/g, 'tan^2');  // Standardize tan^2
+  }
+
+  function resetDragProblem(problemNumber) {
+    console.log('Resetting problem:', problemNumber);
+    
+    // Clear all drop zones for this problem
+    const dropZones = document.querySelectorAll(`[data-problem="${problemNumber}"].drop-zone`);
+    dropZones.forEach(zone => {
+      // Set appropriate default text based on problem and position
+      let defaultText = 'Drop here';
+      
+      if (problemNumber === 2) {
+        // Problem 2 has +/- zones
+        if (zone.dataset.position === '2' || zone.dataset.position === '4') {
+          defaultText = '+/-';
+        }
+      }
+      
+      zone.textContent = defaultText;
+      zone.classList.remove('filled', 'correct', 'incorrect');
+      delete zone.dataset.droppedValue;
+    });
+
+    // Show all drag items for this problem
+    const bank = document.getElementById(`bank-${problemNumber}`);
+    if (bank) {
+      bank.querySelectorAll('.drag-item').forEach(item => {
+        item.style.display = 'block';
+      });
+    }
+
+    // Clear feedback
+    const feedback = document.getElementById(`feedback-${problemNumber}`);
+    if (feedback) {
+      feedback.style.display = 'none';
+    }
+
+    // Reset formula display
+    if (problemNumber === 1 || problemNumber === '1') {
+      const formula = document.getElementById('formula-1');
+      if (formula) {
+        formula.innerHTML = '\\(\\frac{d}{dx}[x^n] = \\square \\cdot x^{\\square}\\)';
+        if (typeof MathJax !== 'undefined') {
+          MathJax.typesetPromise([formula]);
+        }
+      }
+    } else if (problemNumber === 9 || problemNumber === '9') {
+      const formula = document.getElementById('formula-9');
+      if (formula) {
+        formula.innerHTML = '\\(f\'(x) = \\square \\cdot (3x + 1)^{\\square} \\cdot \\square\\)';
+        if (typeof MathJax !== 'undefined') {
+          MathJax.typesetPromise([formula]);
+        }
+      }
+    } else if (problemNumber === 10 || problemNumber === '10') {
+      const formula = document.getElementById('formula-10');
+      if (formula) {
+        formula.innerHTML = '\\(\\frac{d}{dx}\\left[\\frac{f(x)}{g(x)}\\right] = \\frac{\\square - \\square}{[g(x)]^2}\\)';
+        if (typeof MathJax !== 'undefined') {
+          MathJax.typesetPromise([formula]);
+        }
+      }
+    }
+
+    // Reset problem state
+    problemStates[problemNumber] = { completed: false, attempts: 0 };
+    updateDragProgress();
+  }
+
+  function showFeedback(problemNumber, message, type) {
+    const feedback = document.getElementById(`feedback-${problemNumber}`);
+    feedback.textContent = message;
+    feedback.className = `drag-feedback ${type}`;
+    feedback.style.display = 'block';
+
+    // Auto-hide after 5 seconds for error messages
+    if (type === 'error') {
+      setTimeout(() => {
+        feedback.style.display = 'none';
+      }, 5000);
+    }
+  }
+
+
+
+  // Make drag and drop functions globally available
+  window.checkDragAnswer = checkDragAnswer;
+  window.resetDragProblem = resetDragProblem;
+  window.initializeDragAndDrop = initializeDragAndDrop;
+
+  // Interactive Rule Discovery Functions
+  function revealRule(ruleType) {
+    console.log('Revealing rule:', ruleType);
+    
+    const rules = {
+      'constant': {
+        result: '$$0$$',
+        explanation: 'constant-explanation'
+      },
+      'linear': {
+        result: '$$a$$',
+        explanation: 'linear-explanation'
+      },
+      'power': {
+        result: '$$nx^{n-1}$$',
+        explanation: 'power-explanation'
+      }
+    };
+
+    const rule = rules[ruleType];
+    if (rule) {
+      // Update the result
+      const resultElement = document.getElementById(`${ruleType}-result`);
+      if (resultElement) {
+        resultElement.innerHTML = rule.result;
+        resultElement.style.color = 'var(--tertiary-color)';
+        
+        // Trigger MathJax re-rendering
+        if (typeof MathJax !== 'undefined') {
+          MathJax.typesetPromise([resultElement]).catch((err) => console.log(err));
+        }
+      }
+
+      // Show explanation
+      const explanationElement = document.getElementById(`${ruleType}-explanation`);
+      if (explanationElement) {
+        explanationElement.style.display = 'block';
+        explanationElement.classList.add('solution-reveal');
+      }
+
+      // Add visual feedback
+      const cardElement = document.querySelector(`[onclick*="${ruleType}"]`);
+      if (cardElement) {
+        cardElement.style.transform = 'scale(1.02)';
+        setTimeout(() => {
+          cardElement.style.transform = 'scale(1)';
+        }, 200);
+      }
+    }
+  }
+
+  function revealTable() {
+    const table = document.getElementById('rules-table');
+    const button = document.getElementById('reveal-table-btn');
+    
+    if (table && button) {
+      table.style.display = 'block';
+      table.classList.add('solution-reveal');
+      button.textContent = '✅ Table Revealed!';
+      button.style.background = 'var(--tertiary-color)';
+      
+      // Trigger MathJax re-rendering for the table with a delay to ensure DOM is ready
+      setTimeout(() => {
+        if (typeof MathJax !== 'undefined') {
+          MathJax.typesetPromise([table]).then(() => {
+            console.log('Table MathJax rendering completed');
+          }).catch((err) => {
+            console.log('MathJax rendering error:', err);
+            // Fallback: try again after another delay
+            setTimeout(() => {
+              MathJax.typesetPromise([table]).catch(e => console.log('Fallback MathJax error:', e));
+            }, 500);
+          });
+        }
+      }, 100);
+    }
+  }
+
+  // Interactive Problem Solution Functions
+  function toggleSolution(problemId) {
+    console.log('Toggling solution:', problemId);
+    
+    const solutionElement = document.getElementById(problemId);
+    const toggleIcon = document.getElementById(`toggle-${problemId.split('-')[1]}`);
+    
+    if (solutionElement && toggleIcon) {
+      if (solutionElement.style.display === 'none' || solutionElement.style.display === '') {
+        // Show solution
+        solutionElement.style.display = 'block';
+        solutionElement.classList.add('solution-reveal');
+        toggleIcon.textContent = '▼';
+        
+        // Trigger MathJax re-rendering
+        if (typeof MathJax !== 'undefined') {
+          MathJax.typesetPromise([solutionElement]).catch((err) => console.log(err));
+        }
+        
+        // Add success animation
+        const cardElement = solutionElement.closest('.interactive-problem-card');
+        if (cardElement) {
+          cardElement.style.transform = 'scale(1.02)';
+          setTimeout(() => {
+            cardElement.style.transform = 'scale(1)';
+          }, 200);
+        }
+      } else {
+        // Hide solution
+        solutionElement.style.display = 'none';
+        toggleIcon.textContent = '▶';
+      }
+    }
+  }
+
+  function revealAllSolutions() {
+    const problems = ['problem-a', 'problem-b', 'problem-c', 'problem-d', 'problem-e'];
+    
+    problems.forEach(problemId => {
+      const solutionElement = document.getElementById(problemId);
+      const toggleIcon = document.getElementById(`toggle-${problemId.split('-')[1]}`);
+      
+      if (solutionElement && toggleIcon) {
+        solutionElement.style.display = 'block';
+        solutionElement.classList.add('solution-reveal');
+        toggleIcon.textContent = '▼';
+      }
+    });
+    
+    // Trigger MathJax re-rendering for all solutions
+    if (typeof MathJax !== 'undefined') {
+      const allSolutions = problems.map(id => document.getElementById(id)).filter(el => el);
+      MathJax.typesetPromise(allSolutions).catch((err) => console.log(err));
+    }
+    
+    // Show success message
+    showTemporaryMessage('✅ All solutions revealed!', 'success');
+  }
+
+  function hideAllSolutions() {
+    const problems = ['problem-a', 'problem-b', 'problem-c', 'problem-d', 'problem-e'];
+    
+    problems.forEach(problemId => {
+      const solutionElement = document.getElementById(problemId);
+      const toggleIcon = document.getElementById(`toggle-${problemId.split('-')[1]}`);
+      
+      if (solutionElement && toggleIcon) {
+        solutionElement.style.display = 'none';
+        toggleIcon.textContent = '▶';
+      }
+    });
+    
+    // Show message
+    showTemporaryMessage('⬆️ All solutions hidden!', 'info');
+  }
+
+  function showTemporaryMessage(message, type) {
+    // Create temporary message element
+    const messageEl = document.createElement('div');
+    messageEl.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: ${type === 'success' ? 'var(--tertiary-color)' : 'var(--accent-color)'};
+      color: white;
+      padding: 15px 25px;
+      border-radius: 10px;
+      font-weight: 600;
+      z-index: 1000;
+      animation: slideDown 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    `;
+    messageEl.textContent = message;
+    
+    document.body.appendChild(messageEl);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+      messageEl.style.opacity = '0';
+      messageEl.style.transform = 'translateY(-20px)';
+      setTimeout(() => {
+        document.body.removeChild(messageEl);
+      }, 300);
+    }, 3000);
+  }
+
+  // Make interactive functions globally available
+  window.revealRule = revealRule;
+  window.revealTable = revealTable;
+  window.toggleSolution = toggleSolution;
+  window.revealAllSolutions = revealAllSolutions;
+  window.hideAllSolutions = hideAllSolutions;
+
+  // Function to mark topic as completed and return to profile
+  function completeTopicAndReturn() {
+    const topicName = 'Rules of Differentiation';
+    
+    // Mark topic as completed in session storage
+    const practiceAttempts = JSON.parse(sessionStorage.getItem('practiceAttempts') || '{}');
+    practiceAttempts[topicName] = (practiceAttempts[topicName] || 0) + 1;
+    sessionStorage.setItem('practiceAttempts', JSON.stringify(practiceAttempts));
+    
+    // Update mastery data
+    const masteryData = JSON.parse(sessionStorage.getItem('masteryData') || '[]');
+    masteryData.forEach(item => {
+      if (item.topic === topicName) {
+        // Increase mastery for completing theory
+        item.mastery = Math.min(100, item.mastery + 10);
+        
+        // Update badge if mastery level crossed threshold
+        if (item.mastery >= 80) {
+          item.badge = 'M';  // Master
+        } else if (item.mastery >= 50) {
+          item.badge = 'P';  // Proficient
+        } else if (item.mastery >= 20) {
+          item.badge = 'L';  // Learning
+        }
+      }
+    });
+    sessionStorage.setItem('masteryData', JSON.stringify(masteryData));
+    
+    // Show completion message
+    alert('Congratulations! You have completed the "Rules of Differentiation" topic. Your progress has been updated!');
+    
+    // Navigate to profile page
+    window.location.href = 'profile.html';
+  }
+
+</script>
+
+<!-- Back to Profile Button -->
+<div style="margin: 40px auto; text-align: center; max-width: 800px;">
+  <div style="background: white; border: 2px solid black; border-radius: 10px; padding: 30px; box-shadow: 4px 4px black;">
+    <h3 style="color: #323232; margin-bottom: 20px;">Congratulations! You've finished this topic!</h3>
+    <p style="color: #666; margin-bottom: 25px;">Click the button below to mark this topic as completed and return to your profile.</p>
+    <button onclick="completeTopicAndReturn()" style="background: #ff6b6b; color: white; border: 2px solid black; border-radius: 10px; padding: 15px 30px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 4px 4px black;">
+      ✓ Complete Topic & Return to Profile
+    </button>
+  </div>
+</div>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+

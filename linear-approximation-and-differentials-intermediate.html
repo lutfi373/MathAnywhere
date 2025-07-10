@@ -1,0 +1,1929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear Approximation & Differentials - Intermediate | MathAnywhere</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- MathQuill resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+    
+    <!-- MathJax for rendering mathematical expressions -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Plotly for interactive graphs -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                packages: {'[+]': ['color']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <style>
+        :root {
+            --input-focus: #2d8cf0;
+            --font-color: #323232;
+            --font-color-sub: #666;
+            --bg-color: #f7f9fc;
+            --main-color: black;
+            --accent-color: #1dd1a1;
+            --secondary-color: #54a0ff;
+            --tertiary-color: #5f27cd;
+            --light-blue: #74b9ff;
+            --pink: #fd79a8;
+            --purple: #6c5ce7;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fira Code', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: var(--font-color);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(29, 209, 161, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(84, 160, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(95, 39, 205, 0.15) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            box-shadow: 
+                20px 20px 60px rgba(0, 0, 0, 0.1),
+                -20px -20px 60px rgba(255, 255, 255, 0.8),
+                inset 5px 5px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            border: 2px solid var(--main-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 3px solid var(--main-color);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 3em;
+            font-weight: 900;
+            position: relative;
+            z-index: 1;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            margin: 15px 0 0 0;
+            font-size: 1.3em;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            font-weight: 600;
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.25);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+            z-index: 1;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 50px;
+        }
+
+        .question-container {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid var(--main-color);
+            box-shadow: 
+                8px 8px 20px rgba(0, 0, 0, 0.1),
+                -8px -8px 20px rgba(255, 255, 255, 0.7);
+            transition: all 0.4s ease;
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            border: 3px solid var(--main-color);
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            line-height: 1.7;
+            color: var(--font-color);
+            font-weight: 600;
+        }
+
+        .math-expression {
+            background: linear-gradient(135deg, #e8f8f5, #d1ecf1);
+            padding: 20px;
+            border-radius: 15px;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.4em;
+            text-align: center;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid var(--main-color);
+            border-radius: 15px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            font-size: 1.1em;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                4px 4px 8px rgba(0, 0, 0, 0.1),
+                -4px -4px 8px rgba(255, 255, 255, 0.8);
+        }
+
+        .option:hover {
+            border-color: var(--accent-color);
+            background: rgba(29, 209, 161, 0.1);
+            transform: translateX(10px);
+        }
+
+        .option.selected {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border-color: var(--main-color);
+            box-shadow: 
+                6px 6px 12px rgba(0, 0, 0, 0.2),
+                inset 2px 2px 4px rgba(255, 255, 255, 0.3);
+            transform: scale(1.02);
+        }
+
+        .option.correct {
+            background: linear-gradient(135deg, var(--success-color), #20c997);
+            color: white;
+            border-color: var(--main-color);
+            animation: correctPulse 0.6s ease;
+        }
+
+        .option.incorrect {
+            background: linear-gradient(135deg, var(--danger-color), #fd7e14);
+            color: white;
+            border-color: var(--main-color);
+            animation: incorrectShake 0.6s ease;
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes incorrectShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .option-letter {
+            background: linear-gradient(135deg, var(--secondary-color), var(--tertiary-color));
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: 900;
+            font-size: 1em;
+            border: 2px solid var(--main-color);
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .option:hover .option-letter {
+            transform: rotate(360deg);
+        }
+
+        .option.selected .option-letter,
+        .option.correct .option-letter,
+        .option.incorrect .option-letter {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--tertiary-color) 100%);
+            color: white;
+            border: 3px solid var(--main-color);
+            padding: 18px 50px;
+            border-radius: 50px;
+            font-size: 1.3em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            margin: 40px auto;
+            display: block;
+            box-shadow: 
+                8px 8px 16px rgba(0, 0, 0, 0.2),
+                -8px -8px 16px rgba(255, 255, 255, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            background: linear-gradient(135deg, var(--secondary-color), var(--tertiary-color));
+        }
+
+        .submit-btn:active {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 
+                6px 6px 12px rgba(0, 0, 0, 0.2),
+                -6px -6px 12px rgba(255, 255, 255, 0.8);
+        }
+
+        .submit-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .results {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+            text-align: center;
+            border: 3px solid var(--main-color);
+            box-shadow: 
+                10px 10px 20px rgba(0, 0, 0, 0.15),
+                -10px -10px 20px rgba(255, 255, 255, 0.8),
+                inset 5px 5px 10px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .score {
+            font-size: 4em;
+            font-weight: 900;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: scoreAnimation 1s ease;
+        }
+
+        @keyframes scoreAnimation {
+            0% { transform: scale(0) rotate(180deg); opacity: 0; }
+            50% { transform: scale(1.2) rotate(0deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .score.pass {
+            color: var(--success-color);
+            animation: scoreAnimation 1s ease, successGlow 2s ease-in-out infinite alternate;
+        }
+
+        .score.fail {
+            color: var(--danger-color);
+            animation: scoreAnimation 1s ease;
+        }
+
+        @keyframes successGlow {
+            from { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), 0 0 20px rgba(40, 167, 69, 0.5); }
+            to { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), 0 0 30px rgba(40, 167, 69, 0.8); }
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 3px solid var(--main-color);
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.4s ease;
+            flex: 1;
+            text-align: center;
+            font-size: 1.1em;
+            box-shadow: 
+                4px 4px 8px rgba(0, 0, 0, 0.2),
+                -4px -4px 8px rgba(255, 255, 255, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn:hover {
+            background: linear-gradient(135deg, var(--secondary-color), var(--tertiary-color));
+            color: white;
+            transform: translateY(-3px);
+            text-decoration: none;
+        }
+
+
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 20px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2.5em;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .navigation {
+                flex-direction: column;
+            }
+
+            .question-container {
+                padding: 20px;
+            }
+
+            .question-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1em;
+            }
+        }
+
+        /* Special animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Interactive Math Input Styles */
+        .math-input-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid var(--main-color);
+            box-shadow: 
+                inset 2px 2px 5px rgba(0, 0, 0, 0.1),
+                inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .math-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-family: 'Times New Roman', serif;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.1),
+                -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .math-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 
+                0 0 15px rgba(255, 193, 7, 0.3),
+                inset 2px 2px 5px rgba(0, 0, 0, 0.1);
+            transform: scale(1.02);
+        }
+
+        .math-preview {
+            background: linear-gradient(135deg, #fff8e1, #ffe0b2);
+            border: 2px solid var(--accent-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            transition: all 0.3s ease;
+        }
+
+        .input-label {
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            display: block;
+            font-size: 1.1em;
+        }
+
+        .math-hint {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid var(--accent-color);
+            padding: 10px 15px;
+            margin-top: 10px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9em;
+        }
+
+        .answer-feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        .answer-feedback.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .answer-feedback.correct {
+            background: linear-gradient(135deg, var(--success-color), #20c997);
+            color: white;
+            animation: correctPulse 0.6s ease;
+        }
+
+        .answer-feedback.incorrect {
+            background: linear-gradient(135deg, var(--danger-color), #fd7e14);
+            color: white;
+            animation: incorrectShake 0.6s ease;
+        }
+
+        .check-answer-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 
+                4px 4px 8px rgba(0, 0, 0, 0.1),
+                -4px -4px 8px rgba(255, 255, 255, 0.8);
+        }
+
+        .check-answer-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 
+                6px 6px 12px rgba(0, 0, 0, 0.2),
+                -6px -6px 12px rgba(255, 255, 255, 0.9);
+        }
+
+        .mixed-question {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .mcq-section, .input-section {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid var(--main-color);
+            box-shadow: 
+                4px 4px 8px rgba(0, 0, 0, 0.1),
+                -4px -4px 8px rgba(255, 255, 255, 0.8);
+        }
+
+        .section-title {
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 5px;
+        }
+
+        /* MathQuill styling */
+        .mathquill-field {
+            width: 100%;
+            margin: 15px 0;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            min-height: 50px;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.1),
+                -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .mathquill-field:focus-within {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(29, 209, 161, 0.3);
+            transform: scale(1.02);
+        }
+
+        /* Text input field styling for mixed questions */
+        .text-input-field-wrapper {
+            position: relative;
+            margin: 15px 0;
+        }
+
+        /* Radio button styling */
+        input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+            accent-color: var(--accent-color);
+        }
+
+        input[type="radio"] + label {
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            width: 100%;
+        }
+
+        input[type="radio"]:checked + label {
+            background: rgba(29, 209, 161, 0.1);
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* Graph container styling */
+        .graph-container {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid var(--main-color);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 
+                inset 2px 2px 5px rgba(0, 0, 0, 0.1),
+                inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .graph-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .graph-control-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                4px 4px 8px rgba(0, 0, 0, 0.1),
+                -4px -4px 8px rgba(255, 255, 255, 0.8);
+        }
+
+        .graph-control-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 
+                6px 6px 12px rgba(0, 0, 0, 0.2),
+                -6px -6px 12px rgba(255, 255, 255, 0.9);
+        }
+
+        .graph-visualization {
+            width: 100%;
+            height: 400px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: white;
+        }
+
+        /* Show answer button styling */
+        .show-answer-btn {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+            color: var(--main-color);
+            border: 2px solid var(--main-color);
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            display: block;
+        }
+        
+        .show-answer-btn:hover {
+            background: linear-gradient(135deg, #fad0c4, #ff9a9e);
+            transform: translateY(-2px);
+        }
+
+        /* Answer Guide Styling */
+        .answer-guide {
+            background: linear-gradient(135deg, rgba(29, 209, 161, 0.1), rgba(84, 160, 255, 0.1));
+            border: 2px solid var(--accent-color);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 
+                8px 8px 20px rgba(0, 0, 0, 0.1),
+                -8px -8px 20px rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .answer-guide h3 {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            text-align: center;
+            font-weight: 800;
+        }
+
+        .format-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .format-item {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid var(--secondary-color);
+            box-shadow: 
+                4px 4px 8px rgba(0, 0, 0, 0.1),
+                -4px -4px 8px rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .format-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                6px 6px 12px rgba(0, 0, 0, 0.15),
+                -6px -6px 12px rgba(255, 255, 255, 0.9);
+        }
+
+        .format-item strong {
+            color: var(--secondary-color);
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .format-item span {
+            color: var(--font-color);
+            font-family: 'Courier New', monospace;
+            background: rgba(84, 160, 255, 0.1);
+            padding: 5px 8px;
+            border-radius: 6px;
+            font-size: 0.95em;
+        }
+
+        .toggle-btn {
+            background: linear-gradient(135deg, var(--secondary-color), var(--tertiary-color));
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto;
+            box-shadow: 
+                4px 4px 8px rgba(0, 0, 0, 0.2),
+                -4px -4px 8px rgba(255, 255, 255, 0.8);
+        }
+
+        .toggle-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 
+                6px 6px 12px rgba(0, 0, 0, 0.3),
+                -6px -6px 12px rgba(255, 255, 255, 0.9);
+        }
+
+        /* Drag and Drop Styling */
+        .drag-drop-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .drag-section, .drop-section {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid var(--accent-color);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 
+                6px 6px 12px rgba(0, 0, 0, 0.1),
+                -6px -6px 12px rgba(255, 255, 255, 0.8);
+        }
+
+        .drag-section h4, .drop-section h4 {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .drag-items, .drop-zones {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .drag-item {
+            background: linear-gradient(135deg, rgba(29, 209, 161, 0.1), rgba(84, 160, 255, 0.1));
+            border: 2px solid var(--accent-color);
+            border-radius: 12px;
+            padding: 15px;
+            cursor: grab;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 600;
+            user-select: none;
+            box-shadow: 
+                4px 4px 8px rgba(0, 0, 0, 0.1),
+                -4px -4px 8px rgba(255, 255, 255, 0.8);
+        }
+
+        .drag-item:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 
+                6px 6px 12px rgba(0, 0, 0, 0.15),
+                -6px -6px 12px rgba(255, 255, 255, 0.9);
+        }
+
+        .drag-item:active {
+            cursor: grabbing;
+            transform: scale(1.05);
+        }
+
+        .drop-zone {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px dashed var(--secondary-color);
+            border-radius: 12px;
+            padding: 15px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 600;
+            box-shadow: 
+                inset 2px 2px 5px rgba(0, 0, 0, 0.1),
+                inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .drop-zone.drag-over {
+            background: rgba(29, 209, 161, 0.2);
+            border-color: var(--accent-color);
+            border-style: solid;
+            transform: scale(1.02);
+        }
+
+        .drop-zone.filled {
+            background: linear-gradient(135deg, rgba(84, 160, 255, 0.2), rgba(95, 39, 205, 0.2));
+            border-color: var(--tertiary-color);
+            border-style: solid;
+        }
+
+        .drop-zone.correct {
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.2), rgba(32, 201, 151, 0.2));
+            border-color: var(--success-color);
+            animation: correctPulse 0.6s ease;
+        }
+
+        .drop-zone.incorrect {
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.2), rgba(253, 126, 20, 0.2));
+            border-color: var(--danger-color);
+            animation: incorrectShake 0.6s ease;
+        }
+
+        .drag-feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        .drag-feedback.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .drag-feedback.success {
+            background: linear-gradient(135deg, var(--success-color), #20c997);
+            color: white;
+        }
+
+        .drag-feedback.partial {
+            background: linear-gradient(135deg, var(--warning-color), #fd7e14);
+            color: white;
+        }
+
+        .drag-feedback.error {
+            background: linear-gradient(135deg, var(--danger-color), #fd7e14);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .drag-drop-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .format-examples {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Enhanced Mathematical Toolbar Styling */
+        .math-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid var(--main-color);
+            border-radius: 15px;
+            box-shadow: 
+                2px 2px 8px rgba(0, 0, 0, 0.1),
+                -2px -2px 8px rgba(255, 255, 255, 0.8);
+            position: relative;
+        }
+
+        .math-toolbar::before {
+            content: "📐 Math Toolbar";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .math-toolbar:hover::before {
+            transform: scale(1.05);
+        }
+
+        .math-btn {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            border: 2px solid var(--main-color);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 40px;
+            text-align: center;
+            color: var(--main-color);
+            box-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.1),
+                -1px -1px 3px rgba(255, 255, 255, 0.8);
+        }
+
+        .math-btn:hover {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 
+                3px 3px 8px rgba(0, 0, 0, 0.2),
+                -2px -2px 6px rgba(255, 255, 255, 0.9);
+        }
+
+        .math-btn:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        .function-btn {
+            background: linear-gradient(135deg, var(--tertiary-color), var(--accent-color));
+            color: white;
+            font-weight: 700;
+        }
+
+        .function-btn:hover {
+            background: linear-gradient(135deg, var(--accent-color), var(--main-color));
+        }
+
+        @media (max-width: 768px) {
+            .math-toolbar {
+                padding: 12px;
+                gap: 6px;
+            }
+
+            .math-btn {
+                padding: 8px 10px;
+                font-size: 14px;
+                min-width: 35px;
+            }
+
+            .function-btn {
+                font-size: 12px;
+                padding: 6px 8px;
+                min-width: 45px;
+            }
+        }
+
+        .mathquill-field:focus-within {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(29, 209, 161, 0.3);
+            transform: scale(1.02);
+        }
+
+        /* Answer format guides */
+        .answer-format {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(52, 152, 219, 0.05);
+            border: 1px dashed #3498db;
+            border-radius: 8px;
+            color: #333;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            text-align: center;
+            font-weight: normal;
+            position: relative;
+        }
+        
+        .answer-format::before {
+            content: "📝 Answer Format Guide";
+            position: absolute;
+            top: -12px;
+            left: 10px;
+            background: #3498db;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Style for blank spaces in fill-in-the-blank format */
+        .blank {
+            display: inline-block;
+            min-width: 30px;
+            margin: 0 2px;
+            position: relative;
+        }
+        
+        /* Style for the underscores in blanks */
+        .blank-line {
+            color: #3498db;
+            font-weight: bold;
+            font-size: 18px;
+            display: inline;
+        }
+
+        /* Text input field styling for fill-in-the-blank */
+        .text-input-field {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--main-color);
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: rgba(255, 255, 255, 0.95);
+            transition: all 0.3s ease;
+            margin: 15px 0;
+            box-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.1),
+                -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+        
+        .text-input-field:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(29, 209, 161, 0.3);
+            transform: scale(1.02);
+        }
+
+        .text-input-field::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        /* Radio button styling */
+        input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+            accent-color: var(--accent-color);
+        }
+
+        input[type="radio"] + label {
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            width: 100%;
+        }
+
+        input[type="radio"]:checked + label {
+            background: rgba(29, 209, 161, 0.1);
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* Graph container styling */
+        .graph-container {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid var(--main-color);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 
+                inset 2px 2px 5px rgba(0, 0, 0, 0.1),
+                inset -2px -2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .graph-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .graph-control-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            border: 2px solid var(--main-color);
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                4px 4px 8px rgba(0, 0, 0, 0.1),
+                -4px -4px 8px rgba(255, 255, 255, 0.8);
+        }
+
+        .graph-control-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 
+                6px 6px 12px rgba(0, 0, 0, 0.2),
+                -6px -6px 12px rgba(255, 255, 255, 0.9);
+        }
+
+        .graph-visualization {
+            width: 100%;
+            height: 400px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: white;
+        }
+
+        /* Show answer button styling */
+        .show-answer-btn {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+            color: var(--main-color);
+            border: 2px solid var(--main-color);
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            display: block;
+        }
+        
+        .show-answer-btn:hover {
+            background: linear-gradient(135deg, #fad0c4, #ff9a9e);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Linear Approximation & Differentials</h1>
+            <p>Master advanced techniques and error analysis</p>
+            <div class="difficulty-badge">Intermediate Level</div>
+        </div>
+
+        <div class="content">
+            <!-- Answer Format Guide -->
+            <div class="answer-guide" id="answerGuide">
+                <h3>📝 Answer Format Guide - Intermediate Level</h3>
+                <div class="format-examples">
+                    <div class="format-item">
+                        <strong>Linear Approximation:</strong>
+                        <span>L(x) = f(a) + f'(a)(x - a)</span>
+                    </div>
+                    <div class="format-item">
+                        <strong>Complex Functions:</strong>
+                        <span>Use proper notation: sin(x), cos(x), ln(x)</span>
+                    </div>
+                    <div class="format-item">
+                        <strong>Fractions & Derivatives:</strong>
+                        <span>1/(2√x), (x-4)/4, f'(x) = 2x</span>
+                    </div>
+                    <div class="format-item">
+                        <strong>Decimals & Precision:</strong>
+                        <span>Use 3-4 decimal places: 2.0248, 0.0002</span>
+                    </div>
+                    <div class="format-item">
+                        <strong>Differentials:</strong>
+                        <span>dV/dr = 4πr², dy = f'(x)dx</span>
+                    </div>
+                    <div class="format-item">
+                        <strong>Error Analysis:</strong>
+                        <span>|actual - approximation|</span>
+                    </div>
+                </div>
+                <button id="toggleAnswerGuide" class="toggle-btn">Hide Guide</button>
+            </div>
+
+            <div id="questionsContainer">
+                <!-- Question 1 - Theory: Advanced linear approximation understanding -->
+                <div class="question-container">
+                    <div class="question-number">1</div>
+                    <div class="question-text">
+                        In advanced applications, linear approximation is most useful when:
+                    </div>
+                    <div class="math-expression">
+                        Understanding when linear approximation provides the best accuracy
+                    </div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Choose the best answer:</label>
+                        
+                        <div style="margin: 20px 0;">
+                            <div style="margin: 10px 0;">
+                                <input type="radio" id="option1a" name="question1" value="a">
+                                <label for="option1a" style="margin-left: 10px; font-size: 1.1em;">The function is highly nonlinear</label>
+                            </div>
+                            <div style="margin: 10px 0;">
+                                <input type="radio" id="option1b" name="question1" value="b">
+                                <label for="option1b" style="margin-left: 10px; font-size: 1.1em;">We need estimates close to a known point where f and f' are easily computed</label>
+                            </div>
+                            <div style="margin: 10px 0;">
+                                <input type="radio" id="option1c" name="question1" value="c">
+                                <label for="option1c" style="margin-left: 10px; font-size: 1.1em;">The function has discontinuities</label>
+                            </div>
+                            <div style="margin: 10px 0;">
+                                <input type="radio" id="option1d" name="question1" value="d">
+                                <label for="option1d" style="margin-left: 10px; font-size: 1.1em;">We want exact values</label>
+                            </div>
+                        </div>
+                        
+                        <button class="check-answer-btn" onclick="checkMathAnswer(0)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-0"></div>
+                        <div class="math-hint">
+                            💡 Hint: Linear approximation works best when we can easily calculate function values and derivatives at a point
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Graph for Advanced Linear Approximation -->
+                <div class="question-container">
+                    <div class="question-number">📈</div>
+                    <div class="question-text">
+                        Advanced Linear Approximation Visualization
+                    </div>
+                    <div class="math-expression">Explore error behavior and accuracy limits</div>
+                    
+                    <div class="graph-container">
+                        <div class="graph-controls">
+                            <button class="graph-control-btn" onclick="showAdvancedLinearApprox('sqrt')">f(x) = √x near x = 4</button>
+                            <button class="graph-control-btn" onclick="showAdvancedLinearApprox('sin')">f(x) = sin(x) near x = π/4</button>
+                            <button class="graph-control-btn" onclick="showAdvancedLinearApprox('exp')">f(x) = e^x near x = 0</button>
+                            <button class="graph-control-btn" onclick="showErrorAnalysis()">📊 Error Analysis</button>
+                            <button class="graph-control-btn" onclick="animateAdvancedApprox()">🎬 Animate</button>
+                            <button class="graph-control-btn" onclick="resetAdvancedGraph()">🔄 Reset</button>
+                        </div>
+                        <div id="advancedLinearApproxGraph" class="graph-visualization"></div>
+                        <p style="margin-top: 15px; color: #666; font-size: 0.9em;">
+                            Observe how linear approximation accuracy decreases as we move away from the tangent point!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Question 2 - Find linear approximation of √x at x = 4 -->
+                <div class="question-container">
+                    <div class="question-number">2</div>
+                    <div class="question-text">
+                        Find the linear approximation of f(x) = √x at a = 4.
+                    </div>
+                    <div class="math-expression">f(x) = √x, a = 4</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Write the linear approximation L(x)</label>
+                        
+                        <div class="mathquill-field" id="question1"></div>
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(1, 'L(x)')">L(x)</button>
+                            <button class="math-btn" onclick="insertMath(1, '=')"> = </button>
+                            <button class="math-btn" onclick="insertMath(1, '2')">2</button>
+                            <button class="math-btn" onclick="insertMath(1, '+')"> + </button>
+                            <button class="math-btn" onclick="insertMath(1, '\\frac{1}{4}')">1/4</button>
+                            <button class="math-btn" onclick="insertMath(1, '(x-4)')">(x-4)</button>
+                            <button class="math-btn" onclick="insertMath(1, '(')"> ( </button>
+                            <button class="math-btn" onclick="insertMath(1, ')')"> ) </button>
+                        </div>
+                        <div class="answer-format" id="format-1">Expected form: L(x) = ___ + ___(x - ___)</div>
+                        
+                        <button class="check-answer-btn" onclick="checkMathAnswer(1)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-1"></div>
+                        <div class="math-hint">
+                            💡 Hint: f(4) = 2, f'(x) = 1/(2√x), so f'(4) = 1/4
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 3 - Use linear approximation to estimate √4.1 -->
+                <div class="question-container">
+                    <div class="question-number">3</div>
+                    <div class="question-text">
+                        Use your linear approximation to estimate √4.1 and calculate the error.
+                    </div>
+                    <div class="math-expression">L(x) = 2 + (1/4)(x - 4), find L(4.1) and error</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Calculate L(4.1)</label>
+                        
+                        <div class="mathquill-field" id="question2"></div>
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(2, '2.025')">2.025</button>
+                            <button class="math-btn" onclick="insertMath(2, '2.0')">2.0</button>
+                            <button class="math-btn" onclick="insertMath(2, '2.1')">2.1</button>
+                            <button class="math-btn" onclick="insertMath(2, '+')"> + </button>
+                            <button class="math-btn" onclick="insertMath(2, '0.025')">0.025</button>
+                        </div>
+                        <div class="answer-format" id="format-2">Expected: A decimal number</div>
+                        
+                        <button class="check-answer-btn" onclick="checkMathAnswer(2)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-2"></div>
+                        <div class="math-hint">
+                            💡 Hint: L(4.1) = 2 + (1/4)(4.1 - 4) = 2 + (1/4)(0.1)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 4 - Differential applications -->
+                <div class="question-container">
+                    <div class="question-number">4</div>
+                    <div class="question-text">
+                        A sphere's radius increases from 5 cm to 5.2 cm. Use differentials to approximate the volume change.
+                    </div>
+                    <div class="math-expression">V = (4/3)πr³, dr = 0.2</div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Calculate dV = (dV/dr) × dr</label>
+                        
+                        <div class="mathquill-field" id="question3"></div>
+                        <div class="math-toolbar">
+                            <button class="math-btn" onclick="insertMath(3, '20\\pi')">20π</button>
+                            <button class="math-btn" onclick="insertMath(3, '4\\pi')">4π</button>
+                            <button class="math-btn" onclick="insertMath(3, '100\\pi')">100π</button>
+                            <button class="math-btn" onclick="insertMath(3, '\\pi')">π</button>
+                            <button class="math-btn" onclick="insertMath(3, '20')">20</button>
+                        </div>
+                        <div class="answer-format" id="format-3">Expected: Answer in terms of π</div>
+                        
+                        <button class="check-answer-btn" onclick="checkMathAnswer(3)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-3"></div>
+                        <div class="math-hint">
+                            💡 Hint: dV/dr = 4πr², so dV = 4π(5)²(0.2) = 4π(25)(0.2)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 5 - Trigonometric linear approximation -->
+                <div class="question-container">
+                    <div class="question-number">5</div>
+                    <div class="question-text">
+                        What is the purpose of using differentials in error propagation?
+                    </div>
+                    <div class="math-expression">
+                        Understanding how small measurement errors affect calculated results
+                    </div>
+                    
+                    <div class="math-input-container">
+                        <label class="input-label">Complete: "Differentials help us estimate how _______ in measurements affect final calculations."</label>
+                        
+                        <div class="text-input-field-wrapper">
+                            <input type="text" class="text-input-field" id="question4" placeholder="Type your answer here...">
+                            <div class="answer-format" id="format-4">Hint: What kind of changes in input values are we concerned about?</div>
+                        </div>
+                        <button class="check-answer-btn" onclick="checkMathAnswer(4)">Check Answer</button>
+                        <div class="answer-feedback" id="feedback-4"></div>
+                        <div class="math-hint">
+                            💡 Hint: Think about measurement precision and how tiny changes in input affect output
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="submit-btn" id="submitBtn" onclick="submitQuiz()">Submit Quiz</button>
+
+            <!-- DEBUG BUTTONS (Matching novice module) -->
+            <div style="text-align: center; margin: 20px 0; padding: 15px; background: #f0f0f0; border-radius: 10px; border: 2px dashed #999;">
+                <h4 style="color: #666; margin-bottom: 10px;">🔧 Debug Tools (Temporary)</h4>
+                <button onclick="debugCheckModuleStatus()" class="nav-btn" style="background: #17a2b8; margin: 5px; padding: 8px 15px; font-size: 14px;">
+                    🔍 Check Module Status
+                </button>
+                <button onclick="debugForceCompleteModule()" class="nav-btn" style="background: #28a745; margin: 5px; padding: 8px 15px; font-size: 14px;">
+                    ✅ Force Complete Module
+                </button>
+                <p style="font-size: 12px; color: #666; margin-top: 10px;">
+                    Use these buttons to check and fix the module completion status
+                </p>
+            </div>
+
+            <div id="results" class="results" style="display: none;">
+                <div class="score" id="scoreDisplay"></div>
+                <div id="resultMessage"></div>
+                <div class="navigation">
+                    <a href="linear-approximation-and-differentials-novice.html" class="nav-btn">← Back to Novice</a>
+                    <a href="linear-approximation-and-differentials-advanced.html" class="nav-btn">Next: Advanced →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+        import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBUfSOSpmCdWUGTVbSQsMCH-JVmrjpfdPY",
+            authDomain: "fyp-lutfi-naim.firebaseapp.com",
+            projectId: "fyp-lutfi-naim",
+            storageBucket: "fyp-lutfi-naim.firebasestorage.app",
+            messagingSenderId: "231274529807",
+            appId: "1:231274529807:web:c4ea279f9e7581bd674f7a"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let mathAnswers = {};
+        let currentUser = null;
+        let mathFields = {};
+
+        // Initialize MathQuill and page functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📐 Linear Approximation Intermediate module DOM loaded');
+            
+            // Initialize MathQuill for mathematical input fields
+            if (typeof MathQuill !== 'undefined') {
+                const MQ = MathQuill.getInterface(2);
+                
+                // Initialize MathQuill fields for questions 1, 2, 3 (mathematical expressions)
+                for (let i = 1; i <= 3; i++) {
+                    const element = document.getElementById(`question${i}`);
+                    if (element) {
+                        mathFields[i] = MQ.MathField(element, {
+                            spaceBehavesLikeTab: true,
+                            handlers: {
+                                edit: function() {
+                                    const questionNum = i;
+                                    const latex = mathFields[questionNum].latex();
+                                    mathAnswers[questionNum] = latex;
+                                    sessionStorage.setItem('linear-approximation-intermediate-progress', JSON.stringify(mathAnswers));
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+            
+            // Set up text input event listeners
+            const textInput = document.getElementById('question4');
+            if (textInput) {
+                textInput.addEventListener('input', function() {
+                    mathAnswers[4] = this.value;
+                    sessionStorage.setItem('linear-approximation-intermediate-progress', JSON.stringify(mathAnswers));
+                });
+                
+                textInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        checkMathAnswer(4);
+                    }
+                });
+            }
+            
+            // Set up radio button event listeners
+            const radioButtons = document.querySelectorAll('input[name="question1"]');
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.checked) {
+                        mathAnswers[0] = this.value;
+                        sessionStorage.setItem('linear-approximation-intermediate-progress', JSON.stringify(mathAnswers));
+                    }
+                });
+            });
+            
+            // Initialize other components
+            initializeOtherComponents();
+        });
+
+        // Enhanced Mathematical toolbar function with error handling
+        window.insertMath = function(questionNum, symbol) {
+            try {
+                if (!mathFields || !mathFields[questionNum]) {
+                    console.warn('MathField not initialized for question', questionNum);
+                    return;
+                }
+                
+                const field = mathFields[questionNum];
+                
+                // Handle special cases for complex symbols with smart positioning
+                switch(symbol) {
+                    case '\\frac{}{}':
+                        field.write('\\frac{}{}');
+                        field.keystroke('Left Left Left');
+                        break;
+                    case '\\sqrt{}':
+                        field.write('\\sqrt{}');
+                        field.keystroke('Left');
+                        break;
+                    case 'L(x)':
+                        field.write('L(x)');
+                        break;
+                    case '(x-4)':
+                        field.write('(x-4)');
+                        break;
+                    case '\\frac{1}{4}':
+                        field.write('\\frac{1}{4}');
+                        break;
+                    case '20\\pi':
+                        field.write('20\\pi');
+                        break;
+                    case '4\\pi':
+                        field.write('4\\pi');
+                        break;
+                    case '\\pi':
+                        field.write('\\pi');
+                        break;
+                    default:
+                        field.write(symbol + ' ');
+                        break;
+                }
+                
+                field.focus();
+                
+            } catch (error) {
+                console.error('Error in insertMath function:', error);
+            }
+        };
+
+        function initializeOtherComponents() {
+            console.log('📐 Linear Approximation & Differentials Intermediate module loaded');
+            
+            // Set up answer guide toggle
+            const toggleBtn = document.getElementById('toggleAnswerGuide');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', toggleAnswerGuide);
+            }
+            
+            // Initialize interactive graphs
+            initializeAdvancedGraphs();
+            
+            console.log('✅ Linear Approximation & Differentials Intermediate module initialized successfully');
+        }
+
+        // Answer Guide Toggle Function
+        function toggleAnswerGuide() {
+            const guide = document.getElementById('answerGuide');
+            const button = document.getElementById('toggleAnswerGuide');
+            
+            if (guide.style.display === 'none') {
+                guide.style.display = 'block';
+                button.textContent = 'Hide Guide';
+            } else {
+                guide.style.display = 'none';
+                button.textContent = 'Show Guide';
+            }
+        }
+
+        // Interactive Graph Functions
+        function initializeAdvancedGraphs() {
+            // Initialize the advanced linear approximation graph
+            if (typeof Plotly !== 'undefined') {
+                showAdvancedLinearApprox('sqrt');
+            }
+        }
+
+        window.showAdvancedLinearApprox = function(funcType) {
+            const graphDiv = document.getElementById('advancedLinearApproxGraph');
+            if (!graphDiv || typeof Plotly === 'undefined') return;
+
+            let func, derivative, point, funcName;
+            
+            switch(funcType) {
+                case 'sqrt':
+                    func = x => Math.sqrt(x);
+                    derivative = x => 1 / (2 * Math.sqrt(x));
+                    point = 4;
+                    funcName = '√x';
+                    break;
+                case 'sin':
+                    func = x => Math.sin(x);
+                    derivative = x => Math.cos(x);
+                    point = Math.PI / 4;
+                    funcName = 'sin(x)';
+                    break;
+                case 'exp':
+                    func = x => Math.exp(x);
+                    derivative = x => Math.exp(x);
+                    point = 0;
+                    funcName = 'e^x';
+                    break;
+                default:
+                    return;
+            }
+
+            const xMin = point - 2;
+            const xMax = point + 2;
+            const x = [];
+            const y = [];
+            const linearY = [];
+            
+            for (let i = xMin; i <= xMax; i += 0.1) {
+                x.push(i);
+                y.push(func(i));
+                // Linear approximation: L(x) = f(a) + f'(a)(x - a)
+                linearY.push(func(point) + derivative(point) * (i - point));
+            }
+
+            const traces = [
+                {
+                    x: x,
+                    y: y,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: `f(x) = ${funcName}`,
+                    line: { color: '#1dd1a1', width: 3 }
+                },
+                {
+                    x: x,
+                    y: linearY,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: 'Linear Approximation',
+                    line: { color: '#54a0ff', width: 2, dash: 'dash' }
+                },
+                {
+                    x: [point],
+                    y: [func(point)],
+                    type: 'scatter',
+                    mode: 'markers',
+                    name: 'Tangent Point',
+                    marker: { color: '#5f27cd', size: 10 }
+                }
+            ];
+
+            const layout = {
+                title: `Linear Approximation of ${funcName} at x = ${point.toFixed(2)}`,
+                xaxis: { title: 'x' },
+                yaxis: { title: 'y' },
+                showlegend: true,
+                margin: { t: 50, r: 50, b: 50, l: 50 }
+            };
+
+            Plotly.newPlot(graphDiv, traces, layout, { responsive: true });
+        };
+
+        window.showErrorAnalysis = function() {
+            const graphDiv = document.getElementById('advancedLinearApproxGraph');
+            if (!graphDiv || typeof Plotly === 'undefined') return;
+
+            const func = x => Math.sqrt(x);
+            const derivative = x => 1 / (2 * Math.sqrt(x));
+            const point = 4;
+            
+            const x = [];
+            const error = [];
+            
+            for (let i = 3; i <= 5; i += 0.05) {
+                x.push(i);
+                const actual = func(i);
+                const approx = func(point) + derivative(point) * (i - point);
+                error.push(Math.abs(actual - approx));
+            }
+
+            const trace = {
+                x: x,
+                y: error,
+                type: 'scatter',
+                mode: 'lines',
+                name: 'Approximation Error',
+                line: { color: '#ff6b6b', width: 3 }
+            };
+
+            const layout = {
+                title: 'Linear Approximation Error Analysis',
+                xaxis: { title: 'x' },
+                yaxis: { title: '|Actual - Approximation|' },
+                showlegend: true,
+                margin: { t: 50, r: 50, b: 50, l: 50 }
+            };
+
+            Plotly.newPlot(graphDiv, [trace], layout, { responsive: true });
+        };
+
+        window.animateAdvancedApprox = function() {
+            // Animation implementation
+            console.log('Animation feature coming soon!');
+        };
+
+        window.resetAdvancedGraph = function() {
+            showAdvancedLinearApprox('sqrt');
+        };
+
+        // Correct answers for intermediate level
+        const mathCorrectAnswers = {
+            0: "b",                    // Radio button answer
+            1: "L(x) = 2 + \\frac{1}{4}(x-4)",  // Linear approximation
+            2: "2.025",               // L(4.1) calculation
+            3: "20\\pi",              // Volume differential
+            4: "errors"               // Text answer about error propagation
+        };
+
+        window.checkMathAnswer = function(questionNum) {
+            let userAnswer = '';
+            const feedback = document.getElementById(`feedback-${questionNum}`);
+            
+            // Get user answer based on question type
+            if (questionNum === 0) {
+                // Radio button question
+                const selectedRadio = document.querySelector('input[name="question1"]:checked');
+                userAnswer = selectedRadio ? selectedRadio.value : '';
+            } else if (questionNum === 4) {
+                // Text input question
+                const textInput = document.getElementById('question4');
+                userAnswer = textInput ? textInput.value.toLowerCase().trim() : '';
+            } else if (questionNum >= 1 && questionNum <= 3) {
+                // MathQuill questions
+                userAnswer = mathFields[questionNum] ? mathFields[questionNum].latex().toLowerCase().replace(/\s/g, '') : '';
+            }
+            
+            // Check for blank answers
+            if (!userAnswer || userAnswer.trim() === '') {
+                feedback.classList.remove('correct', 'incorrect');
+                feedback.classList.add('show', 'incorrect');
+                feedback.innerHTML = '❌ Please provide an answer before checking.';
+                return;
+            }
+            
+            mathAnswers[questionNum] = userAnswer;
+            sessionStorage.setItem('linear-approximation-intermediate-progress', JSON.stringify(mathAnswers));
+            
+            let isCorrect = false;
+            
+            console.log(`Question ${questionNum}: User answer: "${userAnswer}", Expected: "${mathCorrectAnswers[questionNum]}"`);
+            
+            // Enhanced answer checking for intermediate level
+            switch(questionNum) {
+                case 0:
+                    isCorrect = userAnswer === 'b';
+                    break;
+                case 1:
+                    isCorrect = userAnswer.includes('l(x)') && userAnswer.includes('2') && 
+                               (userAnswer.includes('1/4') || userAnswer.includes('\\frac{1}{4}')) && 
+                               userAnswer.includes('x-4');
+                    break;
+                case 2:
+                    isCorrect = userAnswer.includes('2.025') || userAnswer === '2.025';
+                    break;
+                case 3:
+                    isCorrect = userAnswer.includes('20') && (userAnswer.includes('π') || userAnswer.includes('pi'));
+                    break;
+                case 4:
+                    isCorrect = userAnswer.includes('error') || userAnswer.includes('small') || 
+                               userAnswer.includes('change') || userAnswer.includes('uncertainty');
+                    break;
+            }
+            
+            feedback.classList.remove('correct', 'incorrect');
+            feedback.classList.add('show');
+            
+            if (isCorrect) {
+                feedback.classList.add('correct');
+                feedback.innerHTML = '✅ Excellent! Your intermediate skills are developing!';
+            } else {
+                feedback.classList.add('incorrect');
+                feedback.innerHTML = '❌ Not quite right. Review the method and try again!';
+            }
+            
+            updateProgress();
+        };
+
+        function updateProgress() {
+            console.log('Progress updated:', Object.keys(mathAnswers).length, 'questions answered');
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                loadProgress();
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        function loadProgress() {
+            const saved = sessionStorage.getItem('linear-approximation-intermediate-progress');
+            if (saved) {
+                mathAnswers = JSON.parse(saved);
+                restoreAnswers();
+            }
+        }
+
+        function restoreAnswers() {
+            Object.keys(mathAnswers).forEach(questionNum => {
+                if (questionNum == 0) {
+                    // Radio button
+                    const radio = document.querySelector(`input[name="question1"][value="${mathAnswers[questionNum]}"]`);
+                    if (radio) radio.checked = true;
+                } else if (questionNum == 4) {
+                    // Text input
+                    const textInput = document.getElementById('question4');
+                    if (textInput) textInput.value = mathAnswers[questionNum];
+                } else if (mathFields[questionNum]) {
+                    // MathQuill field
+                    mathFields[questionNum].latex(mathAnswers[questionNum]);
+                }
+            });
+            updateProgress();
+        }
+
+        window.submitQuiz = async function() {
+            if (Object.keys(mathAnswers).length < 5) {
+                alert('Please answer all questions before submitting.');
+                return;
+            }
+
+            let score = 0;
+            
+            Object.keys(mathCorrectAnswers).forEach(questionNum => {
+                const userAnswer = mathAnswers[questionNum] || '';
+                let isCorrect = false;
+                
+                switch(parseInt(questionNum)) {
+                    case 0:
+                        isCorrect = userAnswer === 'b';
+                        break;
+                    case 1:
+                        isCorrect = userAnswer.includes('l(x)') && userAnswer.includes('2') && 
+                                   (userAnswer.includes('1/4') || userAnswer.includes('\\frac{1}{4}')) && 
+                                   userAnswer.includes('x-4');
+                        break;
+                    case 2:
+                        isCorrect = userAnswer.includes('2.025');
+                        break;
+                    case 3:
+                        isCorrect = userAnswer.includes('20') && (userAnswer.includes('π') || userAnswer.includes('pi'));
+                        break;
+                    case 4:
+                        isCorrect = userAnswer.includes('error') || userAnswer.includes('small') || 
+                                   userAnswer.includes('change') || userAnswer.includes('uncertainty');
+                        break;
+                }
+                
+                if (isCorrect) score++;
+            });
+
+            const percentage = Math.round((score / 5) * 100);
+            const passed = score >= 3;
+
+            document.getElementById('scoreDisplay').textContent = `${score}/5 (${percentage}%)`;
+            document.getElementById('scoreDisplay').className = `score ${passed ? 'pass' : 'fail'}`;
+            document.getElementById('resultMessage').innerHTML = passed 
+                ? '<h3 style="color: var(--success-color);">🎉 Outstanding! You have mastered intermediate concepts!</h3><p>You can now move to the Advanced level!</p>'
+                : '<h3 style="color: var(--danger-color);">Keep developing!</h3><p>You need at least 3 correct answers to pass. Review the concepts and try again.</p>';
+
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('submitBtn').style.display = 'none';
+
+            if (currentUser) {
+                try {
+                    const userDocRef = doc(db, 'users', currentUser.uid);
+                    const updateData = {
+                        moduleProgress: {
+                            [`Linear Approximation & Differentials - Intermediate`]: percentage
+                        }
+                    };
+                    await setDoc(userDocRef, updateData, { merge: true });
+                    sessionStorage.removeItem('linear-approximation-intermediate-progress');
+                } catch (error) {
+                    console.error('Error saving progress:', error);
+                }
+            }
+        };
+
+        // Debug functions (matching novice module)
+        window.debugCheckModuleStatus = function() {
+            console.log('Current answers:', mathAnswers);
+            console.log('Progress saved:', sessionStorage.getItem('linear-approximation-intermediate-progress'));
+            alert(`Debug Info:\nAnswers: ${Object.keys(mathAnswers).length}/5\nSaved: ${sessionStorage.getItem('linear-approximation-intermediate-progress') ? 'Yes' : 'No'}`);
+        };
+
+        window.debugForceCompleteModule = function() {
+            if (confirm('Force complete this module? This will mark it as 100% complete.')) {
+                mathAnswers = {0: 'b', 1: 'L(x) = 2 + (1/4)(x-4)', 2: '2.025', 3: '20π', 4: 'errors'};
+                sessionStorage.setItem('linear-approximation-intermediate-progress', JSON.stringify(mathAnswers));
+                submitQuiz();
+            }
+        };
+    </script>
+</body>
+</html> 
+
+
+
+
+
+
+

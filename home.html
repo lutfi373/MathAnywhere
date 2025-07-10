@@ -1,0 +1,1992 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title>Maths Website</title>
+
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans&display=swap" rel="stylesheet">
+
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="css/bootstrap-icons.css" rel="stylesheet">
+
+        <link href="css/templatemo-topic-listing.css" rel="stylesheet">
+
+
+
+        <style>
+            :root {
+                --input-focus: #2d8cf0;
+                --font-color: #323232;
+                --font-color-sub: #666;
+                --bg-color: #f7f9fc;
+                --main-color: black;
+                --accent-color: #ff6b6b;
+                --secondary-color: #feca57;
+                --tertiary-color: #1dd1a1;
+                --light-blue: #54a0ff;
+                --pink: #ff9ff3;
+                --purple: #5f27cd;
+            }
+            
+            body {
+                font-family: 'Fira Code', monospace;
+                background-color: var(--bg-color);
+                color: var(--font-color);
+                margin: 0;
+                padding: 0;
+                line-height: 1.6;
+            }
+
+            /* Navbar */
+            .navbar {
+                background-color: #feca57;
+                border-bottom: 2px solid var(--main-color);
+                box-shadow: 4px 4px var(--main-color);
+                margin-bottom: 10px;
+            }
+
+            .navbar-brand {
+                color: var(--accent-color);
+                font-weight: 700;
+                font-size: 1.5rem;
+                transition: transform 0.3s ease;
+            }
+            
+            .navbar-brand:hover {
+                transform: scale(1.05);
+            }
+
+            .navbar-nav .nav-link {
+                color: var(--font-color);
+                font-weight: 600;
+                border-radius: 5px;
+                padding: 8px 15px;
+                margin: 0 5px;
+                transition: all 0.3s ease;
+                border: 2px solid transparent;
+            }
+
+            .navbar-nav .nav-link:hover {
+                color: var(--input-focus);
+                border: 2px solid var(--input-focus);
+                box-shadow: 3px 3px var(--main-color);
+                transform: translateY(-2px);
+            }
+
+            /* Desktop Icon Styling */
+            #userProfile {
+                color: var(--font-color);
+                font-weight: 600;
+                padding: 8px 15px;
+                border-radius: 5px;
+                border: 2px solid var(--main-color);
+                background-color: var(--bg-color);
+                box-shadow: 4px 4px var(--main-color);
+                transition: all 0.3s ease;
+            }
+
+            #userProfile:hover {
+                background-color: var(--input-focus);
+                color: white;
+                transform: translateY(-3px);
+                box-shadow: 6px 6px var(--main-color);
+            }
+            
+            #userProfile:active {
+                transform: translate(2px, 2px);
+                box-shadow: 2px 2px var(--main-color);
+            }
+
+            /* Hero Section */
+            .hero-section {
+                background: white;
+                color: var(--font-color);
+                text-align: center;
+                padding: 60px 0;
+                border-bottom: 2px solid var(--main-color);
+                box-shadow: 0 4px 0 var(--main-color);
+                margin-bottom: 35px;
+            }
+
+            .hero-section h4 {
+                color: var(--font-color-sub);
+                font-weight: 600;
+                margin-top: 20px;
+                margin-bottom: 25px;
+                transition: color 0.3s ease;
+            }
+            
+            .hero-section:hover h4 {
+                color: var(--accent-color);
+            }
+
+            .explore-section h2 {
+                margin-bottom: 30px;
+                font-size: 2.5rem;
+                color: var(--font-color);
+                font-weight: 800;
+            }
+
+            /* Search Bar Styling */
+            .search-bar {
+                margin: 30px auto;
+                max-width: 600px;
+                padding: 10px;
+                background-color: white;
+                border: 2px solid var(--main-color);
+                border-radius: 10px;
+                box-shadow: 4px 4px var(--main-color);
+                transition: all 0.3s ease;
+            }
+            
+            .search-bar:hover {
+                transform: translateY(-5px);
+                box-shadow: 6px 6px var(--main-color);
+            }
+
+            .search-bar input {
+                width: 80%;
+                padding: 10px;
+                border: 2px solid var(--main-color);
+                border-radius: 5px;
+                outline: none;
+                font-weight: 600;
+                transition: all 0.3s ease;
+            }
+            
+            .search-bar input:focus {
+                border-color: var(--input-focus);
+                box-shadow: 3px 3px var(--main-color);
+            }
+
+            .search-bar button {
+                width: 20%;
+                padding: 10px;
+                background-color: var(--accent-color);
+                color: white;
+                border: 2px solid var(--main-color);
+                border-radius: 5px;
+                cursor: pointer;
+                font-weight: 600;
+                box-shadow: 3px 3px var(--main-color);
+                transition: all 0.3s ease;
+            }
+
+            .search-bar button:hover {
+                background-color: var(--secondary-color);
+                transform: translateY(-2px);
+                box-shadow: 5px 5px var(--main-color);
+            }
+            
+            .search-bar button:active {
+                transform: translate(2px, 2px);
+                box-shadow: 1px 1px var(--main-color);
+            }
+
+            /* Topic Cards Styling */
+            .custom-block {
+                background-color: white;
+                color: var(--font-color);
+                border: 2px solid var(--main-color);
+                border-radius: 10px;
+                padding: 20px;
+                margin: 20px 0;
+                box-shadow: 4px 4px var(--main-color);
+                transition: all 0.3s ease;
+            }
+
+            .custom-block:hover {
+                transform: translateY(-5px) rotate(1deg);
+                box-shadow: 8px 8px var(--main-color);
+            }
+
+            .custom-block h5 {
+                color: var(--font-color);
+                font-weight: 900;
+                font-size: 20px;
+                margin-bottom: 10px;
+                transition: color 0.3s ease;
+            }
+            
+            .custom-block:hover h5 {
+                color: var(--accent-color);
+            }
+
+            .custom-block p {
+                color: var(--font-color-sub);
+                font-weight: 600;
+                font-size: 15px;
+            }
+
+            .custom-block .badge {
+                background-color: var(--main-color);
+                color: white;
+                font-weight: 600;
+                border-radius: 5px;
+                box-shadow: 2px 2px var(--main-color);
+            }
+
+            .custom-block-image {
+                border-radius: 5px;
+                margin-top: 15px;
+                border: 2px solid var(--main-color);
+                transition: all 0.3s ease;
+            }
+            
+            .custom-block:hover .custom-block-image {
+                transform: scale(1.05);
+                border-color: var(--accent-color);
+            }
+
+            /* Custom Block Overlay Styles */
+            .custom-block-overlay {
+                padding: 20px;
+                background: white;
+                border-radius: 10px;
+                border: 2px solid var(--main-color);
+                box-shadow: 4px 4px var(--main-color);
+                transition: all 0.3s ease;
+            }
+
+            .custom-block-overlay:hover {
+                transform: translateY(-5px) rotate(-1deg);
+                box-shadow: 8px 8px var(--main-color);
+            }
+
+            .custom-block-overlay h5 {
+                color: var(--font-color);
+                font-weight: 900;
+                font-size: 20px;
+                margin-bottom: 10px;
+                transition: color 0.3s ease;
+            }
+            
+            .custom-block-overlay:hover h5 {
+                color: var(--tertiary-color);
+            }
+
+            .custom-block-overlay p {
+                color: var(--font-color-sub);
+                font-weight: 600;
+                font-size: 15px;
+            }
+
+            .custom-block-overlay .btn.custom-btn {
+                background-color: var(--light-blue);
+                color: white;
+                border: 2px solid var(--main-color);
+                border-radius: 5px;
+                box-shadow: 4px 4px var(--main-color);
+                font-weight: 600;
+                transition: all 0.3s ease;
+                padding: 8px 15px;
+            }
+
+            .custom-block-overlay .btn.custom-btn:hover {
+                background-color: var(--accent-color);
+                transform: translateY(-3px);
+                box-shadow: 6px 6px var(--main-color);
+            }
+            
+            .custom-block-overlay .btn.custom-btn:active {
+                transform: translate(2px, 2px);
+                box-shadow: 2px 2px var(--main-color);
+            }
+
+            /* Tab Navigation */
+            .nav-tabs {
+                border-bottom: 2px solid var(--main-color);
+            }
+
+            .nav-tabs .nav-link {
+                color: var(--font-color);
+                font-weight: 600;
+                border: 2px solid var(--main-color);
+                border-bottom: none;
+                border-radius: 10px 10px 0 0;
+                margin-right: 5px;
+                background-color: var(--bg-color);
+                transition: all 0.3s ease;
+            }
+
+            .nav-tabs .nav-link:hover {
+                background-color: var(--pink);
+                color: white;
+                transform: translateY(-3px);
+            }
+
+            .nav-tabs .nav-link.active {
+                background-color: white;
+                color: var(--accent-color);
+                border: 2px solid var(--main-color);
+                border-bottom: 2px solid white;
+                font-weight: 700;
+            }
+
+            /* Timeline Section */
+            .timeline-section {
+                background-color: white;
+                padding: 80px 0;
+                position: relative;
+                border-top: 2px solid var(--main-color);
+                border-bottom: 2px solid var(--main-color);
+            }
+
+            .timeline-section h1 {
+                color: var(--font-color);
+                font-weight: 900;
+                margin-bottom: 40px;
+                position: relative;
+                display: inline-block;
+            }
+            
+            .timeline-section h1:after {
+                content: '';
+                position: absolute;
+                bottom: -10px;
+                left: 0;
+                width: 100%;
+                height: 4px;
+                background-color: var(--accent-color);
+                transition: width 0.3s ease;
+            }
+            
+            .timeline-section h1:hover:after {
+                width: 50%;
+            }
+
+            .timeline-container {
+                position: relative;
+                padding: 20px;
+                background-color: white;
+                border: 2px solid var(--main-color);
+                border-radius: 10px;
+                box-shadow: 4px 4px var(--main-color);
+            }
+            
+            .timeline-container:hover {
+                box-shadow: 8px 8px var(--main-color);
+            }
+
+            .vertical-scrollable-timeline li {
+                background-color: white;
+                padding: 15px;
+                margin-bottom: 20px;
+                border: 2px solid var(--main-color);
+                border-radius: 10px;
+                box-shadow: 4px 4px var(--main-color);
+                transition: all 0.3s ease;
+                position: relative;
+            }
+            
+            .vertical-scrollable-timeline li:hover {
+                transform: translateX(10px);
+                box-shadow: 6px 6px var(--main-color);
+            }
+
+            .vertical-scrollable-timeline h4 {
+                color: var(--font-color);
+                font-weight: 800;
+                margin-bottom: 10px;
+            }
+            
+            .vertical-scrollable-timeline li:hover h4 {
+                color: var(--purple);
+            }
+
+            .vertical-scrollable-timeline p {
+                color: var(--font-color-sub);
+                font-weight: 500;
+            }
+
+            .icon-holder {
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+                background-color: var(--accent-color);
+                color: white;
+                border: 2px solid var(--main-color);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 3px 3px var(--main-color);
+                transition: all 0.3s ease;
+            }
+            
+            .vertical-scrollable-timeline li:hover .icon-holder {
+                transform: rotate(360deg);
+                background-color: var(--tertiary-color);
+            }
+
+            /* FAQ Section */
+            .faq-section {
+                padding: 60px 0;
+                background: linear-gradient(135deg, var(--bg-color) 0%, #e8f4f8 100%);
+                position: relative;
+                overflow: hidden;
+            }
+
+            .faq-section::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle, rgba(255,107,107,0.1) 0%, transparent 50%);
+                animation: float 20s infinite linear;
+                pointer-events: none;
+            }
+
+            @keyframes float {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+
+            .faq-title {
+                color: var(--font-color);
+                font-weight: 800;
+                font-size: 2.5rem;
+                margin-bottom: 15px;
+                position: relative;
+                display: inline-block;
+                background: linear-gradient(45deg, var(--accent-color), var(--light-blue), var(--tertiary-color));
+                background-size: 300% 100%;
+                background-clip: text;
+                -webkit-background-clip: text;
+                color: transparent;
+                animation: gradient 3s ease infinite;
+            }
+
+            .faq-subtitle {
+                color: var(--font-color-sub);
+                font-size: 1.2rem;
+                font-weight: 500;
+                margin-bottom: 0;
+            }
+
+            /* Interactive FAQ Cards */
+            .faq-card {
+                background: white;
+                border: 2px solid var(--main-color);
+                border-radius: 15px;
+                overflow: hidden;
+                box-shadow: 4px 4px 0 var(--main-color);
+                transition: all 0.3s ease;
+                cursor: pointer;
+                position: relative;
+                height: auto;
+            }
+
+            .faq-card:hover {
+                transform: translateY(-8px) rotate(1deg);
+                box-shadow: 8px 8px 0 var(--main-color);
+            }
+
+            .faq-card.active {
+                border-color: var(--accent-color);
+                box-shadow: 4px 4px 0 var(--accent-color);
+            }
+
+            .faq-card-header {
+                padding: 20px;
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+                border-bottom: 1px solid #eee;
+                position: relative;
+            }
+
+            .faq-icon {
+                font-size: 2rem;
+                min-width: 50px;
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: var(--accent-color);
+                border-radius: 50%;
+                border: 2px solid var(--main-color);
+                box-shadow: 3px 3px 0 var(--main-color);
+                transition: all 0.3s ease;
+            }
+
+            .faq-card:hover .faq-icon {
+                transform: rotate(360deg) scale(1.1);
+                background: var(--tertiary-color);
+            }
+
+            .faq-card-header h4 {
+                color: var(--font-color);
+                font-weight: 700;
+                font-size: 1.3rem;
+                margin: 0;
+                flex: 1;
+                transition: color 0.3s ease;
+            }
+
+            .faq-card:hover .faq-card-header h4 {
+                color: var(--accent-color);
+            }
+            
+            .faq-toggle {
+                font-size: 1.5rem;
+                font-weight: bold;
+                color: var(--accent-color);
+                background: var(--bg-color);
+                border: 2px solid var(--main-color);
+                border-radius: 50%;
+                width: 35px;
+                height: 35px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+            }
+
+            .faq-card.active .faq-toggle {
+                transform: rotate(45deg);
+                background: var(--accent-color);
+                color: white;
+            }
+
+            .faq-card-body {
+                padding: 0 20px;
+                max-height: 0;
+                overflow: hidden;
+                transition: all 0.4s ease;
+                background: white;
+            }
+
+            .faq-card.active .faq-card-body {
+                padding: 20px;
+                max-height: 500px;
+            }
+
+            .faq-card-body p {
+                color: var(--font-color-sub);
+                font-weight: 500;
+                line-height: 1.6;
+                margin-bottom: 15px;
+            }
+
+            /* FAQ Interactive Elements */
+            .faq-stats {
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+                margin-top: 15px;
+            }
+
+            .stat-badge {
+                background: var(--secondary-color);
+                color: var(--main-color);
+                padding: 5px 12px;
+                border-radius: 20px;
+                font-size: 0.9rem;
+                font-weight: 600;
+                border: 2px solid var(--main-color);
+            }
+
+            .btn-faq-action {
+                background: var(--accent-color);
+                color: white;
+                border: 2px solid var(--main-color);
+                border-radius: 8px;
+                padding: 10px 20px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 3px 3px 0 var(--main-color);
+                margin-top: 10px;
+            }
+
+            .btn-faq-action:hover {
+                background: var(--tertiary-color);
+                transform: translateY(-2px);
+                box-shadow: 5px 5px 0 var(--main-color);
+            }
+
+            .progress-demo {
+                margin-top: 15px;
+            }
+
+            .progress-bar-demo {
+                background: #e9ecef;
+                border: 2px solid var(--main-color);
+                border-radius: 10px;
+                height: 20px;
+                overflow: hidden;
+                position: relative;
+            }
+
+            .progress-fill {
+                background: linear-gradient(90deg, var(--tertiary-color), var(--light-blue));
+                height: 100%;
+                transition: width 2s ease;
+                position: relative;
+            }
+
+            .progress-fill::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+                animation: shimmer 2s infinite;
+            }
+
+            @keyframes shimmer {
+                0% { transform: translateX(-100%); }
+                100% { transform: translateX(100%); }
+            }
+
+            .progress-text {
+                font-size: 0.9rem;
+                color: var(--font-color);
+                font-weight: 600;
+                margin-top: 5px;
+                display: block;
+            }
+
+            .help-features {
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+                margin-top: 15px;
+            }
+
+            .feature-item {
+                background: var(--light-blue);
+                color: white;
+                padding: 8px 15px;
+                border-radius: 20px;
+                font-size: 0.9rem;
+                font-weight: 600;
+                border: 2px solid var(--main-color);
+            }
+
+            .exam-topics {
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+                margin-top: 15px;
+            }
+
+            .topic-tag {
+                background: var(--purple);
+                color: white;
+                padding: 6px 12px;
+                border-radius: 15px;
+                font-size: 0.85rem;
+                font-weight: 600;
+                border: 2px solid var(--main-color);
+            }
+
+            .time-recommendation {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 20px;
+                margin-top: 20px;
+                padding: 15px;
+                background: var(--bg-color);
+                border-radius: 10px;
+                border: 2px solid var(--main-color);
+            }
+
+            .time-block {
+                text-align: center;
+                padding: 15px;
+                background: white;
+                border: 2px solid var(--main-color);
+                border-radius: 10px;
+                box-shadow: 3px 3px 0 var(--main-color);
+            }
+
+            .time-number {
+                font-size: 2rem;
+                font-weight: 800;
+                color: var(--accent-color);
+                line-height: 1;
+            }
+
+            .time-label {
+                font-size: 0.8rem;
+                color: var(--font-color-sub);
+                font-weight: 600;
+                margin-top: 5px;
+            }
+
+            .time-arrow {
+                font-size: 1.5rem;
+                color: var(--accent-color);
+                font-weight: bold;
+            }
+
+            /* Stats Section */
+            .faq-stats-section {
+                background: white;
+                border: 2px solid var(--main-color);
+                border-radius: 15px;
+                padding: 30px;
+                box-shadow: 6px 6px 0 var(--main-color);
+                margin-top: 30px;
+            }
+
+            .faq-stats-section h3 {
+                color: var(--font-color);
+                font-weight: 800;
+                font-size: 1.8rem;
+            }
+
+            .stat-card {
+                background: linear-gradient(135deg, var(--accent-color), var(--light-blue));
+                color: white;
+                padding: 25px 15px;
+                border-radius: 15px;
+                text-align: center;
+                border: 2px solid var(--main-color);
+                box-shadow: 4px 4px 0 var(--main-color);
+                transition: all 0.3s ease;
+                margin-bottom: 20px;
+            }
+
+            .stat-card:hover {
+                transform: translateY(-5px) scale(1.05);
+                box-shadow: 6px 6px 0 var(--main-color);
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+                font-weight: 800;
+                line-height: 1;
+                margin-bottom: 8px;
+            }
+
+            .stat-label {
+                font-size: 0.9rem;
+                font-weight: 600;
+                opacity: 0.9;
+            }
+
+            /* Responsive Design */
+            @media (max-width: 768px) {
+                .faq-title {
+                    font-size: 2rem;
+                }
+                
+                .faq-card-header {
+                    padding: 15px;
+                    gap: 10px;
+                }
+                
+                .faq-icon {
+                    min-width: 40px;
+                    height: 40px;
+                    font-size: 1.5rem;
+                }
+                
+                .faq-card-header h4 {
+                    font-size: 1.1rem;
+                }
+                
+                .time-recommendation {
+                    flex-direction: column;
+                    gap: 10px;
+                }
+                
+                .time-arrow {
+                    transform: rotate(90deg);
+                }
+            }
+
+            /* Contact Section */
+            .contact-section {
+                padding: 60px 0;
+                background-color: white;
+            }
+
+            .contact-section h2 {
+                color: var(--font-color);
+                font-weight: 800;
+                margin-bottom: 30px;
+            }
+
+            .google-map {
+                border: 2px solid var(--main-color);
+                border-radius: 10px;
+                box-shadow: 4px 4px var(--main-color);
+                transition: all 0.3s ease;
+            }
+            
+            .google-map:hover {
+                transform: translateY(-5px);
+                box-shadow: 8px 8px var(--main-color);
+            }
+
+            .contact-section h4 {
+                color: var(--font-color);
+                font-weight: 700;
+                margin-bottom: 20px;
+                position: relative;
+                display: inline-block;
+            }
+            
+            .contact-section h4:after {
+                content: '';
+                position: absolute;
+                bottom: -5px;
+                left: 0;
+                width: 50%;
+                height: 3px;
+                background-color: var(--tertiary-color);
+                transition: width 0.3s ease;
+            }
+            
+            .contact-section h4:hover:after {
+                width: 100%;
+            }
+
+            .site-footer-link {
+                color: var(--input-focus);
+                text-decoration: none;
+                font-weight: 600;
+                transition: all 0.3s ease;
+            }
+            
+            .site-footer-link:hover {
+                color: var(--accent-color);
+                text-decoration: underline;
+            }
+
+            /* Footer */
+            footer {
+                background-color: white;
+                color: var(--font-color);
+                text-align: center;
+                padding: 40px 0;
+                border-top: 2px solid var(--main-color);
+            }
+
+            footer .navbar-brand {
+                color: var(--accent-color);
+                font-weight: 700;
+                transition: all 0.3s ease;
+            }
+            
+            footer .navbar-brand:hover {
+                transform: scale(1.1);
+            }
+
+            footer a {
+                color: var(--input-focus);
+                text-decoration: none;
+                transition: all 0.3s ease;
+            }
+
+            footer a:hover {
+                color: var(--accent-color);
+                text-decoration: underline;
+            }
+
+            .site-footer-title {
+                color: var(--font-color);
+                font-weight: 700;
+                margin-bottom: 15px;
+                position: relative;
+                display: inline-block;
+            }
+            
+            .site-footer-title:after {
+                content: '';
+                position: absolute;
+                bottom: -5px;
+                left: 0;
+                width: 50%;
+                height: 3px;
+                background-color: var(--secondary-color);
+                transition: width 0.3s ease;
+            }
+            
+            .site-footer-title:hover:after {
+                width: 100%;
+            }
+
+            /* Button Styling */
+            .btn-start {
+                background-color: white;
+                color: var(--font-color);
+                border: 2px solid var(--main-color);
+                border-radius: 10px;
+                padding: 12px 25px;
+                font-size: 18px;
+                font-weight: 700;
+                cursor: pointer;
+                box-shadow: 4px 4px var(--main-color);
+                transition: all 0.3s ease;
+                margin-top: 10px;
+                position: relative;
+                overflow: hidden;
+                z-index: 1;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: fit-content;
+            }
+            
+            .container-quiz {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                margin-top: 30px;
+            }
+
+            .btn-start:before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: var(--accent-color);
+                transition: all 0.4s ease;
+                z-index: -1;
+            }
+            
+            .btn-start:hover:before {
+                left: 0;
+            }
+
+            .btn-start:hover {
+                color: white;
+                transform: translateY(-5px);
+                box-shadow: 6px 6px var(--main-color);
+            }
+            
+            .btn-start:active {
+                transform: translate(2px, 2px);
+                box-shadow: 2px 2px var(--main-color);
+            }
+
+            /* Gradient Text */
+            .gradient-text {
+                font-size: 4.5rem;
+                font-weight: 900;
+                background-image: linear-gradient(to right, 
+                    var(--accent-color), 
+                    var(--light-blue), 
+                    var(--tertiary-color), 
+                    var(--secondary-color));
+                background-size: 300% 100%;
+                background-clip: text;
+                -webkit-background-clip: text;
+                color: transparent;
+                animation: gradient 8s linear infinite;
+                transition: transform 0.3s ease;
+                padding: 10px;
+                margin-bottom: 10px;
+                text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+            }
+            
+            .gradient-text:hover {
+                transform: scale(1.05);
+                animation: gradient 3s linear infinite;
+            }
+
+            @keyframes gradient {
+                0% {
+                    background-position: 0% 50%;
+                }
+                50% {
+                    background-position: 100% 50%;
+                }
+                100% {
+                    background-position: 0% 50%;
+                }
+            }
+        </style>
+
+
+
+    </head>
+
+    <body id="top">
+
+
+        <main>
+
+            <section class="hero-section">
+                <div class="container">
+                    <div class="gradient-text" >MathAnywhere</div>
+
+                    </div>
+                    <h4>Anywhere, Anytime, Anyplace</h4>
+
+                    <!-- Search Bar -->
+                    <div class="container-quiz">
+                        <button id="startQuizButton" class="btn-start" onclick="startQuiz()">Where do I Start?</button>
+                    </div>
+
+
+            </section>
+
+            <nav class="navbar navbar-expand-lg">
+                <div class="container">
+                    <a class="navbar-brand" href="home.html">
+                        <i class="bi-back"></i>
+                        <span>MathAnywhere</span>
+                    </a>
+
+                    <div class="d-lg-none ms-auto me-4">
+                        <a href="#top" class="navbar-icon bi-person smoothscroll"></a>
+                    </div>
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-lg-5 me-lg-auto">
+                            <li class="nav-item">
+                                <a class="nav-link click-scroll" href="#section_1">Home</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link click-scroll" href="#section_2">Lessons & Exercises</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link click-scroll" href="#section_3">Journey</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="deri_graph.html">Derivative calc & graphing</a>
+                            </li>
+
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
+
+                                <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
+                                    <li><a class="dropdown-item" href="#section_2">Topics Listing</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+
+
+                        <!-- Desktop Icon (Visible only on large screens) -->
+                        <div class="d-none d-lg-block">
+                            <a href="profile.html" id="userProfile" ></a>
+                        </div>
+
+
+                    </div>
+                </div>
+            </nav>
+
+
+
+
+            <section class="featured-section">
+                <div class="container">
+                    <div class="row justify-content-center">
+
+                        <div class="col-lg-4 col-12 mb-4 mb-lg-0">
+                            <div class="custom-block bg-white shadow-lg">
+                                <a href="topics-detail.html">
+                                    <div class="d-flex">
+                                        <div>
+                                            <h5 class="mb-2">Meet The Developer</h5>
+
+                                            <p class="mb-0">Lutfi Naim Bin Syahronizam</p>
+                                        </div>
+
+
+                                    </div>
+
+                                    <img src="images/topics/undraw_Remote_design_team_re_urdx.png" class="custom-block-image img-fluid" alt="">
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            <div class="custom-block custom-block-overlay">
+                                <div class="d-flex flex-column h-100">
+                                    <img src="images/businesswoman-using-tablet-analysis.jpg" class="custom-block-image img-fluid" alt="">
+
+                                    <div class="custom-block-overlay-text d-flex">
+                                        <div>
+                                            <h5 class="text-white mb-2">Math Tools</h5>
+
+                                            <p class="text-white">Use our powerful calculators and graphing tools</p>
+
+                                            <div class="d-flex flex-wrap gap-2 mt-3">
+                                                <a href="deri_graph.html" class="btn custom-btn">Graphing Tool</a>
+                                                <a href="derivative-calculator.html" class="btn custom-btn">Derivative Calculator</a>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+
+                                    <div class="social-share d-flex">
+                                        <p class="text-white me-4">Share:</p>
+
+                                        <ul class="social-icon">
+                                            <li class="social-icon-item">
+                                                <a href="#" class="social-icon-link bi-twitter"></a>
+                                            </li>
+
+                                            <li class="social-icon-item">
+                                                <a href="#" class="social-icon-link bi-facebook"></a>
+                                            </li>
+
+                                            <li class="social-icon-item">
+                                                <a href="#" class="social-icon-link bi-pinterest"></a>
+                                            </li>
+                                        </ul>
+
+                                        <a href="#" class="custom-icon bi-bookmark ms-auto"></a>
+                                    </div>
+
+                                    <div class="section-overlay"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="explore-section section-padding" id="section_2">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-12 text-center">
+                            <h1 class="mb-4">Browse Topics</h1>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="chapter1-tab" data-bs-toggle="tab" data-bs-target="#chapter1-tab-pane" type="button" role="tab" aria-controls="chapter1-tab" aria-selected="true">Section 1</button>
+                            </li>
+
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="marketing-tab" data-bs-toggle="tab" data-bs-target="#marketing-tab-pane" type="button" role="tab" aria-controls="marketing-tab-pane" aria-selected="false">Section 2</button>
+                            </li>
+
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="finance-tab" data-bs-toggle="tab" data-bs-target="#finance-tab-pane" type="button" role="tab" aria-controls="finance-tab-pane" aria-selected="false">Section 3</button>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-12">
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="chapter1-tab-pane" role="tabpanel" aria-labelledby="chapter1-tab" tabindex="0">
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-6 col-12 mb-4 mb-lg-0">
+                                            <div class="custom-block bg-white shadow-lg">
+                                                <a href="Introduction_to_derivatives.html">
+                                                    <div class="d-flex">
+                                                        <div>
+                                                            <h5 class="mb-2">Introduction to Derivatives</h5>
+
+                                                            <p class="mb-0"></p>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <img src="images/topics/undraw_Remote_design_team_re_urdx.png" class="custom-block-image img-fluid" alt="">
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-6 col-12 mb-4 mb-lg-0">
+                                            <div class="custom-block bg-white shadow-lg">
+                                                <a href="The_definition_of_derivative.html">
+                                                    <div class="d-flex">
+                                                        <div>
+                                                            <h5 class="mb-2">The Definition of Derivative</h5>
+
+                                                                <p class="mb-0"></p>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <img src="images/topics/undraw_Redesign_feedback_re_jvm0.png" class="custom-block-image img-fluid" alt="">
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-6 col-12">
+                                            <div class="custom-block bg-white shadow-lg">
+                                                <a href="rule.html">
+                                                    <div class="d-flex">
+                                                        <div>
+                                                            <h5 class="mb-2">Rules of differentiation</h5>
+
+                                                                <p class="mb-0"></p>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <img src="images/topics/colleagues-working-cozy-office-medium-shot.png" class="custom-block-image img-fluid" alt="">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="marketing-tab-pane" role="tabpanel" aria-labelledby="marketing-tab" tabindex="0">
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-6 col-12 mb-4 mb-lg-3">
+                                                <div class="custom-block bg-white shadow-lg">
+                                                    <a href="Equation-of-tangent.html">
+                                                        <div class="d-flex">
+                                                            <div>
+                                                                <h5 class="mb-2">Equation of Tangent</h5>
+                                                                <p class="mb-0"></p>
+                                                            </div>
+
+
+                                                        </div>
+
+                                                        <img src="images/topics/undraw_online_ad_re_ol62.png" class="custom-block-image img-fluid" alt="">
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-4 col-md-6 col-12 mb-4 mb-lg-3">
+                                                <div class="custom-block bg-white shadow-lg">
+                                                    <a href="Second-derivative.html">
+                                                        <div class="d-flex">
+                                                            <div>
+                                                                <h5 class="mb-2">Second Derivative</h5>
+
+                                                                <p class="mb-0"></p>
+                                                            </div>
+
+
+                                                        </div>
+
+                                                        <img src="images/topics/undraw_Group_video_re_btu7.png" class="custom-block-image img-fluid" alt="">
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-4 col-md-6 col-12">
+                                                <div class="custom-block bg-white shadow-lg">
+                                                    <a href="implicit-differentiation.html">
+                                                        <div class="d-flex">
+                                                            <div>
+                                                                <h5 class="mb-2">Implicit Differentiations</h5>
+
+                                                                <p class="mb-0"></p>
+                                                            </div>
+
+
+                                                        </div>
+
+                                                        <img src="images/topics/undraw_viral_tweet_gndb.png" class="custom-block-image img-fluid" alt="">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                  </div>
+
+                                <div class="tab-pane fade" id="finance-tab-pane" role="tabpanel" aria-labelledby="finance-tab" tabindex="0">   
+                                    <div class="row justify-content-center">
+                                        <div class="col-lg-6 col-md-8 col-12">
+                                            <div class="custom-block bg-white shadow-lg">
+                                                <a href="linear-approx-differentials.html">
+                                                    <div class="d-flex">
+                                                        <div>
+                                                            <h5 class="mb-2">Linear Approximations & Differentials </h5>
+
+                                                            <p class="mb-0"></p>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    <img src="images/topics/undraw_Finance_re_gnv2.png" class="custom-block-image img-fluid" alt="">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- sampai takat ni je -->
+                                <div class="tab-pane fade" id="music-tab-pane" role="tabpanel" aria-labelledby="music-tab" tabindex="0">
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-6 col-12 mb-4 mb-lg-3">
+                                            <div class="custom-block bg-white shadow-lg">
+                                                <a href="topics-detail.html">
+                                                    <div class="d-flex">
+                                                        <div>
+                                                            <h5 class="mb-2"></h5>
+
+                                                            <p class="mb-0"></p>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    <img src="images/topics/undraw_Compose_music_re_wpiw.png" class="custom-block-image img-fluid" alt="">
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-6 col-12 mb-4 mb-lg-3">
+                                            <div class="custom-block bg-white shadow-lg">
+                                                <a href="topics-detail.html">
+                                                    <div class="d-flex">
+                                                        <div>
+                                                            <h5 class="mb-2"></h5>
+
+                                                            <p class="mb-0"></p>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    <img src="images/topics/undraw_happy_music_g6wc.png" class="custom-block-image img-fluid" alt="">
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-6 col-12">
+                                            <div class="custom-block bg-white shadow-lg">
+                                                <a href="topics-detail.html">
+                                                    <div class="d-flex">
+                                                        <div>
+                                                            <h5 class="mb-2"></h5>
+
+                                                            <p class="mb-0"></p>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    <img src="images/topics/undraw_Podcast_audience_re_4i5q.png" class="custom-block-image img-fluid" alt="">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="education-tab-pane" role="tabpanel" aria-labelledby="education-tab" tabindex="0">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-12 mb-4 mb-lg-3">
+                                            <div class="custom-block bg-white shadow-lg">
+                                                <a href="topics-detail.html">
+                                                    <div class="d-flex">
+                                                        <div>
+                                                            <h5 class="mb-2"></h5>
+
+                                                            <p class="mb-0"></p>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    <img src="images/topics/undraw_Graduation_re_gthn.png" class="custom-block-image img-fluid" alt="">
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-12">
+                                            <div class="custom-block bg-white shadow-lg">
+                                                <a href="topics-detail.html">
+                                                    <div class="d-flex">
+                                                        <div>
+                                                            <h5 class="mb-2"></h5>
+
+                                                            <p class="mb-0"></p>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    <img src="images/topics/undraw_Educator_re_ju47.png" class="custom-block-image img-fluid" alt="">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="timeline-section section-padding" id="section_3">
+                <div class="section-overlay"></div>
+
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-12 text-center">
+                            <h1 class="text-white mb-4">Journey of Differentiation</h1>
+                        </div>
+
+                        <div class="col-lg-10 col-12 mx-auto">
+                            <div class="timeline-container">
+                                <ul class="vertical-scrollable-timeline" id="vertical-scrollable-timeline">
+                                    <div class="list-progress">
+                                        <div class="inner"></div>
+                                    </div>
+
+                                    <li>
+                                        <h4 class="text-black mb-3">Introduction to Derivatives</h4>
+                                        <p class="text-black">Start your journey by understanding what derivatives are and why they are fundamental in calculus. Learn how derivatives describe the rate of change and the basics of differentiation.</p>
+                                        <div class="icon-holder">
+                                          <i class="bi-1-circle"></i>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <h4 class="text-black mb-3">The Definition of Derivative</h4>
+                                        <p class="text-black">Explore the formal definition of the derivative as a limit. Understand how the derivative represents the slope of the tangent line and the instantaneous rate of change at a point.</p>
+                                        <div class="icon-holder">
+                                          <i class="bi-2-circle"></i>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <h4 class="text-black mb-3">Rules of Differentiation</h4>
+                                        <p class="text-black">Master the essential rules for finding derivatives, including the power rule, product rule, quotient rule, and chain rule. These rules make differentiation of complex functions easier.</p>
+                                        <div class="icon-holder">
+                                          <i class="bi-3-circle"></i>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <h4 class="text-black mb-3">Equation of Tangent</h4>
+                                        <p class="text-black">Learn how to find the equation of the tangent line to a curve at a given point using derivatives. Tangent lines are key for approximations and understanding local behavior of functions.</p>
+                                        <div class="icon-holder">
+                                          <i class="bi-4-circle"></i>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <h4 class="text-black mb-3">Second Derivative</h4>
+                                        <p class="text-black">Discover the meaning of the second derivative and how it relates to concavity and inflection points. The second derivative provides deeper insight into the shape of graphs.</p>
+                                        <div class="icon-holder">
+                                          <i class="bi-5-circle"></i>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <h4 class="text-black mb-3">Implicit Differentiations</h4>
+                                        <p class="text-black">Tackle equations where y is not isolated. Implicit differentiation allows you to find derivatives even when variables are mixed together in an equation.</p>
+                                        <div class="icon-holder">
+                                          <i class="bi-6-circle"></i>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <h4 class="text-black mb-3">Linear Approximations & Differentials</h4>
+                                        <p class="text-black">Use derivatives to approximate values of functions near a point. Learn about differentials and how linear approximations simplify complex calculations.</p>
+                                        <div class="icon-holder">
+                                          <i class="bi-7-circle"></i>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-12 text-center mt-5">
+                            <p class="text-white">
+                                Want to learn more?
+                                <a href="https://www.youtube.com/@lutfinaim320"class="btn custom-btn custom-border-btn ms-3">Check out Youtube</a>
+                            </p>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="faq-section section-padding" id="section_4">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 text-center mb-5">
+                            <h2 class="faq-title">❓ Got Questions? We've Got Answers! 🚀</h2>
+                            <p class="faq-subtitle">Click on any question to discover helpful insights about your math learning journey</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Interactive FAQ Cards -->
+                        <div class="col-lg-6 col-md-6 col-12 mb-4">
+                            <div class="faq-card" data-faq="1">
+                                <div class="faq-card-header">
+                                    <div class="faq-icon">🎯</div>
+                                    <h4>What makes MathAnywhere special?</h4>
+                                    <div class="faq-toggle">+</div>
+                                </div>
+                                <div class="faq-card-body">
+                                    <p>MathAnywhere offers a <strong>personalized learning experience</strong> with adaptive difficulty levels (Novice, Intermediate, Advanced). Our platform features interactive quizzes, step-by-step solutions, and real-time feedback to help you master calculus and derivatives at your own pace. Plus, it's completely <strong>free</strong> and designed by a passionate math educator! 📚✨</p>
+                                    <div class="faq-stats">
+                                        <span class="stat-badge">🎓 3 Difficulty Levels</span>
+                                        <span class="stat-badge">💯 100% Free</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-12 mb-4">
+                            <div class="faq-card" data-faq="2">
+                                <div class="faq-card-header">
+                                    <div class="faq-icon">🚀</div>
+                                    <h4>Struggling with derivatives?</h4>
+                                    <div class="faq-toggle">+</div>
+                                </div>
+                                <div class="faq-card-body">
+                                    <p>Don't worry! Start with our <strong>"Introduction to Derivatives"</strong> module at the Novice level. We'll guide you through the fundamental concepts with visual explanations and plenty of practice problems. Remember: <em>every math expert was once a beginner</em>. Take the initial quiz to find your perfect starting point! 🌟</p>
+                                    <div class="faq-action">
+                                        <button class="btn-faq-action" onclick="window.location.href='Introduction_to_derivatives.html'">Start Learning Now</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-12 mb-4">
+                            <div class="faq-card" data-faq="3">
+                                <div class="faq-card-header">
+                                    <div class="faq-icon">📊</div>
+                                    <h4>Can I track my progress?</h4>
+                                    <div class="faq-toggle">+</div>
+                                </div>
+                                <div class="faq-card-body">
+                                    <p>Absolutely! Your progress is automatically saved as you complete modules and quizzes. You can see your performance across different topics, track your improvement, and identify areas that need more practice. The system adapts to your learning style and suggests the next best topics to study! 📊🎓</p>
+                                    <div class="progress-demo">
+                                        <div class="progress-bar-demo">
+                                            <div class="progress-fill" style="width: 75%"></div>
+                                        </div>
+                                        <span class="progress-text">Your Progress: 75% Complete</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-12 mb-4">
+                            <div class="faq-card" data-faq="4">
+                                <div class="faq-card-header">
+                                    <div class="faq-icon">🤔</div>
+                                    <h4>Need help with problems?</h4>
+                                    <div class="faq-toggle">+</div>
+                                </div>
+                                <div class="faq-card-body">
+                                    <p>Every problem comes with <strong>detailed step-by-step solutions</strong> and helpful hints! If you're still stuck, you can review the concept explanations or try similar problems at an easier difficulty level. Our interactive feedback system will guide you to the right answer while helping you understand the <em>why</em> behind each step. 🔍💭</p>
+                                    <div class="help-features">
+                                        <div class="feature-item">💡 Hints Available</div>
+                                        <div class="feature-item">📝 Step-by-step Solutions</div>
+                                        <div class="feature-item">🔄 Practice Similar Problems</div>
+                                    </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                        <div class="col-lg-6 col-md-6 col-12 mb-4">
+                            <div class="faq-card" data-faq="5">
+                                <div class="faq-card-header">
+                                    <div class="faq-icon">🎓</div>
+                                    <h4>Good for exam prep?</h4>
+                                    <div class="faq-toggle">+</div>
+                                </div>
+                                <div class="faq-card-body">
+                                    <p>Yes! Our Advanced level modules cover university-level calculus topics including optimization, implicit differentiation, and complex applications. The platform is perfect for <strong>exam preparation</strong>, homework help, and building a solid foundation for higher-level mathematics. Many students use it to supplement their coursework and boost their confidence! 🏆📝</p>
+                                    <div class="exam-topics">
+                                        <span class="topic-tag">Optimization</span>
+                                        <span class="topic-tag">Implicit Differentiation</span>
+                                        <span class="topic-tag">Complex Applications</span>
+                                    </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                        <div class="col-lg-6 col-md-6 col-12 mb-4">
+                            <div class="faq-card" data-faq="6">
+                                <div class="faq-card-header">
+                                    <div class="faq-icon">⏰</div>
+                                    <h4>How much time to study?</h4>
+                                    <div class="faq-toggle">+</div>
+                                        </div>
+                                <div class="faq-card-body">
+                                    <p>Learning math is a marathon, not a sprint! We recommend <strong>15-30 minutes per day</strong> of focused practice. Each module is designed to be completed in bite-sized sessions, so you can learn effectively without feeling overwhelmed. Consistency is key - even 15 minutes daily will lead to significant improvement over time! ⏱️🎯</p>
+                                    <div class="time-recommendation">
+                                        <div class="time-block">
+                                            <div class="time-number">15</div>
+                                            <div class="time-label">Min/Day<br>Minimum</div>
+                                        </div>
+                                        <div class="time-arrow">→</div>
+                                        <div class="time-block">
+                                            <div class="time-number">30</div>
+                                            <div class="time-label">Min/Day<br>Optimal</div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <!-- Interactive Stats Section -->
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <div class="faq-stats-section">
+                                <h3 class="text-center mb-4">🌟 Why Students Love MathAnywhere</h3>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-6 col-6">
+                                        <div class="stat-card">
+                                            <div class="stat-number" data-target="1000">0</div>
+                                            <div class="stat-label">Students Helped</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-6">
+                                        <div class="stat-card">
+                                            <div class="stat-number" data-target="7">0</div>
+                                            <div class="stat-label">Math Topics</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-6">
+                                        <div class="stat-card">
+                                            <div class="stat-number" data-target="95">0</div>
+                                            <div class="stat-label">Success Rate %</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-6">
+                                        <div class="stat-card">
+                                            <div class="stat-number" data-target="24">0</div>
+                                            <div class="stat-label">Available 24/7</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="contact-section section-padding section-bg" id="section_5">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-12 col-12 text-center">
+                            <h2 class="mb-5">Get in touch</h2>
+                        </div>
+
+                        <div class="col-lg-5 col-12 mb-4 mb-lg-0">
+                            <iframe class="google-map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3979.210588295176!2d101.2190171!3d4.1789638!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cb05ba96cbf20d%3A0xdd30c30c83bac918!2sUiTM%20Cawangan%20Perak%2C%20Kampus%20Tapah!5e0!3m2!1sen!2smy!4v1741839345364!5m2!1sen!2smy" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 col-12 mb-3 mb-lg- mb-md-0 ms-auto">
+                            <h4 class="mb-3">Head office</h4>
+
+                            <p>Kampung Baharu Batu Empat, 35400 Tapah, Perak</p>
+
+                            <hr>
+
+                            <p class="d-flex align-items-center mb-1">
+                                <span class="me-2">Phone</span>
+
+                                <a href="tel: 305-240-9671" class="site-footer-link">
+                                    013-3321094
+                                </a>
+                            </p>
+
+                            <p class="d-flex align-items-center">
+                                <span class="me-2">Email</span>
+
+                                <a href="mailto:info@company.com" class="site-footer-link">
+                                    lutfi373naim@gmail.com
+                                </a>
+                            </p>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 col-12 mx-auto">
+                            <h4 class="mb-3">UiTM Tapah</h4>
+
+                            <p>UiTM Cawangan Perak, Kampus Tapah, Tapah Road, 35400 Tapah Road, Perak</p>
+
+                            <hr>
+
+                            <p class="d-flex align-items-center mb-1">
+                                <span class="me-2">Phone</span>
+
+                                <a href="tel: 110-220-3400" class="site-footer-link">
+                                    013-3321094
+                                </a>
+                            </p>
+
+                            <p class="d-flex align-items-center">
+                                <span class="me-2">Email</span>
+
+                                <a href="mailto:info@company.com" class="site-footer-link">
+                                    2022841556@student.uitm.edu.my
+                                </a>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </main>
+
+<footer class="site-footer section-padding">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-3 col-12 mb-4 pb-2">
+                        <a class="navbar-brand mb-2" href="home.html">
+                            <i class="bi-back"></i>
+                            <span>MathAnywhere</span>
+                        </a>
+                    </div>
+
+
+
+                    <div class="col-lg-3 col-md-4 col-6 mb-4 mb-lg-0">
+                        <h6 class="site-footer-title mb-3">Information</h6>
+
+                        <p class="text-white d-flex mb-1">
+                            <a href="tel: 305-240-9671" class="site-footer-link">
+                                013-3321094
+                            </a>
+                        </p>
+
+                        <p class="text-white d-flex">
+                            <a href="mailto:info@company.com" class="site-footer-link">
+                                2022841556@student.uitm.edu.my
+                            </a>
+                        </p>
+                    </div>
+
+
+
+                    </div>
+
+                </div>
+            </div>
+        </footer>
+
+
+        <!-- JAVASCRIPT FILES -->
+        <script src="js/custom.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="js/jquery.sticky.js"></script>
+        <script src="js/click-scroll.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.5.2/math.min.js"></script>
+
+        <script>
+
+            document.addEventListener("DOMContentLoaded", function () {
+                // Check if the user is new
+                let userName = sessionStorage.getItem("userName");
+                let userEmail = sessionStorage.getItem("userEmail");
+                let userLevel = sessionStorage.getItem("level");
+
+                if (!userName || !userEmail) {
+                    // If userName or userEmail is not set, redirect to registration page
+                    window.location.href = "sign-up.html";
+                } else {
+                    // Display the username in the navbar
+                    document.getElementById("userProfile").innerHTML = `<i class="bi bi-person"></i> ${userName}`;
+                }
+
+                // Check if the quiz has been taken or if the user level is not "Beginner"
+                if (userLevel && userLevel !== "Beginner") {
+                    document.getElementById("startQuizButton").style.display = "none";
+                } else {
+                    document.getElementById("startQuizButton").style.display = "block";
+                }
+            });
+
+            function startQuiz() {
+                // Navigate to quiz page in the same tab
+                window.location.href = 'quiz.html';
+                return false; // Prevent default link behavior
+            }
+
+            // Function to handle quiz completion - will be called from quiz.html
+            window.updateUserLevel = function(newLevel) {
+                // Update session storage
+                sessionStorage.setItem("level", newLevel);
+                
+                // Update Firebase if available
+                try {
+                    const firebaseModule = window.firebase || null;
+                    if (firebaseModule) {
+                        const auth = firebaseModule.auth();
+                        const user = auth.currentUser;
+                        if (user) {
+                            const db = firebaseModule.firestore();
+                            db.collection('users').doc(user.uid).update({
+                                level: newLevel
+                            }).then(() => {
+                                console.log("User level updated in Firebase");
+                            }).catch(error => {
+                                console.error("Error updating user level:", error);
+                            });
+                        }
+                    }
+                } catch (e) {
+                    console.log("Firebase not available for updating user level");
+                }
+                
+                // Hide the button after quiz completion
+                document.getElementById("startQuizButton").style.display = "none";
+            }
+
+            // FAQ Interactive Functionality
+            document.addEventListener('DOMContentLoaded', function() {
+                // FAQ Card Toggle
+                const faqCards = document.querySelectorAll('.faq-card');
+                
+                faqCards.forEach(card => {
+                    card.addEventListener('click', function() {
+                        const isActive = this.classList.contains('active');
+                        
+                        // Close all other cards
+                        faqCards.forEach(otherCard => {
+                            if (otherCard !== this) {
+                                otherCard.classList.remove('active');
+                            }
+                        });
+                        
+                        // Toggle current card
+                        if (isActive) {
+                            this.classList.remove('active');
+                        } else {
+                            this.classList.add('active');
+                        }
+                    });
+                });
+
+                // Animated Counter for Stats
+                function animateCounter(element, target, duration = 2000) {
+                    let start = 0;
+                    const increment = target / (duration / 16);
+                    
+                    function updateCounter() {
+                        start += increment;
+                        if (start < target) {
+                            element.textContent = Math.floor(start);
+                            requestAnimationFrame(updateCounter);
+                        } else {
+                            element.textContent = target;
+                        }
+                    }
+                    
+                    updateCounter();
+                }
+
+                // Intersection Observer for Stats Animation
+                const statsObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const statNumbers = entry.target.querySelectorAll('.stat-number');
+                            statNumbers.forEach(stat => {
+                                const target = parseInt(stat.getAttribute('data-target'));
+                                animateCounter(stat, target);
+                            });
+                            statsObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.5 });
+
+                const statsSection = document.querySelector('.faq-stats-section');
+                if (statsSection) {
+                    statsObserver.observe(statsSection);
+                }
+
+                // Progress Bar Animation
+                const progressObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const progressFill = entry.target.querySelector('.progress-fill');
+                            if (progressFill) {
+                                setTimeout(() => {
+                                    progressFill.style.width = '75%';
+                                }, 500);
+                            }
+                            progressObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.5 });
+
+                const progressDemo = document.querySelector('.progress-demo');
+                if (progressDemo) {
+                    progressObserver.observe(progressDemo);
+                }
+
+                // Add hover effects for better interactivity
+                faqCards.forEach(card => {
+                    card.addEventListener('mouseenter', function() {
+                        if (!this.classList.contains('active')) {
+                            this.style.transform = 'translateY(-8px) rotate(1deg)';
+                        }
+                    });
+                    
+                    card.addEventListener('mouseleave', function() {
+                        if (!this.classList.contains('active')) {
+                            this.style.transform = '';
+                        }
+                    });
+                });
+
+                // Auto-open first FAQ card after a delay
+                setTimeout(() => {
+                    if (faqCards.length > 0 && !document.querySelector('.faq-card.active')) {
+                        faqCards[0].classList.add('active');
+                    }
+                }, 1000);
+            });
+
+    </script>
+    </body>
+</html>
+
+
+
+
+
+
+
+
