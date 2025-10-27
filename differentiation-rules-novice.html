@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rules of Differentiation - Novice | MathAnywhere</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- MathQuill resources with improved loading mechanism -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+    <!-- Improved MathQuill loading with dual sources -->
+    <script>
+        // Create global variable
+        window.MQ = null;
+        
+        // First try primary CDN
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔄 Loading MathQuill...');
+            
+            // Function to initialize MathQuill
+            window.initMathQuill = function() {
+                try {
+                    window.MQ = MathQuill.getInterface(2);
+                    console.log('✅ MathQuill successfully initialized');
+                    window.mathQuillLoaded = true;
+                    
+                    // Initialize all math fields
+                    if (typeof initializeMathQuillFields === 'function') {
+                        initializeMathQuillFields();
+                    } else {
+                        console.warn('⚠️ initializeMathQuillFields function not available yet');
+                        // Set a timer to try again
+                        setTimeout(function() {
+                            if (typeof initializeMathQuillFields === 'function') {
+                                initializeMathQuillFields();
+                            }
+                        }, 1000);
+                    }
+                } catch (e) {
+                    console.error('❌ Failed to initialize MathQuill:', e);
+                }
+            };
+            
+            // Load from primary CDN
+            var primaryScript = document.createElement('script');
+            primaryScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js';
+            primaryScript.onload = function() {
+                console.log('✅ MathQuill loaded from primary CDN');
+                window.initMathQuill();
+            };
+            primaryScript.onerror = function() {
+                console.log('🔄 Primary MathQuill CDN failed, trying alternative...');
+                
+                // Load from alternative CDN
+                var backupScript = document.createElement('script');
+                backupScript.src = 'https://unpkg.com/mathquill@0.10.1/build/mathquill.min.js';
+                backupScript.onload = function() {
+                    console.log('✅ MathQuill loaded from backup CDN');
+                    window.initMathQuill();
+                };
+                backupScript.onerror = function() {
+                    console.error('❌ All MathQuill CDNs failed. Adding manual initialization...');
+                    // Fallback to manual initialization if both CDNs fail
+                    setTimeout(function() {
+                        if (typeof MathQuill !== 'undefined') {
+                            window.initMathQuill();
+                        } else {
+                            console.error('❌ MathQuill completely unavailable');
+                            // Show error message to user
+                            document.querySelectorAll('.math-field').forEach(function(field) {
+                                field.textContent = 'Math rendering unavailable';
+                                field.style.color = 'red';
+                            });
+                        }
+                    }, 2000);
+                };
+                document.head.appendChild(backupScript);
+            };
+            document.head.appendChild(primaryScript);
+        });
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .rule-section {
+            margin-bottom: 40px;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid #4facfe;
+        }
+
+        .rule-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .rule-title::before {
+            content: "📐";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .rule-formula {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.3em;
+        }
+
+        .example {
+            background: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .example-title {
+            font-weight: bold;
+            color: #155724;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .math-field {
+            display: inline-block;
+            min-width: 100px;
+            min-height: 30px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin: 5px;
+            background: white;
+        }
+
+        .interactive-example {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .interactive-title {
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .input-group {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .input-group label {
+            font-weight: 500;
+            min-width: 120px;
+        }
+
+        .check-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .check-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .result.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .result.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .navigation {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .nav-button {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            margin: 0 10px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            width: 25%;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            
+            .rule-section {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .input-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .input-group label {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Rules of Differentiation</h1>
+            <p>Master the fundamental rules for finding derivatives</p>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Constant Rule -->
+            <div class="rule-section">
+                <h2 class="rule-title">1. Constant Rule</h2>
+                <p>The derivative of any constant is zero.</p>
+                
+                <div class="rule-formula">
+                    <span class="math-field" id="constant-rule">\\frac{d}{dx}[c] = 0</span>
+                </div>
+                
+                <div class="example">
+                    <div class="example-title">Example:</div>
+                    <p>Find the derivative of f(x) = 7</p>
+                    <div class="math-field" id="constant-example">f'(x) = \\frac{d}{dx}[7] = 0</div>
+                </div>
+
+                <div class="interactive-example">
+                    <div class="interactive-title">🎯 Try it yourself:</div>
+                    <div class="input-group">
+                        <label>Find the derivative of f(x) = 15:</label>
+                        <span class="math-field" id="constant-input">f'(x) = </span>
+                    </div>
+                    <button class="check-button" onclick="checkConstantRule()">Check Answer</button>
+                    <div class="result" id="constant-result"></div>
+                </div>
+            </div>
+
+            <!-- Power Rule -->
+            <div class="rule-section">
+                <h2 class="rule-title">2. Power Rule</h2>
+                <p>For any real number n, the derivative of x^n is nx^(n-1).</p>
+                
+                <div class="rule-formula">
+                    <span class="math-field" id="power-rule">\\frac{d}{dx}[x^n] = nx^{n-1}</span>
+                </div>
+                
+                <div class="example">
+                    <div class="example-title">Examples:</div>
+                    <p>1. Find the derivative of f(x) = x³</p>
+                    <div class="math-field" id="power-example1">f'(x) = \\frac{d}{dx}[x^3] = 3x^{3-1} = 3x^2</div>
+                    
+                    <p style="margin-top: 15px;">2. Find the derivative of f(x) = x⁵</p>
+                    <div class="math-field" id="power-example2">f'(x) = \\frac{d}{dx}[x^5] = 5x^{5-1} = 5x^4</div>
+                </div>
+
+                <div class="interactive-example">
+                    <div class="interactive-title">🎯 Try it yourself:</div>
+                    <div class="input-group">
+                        <label>Find the derivative of f(x) = x⁴:</label>
+                        <span class="math-field" id="power-input">f'(x) = </span>
+                    </div>
+                    <button class="check-button" onclick="checkPowerRule()">Check Answer</button>
+                    <div class="result" id="power-result"></div>
+                </div>
+            </div>
+
+            <!-- Constant Multiple Rule -->
+            <div class="rule-section">
+                <h2 class="rule-title">3. Constant Multiple Rule</h2>
+                <p>The derivative of a constant times a function is the constant times the derivative of the function.</p>
+                
+                <div class="rule-formula">
+                    <span class="math-field" id="multiple-rule">\\frac{d}{dx}[cf(x)] = c\\frac{d}{dx}[f(x)] = cf'(x)</span>
+                </div>
+                
+                <div class="example">
+                    <div class="example-title">Examples:</div>
+                    <p>1. Find the derivative of f(x) = 5x³</p>
+                    <div class="math-field" id="multiple-example1">f'(x) = \\frac{d}{dx}[5x^3] = 5 \\cdot \\frac{d}{dx}[x^3] = 5 \\cdot 3x^2 = 15x^2</div>
+                    
+                    <p style="margin-top: 15px;">2. Find the derivative of f(x) = -2x⁴</p>
+                    <div class="math-field" id="multiple-example2">f'(x) = \\frac{d}{dx}[-2x^4] = -2 \\cdot \\frac{d}{dx}[x^4] = -2 \\cdot 4x^3 = -8x^3</div>
+                </div>
+
+                <div class="interactive-example">
+                    <div class="interactive-title">🎯 Try it yourself:</div>
+                    <div class="input-group">
+                        <label>Find the derivative of f(x) = 3x²:</label>
+                        <span class="math-field" id="multiple-input">f'(x) = </span>
+                    </div>
+                    <button class="check-button" onclick="checkMultipleRule()">Check Answer</button>
+                    <div class="result" id="multiple-result"></div>
+                </div>
+            </div>
+
+            <!-- Sum and Difference Rule -->
+            <div class="rule-section">
+                <h2 class="rule-title">4. Sum and Difference Rule</h2>
+                <p>The derivative of a sum (or difference) is the sum (or difference) of the derivatives.</p>
+                
+                <div class="rule-formula">
+                    <span class="math-field" id="sum-rule">\\frac{d}{dx}[f(x) \\pm g(x)] = f'(x) \\pm g'(x)</span>
+                </div>
+                
+                <div class="example">
+                    <div class="example-title">Example:</div>
+                    <p>Find the derivative of f(x) = x³ + 2x² - 5x + 7</p>
+                    <div class="math-field" id="sum-example">f'(x) = \\frac{d}{dx}[x^3] + \\frac{d}{dx}[2x^2] - \\frac{d}{dx}[5x] + \\frac{d}{dx}[7]</div>
+                    <div class="math-field" id="sum-example2">f'(x) = 3x^2 + 4x - 5 + 0 = 3x^2 + 4x - 5</div>
+                </div>
+
+                <div class="interactive-example">
+                    <div class="interactive-title">🎯 Try it yourself:</div>
+                    <div class="input-group">
+                        <label>Find the derivative of f(x) = x² + 3x - 4:</label>
+                        <span class="math-field" id="sum-input">f'(x) = </span>
+                    </div>
+                    <button class="check-button" onclick="checkSumRule()">Check Answer</button>
+                    <div class="result" id="sum-result"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <a href="calculus-home.html" class="nav-button">← Back to Calculus</a>
+            <a href="differentiation-practice.html" class="nav-button">Practice Problems →</a>
+        </div>
+    </div>
+
+    <script>
+        // Initialize MathQuill fields
+        function initializeMathQuillFields() {
+            if (!window.MQ) {
+                console.warn('MathQuill not available yet');
+                return;
+            }
+
+            console.log('🎯 Initializing MathQuill fields...');
+            
+            // Static math fields (display only)
+            const staticFields = [
+                'constant-rule', 'constant-example',
+                'power-rule', 'power-example1', 'power-example2',
+                'multiple-rule', 'multiple-example1', 'multiple-example2',
+                'sum-rule', 'sum-example', 'sum-example2'
+            ];
+
+            staticFields.forEach(function(id) {
+                const element = document.getElementById(id);
+                if (element) {
+                    try {
+                        const mathField = window.MQ.StaticMath(element);
+                        console.log('✅ Initialized static field:', id);
+                    } catch (e) {
+                        console.error('❌ Failed to initialize static field:', id, e);
+                    }
+                }
+            });
+
+            // Interactive math fields (editable)
+            const interactiveFields = [
+                'constant-input', 'power-input', 'multiple-input', 'sum-input'
+            ];
+
+            window.mathFields = {};
+            interactiveFields.forEach(function(id) {
+                const element = document.getElementById(id);
+                if (element) {
+                    try {
+                        window.mathFields[id] = window.MQ.MathField(element, {
+                            spaceBehavesLikeTab: true,
+                            leftRightIntoCmdGoes: 'up',
+                            restrictMismatchedBrackets: true,
+                            sumStartsWithNEquals: true,
+                            supSubsRequireOperand: true,
+                            charsThatBreakOutOfSupSub: '+-=<>',
+                            autoSubscriptNumerals: true,
+                            autoCommands: 'pi theta sqrt sum prod alpha beta gamma delta epsilon zeta eta theta iota kappa lambda mu nu xi omicron rho sigma tau upsilon phi chi psi omega',
+                            autoOperatorNames: 'sin cos tan sec csc cot sinh cosh tanh log ln exp lim',
+                            maxDepth: 10
+                        });
+                        console.log('✅ Initialized interactive field:', id);
+                    } catch (e) {
+                        console.error('❌ Failed to initialize interactive field:', id, e);
+                    }
+                }
+            });
+
+            console.log('🎉 All MathQuill fields initialized!');
+        }
+
+        // Check functions for interactive examples
+        function checkConstantRule() {
+            const userAnswer = window.mathFields['constant-input'].latex();
+            const correctAnswer = '0';
+            const result = document.getElementById('constant-result');
+            
+            if (userAnswer === correctAnswer) {
+                result.textContent = '✅ Correct! The derivative of any constant is 0.';
+                result.className = 'result correct';
+            } else {
+                result.textContent = '❌ Not quite. Remember: the derivative of any constant is 0.';
+                result.className = 'result incorrect';
+            }
+            result.style.display = 'block';
+        }
+
+        function checkPowerRule() {
+            const userAnswer = window.mathFields['power-input'].latex();
+            const correctAnswers = ['4x^3', '4x^{3}', '4\\cdot x^3', '4\\cdot x^{3}'];
+            const result = document.getElementById('power-result');
+            
+            if (correctAnswers.some(answer => userAnswer.includes(answer.replace(/\\/g, '\\')))) {
+                result.textContent = '✅ Correct! Using the power rule: d/dx[x⁴] = 4x³';
+                result.className = 'result correct';
+            } else {
+                result.textContent = '❌ Not quite. Use the power rule: d/dx[xⁿ] = nx^(n-1). So d/dx[x⁴] = 4x³';
+                result.className = 'result incorrect';
+            }
+            result.style.display = 'block';
+        }
+
+        function checkMultipleRule() {
+            const userAnswer = window.mathFields['multiple-input'].latex();
+            const correctAnswers = ['6x', '6\\cdot x'];
+            const result = document.getElementById('multiple-result');
+            
+            if (correctAnswers.some(answer => userAnswer.includes(answer.replace(/\\/g, '\\')))) {
+                result.textContent = '✅ Correct! Using the constant multiple rule: d/dx[3x²] = 3 · 2x = 6x';
+                result.className = 'result correct';
+            } else {
+                result.textContent = '❌ Not quite. Use the constant multiple rule: d/dx[cf(x)] = c·f\'(x). So d/dx[3x²] = 3 · 2x = 6x';
+                result.className = 'result incorrect';
+            }
+            result.style.display = 'block';
+        }
+
+        function checkSumRule() {
+            const userAnswer = window.mathFields['sum-input'].latex();
+            const correctAnswers = ['2x+3', '2x + 3', '2\\cdot x+3', '2\\cdot x + 3'];
+            const result = document.getElementById('sum-result');
+            
+            if (correctAnswers.some(answer => userAnswer.replace(/\s/g, '').includes(answer.replace(/\s/g, '').replace(/\\/g, '\\')))) {
+                result.textContent = '✅ Correct! Using the sum rule: d/dx[x² + 3x - 4] = 2x + 3 - 0 = 2x + 3';
+                result.className = 'result correct';
+            } else {
+                result.textContent = '❌ Not quite. Apply the sum rule to each term: d/dx[x²] + d/dx[3x] - d/dx[4] = 2x + 3 - 0 = 2x + 3';
+                result.className = 'result incorrect';
+            }
+            result.style.display = 'block';
+        }
+
+        // Update progress as user completes examples
+        let completedExamples = 0;
+        const totalExamples = 4;
+
+        function updateProgress() {
+            completedExamples++;
+            const progressPercent = (completedExamples / totalExamples) * 100;
+            document.querySelector('.progress-fill').style.width = progressPercent + '%';
+        }
+
+        // Add event listeners to check buttons to update progress
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkButtons = document.querySelectorAll('.check-button');
+            checkButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    setTimeout(updateProgress, 500); // Delay to allow answer checking
+                });
+            });
+        });
+    </script>
+</body>
+</html>
